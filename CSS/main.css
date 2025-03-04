@@ -330,7 +330,8 @@ h2 {
 	animation: fade-in 500ms forwards;
 }
 
-#sidebar {
+#sidebar,
+#footer {
 	opacity: 0;
 	animation: fade-in 600ms forwards;
 }
