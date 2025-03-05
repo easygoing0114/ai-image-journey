@@ -44,7 +44,7 @@
       }, 50); // 0.05秒遅延実行
     
     /* .defer-img差し替え */
-    Defer.dom('.defer-img img', 150); // 0.15秒後に処理
+    Defer.dom('.defer-img img', 100); // 0.1秒後に処理
     
     /* loading="lazy" の順次解除 */
     Defer(function() {
@@ -53,7 +53,7 @@
         
         if (imageEagerLoad.length === 0) return;
     
-        // 初回の要素を0.2秒後に処理
+        // 初回の要素を0.1秒後に処理
         const firstImage = imageEagerLoad[0];
         Defer(function() {
             firstImage.removeAttribute('loading');
@@ -269,7 +269,7 @@
       // 実行
       const generator = new LinkPreviewGenerator('https://get-blogcard-info-to-blogger.easygoing0114.workers.dev/');
       generator.replaceLinks();
-    }, 300);
+    }, 100);
     
     /* dark-mode ボタン */
     Defer(function() {
