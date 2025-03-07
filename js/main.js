@@ -29,44 +29,9 @@
     // Defer.css('your_css_url','your-style-id',100);
     // Defer.js('your_script_url','your-script-id',100);
     
-    /* 外部リンクに新しいタブで開く属性追加 */
-    Defer(function() {
-        const links = document.querySelectorAll('a');
-        const myDomain = 'ai-image-journey.com';
-    
-        links.forEach(link => {
-          const href = link.getAttribute('href');
-          if (href && !href.includes(myDomain) && !href.startsWith('/') && !href.startsWith('#')) {
-            link.setAttribute('target', '_blank');
-            link.setAttribute('rel', 'noopener noreferrer');
-          }
-        });
-      }, 50); // 0.05秒遅延実行
-    
     /* .defer-img差し替え */
     Defer.dom('.defer-img img', 100); // 0.1秒後に処理
-    
-    /* loading="lazy" の順次解除 */
-    Defer(function() {
-        // すべての <img> 要素を配列に変換
-        var imageEagerLoad = Array.from(document.querySelectorAll('img'));
-        
-        if (imageEagerLoad.length === 0) return;
-    
-        // 初回の要素を0.1秒後に処理
-        const firstImage = imageEagerLoad[0];
-        Defer(function() {
-            firstImage.removeAttribute('loading');
-        }, 200);
-    
-        // 残りの要素を0.2秒間隔で処理
-        imageEagerLoad.slice(1).forEach((img, index) => {
-            Defer(function() {
-                img.removeAttribute('loading');
-            }, 400 + (index * 200)); // 初回の0.2秒 + 0.2秒の間隔
-        });
-    }, 0);
-    
+
     /* リンクカードの作成 */
     Defer(function() {
       class LinkPreviewGenerator {
@@ -270,7 +235,57 @@
       const generator = new LinkPreviewGenerator('https://get-blogcard-info-to-blogger.easygoing0114.workers.dev/');
       generator.replaceLinks();
     }, 100);
+
+    /* 外部リンクに新しいタブで開く属性追加 */
+    Defer(function() {
+      const links = document.querySelectorAll('a');
+      const myDomain = 'ai-image-journey.com';
+  
+      links.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href && !href.includes(myDomain) && !href.startsWith('/') && !href.startsWith('#')) {
+          link.setAttribute('target', '_blank');
+          link.setAttribute('rel', 'noopener noreferrer');
+        }
+      });
+    }, 150); // 0.05秒遅延実行
+
+    /* DMCA バッジ */
+    Defer(function () {
+      document.addEventListener("DOMContentLoaded", function () {
+          var dmcaBadgeClass = "dmca-badge";
+          var refUrlParam = "refurl";
+          var badgeLinks = document.querySelectorAll('a.' + dmcaBadgeClass);
+          if (badgeLinks.length > 0 && badgeLinks[0].getAttribute("href").indexOf(refUrlParam) < 0) {
+              for (var r = 0; r < badgeLinks.length; r++) {
+                  var link = badgeLinks[r];
+                  link.href = link.href + (link.href.indexOf("?") === -1 ? "?" : "&") + refUrlParam + "=" + document.location;
+              }
+          }
+      }, false);
+    }, 150);
     
+    /* loading="lazy" の順次解除 */
+    Defer(function() {
+        // すべての <img> 要素を配列に変換
+        var imageEagerLoad = Array.from(document.querySelectorAll('img'));
+        
+        if (imageEagerLoad.length === 0) return;
+    
+        // 初回の要素を0.1秒後に処理
+        const firstImage = imageEagerLoad[0];
+        Defer(function() {
+            firstImage.removeAttribute('loading');
+        }, 200);
+    
+        // 残りの要素を0.2秒間隔で処理
+        imageEagerLoad.slice(1).forEach((img, index) => {
+            Defer(function() {
+                img.removeAttribute('loading');
+            }, 400 + (index * 200)); // 初回の0.2秒 + 0.2秒の間隔
+        });
+    }, 0);
+        
     /* dark-mode ボタン */
     Defer(function() {
         var buttons = document.querySelectorAll(".toggle-dark-mode-btn");
@@ -303,7 +318,7 @@
         } else {
             twitterThemeMeta.setAttribute('content', 'light'); // Metaタグを更新
         }
-    }, 500); // 500ミリ秒後遅延実行
+    }, 300); // 500ミリ秒後遅延実行
     
     /* mermaid 読み込み */
     Defer(function () {
@@ -347,7 +362,7 @@
       };
     
       initializeMermaid();
-    }, 600); // 600ms 遅延実行
+    }, 400); 
     
     
     /* table の font-size と padding を画面の最大幅に合わせて変更 */
@@ -400,7 +415,7 @@
         window.addEventListener('load', adjustTableScale);
         adjustTableScale();
         
-    }, 700); // 700ミリ秒遅延実行
+    }, 500); 
     
     // 埋め込みコンテンツの設定
     const embedConfigs = [
@@ -449,9 +464,6 @@
                 element.classList.remove('gpu-accelerated');
             });
         }, 1000);  // 1000ミリ秒後に実行
-    
-    /* DMCA バッジ */
-    Defer.js('//images.dmca.com/Badges/DMCABadgeHelper.min.js','dmca',1500);
     
     Defer(function() {
       // ウィンドウの幅が800pxより大きい場合のみ実行
