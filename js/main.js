@@ -248,7 +248,7 @@
           link.setAttribute('rel', 'noopener noreferrer');
         }
       });
-    }, 150); // 0.05秒遅延実行
+    }, 150); 
 
     /* DMCA バッジ */
     Defer(function () {
