@@ -236,6 +236,27 @@
       generator.replaceLinks();
     }, 100);
 
+    /* loading="lazy" の順次解除 */
+    Defer(function() {
+        // すべての <img> 要素を配列に変換
+        var imageEagerLoad = Array.from(document.querySelectorAll('img'));
+        
+        if (imageEagerLoad.length === 0) return;
+    
+        // 初回の要素を0.1秒後に処理
+        const firstImage = imageEagerLoad[0];
+        Defer(function() {
+            firstImage.removeAttribute('loading');
+        }, 100);
+    
+        // 残りの要素を0.2秒間隔で処理
+        imageEagerLoad.slice(1).forEach((img, index) => {
+            Defer(function() {
+                img.removeAttribute('loading');
+            }, 200 + (index * 100)); // 初回の0.2秒 + 0.2秒の間隔
+        });
+    }, 100);
+
     /* 外部リンクに新しいタブで開く属性追加 */
     Defer(function() {
       const links = document.querySelectorAll('a');
@@ -264,27 +285,6 @@
           }
       }, false);
     }, 150);
-    
-    /* loading="lazy" の順次解除 */
-    Defer(function() {
-        // すべての <img> 要素を配列に変換
-        var imageEagerLoad = Array.from(document.querySelectorAll('img'));
-        
-        if (imageEagerLoad.length === 0) return;
-    
-        // 初回の要素を0.1秒後に処理
-        const firstImage = imageEagerLoad[0];
-        Defer(function() {
-            firstImage.removeAttribute('loading');
-        }, 200);
-    
-        // 残りの要素を0.2秒間隔で処理
-        imageEagerLoad.slice(1).forEach((img, index) => {
-            Defer(function() {
-                img.removeAttribute('loading');
-            }, 400 + (index * 200)); // 初回の0.2秒 + 0.2秒の間隔
-        });
-    }, 0);
         
     /* dark-mode ボタン */
     Defer(function() {
