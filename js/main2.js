@@ -236,6 +236,7 @@
     generator.replaceLinks();
   }, 100);
 
+ 
   /* loading="lazy" の順次解除 */
   Defer(function() {
       // すべての <img> 要素を配列に変換
@@ -247,36 +248,16 @@
       const firstImage = imageEagerLoad[0];
       Defer(function() {
           firstImage.removeAttribute('loading');
-      }, 100);
+      }, 200);
   
       // 残りの要素を0.2秒間隔で処理
       imageEagerLoad.slice(1).forEach((img, index) => {
           Defer(function() {
               img.removeAttribute('loading');
-          }, 200 + (index * 100)); // 初回の0.2秒 + 0.2秒の間隔
+          }, 400 + (index * 200)); // 初回の0.2秒 + 0.2秒の間隔
       });
-  }, 100);
-
-  /* smooth zoom */
-  Defer.js('https://cdn.jsdelivr.net/npm/smooth-zoom@latest/dist/zoom.min.js','smooth-zoom',100);
-
-  Defer(() => {
-    const images = document.querySelectorAll(".entry-text img");
-    if (images.length > 0) {
-      images.forEach(e => e.classList.add("zoomable"));
-      if (typeof Zoom === 'function') {
-        Zoom(".zoomable", {
-          maxZoom: 3,
-          zoomSpeed: 0.2
-        });
-      } else {
-        console.error("Smooth Zoom library is not loaded.");
-      }
-    } else {
-      console.warn("No images found in .entry-text.");
-    }
-  }, 1000); 
-
+  }, 0);
+      
   /* dark-mode ボタン */
   Defer(function() {
       var buttons = document.querySelectorAll(".toggle-dark-mode-btn");
@@ -309,7 +290,7 @@
       } else {
           twitterThemeMeta.setAttribute('content', 'light'); // Metaタグを更新
       }
-  }, 300); 
+  }, 300); // 500ミリ秒後遅延実行
 
   /* 外部リンクに新しいタブで開く属性追加、内部ワークフローリンクをダウンロードリンクに変換 */
 Defer(function() {
@@ -525,7 +506,7 @@ Defer(function() {
         img.src = newSmallImgSrc;
       }
     });
-  }, 7000); 
+  }, 10000); // 10秒（10000ミリ秒）遅延実行
   
   /* img の src の "w400-e90-rw" を "w800-e90-rw" に書き換え */
   Defer(function() {
@@ -537,7 +518,7 @@ Defer(function() {
         img.src = newMediumImgSrc;
       }
     });
-  }, 12000); 
+  }, 15000); // 15秒（15000ミリ秒）遅延実行
   
   /* img の src の "w800-e90-rw" を "w0-e90-rw" に 再度書き換え*/
   Defer(function() {
