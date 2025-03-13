@@ -236,77 +236,27 @@
     generator.replaceLinks();
   }, 100);
 
+ 
   /* loading="lazy" の順次解除 */
   Defer(function() {
-    // すべての <img> 要素を配列に変換
-    var imageEagerLoad = Array.from(document.querySelectorAll('img'));
-    
-    if (imageEagerLoad.length === 0) return;
-
-    // 初回の要素を0.1秒後に処理
-    const firstImage = imageEagerLoad[0];
-    Defer(function() {
-        firstImage.removeAttribute('loading');
-    }, 100);
-
-    // 残りの要素を0.2秒間隔で処理
-    imageEagerLoad.slice(1).forEach((img, index) => {
-        Defer(function() {
-            img.removeAttribute('loading');
-        }, 200 + (index * 100)); // 初回の0.2秒 + 0.2秒の間隔
-    });
-  }, 100);
-
-  /* smooth zoom 読み込み */
-  Defer.js('https://cdn.jsdelivr.net/npm/smooth-zoom@latest/dist/zoom.min.js','smooth-zoom',100); 
-
-  Defer(() => {
-    const images = document.querySelectorAll(".entry-text img");
-    if (images.length > 0) {
-      images.forEach(e => e.classList.add("zoomable"));
-      if (typeof Zoom === 'function') {
-        Zoom(".zoomable", {
-          maxZoom: 3,
-          zoomSpeed: 0.2
-        });
-      } else {
-        console.error("Smooth Zoom library is not loaded.");
-      }
-    } else {
-      console.warn("No images found in .entry-text.");
-    }
-  }, 1000); // 1 秒（1000 ミリ秒）遅延
-
-  /* 外部リンクに新しいタブで開く属性追加 */
-  Defer(function() {
-    const links = document.querySelectorAll('a');
-    const myDomain = 'ai-image-journey.com';
-
-    links.forEach(link => {
-      const href = link.getAttribute('href');
-      if (href && !href.includes(myDomain) && !href.startsWith('/') && !href.startsWith('#')) {
-        link.setAttribute('target', '_blank');
-        link.setAttribute('rel', 'noopener noreferrer');
-      }
-    });
-  }, 300); 
-
-  /* DMCA バッジ */
-  Defer(function () {
-    document.addEventListener("DOMContentLoaded", function () {
-        var dmcaBadgeClass = "dmca-badge";
-        var refUrlParam = "refurl";
-        var badgeLinks = document.querySelectorAll('a.' + dmcaBadgeClass);
-        if (badgeLinks.length > 0 && badgeLinks[0].getAttribute("href").indexOf(refUrlParam) < 0) {
-            for (var r = 0; r < badgeLinks.length; r++) {
-                var link = badgeLinks[r];
-                link.href = link.href + (link.href.indexOf("?") === -1 ? "?" : "&") + refUrlParam + "=" + document.location;
-            }
-        }
-    }, false);
-  }, 300);
+      // すべての <img> 要素を配列に変換
+      var imageEagerLoad = Array.from(document.querySelectorAll('img'));
+      
+      if (imageEagerLoad.length === 0) return;
   
-
+      // 初回の要素を0.1秒後に処理
+      const firstImage = imageEagerLoad[0];
+      Defer(function() {
+          firstImage.removeAttribute('loading');
+      }, 200);
+  
+      // 残りの要素を0.2秒間隔で処理
+      imageEagerLoad.slice(1).forEach((img, index) => {
+          Defer(function() {
+              img.removeAttribute('loading');
+          }, 400 + (index * 200)); // 初回の0.2秒 + 0.2秒の間隔
+      });
+  }, 0);
       
   /* dark-mode ボタン */
   Defer(function() {
@@ -340,7 +290,51 @@
       } else {
           twitterThemeMeta.setAttribute('content', 'light'); // Metaタグを更新
       }
-  }, 300); // 300ミリ秒後遅延実行
+  }, 300); // 500ミリ秒後遅延実行
+
+  /* 外部リンクに新しいタブで開く属性追加、内部ワークフローリンクをダウンロードリンクに変換 */
+Defer(function() {
+	const links = document.querySelectorAll('a');
+	const myDomain = 'ai-image-journey.com';
+	const workflowDomain = 'https://files.ai-image-journey.com/workflow/';
+	
+	links.forEach(link => {
+	  const href = link.getAttribute('href');
+	
+	  if (href) {
+	    // 外部リンクの処理
+	    if (href && !href.includes(myDomain) && !href.startsWith('/') && !href.startsWith('#')) {
+	      link.setAttribute('target', '_blank');
+	      link.setAttribute('rel', 'noopener noreferrer');
+	    }
+	
+	    // ワークフローリンクをダウンロードリンクに変換
+	    if (href && href.startsWith(workflowDomain)) {
+	      const rawFileName = href.substring(workflowDomain.length);
+	      const fileName = encodeURIComponent(rawFileName.replace(/[^a-zA-Z0-9._-]/g, '_')); // サニタイズ
+	      link.setAttribute('download', fileName);
+	      link.removeAttribute('target');
+	      link.removeAttribute('rel');
+	      link.innerHTML += ' <span>↓</span>'; // ダウンロードアイコン
+	    }
+	  }
+	});
+}, 400);
+
+  /* DMCA バッジ */
+  Defer(function () {
+    document.addEventListener("DOMContentLoaded", function () {
+        var dmcaBadgeClass = "dmca-badge";
+        var refUrlParam = "refurl";
+        var badgeLinks = document.querySelectorAll('a.' + dmcaBadgeClass);
+        if (badgeLinks.length > 0 && badgeLinks[0].getAttribute("href").indexOf(refUrlParam) < 0) {
+            for (var r = 0; r < badgeLinks.length; r++) {
+                var link = badgeLinks[r];
+                link.href = link.href + (link.href.indexOf("?") === -1 ? "?" : "&") + refUrlParam + "=" + document.location;
+            }
+        }
+    }, false);
+  }, 500);
   
   /* mermaid 読み込み */
   Defer(function () {
@@ -500,7 +494,7 @@
         }
       });
     }
-  }, 5000); 
+  }, 5000); // 5秒（5000ミリ秒）遅延実行
   
   /* img の src の "w200-e90-rw" を "w400-e90-rw" に書き換え */
   Defer(function() {
@@ -512,7 +506,7 @@
         img.src = newSmallImgSrc;
       }
     });
-  }, 7000); 
+  }, 7000); // 10秒（10000ミリ秒）遅延実行
   
   /* img の src の "w400-e90-rw" を "w800-e90-rw" に書き換え */
   Defer(function() {
@@ -524,7 +518,7 @@
         img.src = newMediumImgSrc;
       }
     });
-  }, 10000); 
+  }, 12000); // 15秒（15000ミリ秒）遅延実行
   
   /* img の src の "w800-e90-rw" を "w0-e90-rw" に 再度書き換え*/
   Defer(function() {
@@ -540,7 +534,7 @@
         }
       });
     }
-  }, 20000); 
+  }, 20000); // 20秒（200000ミリ秒）遅延実行
   
   }
   
