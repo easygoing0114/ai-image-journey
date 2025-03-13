@@ -498,7 +498,7 @@ Defer(function() {
           elements.forEach(function(element) {
               element.classList.remove('gpu-accelerated');
           });
-      }, 3000);  
+      }, 1000);  
   
   Defer(function() {
     // ウィンドウの幅が800pxより大きい場合のみ実行
