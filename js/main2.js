@@ -275,7 +275,7 @@
     } else {
       console.warn("No images found in .entry-text.");
     }
-  }, 300); // 0.3 秒（300 ミリ秒）遅延
+  }, 1000); // 1 秒（1000 ミリ秒）遅延
 
   /* 外部リンクに新しいタブで開く属性追加 */
   Defer(function() {
