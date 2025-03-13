@@ -236,7 +236,6 @@
     generator.replaceLinks();
   }, 100);
 
- 
   /* loading="lazy" の順次解除 */
   Defer(function() {
       // すべての <img> 要素を配列に変換
@@ -248,16 +247,36 @@
       const firstImage = imageEagerLoad[0];
       Defer(function() {
           firstImage.removeAttribute('loading');
-      }, 200);
+      }, 100);
   
       // 残りの要素を0.2秒間隔で処理
       imageEagerLoad.slice(1).forEach((img, index) => {
           Defer(function() {
               img.removeAttribute('loading');
-          }, 400 + (index * 200)); // 初回の0.2秒 + 0.2秒の間隔
+          }, 200 + (index * 100)); // 初回の0.2秒 + 0.2秒の間隔
       });
-  }, 0);
-      
+  }, 100);
+
+  /* smooth zoom */
+  Defer.js('https://cdn.jsdelivr.net/npm/smooth-zoom@latest/dist/zoom.min.js','smooth-zoom',100);
+
+  Defer(() => {
+    const images = document.querySelectorAll(".entry-text img");
+    if (images.length > 0) {
+      images.forEach(e => e.classList.add("zoomable"));
+      if (typeof Zoom === 'function') {
+        Zoom(".zoomable", {
+          maxZoom: 3,
+          zoomSpeed: 0.2
+        });
+      } else {
+        console.error("Smooth Zoom library is not loaded.");
+      }
+    } else {
+      console.warn("No images found in .entry-text.");
+    }
+  }, 1000); 
+
   /* dark-mode ボタン */
   Defer(function() {
       var buttons = document.querySelectorAll(".toggle-dark-mode-btn");
@@ -290,7 +309,7 @@
       } else {
           twitterThemeMeta.setAttribute('content', 'light'); // Metaタグを更新
       }
-  }, 300); // 500ミリ秒後遅延実行
+  }, 300); 
 
   /* 外部リンクに新しいタブで開く属性追加、内部ワークフローリンクをダウンロードリンクに変換 */
 Defer(function() {
@@ -468,7 +487,7 @@ Defer(function() {
           Defer.js(embed.script, embed.id, delay);
           delay += 500;
       });
-  }, 800); // DOMContentLoaded から0.8秒後に実行開始
+  }, 800); 
   
   /* iframe */
   Defer.dom('.defer-iframe iframe', 900);
@@ -479,7 +498,7 @@ Defer(function() {
           elements.forEach(function(element) {
               element.classList.remove('gpu-accelerated');
           });
-      }, 1000);  // 1000ミリ秒後に実行
+      }, 3000);  
   
   Defer(function() {
     // ウィンドウの幅が800pxより大きい場合のみ実行
@@ -506,7 +525,7 @@ Defer(function() {
         img.src = newSmallImgSrc;
       }
     });
-  }, 10000); // 10秒（10000ミリ秒）遅延実行
+  }, 7000); 
   
   /* img の src の "w400-e90-rw" を "w800-e90-rw" に書き換え */
   Defer(function() {
@@ -518,7 +537,7 @@ Defer(function() {
         img.src = newMediumImgSrc;
       }
     });
-  }, 15000); // 15秒（15000ミリ秒）遅延実行
+  }, 12000); 
   
   /* img の src の "w800-e90-rw" を "w0-e90-rw" に 再度書き換え*/
   Defer(function() {
