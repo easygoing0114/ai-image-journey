@@ -236,6 +236,7 @@
     generator.replaceLinks();
   }, 100);
 
+ 
   /* loading="lazy" の順次解除 */
   Defer(function() {
       // すべての <img> 要素を配列に変換
@@ -247,36 +248,16 @@
       const firstImage = imageEagerLoad[0];
       Defer(function() {
           firstImage.removeAttribute('loading');
-      }, 100);
+      }, 200);
   
       // 残りの要素を0.2秒間隔で処理
       imageEagerLoad.slice(1).forEach((img, index) => {
           Defer(function() {
               img.removeAttribute('loading');
-          }, 200 + (index * 100)); // 初回の0.2秒 + 0.2秒の間隔
+          }, 400 + (index * 200)); // 初回の0.2秒 + 0.2秒の間隔
       });
-  }, 100);
-
-  /* smooth zoom */
-  Defer.js('https://cdn.jsdelivr.net/npm/smooth-zoom@latest/dist/zoom.min.js','smooth-zoom',100);
-
-  Defer(() => {
-    const images = document.querySelectorAll(".entry-text img");
-    if (images.length > 0) {
-      images.forEach(e => e.classList.add("zoomable"));
-      if (typeof Zoom === 'function') {
-        Zoom(".zoomable", {
-          maxZoom: 3,
-          zoomSpeed: 0.2
-        });
-      } else {
-        console.error("Smooth Zoom library is not loaded.");
-      }
-    } else {
-      console.warn("No images found in .entry-text.");
-    }
-  }, 1000); 
-
+  }, 0);
+      
   /* dark-mode ボタン */
   Defer(function() {
       var buttons = document.querySelectorAll(".toggle-dark-mode-btn");
@@ -309,7 +290,7 @@
       } else {
           twitterThemeMeta.setAttribute('content', 'light'); // Metaタグを更新
       }
-  }, 300); 
+  }, 300); // 500ミリ秒後遅延実行
 
   /* 外部リンクに新しいタブで開く属性追加、内部ワークフローリンクをダウンロードリンクに変換 */
 Defer(function() {
@@ -487,7 +468,7 @@ Defer(function() {
           Defer.js(embed.script, embed.id, delay);
           delay += 500;
       });
-  }, 800); 
+  }, 800); // DOMContentLoaded から0.8秒後に実行開始
   
   /* iframe */
   Defer.dom('.defer-iframe iframe', 900);
@@ -498,63 +479,94 @@ Defer(function() {
           elements.forEach(function(element) {
               element.classList.remove('gpu-accelerated');
           });
-      }, 1000);  
+      }, 1000);  // 1000ミリ秒後に実行
   
-  Defer(function() {
-    // ウィンドウの幅が800pxより大きい場合のみ実行
-    if (window.innerWidth > 800) {
-      // 画像のsrc属性を変更
-      var imageFullSize = document.querySelectorAll('img');
-      imageFullSize.forEach(function(img) {
-        var src = img.src;
-        if (src.includes('w800-e90-rw')) {
-          var newFullImgSrc = src.replace('w800-e90-rw', 'w0-e90-rw');
-          img.src = newFullImgSrc;
+// イメージローダーの作成 - 画像のロード完了を監視する関数
+function loadImages(selector, sourcePattern, targetPattern, callback) {
+  const images = document.querySelectorAll(selector);
+  let loadedCount = 0;
+  const totalImages = images.length;
+  
+  // 対象となる画像が存在しない場合は、すぐにコールバックを実行
+  if (totalImages === 0) {
+    callback();
+    return;
+  }
+  
+  // 各画像に対して処理を実行
+  images.forEach(function(img) {
+    const src = img.src;
+    if (src.includes(sourcePattern)) {
+      const newSrc = src.replace(sourcePattern, targetPattern);
+      
+      // 新しい画像のロードが完了したときのイベントハンドラ
+      const onLoad = function() {
+        loadedCount++;
+        img.removeEventListener('load', onLoad);
+        
+        // すべての画像のロードが完了したらコールバックを実行
+        if (loadedCount === totalImages) {
+          callback();
         }
-      });
+      };
+      
+      // エラー時のハンドラ（エラーでも次のステップに進む）
+      const onError = function() {
+        loadedCount++;
+        img.removeEventListener('error', onError);
+        
+        // すべての画像のロードが完了したらコールバックを実行
+        if (loadedCount === totalImages) {
+          callback();
+        }
+      };
+      
+      // ロードイベントとエラーイベントの監視を開始
+      img.addEventListener('load', onLoad);
+      img.addEventListener('error', onError);
+      
+      // 画像のソースを変更してロード開始
+      img.src = newSrc;
+    } else {
+      // 処理対象外の画像はカウントに含めない
+      loadedCount++;
+      
+      // すべての画像のロードが完了したらコールバックを実行
+      if (loadedCount === totalImages) {
+        callback();
+      }
     }
-  }, 5000); // 5秒（5000ミリ秒）遅延実行
-  
-// すべてのリソースがロードされた後に実行
-window.onload = function() {
-  // 初期画像ノードを取得（一度だけ）
-  const images = document.querySelectorAll('img');
+  });
+}
 
-  // ステップ1: w200-e90-rw を w400-e90-rw に (0.7秒遅延)
-  Defer(() => {
-    images.forEach(img => {
-      let src = img.src;
-      if (src.includes('w200-e90-rw')) {
-        let newSmallImgSrc = src.replace('w200-e90-rw', 'w400-e90-rw');
-        img.src = newSmallImgSrc;
+// 初期ロード完了後に実行する関数
+function startSequentialImageLoading() {
+  console.log("最初の画像からロード開始: w200-e90-rw → w400-e90-rw");
+  
+  // 最初の解像度アップ: w200-e90-rw → w400-e90-rw
+  loadImages('img', 'w200-e90-rw', 'w400-e90-rw', function() {
+    console.log("w400-e90-rw へのロード完了");
+    
+    // 次の解像度アップ: w400-e90-rw → w800-e90-rw
+    loadImages('img', 'w400-e90-rw', 'w800-e90-rw', function() {
+      console.log("w800-e90-rw へのロード完了");
+      
+      // 最後の解像度アップ（ウィンドウ幅が800px以上の場合のみ）
+      if (window.innerWidth > 800) {
+        loadImages('img', 'w800-e90-rw', 'w0-e90-rw', function() {
+          console.log("w0-e90-rw（フル解像度）へのロード完了");
+        });
       }
     });
-  }, 700);
+  });
+}
 
-  // ステップ2: w400-e90-rw を w800-e90-rw に (1.2秒遅延)
-  Defer(() => {
-    images.forEach(img => {
-      let src = img.src;
-      if (src.includes('w400-e90-rw')) {
-        let newMediumImgSrc = src.replace('w400-e90-rw', 'w800-e90-rw');
-        img.src = newMediumImgSrc;
-      }
-    });
-  }, 1200);
-
-  // ステップ3: w800-e90-rw を w0-e90-rw に (2.0秒遅延、ウィンドウ幅800px以上で実行)
-  Defer(() => {
-    if (window.innerWidth > 800) {
-      images.forEach(img => {
-        let src = img.src;
-        if (src.includes('w800-e90-rw')) {
-          let newFullImgSrc = src.replace('w800-e90-rw', 'w0-e90-rw');
-          img.src = newFullImgSrc;
-        }
-      });
-    }
-  }, 2000);
-};
+// ページロード完了後に実行
+if (document.readyState === 'complete') {
+  startSequentialImageLoading();
+} else {
+  window.addEventListener('load', startSequentialImageLoading);
+}
   
   }
   
