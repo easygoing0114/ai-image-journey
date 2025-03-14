@@ -482,6 +482,7 @@ Defer(function() {
       }, 1000);  // 1000ミリ秒後に実行
   
 // イメージローダーの作成 - 画像のロード完了を監視する関数
+Defer(function() {
 function loadImages(selector, sourcePattern, targetPattern, callback) {
   const images = document.querySelectorAll(selector);
   let loadedCount = 0;
@@ -568,6 +569,7 @@ if (document.readyState === 'complete') {
   window.addEventListener('load', startSequentialImageLoading);
 }
   
+}, 1000);  // 1000ミリ秒後に実行
   }
   
   var ImgSize = 400; // 読み込み画像の解像度を設定
