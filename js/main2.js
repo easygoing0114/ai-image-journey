@@ -515,45 +515,46 @@ Defer(function() {
     }
   }, 5000); // 5秒（5000ミリ秒）遅延実行
   
-  /* img の src の "w200-e90-rw" を "w400-e90-rw" に書き換え */
-  Defer(function() {
-    var imageSmallSize = document.querySelectorAll('img');
-    imageSmallSize.forEach(function(img) {
-      var src = img.src;
+// すべてのリソースがロードされた後に実行
+window.onload = function() {
+  // 初期画像ノードを取得（一度だけ）
+  const images = document.querySelectorAll('img');
+
+  // ステップ1: w200-e90-rw を w400-e90-rw に (0.7秒遅延)
+  Defer(() => {
+    images.forEach(img => {
+      let src = img.src;
       if (src.includes('w200-e90-rw')) {
-        var newSmallImgSrc = src.replace('w200-e90-rw', 'w400-e90-rw');
+        let newSmallImgSrc = src.replace('w200-e90-rw', 'w400-e90-rw');
         img.src = newSmallImgSrc;
       }
     });
-  }, 7000); 
-  
-  /* img の src の "w400-e90-rw" を "w800-e90-rw" に書き換え */
-  Defer(function() {
-    var imageMediumSize = document.querySelectorAll('img');
-    imageMediumSize.forEach(function(img) {
-      var src = img.src;
+  }, 700);
+
+  // ステップ2: w400-e90-rw を w800-e90-rw に (1.2秒遅延)
+  Defer(() => {
+    images.forEach(img => {
+      let src = img.src;
       if (src.includes('w400-e90-rw')) {
-        var newMediumImgSrc = src.replace('w400-e90-rw', 'w800-e90-rw');
+        let newMediumImgSrc = src.replace('w400-e90-rw', 'w800-e90-rw');
         img.src = newMediumImgSrc;
       }
     });
-  }, 12000); 
-  
-  /* img の src の "w800-e90-rw" を "w0-e90-rw" に 再度書き換え*/
-  Defer(function() {
-    // ウィンドウの幅が800pxより大きい場合のみ実行
+  }, 1200);
+
+  // ステップ3: w800-e90-rw を w0-e90-rw に (2.0秒遅延、ウィンドウ幅800px以上で実行)
+  Defer(() => {
     if (window.innerWidth > 800) {
-      // 画像のsrc属性を変更
-      var imageFullSize2 = document.querySelectorAll('img');
-      imageFullSize2.forEach(function(img) {
-        var src = img.src;
+      images.forEach(img => {
+        let src = img.src;
         if (src.includes('w800-e90-rw')) {
-          var newFullImgSrc = src.replace('w800-e90-rw', 'w0-e90-rw');
+          let newFullImgSrc = src.replace('w800-e90-rw', 'w0-e90-rw');
           img.src = newFullImgSrc;
         }
       });
     }
-  }, 20000); // 20秒（200000ミリ秒）遅延実行
+  }, 2000);
+};
   
   }
   
