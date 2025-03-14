@@ -289,22 +289,20 @@
     Defer.js('https://cdn.jsdelivr.net/npm/smooth-zoom@latest/dist/zoom.min.js','smooth-zoom',100);
 
     Defer(() => {
-      document.addEventListener('DOMContentLoaded', () => {
-        const images = document.querySelectorAll(".entry-text img");
-        if (images.length > 0) {
-          images.forEach(e => e.classList.add("zoomable"));
-          if (typeof Zoom === 'function') {
-            Zoom(".zoomable", {
-              maxZoom: 3, // 例: 最大ズーム倍率
-              zoomSpeed: 0.2 // 例: ズーム速度
-            });
-          } else {
-            console.error("Smooth Zoom library is not loaded.");
-          }
+      const images = document.querySelectorAll(".entry-text img");
+      if (images.length > 0) {
+        images.forEach(e => e.classList.add("zoomable"));
+        if (typeof Zoom === 'function') {
+          Zoom(".zoomable", {
+            maxZoom: 3,
+            zoomSpeed: 0.2
+          });
         } else {
-          console.warn("No images found in .entry-text.");
+          console.error("Smooth Zoom library is not loaded.");
         }
-      });
+      } else {
+        console.warn("No images found in .entry-text.");
+      }
     }, 1500); // 1.5 秒（1500 ミリ秒）遅延
 
 
