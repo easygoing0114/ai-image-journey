@@ -261,21 +261,20 @@
   Defer.js('https://cdn.jsdelivr.net/npm/smooth-zoom@latest/dist/zoom.min.js','smooth-zoom',100);
 
   Defer(() => {
-    const images = document.querySelectorAll(".entry-text img");
-    if (images.length > 0) {
-      images.forEach(e => e.classList.add("zoomable"));
-      if (typeof Zoom === 'function') {
+    // Zoom 関数が利用可能になるまで待つ
+    Defer.until(() => typeof Zoom === 'function', () => {
+      const images = document.querySelectorAll(".entry-text img");
+      if (images.length > 0) {
+        images.forEach(e => e.classList.add("zoomable"));
         Zoom(".zoomable", {
           maxZoom: 3,
           zoomSpeed: 0.2
         });
       } else {
-        console.error("Smooth Zoom library is not loaded.");
+        console.warn("No images found in .entry-text.");
       }
-    } else {
-      console.warn("No images found in .entry-text.");
-    }
-  }, 1000); 
+    }, 300); // 300ミリ秒ごとにチェック
+  }, 1000); // 1 秒遅延
 
   /* dark-mode ボタン */
   Defer(function() {
