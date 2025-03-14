@@ -236,7 +236,35 @@
     generator.replaceLinks();
   }, 100);
 
- 
+  /* 外部リンクに新しいタブで開く属性追加 */
+  Defer(function() {
+    const links = document.querySelectorAll('a');
+    const myDomain = 'ai-image-journey.com';
+
+    links.forEach(link => {
+      const href = link.getAttribute('href');
+      if (href && !href.includes(myDomain) && !href.startsWith('/') && !href.startsWith('#')) {
+        link.setAttribute('target', '_blank');
+        link.setAttribute('rel', 'noopener noreferrer');
+      }
+    });
+  }, 150); 
+
+  /* DMCA バッジ */
+  Defer(function () {
+    document.addEventListener("DOMContentLoaded", function () {
+        var dmcaBadgeClass = "dmca-badge";
+        var refUrlParam = "refurl";
+        var badgeLinks = document.querySelectorAll('a.' + dmcaBadgeClass);
+        if (badgeLinks.length > 0 && badgeLinks[0].getAttribute("href").indexOf(refUrlParam) < 0) {
+            for (var r = 0; r < badgeLinks.length; r++) {
+                var link = badgeLinks[r];
+                link.href = link.href + (link.href.indexOf("?") === -1 ? "?" : "&") + refUrlParam + "=" + document.location;
+            }
+        }
+    }, false);
+  }, 150);
+  
   /* loading="lazy" の順次解除 */
   Defer(function() {
       // すべての <img> 要素を配列に変換
@@ -258,6 +286,26 @@
       });
   }, 0);
       
+  Defer.js('https://cdn.jsdelivr.net/npm/smooth-zoom@latest/dist/zoom.min.js','smooth-zoom',100);
+
+  Defer(() => {
+    const images = document.querySelectorAll(".entry-text img");
+    if (images.length > 0) {
+      images.forEach(e => e.classList.add("zoomable"));
+      if (typeof Zoom === 'function') {
+        Zoom(".zoomable", {
+          maxZoom: 3,
+          zoomSpeed: 0.2
+        });
+      } else {
+        console.error("Smooth Zoom library is not loaded.");
+      }
+    } else {
+      console.warn("No images found in .entry-text.");
+    }
+  }, 1500); // 1.5 秒（1500 ミリ秒）遅延
+
+
   /* dark-mode ボタン */
   Defer(function() {
       var buttons = document.querySelectorAll(".toggle-dark-mode-btn");
@@ -291,50 +339,6 @@
           twitterThemeMeta.setAttribute('content', 'light'); // Metaタグを更新
       }
   }, 300); // 500ミリ秒後遅延実行
-
-  /* 外部リンクに新しいタブで開く属性追加、内部ワークフローリンクをダウンロードリンクに変換 */
-Defer(function() {
-	const links = document.querySelectorAll('a');
-	const myDomain = 'ai-image-journey.com';
-	const workflowDomain = 'https://files.ai-image-journey.com/workflow/';
-	
-	links.forEach(link => {
-	  const href = link.getAttribute('href');
-	
-	  if (href) {
-	    // 外部リンクの処理
-	    if (href && !href.includes(myDomain) && !href.startsWith('/') && !href.startsWith('#')) {
-	      link.setAttribute('target', '_blank');
-	      link.setAttribute('rel', 'noopener noreferrer');
-	    }
-	
-	    // ワークフローリンクをダウンロードリンクに変換
-	    if (href && href.startsWith(workflowDomain)) {
-	      const rawFileName = href.substring(workflowDomain.length);
-	      const fileName = encodeURIComponent(rawFileName.replace(/[^a-zA-Z0-9._-]/g, '_')); // サニタイズ
-	      link.setAttribute('download', fileName);
-	      link.removeAttribute('target');
-	      link.removeAttribute('rel');
-	      link.innerHTML += ' <span>↓</span>'; // ダウンロードアイコン
-	    }
-	  }
-	});
-}, 400);
-
-  /* DMCA バッジ */
-  Defer(function () {
-    document.addEventListener("DOMContentLoaded", function () {
-        var dmcaBadgeClass = "dmca-badge";
-        var refUrlParam = "refurl";
-        var badgeLinks = document.querySelectorAll('a.' + dmcaBadgeClass);
-        if (badgeLinks.length > 0 && badgeLinks[0].getAttribute("href").indexOf(refUrlParam) < 0) {
-            for (var r = 0; r < badgeLinks.length; r++) {
-                var link = badgeLinks[r];
-                link.href = link.href + (link.href.indexOf("?") === -1 ? "?" : "&") + refUrlParam + "=" + document.location;
-            }
-        }
-    }, false);
-  }, 500);
   
   /* mermaid 読み込み */
   Defer(function () {
@@ -481,119 +485,62 @@ Defer(function() {
           });
       }, 1000);  // 1000ミリ秒後に実行
   
-  // イメージローダーの作成 - 画像のロード完了を監視する関数
-function loadImages(sourcePattern, targetPattern, callback, delay = 500) {
-  // 一定の遅延後に実行することで動的に読み込まれた画像も捕捉
-  setTimeout(function() {
-    // 実行時点で存在する全画像を再取得
-    const images = document.querySelectorAll('img');
-    let loadedCount = 0;
-    let processedCount = 0; // 処理対象となる画像のカウント
-    const totalImages = images.length;
-    
-    // まず処理対象となる画像の数を確認
-    images.forEach(function(img) {
-      const src = img.src;
-      if (src && src.includes(sourcePattern)) {
-        processedCount++;
-      }
-    });
-    
-    // 処理対象の画像がない場合は即座にコールバックを実行
-    if (processedCount === 0) {
-      console.log(`パターン '${sourcePattern}' に一致する画像がないため、次のステップに進みます`);
-      callback();
-      return;
+  Defer(function() {
+    // ウィンドウの幅が800pxより大きい場合のみ実行
+    if (window.innerWidth > 800) {
+      // 画像のsrc属性を変更
+      var imageFullSize = document.querySelectorAll('img');
+      imageFullSize.forEach(function(img) {
+        var src = img.src;
+        if (src.includes('w800-e90-rw')) {
+          var newFullImgSrc = src.replace('w800-e90-rw', 'w0-e90-rw');
+          img.src = newFullImgSrc;
+        }
+      });
     }
-    
-    console.log(`処理対象の画像数: ${processedCount}/${totalImages} (パターン: ${sourcePattern})`);
-    
-    // 各画像に対して処理を実行
-    images.forEach(function(img) {
-      const src = img.src;
-      // 画像にsrcがあり、かつ対象パターンを含む場合のみ処理
-      if (src && src.includes(sourcePattern)) {
-        const newSrc = src.replace(sourcePattern, targetPattern);
-        
-        // 新しい画像のロードが完了したときのイベントハンドラ
-        const onLoad = function() {
-          loadedCount++;
-          img.removeEventListener('load', onLoad);
-          
-          // すべての対象画像のロードが完了したらコールバックを実行
-          if (loadedCount === processedCount) {
-            console.log(`${processedCount}枚の画像を ${sourcePattern} から ${targetPattern} に変更完了`);
-            callback();
-          }
-        };
-        
-        // エラー時のハンドラ（エラーでも次のステップに進む）
-        const onError = function() {
-          loadedCount++;
-          img.removeEventListener('error', onError);
-          console.warn(`画像のロードに失敗: ${newSrc}`);
-          
-          // すべての対象画像のロードが完了したらコールバックを実行
-          if (loadedCount === processedCount) {
-            console.log(`${processedCount}枚の画像を ${sourcePattern} から ${targetPattern} に変更完了（一部エラーあり）`);
-            callback();
-          }
-        };
-        
-        // ロードイベントとエラーイベントの監視を開始
-        img.addEventListener('load', onLoad);
-        img.addEventListener('error', onError);
-        
-        // 画像のソースを変更してロード開始
-        img.src = newSrc;
-      }
-    });
-    
-    // 処理対象の画像がない場合（念のため再確認）
-    if (processedCount === 0) {
-      callback();
-    }
-  }, delay);
-}
-
-// 初期ロード完了後に実行する関数
-function startSequentialImageLoading() {
-  console.log("画像解像度向上シーケンスを開始します");
+  }, 5000); // 5秒（5000ミリ秒）遅延実行
   
-  // 最初の解像度アップ: w200-e90-rw → w400-e90-rw
-  loadImages('w200-e90-rw', 'w400-e90-rw', function() {
-    console.log("ステージ1完了: w200-e90-rw → w400-e90-rw");
-    
-    // 次の解像度アップ: w400-e90-rw → w800-e90-rw
-    loadImages('w400-e90-rw', 'w800-e90-rw', function() {
-      console.log("ステージ2完了: w400-e90-rw → w800-e90-rw");
-      
-      // 最後の解像度アップ（ウィンドウ幅が800px以上の場合のみ）
-      if (window.innerWidth > 800) {
-        loadImages('w800-e90-rw', 'w0-e90-rw', function() {
-          console.log("最終ステージ完了: w800-e90-rw → w0-e90-rw（フル解像度）");
-        });
-      } else {
-        console.log("画面幅が800px以下のため、最終ステージはスキップします");
+  /* img の src の "w200-e90-rw" を "w400-e90-rw" に書き換え */
+  Defer(function() {
+    var imageSmallSize = document.querySelectorAll('img');
+    imageSmallSize.forEach(function(img) {
+      var src = img.src;
+      if (src.includes('w200-e90-rw')) {
+        var newSmallImgSrc = src.replace('w200-e90-rw', 'w400-e90-rw');
+        img.src = newSmallImgSrc;
       }
     });
-  });
-}
-
-// Defer.domによる遅延ロード処理が完了した後に実行するタイミング調整
-function initImageEnhancement() {
-  // まずDeferの処理が終わるのを待つ（一般的にはDOM操作後に実行されるため）
-  setTimeout(function() {
-    startSequentialImageLoading();
-  }, 1000); // Defer.domの処理完了を待つため1秒待機
-}
-
-// ページロード完了後に実行
-if (document.readyState === 'complete') {
-  initImageEnhancement();
-} else {
-  window.addEventListener('load', initImageEnhancement);
-}
+  }, 10000); // 10秒（10000ミリ秒）遅延実行
+  
+  /* img の src の "w400-e90-rw" を "w800-e90-rw" に書き換え */
+  Defer(function() {
+    var imageMediumSize = document.querySelectorAll('img');
+    imageMediumSize.forEach(function(img) {
+      var src = img.src;
+      if (src.includes('w400-e90-rw')) {
+        var newMediumImgSrc = src.replace('w400-e90-rw', 'w800-e90-rw');
+        img.src = newMediumImgSrc;
+      }
+    });
+  }, 15000); // 15秒（15000ミリ秒）遅延実行
+  
+  /* img の src の "w800-e90-rw" を "w0-e90-rw" に 再度書き換え*/
+  Defer(function() {
+    // ウィンドウの幅が800pxより大きい場合のみ実行
+    if (window.innerWidth > 800) {
+      // 画像のsrc属性を変更
+      var imageFullSize2 = document.querySelectorAll('img');
+      imageFullSize2.forEach(function(img) {
+        var src = img.src;
+        if (src.includes('w800-e90-rw')) {
+          var newFullImgSrc = src.replace('w800-e90-rw', 'w0-e90-rw');
+          img.src = newFullImgSrc;
+        }
+      });
+    }
+  }, 20000); // 20秒（200000ミリ秒）遅延実行
+  
+  }
   
   var ImgSize = 400; // 読み込み画像の解像度を設定
   
