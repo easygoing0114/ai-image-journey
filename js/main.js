@@ -508,7 +508,7 @@ Defer(function() {
       imageFullSize.forEach(function(img) {
         var src = img.src;
         if (src.includes('w800-e90-rw')) {
-          var newFullImgSrc = src.replace('w800-e90-rw', 'w1600-e90-rw');
+          var newFullImgSrc = src.replace('w800-e90-rw', 'w0-e90-rw');
           img.src = newFullImgSrc;
         }
       });
@@ -548,7 +548,7 @@ Defer(function() {
       imageFullSize2.forEach(function(img) {
         var src = img.src;
         if (src.includes('w800-e90-rw')) {
-          var newFullImgSrc2 = src.replace('w800-e90-rw', 'w1600-e90-rw');
+          var newFullImgSrc2 = src.replace('w800-e90-rw', 'w0-e90-rw');
           img.src = newFullImgSrc2;
         }
       });
