@@ -481,96 +481,119 @@ Defer(function() {
           });
       }, 1000);  // 1000ミリ秒後に実行
   
-// イメージローダーの作成 - 画像のロード完了を監視する関数
-Defer(function() {
-function loadImages(selector, sourcePattern, targetPattern, callback) {
-  const images = document.querySelectorAll(selector);
-  let loadedCount = 0;
-  const totalImages = images.length;
-  
-  // 対象となる画像が存在しない場合は、すぐにコールバックを実行
-  if (totalImages === 0) {
-    callback();
-    return;
-  }
-  
-  // 各画像に対して処理を実行
-  images.forEach(function(img) {
-    const src = img.src;
-    if (src.includes(sourcePattern)) {
-      const newSrc = src.replace(sourcePattern, targetPattern);
-      
-      // 新しい画像のロードが完了したときのイベントハンドラ
-      const onLoad = function() {
-        loadedCount++;
-        img.removeEventListener('load', onLoad);
-        
-        // すべての画像のロードが完了したらコールバックを実行
-        if (loadedCount === totalImages) {
-          callback();
-        }
-      };
-      
-      // エラー時のハンドラ（エラーでも次のステップに進む）
-      const onError = function() {
-        loadedCount++;
-        img.removeEventListener('error', onError);
-        
-        // すべての画像のロードが完了したらコールバックを実行
-        if (loadedCount === totalImages) {
-          callback();
-        }
-      };
-      
-      // ロードイベントとエラーイベントの監視を開始
-      img.addEventListener('load', onLoad);
-      img.addEventListener('error', onError);
-      
-      // 画像のソースを変更してロード開始
-      img.src = newSrc;
-    } else {
-      // 処理対象外の画像はカウントに含めない
-      loadedCount++;
-      
-      // すべての画像のロードが完了したらコールバックを実行
-      if (loadedCount === totalImages) {
-        callback();
+  // イメージローダーの作成 - 画像のロード完了を監視する関数
+function loadImages(sourcePattern, targetPattern, callback, delay = 500) {
+  // 一定の遅延後に実行することで動的に読み込まれた画像も捕捉
+  setTimeout(function() {
+    // 実行時点で存在する全画像を再取得
+    const images = document.querySelectorAll('img');
+    let loadedCount = 0;
+    let processedCount = 0; // 処理対象となる画像のカウント
+    const totalImages = images.length;
+    
+    // まず処理対象となる画像の数を確認
+    images.forEach(function(img) {
+      const src = img.src;
+      if (src && src.includes(sourcePattern)) {
+        processedCount++;
       }
+    });
+    
+    // 処理対象の画像がない場合は即座にコールバックを実行
+    if (processedCount === 0) {
+      console.log(`パターン '${sourcePattern}' に一致する画像がないため、次のステップに進みます`);
+      callback();
+      return;
     }
-  });
+    
+    console.log(`処理対象の画像数: ${processedCount}/${totalImages} (パターン: ${sourcePattern})`);
+    
+    // 各画像に対して処理を実行
+    images.forEach(function(img) {
+      const src = img.src;
+      // 画像にsrcがあり、かつ対象パターンを含む場合のみ処理
+      if (src && src.includes(sourcePattern)) {
+        const newSrc = src.replace(sourcePattern, targetPattern);
+        
+        // 新しい画像のロードが完了したときのイベントハンドラ
+        const onLoad = function() {
+          loadedCount++;
+          img.removeEventListener('load', onLoad);
+          
+          // すべての対象画像のロードが完了したらコールバックを実行
+          if (loadedCount === processedCount) {
+            console.log(`${processedCount}枚の画像を ${sourcePattern} から ${targetPattern} に変更完了`);
+            callback();
+          }
+        };
+        
+        // エラー時のハンドラ（エラーでも次のステップに進む）
+        const onError = function() {
+          loadedCount++;
+          img.removeEventListener('error', onError);
+          console.warn(`画像のロードに失敗: ${newSrc}`);
+          
+          // すべての対象画像のロードが完了したらコールバックを実行
+          if (loadedCount === processedCount) {
+            console.log(`${processedCount}枚の画像を ${sourcePattern} から ${targetPattern} に変更完了（一部エラーあり）`);
+            callback();
+          }
+        };
+        
+        // ロードイベントとエラーイベントの監視を開始
+        img.addEventListener('load', onLoad);
+        img.addEventListener('error', onError);
+        
+        // 画像のソースを変更してロード開始
+        img.src = newSrc;
+      }
+    });
+    
+    // 処理対象の画像がない場合（念のため再確認）
+    if (processedCount === 0) {
+      callback();
+    }
+  }, delay);
 }
 
 // 初期ロード完了後に実行する関数
 function startSequentialImageLoading() {
-  console.log("最初の画像からロード開始: w200-e90-rw → w400-e90-rw");
+  console.log("画像解像度向上シーケンスを開始します");
   
   // 最初の解像度アップ: w200-e90-rw → w400-e90-rw
-  loadImages('img', 'w200-e90-rw', 'w400-e90-rw', function() {
-    console.log("w400-e90-rw へのロード完了");
+  loadImages('w200-e90-rw', 'w400-e90-rw', function() {
+    console.log("ステージ1完了: w200-e90-rw → w400-e90-rw");
     
     // 次の解像度アップ: w400-e90-rw → w800-e90-rw
-    loadImages('img', 'w400-e90-rw', 'w800-e90-rw', function() {
-      console.log("w800-e90-rw へのロード完了");
+    loadImages('w400-e90-rw', 'w800-e90-rw', function() {
+      console.log("ステージ2完了: w400-e90-rw → w800-e90-rw");
       
       // 最後の解像度アップ（ウィンドウ幅が800px以上の場合のみ）
       if (window.innerWidth > 800) {
-        loadImages('img', 'w800-e90-rw', 'w0-e90-rw', function() {
-          console.log("w0-e90-rw（フル解像度）へのロード完了");
+        loadImages('w800-e90-rw', 'w0-e90-rw', function() {
+          console.log("最終ステージ完了: w800-e90-rw → w0-e90-rw（フル解像度）");
         });
+      } else {
+        console.log("画面幅が800px以下のため、最終ステージはスキップします");
       }
     });
   });
 }
 
+// Defer.domによる遅延ロード処理が完了した後に実行するタイミング調整
+function initImageEnhancement() {
+  // まずDeferの処理が終わるのを待つ（一般的にはDOM操作後に実行されるため）
+  setTimeout(function() {
+    startSequentialImageLoading();
+  }, 1000); // Defer.domの処理完了を待つため1秒待機
+}
+
 // ページロード完了後に実行
 if (document.readyState === 'complete') {
-  startSequentialImageLoading();
+  initImageEnhancement();
 } else {
-  window.addEventListener('load', startSequentialImageLoading);
+  window.addEventListener('load', initImageEnhancement);
 }
-  
-}, 1000);  // 1000ミリ秒後に実行
-  }
   
   var ImgSize = 400; // 読み込み画像の解像度を設定
   
