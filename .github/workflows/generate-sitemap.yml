@@ -5,6 +5,9 @@ on:
     - cron: '0 0 * * *'  # 毎日UTC0時に実行
   workflow_dispatch:  # 手動実行も可能
 
+permissions:
+  contents: write  # リポジトリへの書き込み権限を付与
+
 jobs:
   generate-sitemap:
     runs-on: ubuntu-latest
@@ -18,10 +21,10 @@ jobs:
           node-version: '16'
 
       - name: Install dependencies
-        run: npm install  # package.jsonに基づいて依存関係をインストール
+        run: npm install
 
       - name: Run sitemap generator
-        run: node js/generate_m0_sitemap.js  # パスをjs/に修正
+        run: node js/generate_m0_sitemap.js
 
       - name: Commit and push changes
         run: |
