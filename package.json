@@ -1,0 +1,11 @@
+{
+    "name": "sitemap-generator",
+    "version": "1.0.0",
+    "dependencies": {
+      "axios": "^1.6.0",
+      "xml2js": "^0.6.0"
+    },
+    "scripts": {
+      "start": "node generate_m0_sitemap.js"
+    }
+  }

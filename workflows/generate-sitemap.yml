@@ -1,0 +1,34 @@
+name: Generate m0 Sitemap
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 毎日UTC0時に実行
+  workflow_dispatch:  # 手動実行も可能
+
+jobs:
+  generate-sitemap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install axios xml2js
+
+      - name: Run sitemap generator
+        run: node generate_m0_sitemap.js
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add docs/sitemaps/*
+          git commit -m "Update m0 sitemaps" || echo "No changes to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
