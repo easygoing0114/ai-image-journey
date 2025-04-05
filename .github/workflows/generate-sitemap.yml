@@ -18,10 +18,10 @@ jobs:
           node-version: '16'
 
       - name: Install dependencies
-        run: npm install axios xml2js
+        run: npm install  # package.jsonに基づいて依存関係をインストール
 
       - name: Run sitemap generator
-        run: node generate_m0_sitemap.js
+        run: node js/generate_m0_sitemap.js  # パスをjs/に修正
 
       - name: Commit and push changes
         run: |
