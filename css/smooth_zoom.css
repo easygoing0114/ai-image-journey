@@ -1,0 +1,14 @@
+/*smooth zoom*/
+.zoom-img,
+.zoom-bg  {
+  cursor: pointer;/*デフォルトは zoom-in*/
+}
+/*拡大(背景変化)&#12539;解除が完了するまでの時間*/
+.zoom-img,
+.zoom-bg {
+  transition-duration: .1s;/*デフォルトは .3s*/
+}
+/*背景色*/
+.zoom-bg {
+  background: rgba(0,0,0,.8);/*デフォルトは rgba(0,0,0,.95)*/
+}
