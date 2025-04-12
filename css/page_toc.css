@@ -1,7 +1,7 @@
 #toc {
     font-size: var(--font-08);
     max-width: 480px;
-    border: 1px solid var(--bs-body-color);
+    border: 1px dotted var(--bs-body-color);
     margin-left: auto;
     margin-right: auto;
     }
@@ -17,6 +17,9 @@
     counter-reset: ul-counter;
     }
     .toc-container li {
+    list-style: none;
+    } 
+    .toc-container li > ul > li{
     list-style: none;
     }    
     .toc-container li a {
