@@ -1,7 +1,7 @@
 #toc {
-    font-size: 14px;
-    max-width: 400px;
-    border: 1px solid var(--user-dark-border-03);
+    font-size: var(--font-08);
+    max-width: 480px;
+    border: 1px solid var(--bs-body-color);
     margin-left: auto;
     margin-right: auto;
     }
@@ -10,17 +10,15 @@
     text-align: center;
     }
     .toc-container {
-    font-size: 14px;
-    padding: 2em !important;
-    margin: 0 !important;
-    }
-    #toc ul{
-    font-size: 14px;
+    padding: 2em;
+    margin: 0;
     }
     .toc-container, .toc-container ul {
     counter-reset: ul-counter;
-    list-style: none;
     }
+    .toc-container li {
+    list-style: none;
+    }    
     .toc-container li a {
     display: flex;
     color: var(--jt-link-color);
