@@ -59,7 +59,7 @@
         };
         
         // デフォルトのCivitai画像
-        this.DEFAULT_CIVITAI_IMAGE = 'https://education.civitai.com/wp-content/uploads/2023/08/Edu1.png';
+        this.DEFAULT_CIVITAI_IMAGE = 'https://files.ai-image-journey.com/images/logo/civitai-color%20400.png';
       }
   
       // カスタム画像を取得する関数
