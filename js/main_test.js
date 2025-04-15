@@ -465,7 +465,7 @@
           elements.forEach(function(element) {
               element.classList.remove('gpu-accelerated');
           });
-      }, 1000);  // 1000ミリ秒後に実行
+      }, 3000);  // 3000ミリ秒後に実行
    
   /* img の src の "w200-e90-rw" を "w400-e90-rw" に書き換え */
   Defer(function() {
