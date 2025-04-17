@@ -59,7 +59,7 @@
         };
         
         // デフォルトのCivitai画像
-        this.DEFAULT_CIVITAI_IMAGE = 'https://files.ai-image-journey.com/images/logo/civitai-color%20400.png';
+        this.DEFAULT_CIVITAI_IMAGE = 'https://files.ai-image-journey.com/images/logo/civitai-color%20400.webp';
       }
   
       // カスタム画像を取得する関数
