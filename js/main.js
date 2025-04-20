@@ -110,7 +110,7 @@
         
         // 画像URLのパラメータ変換処理
         if (imageUrl) {
-          imageUrl = imageUrl.replace(/s1600|w0-e90-rw|w800-e90-rw/g, 'w400-e90-rw');
+          imageUrl = imageUrl.replace(/s1600|w0-e90-rw|w800-e90-rw|w1200-e90-rw/g, 'w400-e90-rw');
         }
   
         const linkClass = `blogcard-link${imageUrl ? '' : ' blogcard-link-no-image'}`;
