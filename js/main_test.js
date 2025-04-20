@@ -59,7 +59,7 @@
         };
         
         // デフォルトのCivitai画像
-        this.DEFAULT_CIVITAI_IMAGE = 'https://files.ai-image-journey.com/images/logo/civitai-color%20400.png';
+        this.DEFAULT_CIVITAI_IMAGE = 'https://files.ai-image-journey.com/images/logo/civitai-color%20400.webp';
       }
   
       // カスタム画像を取得する関数
@@ -110,7 +110,7 @@
         
         // 画像URLのパラメータ変換処理
         if (imageUrl) {
-          imageUrl = imageUrl.replace(/s1600|w0-e90-rw|w800-e90-rw/g, 'w400-e90-rw');
+          imageUrl = imageUrl.replace(/s1600|w0-e90-rw|w800-e90-rw|w1200-e90-rw/g, 'w400-e90-rw');
         }
   
         const linkClass = `blogcard-link${imageUrl ? '' : ' blogcard-link-no-image'}`;
@@ -320,7 +320,7 @@
       } else {
           twitterThemeMeta.setAttribute('content', 'light'); // Metaタグを更新
       }
-  }, 300); // 500ミリ秒後遅延実行
+  }, 300);
   
   /* mermaid 読み込み */
   Defer(function () {
@@ -454,7 +454,7 @@
           Defer.js(embed.script, embed.id, delay);
           delay += 500;
       });
-  }, 800); // DOMContentLoaded から0.8秒後に実行開始
+  }, 800);
   
   /* iframe */
   Defer.dom('.defer-iframe iframe', 900);
@@ -465,7 +465,7 @@
           elements.forEach(function(element) {
               element.classList.remove('gpu-accelerated');
           });
-      }, 3000);  // 3000ミリ秒後に実行
+      }, 3000);
    
   /* img の src の "w200-e90-rw" を "w400-e90-rw" に書き換え */
   Defer(function() {
@@ -477,7 +477,7 @@
         img.src = newSmallImgSrc;
       }
     });
-  }, 10000); // 10秒（10000ミリ秒）遅延実行
+  }, 10000);
   
   /* img の src の "w400-e90-rw" を "w800-e90-rw" に書き換え */
   Defer(function() {
@@ -489,7 +489,7 @@
         img.src = newMediumImgSrc;
       }
     });
-  }, 20000); // 20秒（20000ミリ秒）遅延実行
+  }, 20000);
     
 }
   
