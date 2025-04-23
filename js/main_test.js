@@ -57,6 +57,7 @@
           'huggingface.co/bluepen5805/anima_pencil-xl': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/48499ad8-33bb-4a2c-aac8-af6c6edcc280/00494-20240625200426-223644773-30-5.jpeg',
           'huggingface.co/bluepen5805/blue_pencil-xl': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/55619f31-4395-4e9b-a94d-208460a9f7d2/00494-20240623160056-880978405-30-5.jpeg',
           'huggingface.co/bluepen5805/noob_v_pencil-XL': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/5d4020ad-6777-4077-b53e-4432e9263d45/00000-20241211153415-1954655588-30-5.jpeg',
+          'huggingface.co/zer0int': 'https://cdn-avatars.huggingface.co/v1/production/uploads/6490359a877fc29cb1b09451/b-oU9m0-ceQQ1tyt2G_pq.png',
           'huggingface.co/easygoing0114': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiQc6TaqYJzaLshb3_gqq033VJHulIafa-B9uDdLZJ8mMur0lpHWCgGapiBPH2Cqclz2xzD3UW_SaORKAjy2mabO2EuDCQv5IwD_XhUCpqakhEs0v5K4r5ud_eqyDlF6BPtLqbKYIMR00wd5ire9pCcFc1ieii2sBI6tMMmVxprH0Fhafk/w400-e90-rw/Profile%20image.png'
         };
         
