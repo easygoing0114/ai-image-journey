@@ -378,21 +378,18 @@
         chartJsScript.async = true; // 非同期ロードを明示
         document.head.appendChild(chartJsScript);
 
-        // エラーハンドリング
-        chartJsScript.onerror = () => console.error('Failed to load Chart.js');
-
-        // Chart.js ロード完了後にプラグインをロード
-        chartJsScript.onload = () => {
-          const datalabelsScript = document.createElement('script');
-          datalabelsScript.src = 'https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js';
-          datalabelsScript.async = true;
-          document.head.appendChild(datalabelsScript);
-
-          // エラーハンドリング
-          datalabelsScript.onerror = () => console.error('Failed to load chartjs-plugin-datalabels');
-        };
       }
-    }, 100); // 遅延時間を0msに設定（DOM読み込み後に即実行）
+    }, 100); 
+
+    Defer(function () {
+      if (document.querySelector('canvas.chartjs')) {
+        // プラグインをロード
+        const datalabelsScript = document.createElement('script');
+        datalabelsScript.src = 'https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js';
+        datalabelsScript.async = true;
+        document.head.appendChild(datalabelsScript);
+      }
+    }, 500); 
   
   /* table の font-size と padding を画面の最大幅に合わせて変更 */
   Defer(function() {
