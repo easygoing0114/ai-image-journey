@@ -253,7 +253,7 @@
         link.setAttribute('rel', 'noopener noreferrer');
       }
     });
-  }, 150); 
+  }, 100); 
 
   /* DMCA バッジ */
   Defer(function () {
@@ -268,7 +268,7 @@
             }
         }
     }, false);
-  }, 150);
+  }, 100);
   
   /* loading="lazy" の順次解除 */
   Defer(function() {
@@ -289,7 +289,7 @@
               img.removeAttribute('loading');
           }, 400 + (index * 200)); // 初回の0.2秒 + 0.2秒の間隔
       });
-  }, 100);
+  }, 200);
       
   /* dark-mode ボタン */
   Defer(function() {
@@ -323,7 +323,7 @@
       } else {
           twitterThemeMeta.setAttribute('content', 'light'); // Metaタグを更新
       }
-  }, 300);
+  }, 100);
   
   /* mermaid 読み込み */
   Defer(function () {
@@ -367,7 +367,7 @@
     };
   
     initializeMermaid();
-  }, 400); 
+  }, 100); 
   
   /* Chart.js の読み込み */
   Defer(function () {
@@ -384,7 +384,7 @@
       datalabelsScript.src = 'https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js';
         document.head.appendChild(datalabelsScript);
     }
-  }, 500); 
+  }, 100); 
   
   /* table の font-size と padding を画面の最大幅に合わせて変更 */
   Defer(function() {
@@ -436,7 +436,7 @@
       window.addEventListener('load', adjustTableScale);
       adjustTableScale();
       
-  }, 600); 
+  }, 100); 
   
   // 埋め込みコンテンツの設定
   const embedConfigs = [
@@ -473,7 +473,7 @@
           Defer.js(embed.script, embed.id, delay);
           delay += 500;
       });
-  }, 800);
+  }, 300);
   
   /* iframe */
   Defer.dom('.defer-iframe iframe', 900);
