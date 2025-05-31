@@ -373,7 +373,7 @@
     Defer(function () {
       if (document.querySelector('canvas.chartjs')) {
         const chartJsScript = document.createElement('script');
-        chartJsScript.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js';
+        chartJsScript.src = 'https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js';
         chartJsScript.async = true; 
         document.head.appendChild(chartJsScript);
 
@@ -384,7 +384,7 @@
     Defer(function () {
       if (document.querySelector('canvas.chartjs')) {
         const datalabelsScript = document.createElement('script');
-        datalabelsScript.src = 'https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js';
+        datalabelsScript.src = 'https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js';
         datalabelsScript.async = true;
         document.head.appendChild(datalabelsScript);
       }
