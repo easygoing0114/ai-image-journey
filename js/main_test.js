@@ -369,6 +369,23 @@
     initializeMermaid();
   }, 400); 
   
+  /* Chart.js の読み込み */
+
+  Defer(function () {
+    if (document.querySelector('canvas.chartjs')) {
+      // Chart.js スクリプトをロード
+      const chartJsScript = document.createElement('script');
+      chartJsScript.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js';
+      document.head.appendChild(chartJsScript);
+
+      // Chart.js ロード完了後にプラグインをロード
+      chartJsScript.onload = () => {
+        const datalabelsScript = document.createElement('script');
+        datalabelsScript.src = 'https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js';
+        document.head.appendChild(datalabelsScript);
+      };
+    }
+  }, 500); 
   
   /* table の font-size と padding を画面の最大幅に合わせて変更 */
   Defer(function() {
@@ -420,7 +437,7 @@
       window.addEventListener('load', adjustTableScale);
       adjustTableScale();
       
-  }, 500); 
+  }, 600); 
   
   // 埋め込みコンテンツの設定
   const embedConfigs = [
