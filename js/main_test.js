@@ -372,7 +372,6 @@
   /* Chart.js の読み込み */
     Defer(function () {
       if (document.querySelector('canvas.chartjs')) {
-        // Chart.js スクリプトをロード
         const chartJsScript = document.createElement('script');
         chartJsScript.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js';
         chartJsScript.async = true; // 非同期ロードを明示
@@ -381,9 +380,9 @@
       }
     }, 100); 
 
+    /* プラグインの読み込み */
     Defer(function () {
       if (document.querySelector('canvas.chartjs')) {
-        // プラグインをロード
         const datalabelsScript = document.createElement('script');
         datalabelsScript.src = 'https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js';
         datalabelsScript.async = true;
