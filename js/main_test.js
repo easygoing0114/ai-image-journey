@@ -389,15 +389,6 @@
         document.head.appendChild(datalabelsScript);
       }
     }, 500); 
-
-    Defer(function () {
-      if (document.querySelector('canvas.chartjs')) {
-        const colorschemesScript = document.createElement('script');
-        colorschemesScript.src = 'https://cdn.jsdelivr.net/npm/chartjs-plugin-colorschemes@0.4.0/dist/chartjs-plugin-colorschemes.min.js';
-        colorschemesScript.async = true;
-        document.head.appendChild(colorschemesScript);
-      }
-    }, 500); 
   
   /* table の font-size と padding を画面の最大幅に合わせて変更 */
   Defer(function() {
