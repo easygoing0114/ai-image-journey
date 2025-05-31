@@ -393,7 +393,7 @@
     Defer(function () {
       if (document.querySelector('canvas.chartjs')) {
         const colorschemesScript = document.createElement('script');
-        colorschemesScript.src = 'https://cdn.jsdelivr.net/npm/chartjs-plugin-colorschemes/dist/chartjs-plugin-colorschemes.min.js';
+        colorschemesScript.src = 'https://cdn.jsdelivr.net/npm/chartjs-plugin-colorschemes@0.4.0/dist/chartjs-plugin-colorschemes.min.js';
         colorschemesScript.async = true;
         document.head.appendChild(colorschemesScript);
       }
