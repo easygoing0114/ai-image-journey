@@ -374,7 +374,7 @@
       if (document.querySelector('canvas.chartjs')) {
         const chartJsScript = document.createElement('script');
         chartJsScript.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js';
-        chartJsScript.async = true; // 非同期ロードを明示
+        chartJsScript.async = true; 
         document.head.appendChild(chartJsScript);
 
       }
@@ -390,10 +390,10 @@
       }
     }, 500); 
 
-        Defer(function () {
+    Defer(function () {
       if (document.querySelector('canvas.chartjs')) {
         const colorschemesScript = document.createElement('script');
-        colorschemesScript.src = 'https://cdn.jsdelivr.net/npm/chartjs-plugin-colorschemes';
+        colorschemesScript.src = 'https://cdn.jsdelivr.net/npm/chartjs-plugin-colorschemes/dist/chartjs-plugin-colorschemes.min.js';
         colorschemesScript.async = true;
         document.head.appendChild(colorschemesScript);
       }
