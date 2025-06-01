@@ -392,11 +392,6 @@
 
     let chartInstance = null;
 
-    // 現在のテーマに基づいて色を取得する関数
-    function getCurrentThemeColor() { // 関数宣言なので巻き上げされる
-      return getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color').trim();
-    }
-
     // 全てのChart.jsインスタンスの色を更新する関数（テンプレートに記載）
     function updateAllChartColors() {
       const currentColor = getCurrentThemeColor();
