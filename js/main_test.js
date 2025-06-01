@@ -388,7 +388,9 @@
         datalabelsScript.async = true;
         document.head.appendChild(datalabelsScript);
       }
-    }, 500); 
+    }, 100); 
+
+
   
   /* table の font-size と padding を画面の最大幅に合わせて変更 */
   Defer(function() {
