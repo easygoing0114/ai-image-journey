@@ -293,9 +293,9 @@
       
   /* dark-mode ボタン */
   Defer(function() {
-      var buttons = document.querySelectorAll(".toggle-dark-mode-btn");
+      var darkModeButtons = document.querySelectorAll(".toggle-dark-mode-btn");
   
-      buttons.forEach(function(button) {
+      darkModeButtons.forEach(function(button) {
           button.addEventListener("click", function() {
               var htmlElement = document.querySelector("html");
               var classList = htmlElement.classList;
