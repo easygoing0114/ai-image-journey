@@ -407,25 +407,30 @@ Defer(function() {
   /* Chart.js */
   if (document.querySelector('.chartjs') !== null) {
     document.addEventListener('DOMContentLoaded', function() {
-      // 3秒待機してからチャートを描画
       setTimeout(function() {
         Chart.register(ChartDataLabels);
         updateAllChartColors();
-        createChart();
+        
+        // Get all canvas elements with class 'chartjs'
+        const canvases = document.querySelectorAll('.chartjs');
+        canvases.forEach((canvas, index) => {
+          // Call createChartN function where N is index + 1
+          const funcName = `createChart${index + 1}`;
+          if (typeof window[funcName] === 'function') {
+            window[funcName]();
+          } else {
+            console.warn(`Function ${funcName} not found for canvas ${canvas.id}`);
+          }
+        });
       }, 3000);
     });
-
-    let chartInstance = null;
 
     function updateAllChartColors() {
       const currentColor = getCurrentThemeColor();
       
-      // Chart.jsのデフォルト設定を更新
       Chart.defaults.color = currentColor;
       
-      // 既存の全てのチャートインスタンスを更新
       Object.values(Chart.instances).forEach(function(chart) {
-        // スケールの色を更新
         if (chart.options.scales) {
           Object.keys(chart.options.scales).forEach(function(scaleKey) {
             if (chart.options.scales[scaleKey].ticks) {
@@ -434,26 +439,22 @@ Defer(function() {
           });
         }
         
-        // 凡例の色を更新
         if (chart.options.plugins && chart.options.plugins.legend && chart.options.plugins.legend.labels) {
           chart.options.plugins.legend.labels.color = currentColor;
         }
         
-        // タイトルの色を更新
         if (chart.options.plugins && chart.options.plugins.title) {
           chart.options.plugins.title.color = currentColor;
         }
         
-        // データラベルの色を更新
         if (chart.options.plugins && chart.options.plugins.datalabels) {
           chart.options.plugins.datalabels.color = currentColor;
         }
         
-        // チャートを再描画
         chart.update('none');
       });
     }
-  }      
+  }
 
   /* table の font-size と padding を画面の最大幅に合わせて変更 */
   if (document.querySelector('table') !== null) {
