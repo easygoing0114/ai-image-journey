@@ -405,6 +405,14 @@ Defer(function() {
       }
     }, 1000); 
 
+    document.addEventListener('DOMContentLoaded', function() {
+      // 3秒待機してからチャートを描画
+      setTimeout(function() {
+        Chart.register(ChartDataLabels);
+        createChart();
+      }, 3000);
+    });
+
     let chartInstance = null;
 
     // 全てのChart.jsインスタンスの色を更新する関数（テンプレートに記載）

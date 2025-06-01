@@ -59,4 +59,4 @@ Defer(() => {
     }
   }, 30000); 
 
-Defer.js('https://cdn.jsdelivr.net/npm/smooth-zoom@latest/dist/zoom.min.js','smooth-zoom',100);
+Defer.js('https://cdn.jsdelivr.net/npm/smooth-zoom/dist/zoom.min.js','smooth-zoom',100);
