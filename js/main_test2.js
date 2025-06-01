@@ -400,6 +400,7 @@ Defer(function() {
   }, 100); 
   
   /* Chart.js */
+  if (document.querySelector('.chartjs') !== null) {
     document.addEventListener('DOMContentLoaded', function() {
       // 3秒待機してからチャートを描画
       setTimeout(function() {
@@ -446,7 +447,8 @@ Defer(function() {
         chart.update('none');
       });
     }
-      
+  }      
+  
   /* table の font-size と padding を画面の最大幅に合わせて変更 */
   Defer(function() {
   
