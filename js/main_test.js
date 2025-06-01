@@ -292,38 +292,53 @@
   }, 200);
       
   /* dark-mode ボタン */
-  Defer(function() {
-      var darkModeButtons = document.querySelectorAll(".toggle-dark-mode-btn");
-  
-      darkModeButtons.forEach(function(button) {
-          button.addEventListener("click", function() {
-              var htmlElement = document.querySelector("html");
-              var classList = htmlElement.classList;
-              var isDarkMode = classList.contains("dark-mode");
-              var twitterThemeMeta = document.querySelector("#twitter-theme");
-  
-              if (isDarkMode) {
-                  classList.remove("dark-mode");
-                  localStorage.setItem('theme', 'light'); // ライトモードを記憶
-                  twitterThemeMeta.setAttribute('content', 'light'); // Metaタグを更新
-              } else {
-                  classList.add("dark-mode");
-                  localStorage.setItem('theme', 'dark'); // ダークモードを記憶
-                  twitterThemeMeta.setAttribute('content', 'dark'); // Metaタグを更新
-              }
-          });
-      });
-  
-      // ページ読み込み時にlocalStorageの値をチェックして適用
-      var savedTheme = localStorage.getItem('theme');
-      var twitterThemeMeta = document.querySelector("#twitter-theme");
-      if (savedTheme === 'dark') {
-          document.querySelector("html").classList.add("dark-mode");
-          twitterThemeMeta.setAttribute('content', 'dark'); // Metaタグを更新
-      } else {
-          twitterThemeMeta.setAttribute('content', 'light'); // Metaタグを更新
-      }
-  }, 100);
+Defer(function() {
+    var darkModeButtons = document.querySelectorAll(".toggle-dark-mode-btn");
+
+    darkModeButtons.forEach(function(button) {
+        button.addEventListener("click", function() {
+            var htmlElement = document.querySelector("html");
+            var classList = htmlElement.classList;
+            var isDarkMode = classList.contains("dark-mode");
+            var twitterThemeMeta = document.querySelector("#twitter-theme");
+
+            if (isDarkMode) {
+                classList.remove("dark-mode");
+                localStorage.setItem('theme', 'light'); // ライトモードを記憶
+                if (twitterThemeMeta) {
+                    twitterThemeMeta.setAttribute('content', 'light'); // Metaタグを更新
+                }
+            } else {
+                classList.add("dark-mode");
+                localStorage.setItem('theme', 'dark'); // ダークモードを記憶
+                if (twitterThemeMeta) {
+                    twitterThemeMeta.setAttribute('content', 'dark'); // Metaタグを更新
+                }
+            }
+            
+            // Chart.jsの色を更新（テンプレート関数を呼び出し）
+            if (typeof updateAllChartColors === 'function') {
+                setTimeout(function() {
+                    updateAllChartColors();
+                }, 100); // CSSの適用を待つ
+            }
+        });
+    });
+
+    // ページ読み込み時にlocalStorageの値をチェックして適用
+    var savedTheme = localStorage.getItem('theme');
+    var twitterThemeMeta = document.querySelector("#twitter-theme");
+    if (savedTheme === 'dark') {
+        document.querySelector("html").classList.add("dark-mode");
+        if (twitterThemeMeta) {
+            twitterThemeMeta.setAttribute('content', 'dark'); // Metaタグを更新
+        }
+    } else {
+        if (twitterThemeMeta) {
+            twitterThemeMeta.setAttribute('content', 'light'); // Metaタグを更新
+        }
+    }
+}, 100);
   
   /* mermaid 読み込み */
   Defer(function () {
