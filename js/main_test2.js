@@ -30,6 +30,12 @@
   // Defer.css('your_css_url','your-style-id',100);
   // Defer.js('your_script_url','your-script-id',100);
   
+  /* 外部スクリプトの読み込み */
+  if (document.querySelector('canvas.chartjs') !== null) {
+    Defer.js('https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js', 'chartjs', 100);
+    Defer.js('https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js', 'chartjsplugin', 1000);
+  }
+
   /* .defer-img差し替え */
   Defer.dom('.defer-img img', 100); // 0.1秒後に処理
 
@@ -384,27 +390,7 @@ Defer(function() {
     initializeMermaid();
   }, 100); 
   
-  /* Chart.js の読み込み */
-    Defer(function () {
-      if (document.querySelector('canvas.chartjs')) {
-        const chartJsScript = document.createElement('script');
-        chartJsScript.src = 'https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js';
-        chartJsScript.async = true; 
-        document.head.appendChild(chartJsScript);
-
-      }
-    }, 100); 
-
-    /* プラグインの読み込み */
-    Defer(function () {
-      if (document.querySelector('canvas.chartjs')) {
-        const datalabelsScript = document.createElement('script');
-        datalabelsScript.src = 'https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js';
-        datalabelsScript.async = true;
-        document.head.appendChild(datalabelsScript);
-      }
-    }, 1000); 
-
+  /* Chart.js */
     document.addEventListener('DOMContentLoaded', function() {
       // 3秒待機してからチャートを描画
       setTimeout(function() {
