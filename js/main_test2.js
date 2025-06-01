@@ -354,37 +354,39 @@ Defer(function() {
   Defer(function () {
     const initializeMermaid = async () => {
       const mermaidCodes = document.querySelectorAll('code.mermaid');
+      if (mermaidCodes.length > 0) {
+        const { default: mermaid } = await import('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs');
   
         // ダークモードの検出
         const isDarkMode = document.documentElement.classList.contains('dark-mode');
-
+  
         mermaid.initialize({
-            startOnLoad: true,
-            theme: isDarkMode ? 'dark' : 'default',
+          startOnLoad: true,
+          theme: isDarkMode ? 'dark' : 'default',
         });
-
+  
         mermaid.contentLoaded();
-
+  
         // アスペクト比に基づいてクラスを適用 & <svg> の max-width 削除
         setTimeout(() => {
-            document.querySelectorAll('figure.mermaid-chart').forEach(figure => {
+          document.querySelectorAll('figure.mermaid-chart').forEach(figure => {
             const preBlock = figure.querySelector('pre.mermaid-block');
-
+  
             if (preBlock) {
-                const aspectRatio = preBlock.clientWidth / preBlock.clientHeight;
-
-                // 共通クラス box-img を付与
-                figure.classList.add('box-img');
-
-                // アスペクト比に応じたクラスを追加
-                if (aspectRatio >= 1) {
+              const aspectRatio = preBlock.clientWidth / preBlock.clientHeight;
+  
+              // 共通クラス box-img を付与
+              figure.classList.add('box-img');
+  
+              // アスペクト比に応じたクラスを追加
+              if (aspectRatio >= 1) {
                 figure.classList.add('box-img640');
-                } else {
+              } else {
                 figure.classList.add('box-img480');
-                }
+              }
             }
-
-            });
+  
+          });
         }, 1000); // レンダリング完了後に実行
     };
   
