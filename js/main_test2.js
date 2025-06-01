@@ -31,14 +31,14 @@
   // Defer.js('your_script_url','your-script-id',100);
   
   /* 外部スクリプトの読み込み */
+  if (document.querySelector('code.mermaid') !== null) {
+    Defer.js('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs', 'mermaid', 100);
+  }
   if (document.querySelector('canvas.chartjs') !== null) {
     Defer.js('https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js', 'chartjs', 100);
     Defer.js('https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js', 'chartjsplugin', 1000);
   }
-  if (document.querySelector('code.mermaid') !== null) {
-    Defer.js('https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js', 'chartjs', 100);
-    Defer.js('https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js', 'chartjsplugin', 1000);
-  }
+
 
   /* .defer-img差し替え */
   Defer.dom('.defer-img img', 100); // 0.1秒後に処理
@@ -354,41 +354,38 @@ Defer(function() {
   Defer(function () {
     const initializeMermaid = async () => {
       const mermaidCodes = document.querySelectorAll('code.mermaid');
-      if (mermaidCodes.length > 0) {
-        const { default: mermaid } = await import('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs');
   
         // ダークモードの検出
         const isDarkMode = document.documentElement.classList.contains('dark-mode');
-  
+
         mermaid.initialize({
-          startOnLoad: true,
-          theme: isDarkMode ? 'dark' : 'default',
+            startOnLoad: true,
+            theme: isDarkMode ? 'dark' : 'default',
         });
-  
+
         mermaid.contentLoaded();
-  
+
         // アスペクト比に基づいてクラスを適用 & <svg> の max-width 削除
         setTimeout(() => {
-          document.querySelectorAll('figure.mermaid-chart').forEach(figure => {
+            document.querySelectorAll('figure.mermaid-chart').forEach(figure => {
             const preBlock = figure.querySelector('pre.mermaid-block');
-  
+
             if (preBlock) {
-              const aspectRatio = preBlock.clientWidth / preBlock.clientHeight;
-  
-              // 共通クラス box-img を付与
-              figure.classList.add('box-img');
-  
-              // アスペクト比に応じたクラスを追加
-              if (aspectRatio >= 1) {
+                const aspectRatio = preBlock.clientWidth / preBlock.clientHeight;
+
+                // 共通クラス box-img を付与
+                figure.classList.add('box-img');
+
+                // アスペクト比に応じたクラスを追加
+                if (aspectRatio >= 1) {
                 figure.classList.add('box-img640');
-              } else {
+                } else {
                 figure.classList.add('box-img480');
-              }
+                }
             }
-  
-          });
+
+            });
         }, 1000); // レンダリング完了後に実行
-      }
     };
   
     initializeMermaid();
