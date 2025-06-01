@@ -390,8 +390,53 @@
       }
     }, 100); 
 
+    Defer(function () {
+      let chartInstance = null;
 
-  
+      // 現在のテーマに基づいて色を取得する関数
+      function getCurrentThemeColor() {
+        return getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color').trim();
+      }
+
+      // 全てのChart.jsインスタンスの色を更新する関数（テンプレートに記載）
+      function updateAllChartColors() {
+        const currentColor = getCurrentThemeColor();
+        
+        // Chart.jsのデフォルト設定を更新
+        Chart.defaults.color = currentColor;
+        
+        // 既存の全てのチャートインスタンスを更新
+        Object.values(Chart.instances).forEach(function(chart) {
+          // スケールの色を更新
+          if (chart.options.scales) {
+            Object.keys(chart.options.scales).forEach(function(scaleKey) {
+              if (chart.options.scales[scaleKey].ticks) {
+                chart.options.scales[scaleKey].ticks.color = currentColor;
+              }
+            });
+          }
+          
+          // 凡例の色を更新
+          if (chart.options.plugins && chart.options.plugins.legend && chart.options.plugins.legend.labels) {
+            chart.options.plugins.legend.labels.color = currentColor;
+          }
+          
+          // タイトルの色を更新
+          if (chart.options.plugins && chart.options.plugins.title) {
+            chart.options.plugins.title.color = currentColor;
+          }
+          
+          // データラベルの色を更新
+          if (chart.options.plugins && chart.options.plugins.datalabels) {
+            chart.options.plugins.datalabels.color = currentColor;
+          }
+          
+          // チャートを再描画
+          chart.update('none');
+        });
+      }
+    }, 100); 
+      
   /* table の font-size と padding を画面の最大幅に合わせて変更 */
   Defer(function() {
   
