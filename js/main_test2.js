@@ -31,11 +31,11 @@
   // Defer.js('your_script_url','your-script-id',100);
   
   /* 外部スクリプトの読み込み */
-  if (document.querySelector('.chartjs') !== null) {
+  if (document.querySelector('canvas.chartjs') !== null) {
     Defer.js('https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js', 'chartjs', 100);
     Defer.js('https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js', 'chartjsplugin', 1000);
   }
-  if (document.querySelector('.mermaid') !== null) {
+  if (document.querySelector('code.mermaid') !== null) {
     Defer.js('https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js', 'chartjs', 100);
     Defer.js('https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js', 'chartjsplugin', 1000);
   }
