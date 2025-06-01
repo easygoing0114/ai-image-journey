@@ -390,7 +390,6 @@
       }
     }, 1000); 
 
-    Defer(function () {
       let chartInstance = null;
 
       // 現在のテーマに基づいて色を取得する関数
@@ -435,7 +434,6 @@
           chart.update('none');
         });
       }
-    }, 1000); 
       
   /* table の font-size と padding を画面の最大幅に合わせて変更 */
   Defer(function() {
