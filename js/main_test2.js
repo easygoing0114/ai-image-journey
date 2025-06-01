@@ -31,9 +31,6 @@
   // Defer.js('your_script_url','your-script-id',100);
   
   /* 外部スクリプトの読み込み */
-  if (document.querySelector('code.mermaid') !== null) {
-    Defer.js('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs', 'mermaid', 100);
-  }
   if (document.querySelector('canvas.chartjs') !== null) {
     Defer.js('https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js', 'chartjs', 100);
     Defer.js('https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js', 'chartjsplugin', 1000);
@@ -388,6 +385,7 @@ Defer(function() {
   
           });
         }, 1000); // レンダリング完了後に実行
+      }
     };
   
     initializeMermaid();
