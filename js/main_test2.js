@@ -45,216 +45,219 @@
     Defer.js('https://cdn.jsdelivr.net/npm/html2canvas-pro/dist/html2canvas-pro.min.js', 'canvaspro', 100);
   }
 
-  /* .defer-img差し替え */
-  Defer.dom('.defer-img img', 100); // 0.1秒後に処理
+  /* img, iframe 差し替え */
+  Defer.dom('.defer-img img', 100);
+  Defer.dom('.defer-iframe iframe', 500);
 
   /* リンクカードの作成 */
-  Defer(function() {
-    class LinkPreviewGenerator {
-      constructor(workerUrl) {
-        this.workerUrl = workerUrl;
-        this.baseDomain = 'ai-image-journey.com';
-        this.BLOGGER_IMAGE_DOMAIN = 'blogger.googleusercontent.com';
-        
-        // カスタム画像のマッピング
-        this.CUSTOM_IMAGES = {
-          // Civitai models
-          'civitai.com/models/722776': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ff1638f0-0295-45e8-b038-d7f376f26873/ComfyUI_00023_.jpeg',
-          'civitai.com/models/261336': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/48499ad8-33bb-4a2c-aac8-af6c6edcc280/00494-20240625200426-223644773-30-5.jpeg',
-          'civitai.com/models/119012': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/55619f31-4395-4e9b-a94d-208460a9f7d2/00494-20240623160056-880978405-30-5.jpeg',
-          'civitai.com/models/674457': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/b5674e66-26cb-45ec-9e82-c19a2dd9753d/ComfyUI_00262_.jpeg',
-          'civitai.com/models/260267': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/b50708a9-a0a2-4a62-a688-cbd15abb65e4/image%20(24).jpeg',
-          'civitai.com/models/1027203': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/5d4020ad-6777-4077-b53e-4432e9263d45/00000-20241211153415-1954655588-30-5.jpeg',
-          'civitai.com/models/1356520': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjslEk_MbcW7rmbFx4f3uB5iN8zNVKrFJV7qLSuoc8WJsLxq0aR04ug4Suqef9fK4A5QcaprR-dFgqxsNpj-Pk6j3-lAIix8bRtiRs3OXLy3G2cLUqdE-0bY-hEiTEFLbRnLJU9hbysUPAL-78n39qmQYB7mxvRunFo_Xpx5HDVIKNUBLE/w400-e90-rw/Flux1_euler_Anime%20Illustration%20of%20%20A%20young%20girl%20holding%20a%20chalkboard%20that%20says%20flan%20t5%20and%20te-only.png',
+  if (document.querySelector('.blogcard-auto') !== null) {
+    Defer(function() {
+      class LinkPreviewGenerator {
+        constructor(workerUrl) {
+          this.workerUrl = workerUrl;
+          this.baseDomain = 'ai-image-journey.com';
+          this.BLOGGER_IMAGE_DOMAIN = 'blogger.googleusercontent.com';
           
-          // Hugging Face models
-          'huggingface.co/bluepen5805/blue_pencil-flux1': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ff1638f0-0295-45e8-b038-d7f376f26873/ComfyUI_00023_.jpeg',
-          'huggingface.co/bluepen5805/anima_pencil-xl': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/48499ad8-33bb-4a2c-aac8-af6c6edcc280/00494-20240625200426-223644773-30-5.jpeg',
-          'huggingface.co/bluepen5805/blue_pencil-xl': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/55619f31-4395-4e9b-a94d-208460a9f7d2/00494-20240623160056-880978405-30-5.jpeg',
-          'huggingface.co/bluepen5805/noob_v_pencil-XL': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/5d4020ad-6777-4077-b53e-4432e9263d45/00000-20241211153415-1954655588-30-5.jpeg',
-          'huggingface.co/zer0int': 'https://cdn-avatars.huggingface.co/v1/production/uploads/6490359a877fc29cb1b09451/b-oU9m0-ceQQ1tyt2G_pq.png',
-          'huggingface.co/easygoing0114': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhPnTwjMymZ1GmW7M0av29ua0DpqyeFZ2QLf3INk-i0rgWAepGwtta79Kn7mtrSSkfCPHHAaFL2Yywvp7sRP3-JAteLQYJsxX-SSTwrd_BKld9pBGxsByp2q9feoXdizjP0MTD5_0V8glo9J0qLVxyegs_qPumq6ijA_13hzLOzjLE2ejs/w400-e90-rw/profile%202025.5.10.png'
-        };
-        
-        // デフォルトのCivitai画像
-        this.DEFAULT_CIVITAI_IMAGE = 'https://files.ai-image-journey.com/images/logo/civitai-color%20400.webp';
-      }
-  
-      // カスタム画像を取得する関数
-      getCustomImage(url) {
-        try {
-          const urlLower = url.toLowerCase();
-          
-          // URLからモデルIDを含むパスを抽出
-          for (const [path, image] of Object.entries(this.CUSTOM_IMAGES)) {
-            if (urlLower.includes(path.toLowerCase())) {
-              return image;
-            }
-          }
-          
-          // Civitaiのその他のページ用のデフォルト画像
-          if (urlLower.includes('civitai.com/models/')) {
-            return this.DEFAULT_CIVITAI_IMAGE;
-          }
-          
-          return null;
-        } catch (error) {
-  //        console.error('Error getting custom image:', error);
-          return null;
-        }
-      }
-  
-      // メタデータから画像URLを取得する関数
-      getMetadataImage(metadata) {
-        if (!metadata) return null;
-        return metadata.thumbnail || 
-               metadata.ogImage || 
-               metadata.twitterImage || 
-               metadata.firstImage || 
-               null;
-      }
-  
-      createCardHTML(metadata) {
-        const isInternal = this.isSameDomain(metadata.url);
-        
-        // 1. まずカスタム画像を確認
-        let imageUrl = this.getCustomImage(metadata.url);
-        
-        // 2. カスタム画像がない場合のみメタデータの画像を使用
-        if (!imageUrl) {
-          imageUrl = this.getMetadataImage(metadata);
-        }
-  
-        
-        // 画像URLのパラメータ変換処理
-        if (imageUrl) {
-          imageUrl = imageUrl.replace(/s1600|w0-e90-rw|w800-e90-rw|w1200-e90-rw/g, 'w400-e90-rw');
-        }
-  
-        const linkClass = `blogcard-link${imageUrl ? '' : ' blogcard-link-no-image'}`;
-        
-        const imageHTML = imageUrl ? `
-          <div class="blogcard-image-container">
-              <img class="blogcard-image" src="${imageUrl}" 
-                alt="link page thumbnail image" width="400" height="400" />
-          </div>
-        ` : '';
-  
-        return `
-          <figure class="blogcard blogcard-auto">
-            <a class="${linkClass}" href="${metadata.url}"
-               ${isInternal ? '' : 'target="_blank" rel="noopener noreferrer"'}>
-              ${imageHTML}
-              <div class="blogcard-content">
-                <p class="blogcard-title">${metadata.title}</p>
-                <blockquote cite="${metadata.url}">
-                  <p class="blogcard-description">${metadata.description}</p>
-                </blockquote>
-                ${isInternal ? '' : `
-                  <div class="blogcard-footer">
-                    <img src="https://www.google.com/s2/favicons?domain=${metadata.domain}" 
-                      alt="Favicon" width="16" height="16" />
-                    ${metadata.domain}
-                  </div>
-                `}
-              </div>
-            </a>
-          </figure>
-        `;
-      }
-  
-      createFallbackCardHTML(link, url) {
-        const linkText = link.textContent.trim() || url;
-        const customImage = this.getCustomImage(url);
-        const linkClass = `blogcard-link${customImage ? '' : ' blogcard-link-no-image'}`;
-        
-        const imageHTML = customImage ? `
-          <div class="blogcard-image-container">
-              <img class="blogcard-image" src="${customImage}" 
-                alt="link page thumbnail image" width="400" height="400" />
-          </div>
-        ` : '';
-  
-        return `
-          <figure class="blogcard blogcard-auto">
-            <a class="${linkClass}" href="${url}"
-               target="_blank" rel="noopener noreferrer">
-              ${imageHTML}
-              <div class="blogcard-content">
-                <p class="blogcard-title">${linkText}</p>
-              </div>
-            </a>
-          </figure>
-        `;
-      }
-  
-      // メタデータを取得する関数
-      async fetchPageData(url) {
-        try {
-          const response = await fetch(this.workerUrl, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ url }),
-          });
-  
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-  
-          const data = await response.json();
-          return data.status === 'success' ? data.metadata : null;
-        } catch (error) {
-  //        console.error('Error fetching page data:', error);
-          return null;
-        }
-      }
-  
-      async replaceLinks() {
-        const blogcards = document.querySelectorAll('.blogcard-auto');
-        for (const card of blogcards) {
-          try {
-            const link = card.querySelector('a');
-            if (!link) continue;
-  
-            const url = link.getAttribute('href');
-            if (!url) continue;
-  
-  //          console.log('Processing:', card, link, url);
-  
-            let metadata;
-            try {
-              metadata = await this.fetchPageData(url);
-            } catch (error) {
-              metadata = null;
-            }
-  
-            const cardHTML = metadata ? this.createCardHTML(metadata) : this.createFallbackCardHTML(link, url);
+          // カスタム画像のマッピング
+          this.CUSTOM_IMAGES = {
+            // Civitai models
+            'civitai.com/models/722776': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ff1638f0-0295-45e8-b038-d7f376f26873/ComfyUI_00023_.jpeg',
+            'civitai.com/models/261336': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/48499ad8-33bb-4a2c-aac8-af6c6edcc280/00494-20240625200426-223644773-30-5.jpeg',
+            'civitai.com/models/119012': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/55619f31-4395-4e9b-a94d-208460a9f7d2/00494-20240623160056-880978405-30-5.jpeg',
+            'civitai.com/models/674457': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/b5674e66-26cb-45ec-9e82-c19a2dd9753d/ComfyUI_00262_.jpeg',
+            'civitai.com/models/260267': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/b50708a9-a0a2-4a62-a688-cbd15abb65e4/image%20(24).jpeg',
+            'civitai.com/models/1027203': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/5d4020ad-6777-4077-b53e-4432e9263d45/00000-20241211153415-1954655588-30-5.jpeg',
+            'civitai.com/models/1356520': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjslEk_MbcW7rmbFx4f3uB5iN8zNVKrFJV7qLSuoc8WJsLxq0aR04ug4Suqef9fK4A5QcaprR-dFgqxsNpj-Pk6j3-lAIix8bRtiRs3OXLy3G2cLUqdE-0bY-hEiTEFLbRnLJU9hbysUPAL-78n39qmQYB7mxvRunFo_Xpx5HDVIKNUBLE/w400-e90-rw/Flux1_euler_Anime%20Illustration%20of%20%20A%20young%20girl%20holding%20a%20chalkboard%20that%20says%20flan%20t5%20and%20te-only.png',
             
-            card.insertAdjacentHTML('afterend', cardHTML);
-            card.remove();
+            // Hugging Face models
+            'huggingface.co/bluepen5805/blue_pencil-flux1': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ff1638f0-0295-45e8-b038-d7f376f26873/ComfyUI_00023_.jpeg',
+            'huggingface.co/bluepen5805/anima_pencil-xl': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/48499ad8-33bb-4a2c-aac8-af6c6edcc280/00494-20240625200426-223644773-30-5.jpeg',
+            'huggingface.co/bluepen5805/blue_pencil-xl': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/55619f31-4395-4e9b-a94d-208460a9f7d2/00494-20240623160056-880978405-30-5.jpeg',
+            'huggingface.co/bluepen5805/noob_v_pencil-XL': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/5d4020ad-6777-4077-b53e-4432e9263d45/00000-20241211153415-1954655588-30-5.jpeg',
+            'huggingface.co/zer0int': 'https://cdn-avatars.huggingface.co/v1/production/uploads/6490359a877fc29cb1b09451/b-oU9m0-ceQQ1tyt2G_pq.png',
+            'huggingface.co/easygoing0114': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhPnTwjMymZ1GmW7M0av29ua0DpqyeFZ2QLf3INk-i0rgWAepGwtta79Kn7mtrSSkfCPHHAaFL2Yywvp7sRP3-JAteLQYJsxX-SSTwrd_BKld9pBGxsByp2q9feoXdizjP0MTD5_0V8glo9J0qLVxyegs_qPumq6ijA_13hzLOzjLE2ejs/w400-e90-rw/profile%202025.5.10.png'
+          };
+          
+          // デフォルトのCivitai画像
+          this.DEFAULT_CIVITAI_IMAGE = 'https://files.ai-image-journey.com/images/logo/civitai-color%20400.webp';
+        }
+    
+        // カスタム画像を取得する関数
+        getCustomImage(url) {
+          try {
+            const urlLower = url.toLowerCase();
+            
+            // URLからモデルIDを含むパスを抽出
+            for (const [path, image] of Object.entries(this.CUSTOM_IMAGES)) {
+              if (urlLower.includes(path.toLowerCase())) {
+                return image;
+              }
+            }
+            
+            // Civitaiのその他のページ用のデフォルト画像
+            if (urlLower.includes('civitai.com/models/')) {
+              return this.DEFAULT_CIVITAI_IMAGE;
+            }
+            
+            return null;
           } catch (error) {
-  //          console.error(`Error processing link: ${error.message}`);
-            continue;
+            // console.error('Error getting custom image:', error);
+            return null;
+          }
+        }
+    
+        // メタデータから画像URLを取得する関数
+        getMetadataImage(metadata) {
+          if (!metadata) return null;
+          return metadata.thumbnail || 
+                metadata.ogImage || 
+                metadata.twitterImage || 
+                metadata.firstImage || 
+                null;
+        }
+    
+        createCardHTML(metadata) {
+          const isInternal = this.isSameDomain(metadata.url);
+          
+          // 1. まずカスタム画像を確認
+          let imageUrl = this.getCustomImage(metadata.url);
+          
+          // 2. カスタム画像がない場合のみメタデータの画像を使用
+          if (!imageUrl) {
+            imageUrl = this.getMetadataImage(metadata);
+          }
+    
+          
+          // 画像URLのパラメータ変換処理
+          if (imageUrl) {
+            imageUrl = imageUrl.replace(/s1600|w0-e90-rw|w800-e90-rw|w1200-e90-rw/g, 'w400-e90-rw');
+          }
+    
+          const linkClass = `blogcard-link${imageUrl ? '' : ' blogcard-link-no-image'}`;
+          
+          const imageHTML = imageUrl ? `
+            <div class="blogcard-image-container">
+                <img class="blogcard-image" src="${imageUrl}" 
+                  alt="link page thumbnail image" width="400" height="400" />
+            </div>
+          ` : '';
+    
+          return `
+            <figure class="blogcard blogcard-auto">
+              <a class="${linkClass}" href="${metadata.url}"
+                ${isInternal ? '' : 'target="_blank" rel="noopener noreferrer"'}>
+                ${imageHTML}
+                <div class="blogcard-content">
+                  <p class="blogcard-title">${metadata.title}</p>
+                  <blockquote cite="${metadata.url}">
+                    <p class="blogcard-description">${metadata.description}</p>
+                  </blockquote>
+                  ${isInternal ? '' : `
+                    <div class="blogcard-footer">
+                      <img src="https://www.google.com/s2/favicons?domain=${metadata.domain}" 
+                        alt="Favicon" width="16" height="16" />
+                      ${metadata.domain}
+                    </div>
+                  `}
+                </div>
+              </a>
+            </figure>
+          `;
+        }
+    
+        createFallbackCardHTML(link, url) {
+          const linkText = link.textContent.trim() || url;
+          const customImage = this.getCustomImage(url);
+          const linkClass = `blogcard-link${customImage ? '' : ' blogcard-link-no-image'}`;
+          
+          const imageHTML = customImage ? `
+            <div class="blogcard-image-container">
+                <img class="blogcard-image" src="${customImage}" 
+                  alt="link page thumbnail image" width="400" height="400" />
+            </div>
+          ` : '';
+    
+          return `
+            <figure class="blogcard blogcard-auto">
+              <a class="${linkClass}" href="${url}"
+                target="_blank" rel="noopener noreferrer">
+                ${imageHTML}
+                <div class="blogcard-content">
+                  <p class="blogcard-title">${linkText}</p>
+                </div>
+              </a>
+            </figure>
+          `;
+        }
+    
+        // メタデータを取得する関数
+        async fetchPageData(url) {
+          try {
+            const response = await fetch(this.workerUrl, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ url }),
+            });
+    
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+    
+            const data = await response.json();
+            return data.status === 'success' ? data.metadata : null;
+          } catch (error) {
+    //        console.error('Error fetching page data:', error);
+            return null;
+          }
+        }
+    
+        async replaceLinks() {
+          const blogcards = document.querySelectorAll('.blogcard-auto');
+          for (const card of blogcards) {
+            try {
+              const link = card.querySelector('a');
+              if (!link) continue;
+    
+              const url = link.getAttribute('href');
+              if (!url) continue;
+    
+    //          console.log('Processing:', card, link, url);
+    
+              let metadata;
+              try {
+                metadata = await this.fetchPageData(url);
+              } catch (error) {
+                metadata = null;
+              }
+    
+              const cardHTML = metadata ? this.createCardHTML(metadata) : this.createFallbackCardHTML(link, url);
+              
+              card.insertAdjacentHTML('afterend', cardHTML);
+              card.remove();
+            } catch (error) {
+    //          console.error(`Error processing link: ${error.message}`);
+              continue;
+            }
+          }
+        }
+    
+        isSameDomain(url) {
+          try {
+            const urlDomain = new URL(url).hostname;
+            return urlDomain === this.baseDomain || urlDomain.endsWith(`.${this.baseDomain}`);
+          } catch (error) {
+            return false;
           }
         }
       }
-  
-      isSameDomain(url) {
-        try {
-          const urlDomain = new URL(url).hostname;
-          return urlDomain === this.baseDomain || urlDomain.endsWith(`.${this.baseDomain}`);
-        } catch (error) {
-          return false;
-        }
-      }
-    }
-  
-    // 実行
-    const generator = new LinkPreviewGenerator('https://get-blogcard-info-to-blogger.easygoing0114.workers.dev/');
-    generator.replaceLinks();
-  }, 100);
+    
+      // 実行
+      const generator = new LinkPreviewGenerator('https://get-blogcard-info-to-blogger.easygoing0114.workers.dev/');
+      generator.replaceLinks();
+    }, 100);
+  }
 
   /* 外部リンクに新しいタブで開く属性追加 */
   Defer(function() {
@@ -407,6 +410,7 @@ Defer(function() {
       // 3秒待機してからチャートを描画
       setTimeout(function() {
         Chart.register(ChartDataLabels);
+        updateAllChartColors();
         createChart();
       }, 3000);
     });
@@ -543,9 +547,6 @@ Defer(function() {
         });
     }, 300);
   }
-  
-  /* iframe */
-  Defer.dom('.defer-iframe iframe', 500);
   
   /* GPUアクセラレーション除去 */
   Defer(function() {
