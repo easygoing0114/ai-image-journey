@@ -356,48 +356,50 @@ Defer(function() {
 }, 100);
   
   /* mermaid 読み込み */
-  Defer(function () {
-    const initializeMermaid = async () => {
-      const mermaidCodes = document.querySelectorAll('code.mermaid');
-      if (mermaidCodes.length > 0) {
-        const { default: mermaid } = await import('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs');
-  
-        // ダークモードの検出
-        const isDarkMode = document.documentElement.classList.contains('dark-mode');
-  
-        mermaid.initialize({
-          startOnLoad: true,
-          theme: isDarkMode ? 'dark' : 'default',
-        });
-  
-        mermaid.contentLoaded();
-  
-        // アスペクト比に基づいてクラスを適用 & <svg> の max-width 削除
-        setTimeout(() => {
-          document.querySelectorAll('figure.mermaid-chart').forEach(figure => {
-            const preBlock = figure.querySelector('pre.mermaid-block');
-  
-            if (preBlock) {
-              const aspectRatio = preBlock.clientWidth / preBlock.clientHeight;
-  
-              // 共通クラス box-img を付与
-              figure.classList.add('box-img');
-  
-              // アスペクト比に応じたクラスを追加
-              if (aspectRatio >= 1) {
-                figure.classList.add('box-img640');
-              } else {
-                figure.classList.add('box-img480');
-              }
-            }
-  
-          });
-        }, 1000); // レンダリング完了後に実行
-      }
-    };
-  
-    initializeMermaid();
-  }, 100); 
+  if (document.querySelector('.mermaid') !== null) {
+    Defer(function () {
+        const initializeMermaid = async () => {
+        const mermaidCodes = document.querySelectorAll('code.mermaid');
+        if (mermaidCodes.length > 0) {
+            const { default: mermaid } = await import('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs');
+    
+            // ダークモードの検出
+            const isDarkMode = document.documentElement.classList.contains('dark-mode');
+    
+            mermaid.initialize({
+            startOnLoad: true,
+            theme: isDarkMode ? 'dark' : 'default',
+            });
+    
+            mermaid.contentLoaded();
+    
+            // アスペクト比に基づいてクラスを適用 & <svg> の max-width 削除
+            setTimeout(() => {
+            document.querySelectorAll('figure.mermaid-chart').forEach(figure => {
+                const preBlock = figure.querySelector('pre.mermaid-block');
+    
+                if (preBlock) {
+                const aspectRatio = preBlock.clientWidth / preBlock.clientHeight;
+    
+                // 共通クラス box-img を付与
+                figure.classList.add('box-img');
+    
+                // アスペクト比に応じたクラスを追加
+                if (aspectRatio >= 1) {
+                    figure.classList.add('box-img640');
+                } else {
+                    figure.classList.add('box-img480');
+                }
+                }
+    
+            });
+            }, 1000); // レンダリング完了後に実行
+        }
+        };
+    
+        initializeMermaid();
+    }, 100); 
+  }
   
   /* Chart.js */
   if (document.querySelector('.chartjs') !== null) {
@@ -448,98 +450,102 @@ Defer(function() {
       });
     }
   }      
-  
+
   /* table の font-size と padding を画面の最大幅に合わせて変更 */
-  Defer(function() {
-  
-  function debounce(func, wait) {
-      let timeout;
-      return function() {
-          const context = this, args = arguments;
-          clearTimeout(timeout);
-          timeout = setTimeout(() => func.apply(context, args), wait);
-      };
+  if (document.querySelector('table') !== null) {
+    Defer(function() {
+    
+    function debounce(func, wait) {
+        let timeout;
+        return function() {
+            const context = this, args = arguments;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(context, args), wait);
+        };
+    }
+    
+    function adjustTableScale() {
+            var tables = document.querySelectorAll('.table-responsive table');
+            tables.forEach(function(table) {
+                var tableResponsive = table.parentElement;
+                var tableResponsiveWidth = tableResponsive.clientWidth;
+                var tableResponsiveFontSize = parseFloat(getComputedStyle(tableResponsive).fontSize);
+                var paddingAdjustment = 2 * 1 * tableResponsiveFontSize; // 1emのpaddingが左右にあるので2emをピクセルに変換
+                var availableWidth = tableResponsiveWidth - paddingAdjustment;
+                var tableWidth = table.scrollWidth;
+                var tableHeight = table.scrollHeight;
+    
+                if (tableWidth > availableWidth) {
+                    var scale = availableWidth / tableWidth;
+                    table.style.width = availableWidth + 'px';
+                    table.style.height = tableHeight * scale + 'px';
+                    table.querySelectorAll('th, td').forEach(function(cell) {
+                        var originalFontSize = parseFloat(getComputedStyle(cell).fontSize);
+                        cell.style.fontSize = (originalFontSize * scale) + 'px';
+                        var originalPaddingTopBottom = parseFloat(getComputedStyle(cell).paddingTop);
+                        var originalPaddingLeftRight = parseFloat(getComputedStyle(cell).paddingLeft);
+                        cell.style.padding = (originalPaddingTopBottom * scale) + 'px ' + (originalPaddingLeftRight * scale) + 'px';
+                    });
+                } else {
+                    table.style.height = 'auto';
+                    table.querySelectorAll('th, td').forEach(function(cell) {
+                        cell.style.fontSize = '';
+                        cell.style.padding = '';
+                    });
+                }
+            });
+        }
+    
+        const debouncedAdjustTableScale = debounce(adjustTableScale, 100);
+    
+        window.addEventListener('resize', debouncedAdjustTableScale);
+        window.addEventListener('load', adjustTableScale);
+        adjustTableScale();
+        
+    }, 100); 
   }
   
-  function adjustTableScale() {
-          var tables = document.querySelectorAll('.table-responsive table');
-          tables.forEach(function(table) {
-              var tableResponsive = table.parentElement;
-              var tableResponsiveWidth = tableResponsive.clientWidth;
-              var tableResponsiveFontSize = parseFloat(getComputedStyle(tableResponsive).fontSize);
-              var paddingAdjustment = 2 * 1 * tableResponsiveFontSize; // 1emのpaddingが左右にあるので2emをピクセルに変換
-              var availableWidth = tableResponsiveWidth - paddingAdjustment;
-              var tableWidth = table.scrollWidth;
-              var tableHeight = table.scrollHeight;
-  
-              if (tableWidth > availableWidth) {
-                  var scale = availableWidth / tableWidth;
-                  table.style.width = availableWidth + 'px';
-                  table.style.height = tableHeight * scale + 'px';
-                  table.querySelectorAll('th, td').forEach(function(cell) {
-                      var originalFontSize = parseFloat(getComputedStyle(cell).fontSize);
-                      cell.style.fontSize = (originalFontSize * scale) + 'px';
-                      var originalPaddingTopBottom = parseFloat(getComputedStyle(cell).paddingTop);
-                      var originalPaddingLeftRight = parseFloat(getComputedStyle(cell).paddingLeft);
-                      cell.style.padding = (originalPaddingTopBottom * scale) + 'px ' + (originalPaddingLeftRight * scale) + 'px';
-                  });
-              } else {
-                  table.style.height = 'auto';
-                  table.querySelectorAll('th, td').forEach(function(cell) {
-                      cell.style.fontSize = '';
-                      cell.style.padding = '';
-                  });
-              }
-          });
-      }
-  
-      const debouncedAdjustTableScale = debounce(adjustTableScale, 100);
-  
-      window.addEventListener('resize', debouncedAdjustTableScale);
-      window.addEventListener('load', adjustTableScale);
-      adjustTableScale();
-      
-  }, 100); 
-  
   // 埋め込みコンテンツの設定
-  const embedConfigs = [
-      {
-          elements: document.getElementsByClassName('twitter-tweet'),
-          script: '//platform.twitter.com/widgets.js',
-          id: 'widgets-js'
-      },
-      {
-          elements: document.getElementsByClassName('instagram-media'),
-          script: '//www.instagram.com/embed.js',
-          id: 'instaembed-js'
-      },
-      {
-          elements: document.getElementsByClassName('bluesky-embed'),
-          script: '//embed.bsky.app/static/embed.js',
-          id: 'blueskyembed-js'
-      }
-  ];
-  
-  Defer(function() {
-      // 要素が存在する埋め込みのみをフィルタリング
-      const activeEmbeds = embedConfigs.filter(config => config.elements.length !== 0);
-      
-      if (activeEmbeds.length === 0) return;
-  
-      // 最初の埋め込みを即時読み込み（Defer 自体が既に遅延されているため）
-      const firstEmbed = activeEmbeds[0];
-      Defer.js(firstEmbed.script, firstEmbed.id);
-  
-      // 残りの埋め込みを0.5秒間隔で読み込み
-      let delay = 500; // 間隔は500ms
-      activeEmbeds.slice(1).forEach((embed) => {
-          Defer.js(embed.script, embed.id, delay);
-          delay += 500;
-      });
-  }, 300);
+  if (document.querySelector('iframe') !== null) {
+    const embedConfigs = [
+        {
+            elements: document.getElementsByClassName('twitter-tweet'),
+            script: '//platform.twitter.com/widgets.js',
+            id: 'widgets-js'
+        },
+        {
+            elements: document.getElementsByClassName('instagram-media'),
+            script: '//www.instagram.com/embed.js',
+            id: 'instaembed-js'
+        },
+        {
+            elements: document.getElementsByClassName('bluesky-embed'),
+            script: '//embed.bsky.app/static/embed.js',
+            id: 'blueskyembed-js'
+        }
+    ];
+    
+    Defer(function() {
+        // 要素が存在する埋め込みのみをフィルタリング
+        const activeEmbeds = embedConfigs.filter(config => config.elements.length !== 0);
+        
+        if (activeEmbeds.length === 0) return;
+    
+        // 最初の埋め込みを即時読み込み（Defer 自体が既に遅延されているため）
+        const firstEmbed = activeEmbeds[0];
+        Defer.js(firstEmbed.script, firstEmbed.id);
+    
+        // 残りの埋め込みを0.5秒間隔で読み込み
+        let delay = 500; // 間隔は500ms
+        activeEmbeds.slice(1).forEach((embed) => {
+            Defer.js(embed.script, embed.id, delay);
+            delay += 500;
+        });
+    }, 300);
+  }
   
   /* iframe */
-  Defer.dom('.defer-iframe iframe', 900);
+  Defer.dom('.defer-iframe iframe', 500);
   
   /* GPUアクセラレーション除去 */
   Defer(function() {
