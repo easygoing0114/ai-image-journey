@@ -388,7 +388,7 @@
         datalabelsScript.async = true;
         document.head.appendChild(datalabelsScript);
       }
-    }, 100); 
+    }, 1000); 
 
     Defer(function () {
       let chartInstance = null;
@@ -435,7 +435,7 @@
           chart.update('none');
         });
       }
-    }, 100); 
+    }, 2000); 
       
   /* table の font-size と padding を画面の最大幅に合わせて変更 */
   Defer(function() {
