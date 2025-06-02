@@ -430,7 +430,7 @@ Defer(function() {
       
       Chart.defaults.color = currentColor;
       
-      /* Object.values(Chart.instances).forEach(function(chart) {
+       Object.values(Chart.instances).forEach(function(chart) {
         if (chart.options.scales) {
           Object.keys(chart.options.scales).forEach(function(scaleKey) {
             if (chart.options.scales[scaleKey].ticks) {
@@ -453,7 +453,6 @@ Defer(function() {
         
         chart.update('none');
       });
-      */
     }
   }
 
