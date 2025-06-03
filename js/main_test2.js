@@ -467,23 +467,25 @@ if (document.querySelector('.chartjs') !== null) {
     });
   }
 
+  function executeChart() {
+    getCurrentThemeColor()
+    updateAllChartColors();
+    Chart.register(ChartDataLabels);
+    
+    // Get all canvas elements with class 'chartjs'
+    const canvases = document.querySelectorAll('.chartjs');
+    canvases.forEach((canvas, index) => {
+      // Call createChartN function where N is index + 1
+      const funcName = `createChart${index + 1}`;
+      if (typeof window[funcName] === 'function') {
+        window[funcName]();
+      }
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', function() {
     setTimeout(function() {
-      function executeChart() {
-        getCurrentThemeColor()
-        updateAllChartColors();
-        Chart.register(ChartDataLabels);
-        
-        // Get all canvas elements with class 'chartjs'
-        const canvases = document.querySelectorAll('.chartjs');
-        canvases.forEach((canvas, index) => {
-          // Call createChartN function where N is index + 1
-          const funcName = `createChart${index + 1}`;
-          if (typeof window[funcName] === 'function') {
-            window[funcName]();
-          }
-        });
-      }
+      executeChart()
     }, 3000);
   });
 
