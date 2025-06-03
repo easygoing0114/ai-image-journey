@@ -22,6 +22,10 @@
     }).join("") + "</div>";
   }
   
+  function getCurrentThemeColor() {
+    return getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color').trim();
+  }    
+
   function jtCallback(){
   
   /*Your Script is here to maintain performance.*/
@@ -406,9 +410,6 @@ Defer(function() {
   
   /* Chart.js */
   if (document.querySelector('.chartjs') !== null) {
-    function getCurrentThemeColor() {
-      return getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color').trim();
-    }  
     document.addEventListener('DOMContentLoaded', function() {
       setTimeout(function() {
         Chart.register(ChartDataLabels);
