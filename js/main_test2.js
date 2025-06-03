@@ -133,21 +133,35 @@ Defer(function() {
 if (document.querySelector('textarea') !== null) {
   Defer(function() {
 
-    const textareas = document.querySelectorAll('textarea');
-    textareas.forEach(textarea => {
+    function setupTextareaAutoResize(textarea) {
         function adjustTextareaHeight() {
             textarea.style.height = 'auto';
-            textarea.style.height = Math.max(textarea.scrollHeight, 24) + 'px';
+            textarea.style.height = Math.max(textarea.scrollHeight, 12) + 'px';
         }
 
-        // 初期読み込み時に高さ調整
+        // 初期高さ調整
         adjustTextareaHeight();
 
-        // 入力、カット、貼り付け時に高さ調整
+        // イベントリスナー
         textarea.addEventListener('input', adjustTextareaHeight);
         textarea.addEventListener('cut', adjustTextareaHeight);
         textarea.addEventListener('paste', adjustTextareaHeight);
-    });
+
+        // 値の変更を監視
+        const observer = new MutationObserver(() => {
+            adjustTextareaHeight();
+        });
+        observer.observe(textarea, {
+            childList: true,
+            characterData: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ['value']
+        });
+    }
+
+    // 初期のtextareaに適用
+    document.querySelectorAll('textarea').forEach(setupTextareaAutoResize);
 
   }, 100);
 }
