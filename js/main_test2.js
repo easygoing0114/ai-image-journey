@@ -49,27 +49,6 @@ function sidebar_temp(e) {
   }).join("") + "</div>";
 }
 
-// テキストエリアの高さ自動調整
-if (document.querySelector('textarea') !== null) {
-  Defer(function() {
-
-    const textareas = document.querySelectorAll('textarea');
-    textareas.forEach(textarea => {
-        function adjustTextareaHeight() {
-            textarea.style.height = 'auto';
-            textarea.style.height = Math.max(textarea.scrollHeight, 50) + 'px';
-        }
-
-        // 初期読み込み時に高さ調整
-        adjustTextareaHeight();
-
-        // 入力時に高さ調整
-        textarea.addEventListener('input', adjustTextareaHeight);
-    });
-
-  }, 100);
-}
-
 /* 外部リンクに新しいタブで開く属性追加 */
 Defer(function() {
   const links = document.querySelectorAll('a');
@@ -147,6 +126,27 @@ Defer(function() {
       }
   }
 }, 100);
+
+// テキストエリアの高さ自動調整
+if (document.querySelector('textarea') !== null) {
+  Defer(function() {
+
+    const textareas = document.querySelectorAll('textarea');
+    textareas.forEach(textarea => {
+        function adjustTextareaHeight() {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.max(textarea.scrollHeight, 50) + 'px';
+        }
+
+        // 初期読み込み時に高さ調整
+        adjustTextareaHeight();
+
+        // 入力時に高さ調整
+        textarea.addEventListener('input', adjustTextareaHeight);
+    });
+
+  }, 100);
+}
 
 /* リンクカードの作成 */
 if (document.querySelector('.blogcard-auto') !== null) {
