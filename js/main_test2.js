@@ -25,8 +25,6 @@
   function getCurrentThemeColor() {
     return getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color').trim();
   }    
-
-  function jtCallback(){
   
   /*Your Script is here to maintain performance.*/
   
@@ -584,8 +582,6 @@ Defer(function() {
       }
     });
   }, 20000);
-    
-}
   
 var ImgSize = 400; // 読み込み画像の解像度を設定
   
