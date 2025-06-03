@@ -169,18 +169,7 @@ if (document.querySelector('textarea') !== null) {
         });
     }
 
-    // 初期実行
     createAutoResizeTextarea();
-
-    // 新しいtextareaが追加された時の対応
-    const observer = new MutationObserver(() => {
-        createAutoResizeTextarea();
-    });
-
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true
-    });
 
   }, 100);
 }
