@@ -137,7 +137,7 @@ if (document.querySelector('textarea') !== null) {
     textareas.forEach(textarea => {
         function adjustTextareaHeight() {
             textarea.style.height = 'auto';
-            textarea.style.height = Math.max(textarea.scrollHeight, 50) + 'px';
+            textarea.style.height = Math.max(textarea.scrollHeight, 24) + 'px';
         }
 
         // 初期読み込み時に高さ調整
