@@ -133,34 +133,53 @@ Defer(function() {
 if (document.querySelector('textarea') !== null) {
   Defer(function() {
 
-    const textareas = document.querySelectorAll('textarea');
-    textareas.forEach(textarea => {
-        function adjustTextareaHeight() {
-            textarea.style.height = 'auto';
-            textarea.style.height = Math.max(textarea.scrollHeight, 24) + 'px';
-        }
+    // より確実でシンプルなアプローチ
+    function createAutoResizeTextarea() {
+        const textareas = document.querySelectorAll('textarea');
+        
+        textareas.forEach(textarea => {
+            function adjustHeight() {
+                textarea.style.height = 'auto';
+                textarea.style.height = Math.max(textarea.scrollHeight, 24) + 'px';
+            }
 
-        // 初期読み込み時に高さ調整
-        adjustTextareaHeight();
+            // 初期調整
+            adjustHeight();
 
-        // 入力、カット、貼り付け時に高さ調整
-        textarea.addEventListener('input', adjustTextareaHeight);
-        textarea.addEventListener('cut', adjustTextareaHeight);
-        textarea.addEventListener('paste', adjustTextareaHeight);
+            // 全てのイベントを監視
+            ['input', 'paste', 'cut', 'keydown', 'keyup'].forEach(event => {
+                textarea.addEventListener(event, () => {
+                    setTimeout(adjustHeight, 0);
+                });
+            });
 
-        // 動的な値の変更を監視
-        const observer = new MutationObserver(() => {
-            adjustTextareaHeight();
+            // 定期的な値チェック（最も確実）
+            let lastValue = textarea.value;
+            const checkInterval = setInterval(() => {
+                if (textarea.value !== lastValue) {
+                    lastValue = textarea.value;
+                    adjustHeight();
+                }
+                
+                // textareaが削除された場合はintervalをクリア
+                if (!document.contains(textarea)) {
+                    clearInterval(checkInterval);
+                }
+            }, 50);
         });
+    }
 
-        // textareaの値や子ノードの変更を監視
-        observer.observe(textarea, {
-            childList: true,
-            characterData: true,
-            subtree: true,
-            attributes: true,
-            attributeFilter: ['value']
-        });
+    // 初期実行
+    createAutoResizeTextarea();
+
+    // 新しいtextareaが追加された時の対応
+    const observer = new MutationObserver(() => {
+        createAutoResizeTextarea();
+    });
+
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
     });
 
   }, 100);
