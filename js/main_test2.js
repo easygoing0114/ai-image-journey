@@ -464,8 +464,8 @@ if (document.querySelector('.chartjs') !== null) {
 
   document.addEventListener('DOMContentLoaded', function() {
     setTimeout(function() {
-      Chart.register(ChartDataLabels);
       updateAllChartColors();
+      Chart.register(ChartDataLabels);
       
       // Get all canvas elements with class 'chartjs'
       const canvases = document.querySelectorAll('.chartjs');
@@ -480,7 +480,7 @@ if (document.querySelector('.chartjs') !== null) {
       });
     }, 3000);
   });
-  
+
 }
 
 /* table の font-size と padding を画面の最大幅に合わせて変更 */
