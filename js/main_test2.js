@@ -143,8 +143,10 @@ if (document.querySelector('textarea') !== null) {
         // 初期読み込み時に高さ調整
         adjustTextareaHeight();
 
-        // 入力時に高さ調整
+        // 入力、カット、貼り付け時に高さ調整
         textarea.addEventListener('input', adjustTextareaHeight);
+        textarea.addEventListener('cut', adjustTextareaHeight);
+        textarea.addEventListener('paste', adjustTextareaHeight);
     });
 
   }, 100);
