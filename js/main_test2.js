@@ -406,6 +406,9 @@ Defer(function() {
   
   /* Chart.js */
   if (document.querySelector('.chartjs') !== null) {
+    function getCurrentThemeColor() {
+      return getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color').trim();
+    }  
     document.addEventListener('DOMContentLoaded', function() {
       setTimeout(function() {
         Chart.register(ChartDataLabels);
