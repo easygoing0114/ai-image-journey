@@ -474,8 +474,6 @@ if (document.querySelector('.chartjs') !== null) {
         const funcName = `createChart${index + 1}`;
         if (typeof window[funcName] === 'function') {
           window[funcName]();
-        } else {
-          console.warn(`Function ${funcName} not found for canvas ${canvas.id}`);
         }
       });
     }, 3000);
