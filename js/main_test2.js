@@ -2,7 +2,33 @@
 /*@shinsenter/defer.js@3.7.0*/
 !(function(i,u,f){function s(n,t,e){N?z(n,t):((e=e===f?s.lazy:e)?q:S).push(n,Math.max(e?350:0,t))} function c(n){return"string"==typeof(n=n||{})?{id:n}:n} function r(t,n,e,o){a(n.split(" "),function(n){(o||i)[t+"EventListener"](n,e||m)})} function a(n,t){n.map(t)} function l(n,t){a(D.call(n.attributes),function(n){t(n.name,n.value)})} function d(n,t,e,o,i,c){if(i=I.createElement(n),e&&r(w,b,e,i),t) for(c in t)i[j](c,t[c]);return o&&I.head.appendChild(i),i} function p(n,t){return D.call((t||I).querySelectorAll(n))} function h(o,n){a(p("source,img",o),h),l(o,function(n,t,e){(e=y.exec(n))&&o[j](e[1],t)}),"string"==typeof n&&(o.className+=" "+n),o[b]&&o[b]()} function n(n,t,e){s(function(o){a(o=p(n||"script[type=deferjs]"),function(n,e){n[A]&&(e={},l(n,function(n,t){n!=C&&(e[n==A?"href":n]=t)}),e.as=g,e.rel="preload",d(v,e,f,I))}),(function i(n,e,t){(n=o[k]())&&(e={},l(n,function(n,t){n!=C&&(e[n]=t)}),t=e[A]&&!("async" in e),(e=d(g,e)).text=n.text,n.parentNode.replaceChild(e,n),t?r(w,b+" error",i,e):i())})()},t,e)} function m(n,t){for(t=N?(r(e,o),q):(r(e,x),N=s,q[0]&&r(w,o),S);t[0];)z(t[k](),t[k]())} var y=/^data-(.+)/,v="link",g="script",b="load",t="pageshow",w="add",e="remove",o="touchstart mousemove mousedown keydown wheel",x="on"+t in i?t:b,j="setAttribute",k="shift",A="src",C="type",E=i.IntersectionObserver,I=i.document||i,N=/p/.test(I.readyState),S=[],q=[],z=i.setTimeout,D=S.slice;s.all=n,s.domz=function(n,t,i,z,c,r){s(function(e){function o(n){c&&!1===c(n)||h(n,i)} e=E?new E(function(n){a(n,function(n,t){n.isIntersecting&&(t=n.target)&&(z&&z(t),e.unobserve(t),o(t))})},r):f,a(p(n||"[data-src]"),function(n){n[u]||(n[u]=s,e?e.observe(n):o(n))})},t,!1)},s.dom=function(n,t,i,c,r){s(function(e){function o(n){c&&!1===c(n)||h(n,i)} e=E?new E(function(n){a(n,function(n,t){n.isIntersecting&&(e.unobserve(t=n.target),o(t))})},r):f,a(p(n||"[data-src]"),function(n){n[u]||(n[u]=s,e?e.observe(n):o(n))})},t,!1)},s.css=function(n,t,e,o,i){(t=c(t)).href=n,t.rel="stylesheet",s(function(){d(v,t,o,I)},e,i)},s.js=function(n,t,e,o,i){(t=c(t)).src=n,s(function(){d(g,t,o,I)},e,i)},s.reveal=h,i[u]=s,N||r(w,x),n()})(this,"Defer")
 
-  'IntersectionObserver'in window||document.write('<script src="https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver"><\/script>');
+'IntersectionObserver'in window||document.write('<script src="https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver"><\/script>');
+
+// Defer.js example
+// Defer.css('your_css_url','your-style-id',100);
+// Defer.js('your_script_url','your-script-id',100);
+
+/* 外部スクリプトの読み込み */
+if (document.querySelector('.mermaid') !== null) {
+  Defer.js('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs', 'mermaid', 100);
+}
+if (document.querySelector('.chartjs') !== null) {
+  Defer.js('https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js', 'chartjs', 100);
+  Defer.js('https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js', 'chartjsplugin', 1000);
+}
+if (document.querySelector('.markdown') !== null) {
+  Defer.js('https://cdnjs.cloudflare.com/ajax/libs/turndown/7.2.0/turndown.min.js', 'turndown', 100);
+  Defer.js('https://unpkg.com/turndown-plugin-gfm/dist/turndown-plugin-gfm.js', 'turndownplugin', 100);
+  Defer.js('https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js', 'marked', 100);
+  Defer.js('https://cdn.jsdelivr.net/npm/marked-extended-tables/lib/index.umd.js', 'markedplugin', 100);
+}
+if (document.querySelector('canvas') !== null) {
+  Defer.js('https://cdn.jsdelivr.net/npm/html2canvas-pro/dist/html2canvas-pro.min.js', 'canvaspro', 100);
+}
+
+/* img, iframe 差し替え */
+Defer.dom('.defer-img img', 100);
+Defer.dom('.defer-iframe iframe', 500);
 
 /*jettheme function*/
 function related_temp(e) {
@@ -23,30 +49,93 @@ function sidebar_temp(e) {
   }).join("") + "</div>";
 }
 
-/*Your Script is here to maintain performance.*/
-
-// the example below if you use url.
-// Defer.css('your_css_url','your-style-id',100);
-// Defer.js('your_script_url','your-script-id',100);
-
-/* 外部スクリプトの読み込み */
-if (document.querySelector('.chartjs') !== null) {
-  Defer.js('https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js', 'chartjs', 100);
-  Defer.js('https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js', 'chartjsplugin', 1000);
-}
-if (document.querySelector('.markdown') !== null) {
-  Defer.js('https://cdnjs.cloudflare.com/ajax/libs/turndown/7.2.0/turndown.min.js', 'turndown', 100);
-  Defer.js('https://unpkg.com/turndown-plugin-gfm/dist/turndown-plugin-gfm.js', 'turndownplugin', 100);
-  Defer.js('https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js', 'marked', 100);
-  Defer.js('https://cdn.jsdelivr.net/npm/marked-extended-tables/lib/index.umd.js', 'markedplugin', 100);
-}
-if (document.querySelector('canvas') !== null) {
-  Defer.js('https://cdn.jsdelivr.net/npm/html2canvas-pro/dist/html2canvas-pro.min.js', 'canvaspro', 100);
+// テキストエリアの高さ自動調整
+if (document.querySelector('textarea') !== null) {
+  Defer(function() {
+    function adjustTextareaHeight(textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = Math.max(textarea.scrollHeight, 50) + 'px';
+    }
+  }, 100);
 }
 
-/* img, iframe 差し替え */
-Defer.dom('.defer-img img', 100);
-Defer.dom('.defer-iframe iframe', 500);
+/* 外部リンクに新しいタブで開く属性追加 */
+Defer(function() {
+  const links = document.querySelectorAll('a');
+  const myDomain = 'ai-image-journey.com';
+
+  links.forEach(link => {
+    const href = link.getAttribute('href');
+    if (href && !href.includes(myDomain) && !href.startsWith('/') && !href.startsWith('#')) {
+      link.setAttribute('target', '_blank');
+      link.setAttribute('rel', 'noopener noreferrer');
+    }
+  });
+}, 100); 
+
+/* DMCA バッジ */
+Defer(function () {
+  document.addEventListener("DOMContentLoaded", function () {
+      var dmcaBadgeClass = "dmca-badge";
+      var refUrlParam = "refurl";
+      var badgeLinks = document.querySelectorAll('a.' + dmcaBadgeClass);
+      if (badgeLinks.length > 0 && badgeLinks[0].getAttribute("href").indexOf(refUrlParam) < 0) {
+          for (var r = 0; r < badgeLinks.length; r++) {
+              var link = badgeLinks[r];
+              link.href = link.href + (link.href.indexOf("?") === -1 ? "?" : "&") + refUrlParam + "=" + document.location;
+          }
+      }
+  }, false);
+}, 100);
+
+/* dark-mode ボタン */
+Defer(function() {
+  var darkModeButtons = document.querySelectorAll(".toggle-dark-mode-btn");
+
+  darkModeButtons.forEach(function(button) {
+      button.addEventListener("click", function() {
+          var htmlElement = document.querySelector("html");
+          var classList = htmlElement.classList;
+          var isDarkMode = classList.contains("dark-mode");
+          var twitterThemeMeta = document.querySelector("#twitter-theme");
+
+          if (isDarkMode) {
+              classList.remove("dark-mode");
+              localStorage.setItem('theme', 'light'); // ライトモードを記憶
+              if (twitterThemeMeta) {
+                  twitterThemeMeta.setAttribute('content', 'light'); // Metaタグを更新
+              }
+          } else {
+              classList.add("dark-mode");
+              localStorage.setItem('theme', 'dark'); // ダークモードを記憶
+              if (twitterThemeMeta) {
+                  twitterThemeMeta.setAttribute('content', 'dark'); // Metaタグを更新
+              }
+          }
+          
+          // Chart.jsの色を更新（テンプレート関数を呼び出し）
+          if (typeof updateAllChartColors === 'function') {
+              setTimeout(function() {
+                  updateAllChartColors();
+              }, 100); // CSSの適用を待つ
+          }
+      });
+  });
+
+  // ページ読み込み時にlocalStorageの値をチェックして適用
+  var savedTheme = localStorage.getItem('theme');
+  var twitterThemeMeta = document.querySelector("#twitter-theme");
+  if (savedTheme === 'dark') {
+      document.querySelector("html").classList.add("dark-mode");
+      if (twitterThemeMeta) {
+          twitterThemeMeta.setAttribute('content', 'dark'); // Metaタグを更新
+      }
+  } else {
+      if (twitterThemeMeta) {
+          twitterThemeMeta.setAttribute('content', 'light'); // Metaタグを更新
+      }
+  }
+}, 100);
 
 /* リンクカードの作成 */
 if (document.querySelector('.blogcard-auto') !== null) {
@@ -258,35 +347,6 @@ if (document.querySelector('.blogcard-auto') !== null) {
   }, 100);
 }
 
-/* 外部リンクに新しいタブで開く属性追加 */
-Defer(function() {
-  const links = document.querySelectorAll('a');
-  const myDomain = 'ai-image-journey.com';
-
-  links.forEach(link => {
-    const href = link.getAttribute('href');
-    if (href && !href.includes(myDomain) && !href.startsWith('/') && !href.startsWith('#')) {
-      link.setAttribute('target', '_blank');
-      link.setAttribute('rel', 'noopener noreferrer');
-    }
-  });
-}, 100); 
-
-/* DMCA バッジ */
-Defer(function () {
-  document.addEventListener("DOMContentLoaded", function () {
-      var dmcaBadgeClass = "dmca-badge";
-      var refUrlParam = "refurl";
-      var badgeLinks = document.querySelectorAll('a.' + dmcaBadgeClass);
-      if (badgeLinks.length > 0 && badgeLinks[0].getAttribute("href").indexOf(refUrlParam) < 0) {
-          for (var r = 0; r < badgeLinks.length; r++) {
-              var link = badgeLinks[r];
-              link.href = link.href + (link.href.indexOf("?") === -1 ? "?" : "&") + refUrlParam + "=" + document.location;
-          }
-      }
-  }, false);
-}, 100);
-
 /* loading="lazy" の順次解除 */
 Defer(function() {
     // すべての <img> 要素を配列に変換
@@ -307,61 +367,12 @@ Defer(function() {
         }, 400 + (index * 200)); // 初回の0.2秒 + 0.2秒の間隔
     });
 }, 200);
-    
-/* dark-mode ボタン */
-Defer(function() {
-  var darkModeButtons = document.querySelectorAll(".toggle-dark-mode-btn");
-
-  darkModeButtons.forEach(function(button) {
-      button.addEventListener("click", function() {
-          var htmlElement = document.querySelector("html");
-          var classList = htmlElement.classList;
-          var isDarkMode = classList.contains("dark-mode");
-          var twitterThemeMeta = document.querySelector("#twitter-theme");
-
-          if (isDarkMode) {
-              classList.remove("dark-mode");
-              localStorage.setItem('theme', 'light'); // ライトモードを記憶
-              if (twitterThemeMeta) {
-                  twitterThemeMeta.setAttribute('content', 'light'); // Metaタグを更新
-              }
-          } else {
-              classList.add("dark-mode");
-              localStorage.setItem('theme', 'dark'); // ダークモードを記憶
-              if (twitterThemeMeta) {
-                  twitterThemeMeta.setAttribute('content', 'dark'); // Metaタグを更新
-              }
-          }
-          
-          // Chart.jsの色を更新（テンプレート関数を呼び出し）
-          if (typeof updateAllChartColors === 'function') {
-              setTimeout(function() {
-                  updateAllChartColors();
-              }, 100); // CSSの適用を待つ
-          }
-      });
-  });
-
-  // ページ読み込み時にlocalStorageの値をチェックして適用
-  var savedTheme = localStorage.getItem('theme');
-  var twitterThemeMeta = document.querySelector("#twitter-theme");
-  if (savedTheme === 'dark') {
-      document.querySelector("html").classList.add("dark-mode");
-      if (twitterThemeMeta) {
-          twitterThemeMeta.setAttribute('content', 'dark'); // Metaタグを更新
-      }
-  } else {
-      if (twitterThemeMeta) {
-          twitterThemeMeta.setAttribute('content', 'light'); // Metaタグを更新
-      }
-  }
-}, 100);
 
 /* mermaid 読み込み */
 if (document.querySelector('.mermaid') !== null) {
   Defer(function () {
       const initializeMermaid = async () => {
-      const mermaidCodes = document.querySelectorAll('code.mermaid');
+      const mermaidCodes = document.querySelectorAll('.mermaid');
       if (mermaidCodes.length > 0) {
           const { default: mermaid } = await import('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs');
   
