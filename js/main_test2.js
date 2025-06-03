@@ -427,27 +427,10 @@ if (document.querySelector('.mermaid') !== null) {
 
 /* Chart.js */
 if (document.querySelector('.chartjs') !== null) {
+
   function getCurrentThemeColor() {
     return getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color').trim();
-  }   
-  document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(function() {
-      Chart.register(ChartDataLabels);
-      updateAllChartColors();
-      
-      // Get all canvas elements with class 'chartjs'
-      const canvases = document.querySelectorAll('.chartjs');
-      canvases.forEach((canvas, index) => {
-        // Call createChartN function where N is index + 1
-        const funcName = `createChart${index + 1}`;
-        if (typeof window[funcName] === 'function') {
-          window[funcName]();
-        } else {
-          console.warn(`Function ${funcName} not found for canvas ${canvas.id}`);
-        }
-      });
-    }, 3000);
-  });
+  } 
 
   function updateAllChartColors() {
     const currentColor = getCurrentThemeColor();
@@ -478,6 +461,26 @@ if (document.querySelector('.chartjs') !== null) {
       chart.update('none');
     });
   }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+      Chart.register(ChartDataLabels);
+      updateAllChartColors();
+      
+      // Get all canvas elements with class 'chartjs'
+      const canvases = document.querySelectorAll('.chartjs');
+      canvases.forEach((canvas, index) => {
+        // Call createChartN function where N is index + 1
+        const funcName = `createChart${index + 1}`;
+        if (typeof window[funcName] === 'function') {
+          window[funcName]();
+        } else {
+          console.warn(`Function ${funcName} not found for canvas ${canvas.id}`);
+        }
+      });
+    }, 3000);
+  });
+  
 }
 
 /* table の font-size と padding を画面の最大幅に合わせて変更 */
