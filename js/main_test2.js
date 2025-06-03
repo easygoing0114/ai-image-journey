@@ -54,31 +54,49 @@ if (document.querySelector('textarea') !== null) {
   Defer(function() {
 
     // デバウンス関数
-    function debounce(func, wait) {
-        let timeout;
-        return function(...args) {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(this, args), wait);
+    function debounce(func, delay) {
+        let timeoutId;
+        return function (...args) {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => func.apply(this, args), delay);
         };
     }
 
-    // textareaの高さ調整関数
+    // textareaの高さを調整する関数
     function adjustTextareaHeight(textarea) {
         textarea.style.height = 'auto';
         textarea.style.height = Math.max(textarea.scrollHeight, 50) + 'px';
     }
 
-    // 全てのtextareaを取得
-    const textareas = document.querySelectorAll('textarea');
-    
-    // 初期読み込み時に高さ調整
-    textareas.forEach(textarea => {
-        adjustTextareaHeight(textarea);
+    // 全てのtextareaに対して処理を適用する関数
+    function setupTextareaAutoResize() {
+        const textareas = document.querySelectorAll('textarea');
         
-        // 入力イベントリスナーを追加（デバウンス付き）
-        const debouncedAdjust = debounce(() => adjustTextareaHeight(textarea), 100);
-        textarea.addEventListener('input', debouncedAdjust);
+        textareas.forEach(textarea => {
+            // 初期サイズ調整
+            adjustTextareaHeight(textarea);
+            
+            // デバウンス付きの入力イベントリスナーを作成
+            const debouncedAdjust = debounce(() => adjustTextareaHeight(textarea), 100);
+            
+            // 各種イベントにリスナーを追加
+            textarea.addEventListener('input', debouncedAdjust);
+            textarea.addEventListener('paste', debouncedAdjust);
+            textarea.addEventListener('cut', debouncedAdjust);
+            
+            // リサイズイベント（ウィンドウサイズ変更時など）
+            window.addEventListener('resize', debouncedAdjust);
+        });
+    }
+
+    setupTextareaAutoResize();
+
+    // DOM監視を開始
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
     });
+
   }, 100);
 }
 
