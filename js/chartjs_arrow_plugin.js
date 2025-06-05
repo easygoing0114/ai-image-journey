@@ -71,7 +71,7 @@ const arrowPlugin = {
                     const strokeColor = Array.isArray(dataset.arrowStrokeColor)
                         ? dataset.arrowStrokeColor[index] || 'rgb(54, 162, 235)'
                         : dataset.arrowStrokeColor || 'rgb(54, 162, 235)';
-                    const lineWidth = dataset.arrowLineWidth || 1;
+                    const lineWidth = dataset.arrowLineWidth || 2;
                     
                     drawArrow(ctx, x, y, size, direction, fillColor, strokeColor, lineWidth);
                 });
