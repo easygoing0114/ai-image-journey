@@ -66,11 +66,11 @@ const arrowPlugin = {
                         : dataset.arrowDirection;
                     const size = dataset.arrowSize || 12;
                     const fillColor = Array.isArray(dataset.arrowFillColor)
-                        ? dataset.arrowFillColor[index] || 'rgba(75, 192, 192, 0.2)'
-                        : dataset.arrowFillColor || 'rgba(75, 192, 192, 0.2)';
+                        ? dataset.arrowFillColor[index] || 'rgba(54, 162, 235, 0.2)'
+                        : dataset.arrowFillColor || 'rgba(54, 162, 235, 0.2)';
                     const strokeColor = Array.isArray(dataset.arrowStrokeColor)
-                        ? dataset.arrowStrokeColor[index] || 'rgb(75, 192, 192)'
-                        : dataset.arrowStrokeColor || 'rgb(75, 192, 192)';
+                        ? dataset.arrowStrokeColor[index] || 'rgb(54, 162, 235)'
+                        : dataset.arrowStrokeColor || 'rgb(54, 162, 235)';
                     const lineWidth = dataset.arrowLineWidth || 1;
                     
                     drawArrow(ctx, x, y, size, direction, fillColor, strokeColor, lineWidth);
