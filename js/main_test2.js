@@ -497,6 +497,7 @@ if (document.querySelector('.chartjs') !== null) {
     getCurrentThemeColor();
     updateAllChartColors();
     Chart.register(ChartDataLabels);
+    Chart.defaults.layout.padding = 24;
     
     // Get all canvas elements with class 'chartjs'
     const canvases = document.querySelectorAll('.chartjs');
