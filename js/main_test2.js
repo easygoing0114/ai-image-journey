@@ -17,7 +17,6 @@ if (document.querySelector('.mermaid') !== null) {
 if (document.querySelector('.chartjs') !== null) {
   Defer.js('https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js', 'chartjs', 100);
   Defer.js('https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js', 'chartjsdatalabelsplugin', 1000);
-//  Defer.js('https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.1.0/chartjs-plugin-annotation.min.js', 'chartjsannotationplugin', 1000);
   Defer.js('https://files.ai-image-journey.com/js/chartjs_arrow_plugin.js', 'chartjsarrowplugin', 1000);
 }
 if (document.querySelector('.markdown') !== null) {
@@ -135,6 +134,7 @@ Defer(function() {
 if (document.querySelector('textarea') !== null) {
   Defer(function() {
 
+    // より確実でシンプルなアプローチ
     function createAutoResizeTextarea() {
         const textareas = document.querySelectorAll('textarea');
         
@@ -490,10 +490,9 @@ if (document.querySelector('.chartjs') !== null) {
   }
 
   function executeChart() {
-    getCurrentThemeColor();
+    getCurrentThemeColor()
     updateAllChartColors();
     Chart.register(ChartDataLabels);
-//    Chart.register(ChartjsPluginAnnotation);
     
     // Get all canvas elements with class 'chartjs'
     const canvases = document.querySelectorAll('.chartjs');
