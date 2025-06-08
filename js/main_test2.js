@@ -491,7 +491,7 @@ if (document.querySelector('.chartjs') !== null) {
   }
 
   function executeChart() {
-    getCurrentThemeColor()
+    getCurrentThemeColor();
     updateAllChartColors();
     Chart.register(ChartDataLabels);
     
