@@ -490,9 +490,9 @@ if (document.querySelector('.chartjs') !== null) {
   }
 
   function executeChart() {
-    getCurrentThemeColor();
-    updateAllChartColors();
-    Chart.register(ChartDataLabels);
+    getCurrentThemeColor()
+    updateAllChartColors()
+    Chart.register(ChartDataLabels)
     Chart.register(ChartjsPluginAnnotation);
     
     // Get all canvas elements with class 'chartjs'
