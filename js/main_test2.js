@@ -459,8 +459,6 @@ if (document.querySelector('.mermaid') !== null) {
 /* Chart.js */
 if (document.querySelector('.chartjs') !== null) {
 
-  Chart.defaults.layout.padding = 24;
-
   function getCurrentThemeColor() {
     return getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color').trim();
   } 
@@ -498,6 +496,7 @@ if (document.querySelector('.chartjs') !== null) {
     updateAllChartColors();
     Chart.register(ChartDataLabels);
     Chart.defaults.color = currentColor;
+    Chart.defaults.layout.padding = 24;
     
     // Get all canvas elements with class 'chartjs'
     const canvases = document.querySelectorAll('.chartjs');
