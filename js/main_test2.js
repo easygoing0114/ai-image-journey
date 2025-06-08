@@ -459,16 +459,6 @@ if (document.querySelector('.mermaid') !== null) {
 /* Chart.js */
 if (document.querySelector('.chartjs') !== null) {
 
-  document.querySelectorAll('canvas.chartjs').forEach(canvas => {
-    canvas.setAttribute('role', 'img');
-    canvas.setAttribute('aria-label', 'Graph Chart');
-    
-    const figure = document.createElement('figure');
-    figure.className = 'box-img400 chartjs-container';
-    canvas.parentNode.insertBefore(figure, canvas);
-    figure.appendChild(canvas);
-  });
-
   function getCurrentThemeColor() {
     return getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color').trim();
   } 
