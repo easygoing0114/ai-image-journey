@@ -14,17 +14,20 @@ var ImgSize = 400;
 if (document.querySelector('.mermaid') !== null) {
   Defer.js('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs', 'mermaid', 100);
 }
+
 if (document.querySelector('.chartjs') !== null) {
   Defer.js('https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js', 'chartjs', 100);
   Defer.js('https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js', 'chartjsdatalabelsplugin', 1000);
   Defer.js('https://files.ai-image-journey.com/js/chartjs_arrow_plugin.js', 'chartjsarrowplugin', 1000);
 }
+
 if (document.querySelector('.markdown') !== null) {
   Defer.js('https://cdnjs.cloudflare.com/ajax/libs/turndown/7.2.0/turndown.min.js', 'turndown', 100);
   Defer.js('https://unpkg.com/turndown-plugin-gfm/dist/turndown-plugin-gfm.js', 'turndownplugin', 100);
   Defer.js('https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js', 'marked', 100);
   Defer.js('https://cdn.jsdelivr.net/npm/marked-extended-tables/lib/index.umd.js', 'markedplugin', 100);
 }
+
 if (document.querySelector('canvas') !== null) {
   Defer.js('https://cdn.jsdelivr.net/npm/html2canvas-pro/dist/html2canvas-pro.min.js', 'canvaspro', 100);
 }
@@ -455,6 +458,8 @@ if (document.querySelector('.mermaid') !== null) {
 
 /* Chart.js */
 if (document.querySelector('.chartjs') !== null) {
+
+  Chart.defaults.layout.padding = 24;
 
   function getCurrentThemeColor() {
     return getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color').trim();
