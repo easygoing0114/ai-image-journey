@@ -468,8 +468,6 @@ if (document.querySelector('.chartjs') !== null) {
   function updateAllChartColors() {
     const currentColor = getCurrentThemeColor();
     
-    Chart.defaults.color = currentColor;
-    
       Object.values(Chart.instances).forEach(function(chart) {
       if (chart.options.scales) {
         Object.keys(chart.options.scales).forEach(function(scaleKey) {
@@ -499,6 +497,7 @@ if (document.querySelector('.chartjs') !== null) {
     getCurrentThemeColor();
     updateAllChartColors();
     Chart.register(ChartDataLabels);
+    Chart.defaults.color = currentColor;
     
     // Get all canvas elements with class 'chartjs'
     const canvases = document.querySelectorAll('.chartjs');
