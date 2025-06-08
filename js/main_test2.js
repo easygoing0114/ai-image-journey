@@ -494,6 +494,7 @@ if (document.querySelector('.chartjs') !== null) {
     getCurrentThemeColor();
     updateAllChartColors();
     Chart.register(ChartDataLabels);
+    Chart.register(annotationPlugin);
     
     // Get all canvas elements with class 'chartjs'
     const canvases = document.querySelectorAll('.chartjs');
