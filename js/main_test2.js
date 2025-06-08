@@ -455,6 +455,9 @@ if (document.querySelector('.mermaid') !== null) {
 /* Chart.js */
 if (document.querySelector('.chartjs') !== null) {
 
+  // 省略表記：全ての辺に24のpaddingを設定
+  Chart.defaults.layout.padding = 24;
+
   function getCurrentThemeColor() {
     return getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color').trim();
   } 
