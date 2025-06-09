@@ -413,20 +413,23 @@ Defer(function() {
 /* mermaid 読み込み */
 if (document.querySelector('.mermaid') !== null) {
 
+  // 既存の図表にスタイルを適用
+  document.querySelectorAll('figure.mermaid-chart').forEach(figure => {
+    figure.classList.add('box-img', 'box-img640');
+  });
+
+      const isDarkMode = document.documentElement.classList.contains('dark-mode');
+
   Defer(function () {
 
-      document.querySelectorAll('figure.mermaid-chart').forEach(figure => {
-          figure.classList.add('box-img box-img640');
-      }
-          // ダークモードの検出
-      const isDarkMode = document.documentElement.classList.contains('dark-mode');
-  
-      mermaid.initialize({
-        startOnLoad: true,
-        theme: isDarkMode ? 'dark' : 'default',
-      }); 
+    mermaid.initialize({
+      startOnLoad: false, // 手動初期化のためfalseに
+      theme: isDarkMode ? 'dark' : 'default',
+    });
 
-  }, 100); 
+    mermaid.run();
+
+  }, 3000);
 }
 
 /* Chart.js */
