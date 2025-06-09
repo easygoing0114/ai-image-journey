@@ -32,9 +32,19 @@ if (document.querySelector('canvas') !== null) {
   Defer.js('https://cdn.jsdelivr.net/npm/html2canvas-pro/dist/html2canvas-pro.min.js', 'canvaspro', 100);
 }
 
+if (document.querySelector('.twitter-tweet') !== null) {
+  Defer.js('https://platform.twitter.com/widgets.js', 'twitter', 100);
+}
+if (document.querySelector('.bluesky-embed') !== null) {
+  Defer.js('https://embed.bsky.app/static/embed.js', 'bluesky', 100);
+}
+if (document.querySelector('.instagram-media') !== null) {
+  Defer.js('https://www.instagram.com/embed.js', 'instagram', 100);
+}
+
 /* img, iframe 差し替え */
 Defer.dom('.defer-img img', 100);
-Defer.dom('.defer-iframe iframe', 500);
+Defer.dom('.defer-iframe iframe', 1500);
 
 /*jettheme function*/
 function related_temp(e) {
@@ -597,46 +607,7 @@ if (document.querySelector('table') !== null) {
       
   }, 100); 
 }
-
-// 埋め込みコンテンツの設定
-if (document.querySelector('iframe') !== null) {
-  const embedConfigs = [
-      {
-          elements: document.getElementsByClassName('twitter-tweet'),
-          script: '//platform.twitter.com/widgets.js',
-          id: 'widgets-js'
-      },
-      {
-          elements: document.getElementsByClassName('instagram-media'),
-          script: '//www.instagram.com/embed.js',
-          id: 'instaembed-js'
-      },
-      {
-          elements: document.getElementsByClassName('bluesky-embed'),
-          script: '//embed.bsky.app/static/embed.js',
-          id: 'blueskyembed-js'
-      }
-  ];
   
-  Defer(function() {
-      // 要素が存在する埋め込みのみをフィルタリング
-      const activeEmbeds = embedConfigs.filter(config => config.elements.length !== 0);
-      
-      if (activeEmbeds.length === 0) return;
-  
-      // 最初の埋め込みを即時読み込み（Defer 自体が既に遅延されているため）
-      const firstEmbed = activeEmbeds[0];
-      Defer.js(firstEmbed.script, firstEmbed.id);
-  
-      // 残りの埋め込みを0.5秒間隔で読み込み
-      let delay = 500; // 間隔は500ms
-      activeEmbeds.slice(1).forEach((embed) => {
-          Defer.js(embed.script, embed.id, delay);
-          delay += 500;
-      });
-  }, 300);
-}
-
 /* GPUアクセラレーション除去 */
 Defer(function() {
         var elements = document.querySelectorAll('.gpu-accelerated');
