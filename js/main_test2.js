@@ -418,7 +418,57 @@ if (document.querySelector('.mermaid') !== null) {
     figure.classList.add('box-img', 'box-img640');
   });
 
-      const isDarkMode = document.documentElement.classList.contains('dark-mode');
+  const isDarkMode = document.documentElement.classList.contains('dark-mode');
+
+  // gantt チャートの再診日付を更新
+  // 今日の日付を取得 (YYYY-MM-DD形式)
+  const today = new Date().toISOString().split('T')[0]; // 2025-06-09
+
+  // 最新の日付を検出する関数
+  function findLatestDate(code) {
+    const dateRegex = /\d{4}-\d{2}-\d{2}/g;
+    const dates = code.match(dateRegex);
+    if (!dates) return null;
+    
+    // 日付を比較して最新の日付を見つける
+    return dates.reduce((latest, current) => {
+      return new Date(current) > new Date(latest) ? current : latest;
+    }, dates[0]);
+  }
+
+  // 最新の日付を今日の日付に置換
+  function replaceLatestDate(code, latestDate, newDate) {
+    const regex = new RegExp(latestDate, 'g');
+    return code.replace(regex, newDate);
+  }
+
+  // Mermaidコードを検出して処理
+  function updateMermaidGanttCharts() {
+    // <code class="mermaid"> 要素をすべて取得
+    const mermaidElements = document.querySelectorAll('code.mermaid');
+    
+    mermaidElements.forEach((element) => {
+      const code = element.textContent;
+      
+      // 'gantt' を含むか確認
+      if (code.includes('gantt')) {
+        const latestDate = findLatestDate(code);
+        if (latestDate) {
+          // 最新の日付を今日の日付に置換
+          const updatedCode = replaceLatestDate(code, latestDate, today);
+          // 置換後のコードを要素に戻す
+          element.textContent = updatedCode;
+          
+          // Mermaid.jsを再レンダリング（Mermaidがページにロードされている場合）
+          if (typeof mermaid !== 'undefined') {
+            mermaid.init(undefined, element);
+          }
+        }
+      }
+    });
+  }
+
+  updateMermaidGanttCharts()
 
   Defer(function () {
 
