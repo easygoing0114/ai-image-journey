@@ -42,6 +42,16 @@ if (document.querySelector('.instagram-media') !== null) {
   Defer.js('https://www.instagram.com/embed.js', 'instagram', 100);
 }
 
+/* debounce関数 */
+function debounce(func, wait) {
+    let timeout;
+    return function() {
+        const context = this, args = arguments;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(context, args), wait);
+    };
+}
+
 /* img, iframe 差し替え */
 Defer.dom('.defer-img img', 100);
 Defer.dom('.defer-iframe iframe', 1500);
@@ -556,65 +566,57 @@ if (document.querySelector('.chartjs') !== null) {
 
 /* table の font-size と padding を画面の最大幅に合わせて変更 */
 if (document.querySelector('table') !== null) {
+  
   Defer(function() {
   
-  function debounce(func, wait) {
-      let timeout;
-      return function() {
-          const context = this, args = arguments;
-          clearTimeout(timeout);
-          timeout = setTimeout(() => func.apply(context, args), wait);
-      };
-  }
-  
   function adjustTableScale() {
-          var tables = document.querySelectorAll('.table-responsive table');
-          tables.forEach(function(table) {
-              var tableResponsive = table.parentElement;
-              var tableResponsiveWidth = tableResponsive.clientWidth;
-              var tableResponsiveFontSize = parseFloat(getComputedStyle(tableResponsive).fontSize);
-              var paddingAdjustment = 2 * 1 * tableResponsiveFontSize; // 1emのpaddingが左右にあるので2emをピクセルに変換
-              var availableWidth = tableResponsiveWidth - paddingAdjustment;
-              var tableWidth = table.scrollWidth;
-              var tableHeight = table.scrollHeight;
-  
-              if (tableWidth > availableWidth) {
-                  var scale = availableWidth / tableWidth;
-                  table.style.width = availableWidth + 'px';
-                  table.style.height = tableHeight * scale + 'px';
-                  table.querySelectorAll('th, td').forEach(function(cell) {
-                      var originalFontSize = parseFloat(getComputedStyle(cell).fontSize);
-                      cell.style.fontSize = (originalFontSize * scale) + 'px';
-                      var originalPaddingTopBottom = parseFloat(getComputedStyle(cell).paddingTop);
-                      var originalPaddingLeftRight = parseFloat(getComputedStyle(cell).paddingLeft);
-                      cell.style.padding = (originalPaddingTopBottom * scale) + 'px ' + (originalPaddingLeftRight * scale) + 'px';
-                  });
-              } else {
-                  table.style.height = 'auto';
-                  table.querySelectorAll('th, td').forEach(function(cell) {
-                      cell.style.fontSize = '';
-                      cell.style.padding = '';
-                  });
-              }
-          });
-      }
-  
-      const debouncedAdjustTableScale = debounce(adjustTableScale, 100);
-  
-      window.addEventListener('resize', debouncedAdjustTableScale);
-      window.addEventListener('load', adjustTableScale);
-      adjustTableScale();
+        var tables = document.querySelectorAll('.table-responsive table');
+        tables.forEach(function(table) {
+            var tableResponsive = table.parentElement;
+            var tableResponsiveWidth = tableResponsive.clientWidth;
+            var tableResponsiveFontSize = parseFloat(getComputedStyle(tableResponsive).fontSize);
+            var paddingAdjustment = 2 * 1 * tableResponsiveFontSize; // 1emのpaddingが左右にあるので2emをピクセルに変換
+            var availableWidth = tableResponsiveWidth - paddingAdjustment;
+            var tableWidth = table.scrollWidth;
+            var tableHeight = table.scrollHeight;
+
+            if (tableWidth > availableWidth) {
+                var scale = availableWidth / tableWidth;
+                table.style.width = availableWidth + 'px';
+                table.style.height = tableHeight * scale + 'px';
+                table.querySelectorAll('th, td').forEach(function(cell) {
+                    var originalFontSize = parseFloat(getComputedStyle(cell).fontSize);
+                    cell.style.fontSize = (originalFontSize * scale) + 'px';
+                    var originalPaddingTopBottom = parseFloat(getComputedStyle(cell).paddingTop);
+                    var originalPaddingLeftRight = parseFloat(getComputedStyle(cell).paddingLeft);
+                    cell.style.padding = (originalPaddingTopBottom * scale) + 'px ' + (originalPaddingLeftRight * scale) + 'px';
+                });
+            } else {
+                table.style.height = 'auto';
+                table.querySelectorAll('th, td').forEach(function(cell) {
+                    cell.style.fontSize = '';
+                    cell.style.padding = '';
+                });
+            }
+        });
+    }
+
+    const debouncedAdjustTableScale = debounce(adjustTableScale, 100);
+
+    window.addEventListener('resize', debouncedAdjustTableScale);
+    window.addEventListener('load', adjustTableScale);
+    adjustTableScale();
       
   }, 100); 
 }
   
 /* GPUアクセラレーション除去 */
 Defer(function() {
-        var elements = document.querySelectorAll('.gpu-accelerated');
-        elements.forEach(function(element) {
-            element.classList.remove('gpu-accelerated');
-        });
-    }, 3000);
+    var elements = document.querySelectorAll('.gpu-accelerated');
+    elements.forEach(function(element) {
+        element.classList.remove('gpu-accelerated');
+    });
+}, 3000);
   
 /* img の src の "w200-e90-rw" を "w400-e90-rw" に書き換え */
 Defer(function() {
