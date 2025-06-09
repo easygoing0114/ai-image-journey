@@ -12,7 +12,7 @@ var ImgSize = 400;
 
 /* 外部スクリプトの読み込み */
 if (document.querySelector('.mermaid') !== null) {
-  Defer.js('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs', 'mermaid', 100);
+  Defer.js('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js', 'mermaid', 100);
 }
 
 if (document.querySelector('.chartjs') !== null) {
