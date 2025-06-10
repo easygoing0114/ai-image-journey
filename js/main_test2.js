@@ -91,7 +91,7 @@ Defer(function() {
 
 /* DMCA バッジ */
 Defer(function () {
-  document.addEventListener("DOMContentLoaded", function () {
+//  document.addEventListener("DOMContentLoaded", function () {
       var dmcaBadgeClass = "dmca-badge";
       var refUrlParam = "refurl";
       var badgeLinks = document.querySelectorAll('a.' + dmcaBadgeClass);
@@ -101,7 +101,7 @@ Defer(function () {
               link.href = link.href + (link.href.indexOf("?") === -1 ? "?" : "&") + refUrlParam + "=" + document.location;
           }
       }
-  }, false);
+//  }, false);
 }, 100);
 
 /* dark-mode ボタン */
