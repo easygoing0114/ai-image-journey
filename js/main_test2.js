@@ -150,7 +150,6 @@ Defer(function() {
 if (document.querySelector('textarea') !== null) {
   Defer(function() {
 
-    // より確実でシンプルなアプローチ
     function createAutoResizeTextarea() {
         const textareas = document.querySelectorAll('textarea');
         
@@ -160,7 +159,6 @@ if (document.querySelector('textarea') !== null) {
                 textarea.style.height = Math.max(textarea.scrollHeight, 24) + 'px';
             }
 
-            // 初期調整
             adjustHeight();
 
             // 全てのイベントを監視
@@ -503,33 +501,38 @@ if (document.querySelector('.chartjs') !== null) {
   } 
 
   function updateAllChartColors() {
-    const currentColor = getCurrentThemeColor();
+      const currentColor = getCurrentThemeColor();
 
       Chart.defaults.color = currentColor;
-    
+
       Object.values(Chart.instances).forEach(function(chart) {
-      if (chart.options.scales) {
-        Object.keys(chart.options.scales).forEach(function(scaleKey) {
-          if (chart.options.scales[scaleKey].ticks) {
-            chart.options.scales[scaleKey].ticks.color = currentColor;
+          if (chart.options.scales) {
+              Object.keys(chart.options.scales).forEach(function(scaleKey) {
+                  // 軸のティックの色
+                  if (chart.options.scales[scaleKey].ticks) {
+                      chart.options.scales[scaleKey].ticks.color = currentColor;
+                  }
+                  // 軸ラベルの色
+                  if (chart.options.scales[scaleKey].title) {
+                      chart.options.scales[scaleKey].title.color = currentColor;
+                  }
+              });
           }
-        });
-      }
-      
-      if (chart.options.plugins && chart.options.plugins.legend && chart.options.plugins.legend.labels) {
-        chart.options.plugins.legend.labels.color = currentColor;
-      }
-      
-      if (chart.options.plugins && chart.options.plugins.title) {
-        chart.options.plugins.title.color = currentColor;
-      }
-      
-      if (chart.options.plugins && chart.options.plugins.datalabels) {
-        chart.options.plugins.datalabels.color = currentColor;
-      }
-      
-      chart.update('none');
-    });
+
+          if (chart.options.plugins && chart.options.plugins.legend && chart.options.plugins.legend.labels) {
+              chart.options.plugins.legend.labels.color = currentColor;
+          }
+
+          if (chart.options.plugins && chart.options.plugins.title) {
+              chart.options.plugins.title.color = currentColor;
+          }
+
+          if (chart.options.plugins && chart.options.plugins.datalabels) {
+              chart.options.plugins.datalabels.color = currentColor;
+          }
+
+          chart.update('none');
+      });
   }
 
   function executeChart() {
@@ -562,7 +565,7 @@ if (document.querySelector('table') !== null) {
   
   Defer(function() {
   
-  function adjustTableScale() {
+    function adjustTableScale() {
         var tables = document.querySelectorAll('.table-responsive table');
         tables.forEach(function(table) {
             var tableResponsive = table.parentElement;
