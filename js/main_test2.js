@@ -91,17 +91,10 @@ Defer(function() {
 
 /* DMCA バッジ */
 Defer(function () {
-//  document.addEventListener("DOMContentLoaded", function () {
-      var dmcaBadgeClass = "dmca-badge";
-      var refUrlParam = "refurl";
-      var badgeLinks = document.querySelectorAll('a.' + dmcaBadgeClass);
-      if (badgeLinks.length > 0 && badgeLinks[0].getAttribute("href").indexOf(refUrlParam) < 0) {
-          for (var r = 0; r < badgeLinks.length; r++) {
-              var link = badgeLinks[r];
-              link.href = link.href + (link.href.indexOf("?") === -1 ? "?" : "&") + refUrlParam + "=" + document.location;
-          }
-      }
-//  }, false);
+    var dmcaLink = document.getElementById('dmcaLink');
+    if (dmcaLink && dmcaLink.href.indexOf('refurl') < 0) {
+        dmcaLink.href += (dmcaLink.href.indexOf('?') === -1 ? '?' : '&') + 'refurl=' + document.location;
+    }
 }, 100);
 
 /* dark-mode ボタン */
