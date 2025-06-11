@@ -496,6 +496,24 @@ if (document.querySelector('.mermaid') !== null) {
 /* Chart.js */
 if (document.querySelector('.chartjs') !== null) {
 
+    const borderColors = [
+    'rgb(255, 99, 132)',    // Red
+    'rgb(255, 159, 64)',    // Orange
+    'rgb(255, 205, 86)',    // Yellow
+    'rgb(75, 192, 192)',    // Cyan
+    'rgb(54, 162, 235)',    // Blue
+    'rgb(153, 102, 255)'    // Purple
+  ];
+
+  const backgroundColors = [
+    'rgba(255, 99, 132, 0.2)',    // Red
+    'rgba(255, 159, 64, 0.2)',    // Orange
+    'rgba(255, 205, 86, 0.2)',    // Yellow
+    'rgba(75, 192, 192, 0.2)',    // Cyan
+    'rgba(54, 162, 235, 0.2)',    // Blue
+    'rgba(153, 102, 255, 0.2)'    // Purple
+  ];
+
   function getCurrentThemeColor() {
     return getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color').trim();
   } 
