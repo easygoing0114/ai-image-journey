@@ -502,7 +502,8 @@ if (document.querySelector('.chartjs') !== null) {
     'rgb(255, 205, 86)',    // Yellow
     'rgb(75, 192, 192)',    // Cyan
     'rgb(54, 162, 235)',    // Blue
-    'rgb(153, 102, 255)'    // Purple
+    'rgb(153, 102, 255)',    // Purple
+    'rgb(201, 203, 207)'    // Gray
   ];
 
   const backgroundColors = [
@@ -511,7 +512,8 @@ if (document.querySelector('.chartjs') !== null) {
     'rgba(255, 205, 86, 0.2)',    // Yellow
     'rgba(75, 192, 192, 0.2)',    // Cyan
     'rgba(54, 162, 235, 0.2)',    // Blue
-    'rgba(153, 102, 255, 0.2)'    // Purple
+    'rgba(153, 102, 255, 0.2)',    // Purple
+    'rgba(201, 203, 207, 0.2)'    // Gray
   ];
 
   function getCurrentThemeColor() {
