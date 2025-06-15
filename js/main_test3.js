@@ -612,13 +612,37 @@ if (document.querySelector('.table-responsive') !== null) {
             
             // スケール調整の判定と適用
             if (originalTableWidth > tableResponsiveWidth) {
-                // ボーダー分の余裕を考慮（box-sizing: border-box対応）
-                var borderBuffer = 4; // ボーダー分の余裕（px）
-                var availableWidth = tableResponsiveWidth - borderBuffer;
+                // テーブルの実際のボーダー幅を取得
+                var tableComputedStyle = getComputedStyle(table);
+                var borderLeftWidth = parseFloat(tableComputedStyle.borderLeftWidth) || 0;
+                var borderRightWidth = parseFloat(tableComputedStyle.borderRightWidth) || 0;
+                var totalBorderWidth = borderLeftWidth + borderRightWidth;
+                
+                // セルのボーダーも考慮（テーブルによってはcollapse border）
+                var firstCell = table.querySelector('th, td');
+                var totalBorderHeight = 0;
+                if (firstCell && tableComputedStyle.borderCollapse !== 'collapse') {
+                    var cellStyle = getComputedStyle(firstCell);
+                    var cellBorderLeft = parseFloat(cellStyle.borderLeftWidth) || 0;
+                    var cellBorderRight = parseFloat(cellStyle.borderRightWidth) || 0;
+                    var cellBorderTop = parseFloat(cellStyle.borderTopWidth) || 0;
+                    var cellBorderBottom = parseFloat(cellStyle.borderBottomWidth) || 0;
+                    totalBorderWidth += Math.max(cellBorderLeft + cellBorderRight, 2);
+                    totalBorderHeight = cellBorderTop + cellBorderBottom;
+                }
+                
+                // テーブル自体の上下ボーダー
+                var borderTopWidth = parseFloat(tableComputedStyle.borderTopWidth) || 0;
+                var borderBottomWidth = parseFloat(tableComputedStyle.borderBottomWidth) || 0;
+                totalBorderHeight += borderTopWidth + borderBottomWidth;
+                
+                // 安全なマージンを追加
+                var safetyMargin = 2;
+                var availableWidth = tableResponsiveWidth - totalBorderWidth - safetyMargin;
                 var scale = availableWidth / originalTableWidth;
                 
                 table.style.width = availableWidth + 'px';
-                table.style.height = (originalTableHeight * scale) + 'px';
+                table.style.height = (originalTableHeight * scale) + totalBorderHeight + safetyMargin + 'px';
                 table.querySelectorAll('th, td').forEach(function(cell) {
                     cell.style.fontSize = (originalFontSize * scale) + 'px';
                     cell.style.padding = (originalPaddingTop * scale) + 'px ' + (originalPaddingLeft * scale) + 'px';
