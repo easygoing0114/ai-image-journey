@@ -1113,21 +1113,6 @@ const jo = {};
     Defer.domz(".custom-posts", 1, null, jo[loadCustomPostsFn], null, {
       rootMargin: "300%"
     });
-    if (0 < noscriptElements[lengthProp]) {
-      for (var i = 0; i < noscriptElements[lengthProp]; ++i) {
-        var noscript = noscriptElements[i];
-        var content = noscript[innerHTMLProp];
-        var textarea = documentObj[createElementFn]("textarea");
-        textarea[innerHTMLProp] = content[replaceFn](/src="(.*?)"/g, 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" loading="lazy" lazyload="true" data-src="$1"');
-        var div = documentObj[createElementFn]("div");
-        div[innerHTMLProp] = textarea.value;
-        if (0 === i) t2(div, "feature-image full-width");
-        noscript[parentElementProp][insertStr + beforeStr](div, noscript);
-      }
-      Defer.domz('[lazyload="true"]', 1, "loaded", processImage, null, {
-        rootMargin: "300%"
-      });
-    }
     if (null !== postBodyElement) {
       if (null !== relatedPosts && null !== relatedInline) {
         relatedInline[innerHTMLProp] = relatedPosts[innerHTMLProp];
