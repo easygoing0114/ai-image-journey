@@ -637,7 +637,7 @@ if (document.querySelector('.table-responsive') !== null) {
                 totalBorderHeight += borderTopWidth + borderBottomWidth;
                 
                 // 安全なマージンを追加
-                var safetyMargin = 2;
+                var safetyMargin = 4;
                 var availableWidth = tableResponsiveWidth - totalBorderWidth - safetyMargin;
                 var scale = availableWidth / originalTableWidth;
                 
