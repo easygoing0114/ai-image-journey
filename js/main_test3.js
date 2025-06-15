@@ -563,44 +563,71 @@ if (document.querySelector('.chartjs') !== null) {
 
 /* table の font-size と padding を画面の最大幅に合わせて変更 */
 if (document.querySelector('.table-responsive') !== null) {
-   
-  function adjustTableScale() {
-      var tables = document.querySelectorAll('.table-responsive table');
-      tables.forEach(function(table) {
-          var tableResponsive = table.parentElement;
-          var tableResponsiveWidth = tableResponsive.clientWidth;
-          var tableWidth = table.scrollWidth;
-          var tableHeight = table.scrollHeight;          
+    
+    function adjustTableScale() {
+        var tables = document.querySelectorAll('.table-responsive table');
+        tables.forEach(function(table) {
+            var tableResponsive = table.parentElement;
+            var tableResponsiveWidth = tableResponsive.clientWidth;
+            
+            // 元のサイズが保存されていない場合は保存
+            if (!table.dataset.originalWidth) {
+                // 完全にリセットした状態でサイズを測定
+                table.style.cssText = '';
+                table.querySelectorAll('th, td').forEach(function(cell) {
+                    cell.style.fontSize = '';
+                    cell.style.padding = '';
+                });
+                
+                // 元のサイズを保存
+                table.dataset.originalWidth = table.scrollWidth;
+                table.dataset.originalHeight = table.scrollHeight;
+                
+                // 元のスタイルも保存
+                var firstCell = table.querySelector('th, td');
+                if (firstCell) {
+                    var computedStyle = getComputedStyle(firstCell);
+                    if (!table.dataset.originalFontSize) {
+                        table.dataset.originalFontSize = computedStyle.fontSize;
+                        table.dataset.originalPaddingTop = computedStyle.paddingTop;
+                        table.dataset.originalPaddingLeft = computedStyle.paddingLeft;
+                    }
+                }
+            }
+            
+            // 保存された元のサイズを使用
+            var originalTableWidth = parseInt(table.dataset.originalWidth);
+            var originalTableHeight = parseInt(table.dataset.originalHeight);
+            var originalFontSize = parseFloat(table.dataset.originalFontSize);
+            var originalPaddingTop = parseFloat(table.dataset.originalPaddingTop);
+            var originalPaddingLeft = parseFloat(table.dataset.originalPaddingLeft);
+            
+            // リセット処理
+            table.style.height = 'auto';
+            table.style.width = 'auto';
+            table.querySelectorAll('th, td').forEach(function(cell) {
+                cell.style.fontSize = originalFontSize + 'px';
+                cell.style.padding = originalPaddingTop + 'px ' + originalPaddingLeft + 'px';
+            });
+            
+            // スケール調整の判定と適用
+            if (originalTableWidth > tableResponsiveWidth) {
+                var scale = tableResponsiveWidth / originalTableWidth;
+                table.style.width = tableResponsiveWidth + 'px';
+                table.style.height = (originalTableHeight * scale) + 'px';
+                table.querySelectorAll('th, td').forEach(function(cell) {
+                    cell.style.fontSize = (originalFontSize * scale) + 'px';
+                    cell.style.padding = (originalPaddingTop * scale) + 'px ' + (originalPaddingLeft * scale) + 'px';
+                });
+            }
+        });
+    }
 
-          // 常にリセット処理を実行
-          table.style.height = 'auto';
-          table.style.width = 'auto';
-          table.querySelectorAll('th, td').forEach(function(cell) {
-              cell.style.fontSize = '';
-              cell.style.padding = '';
-          });
-
-          // 条件判定とスケール調整
-          if (tableWidth > tableResponsiveWidth) {
-              var scale = tableResponsiveWidth / tableWidth;
-              table.style.width = tableResponsiveWidth + 'px';
-              table.style.height = tableHeight * scale + 'px';
-              table.querySelectorAll('th, td').forEach(function(cell) {
-                  var originalFontSize = parseFloat(getComputedStyle(cell).fontSize);
-                  cell.style.fontSize = (originalFontSize * scale) + 'px';
-                  var originalPaddingTopBottom = parseFloat(getComputedStyle(cell).paddingTop);
-                  var originalPaddingLeftRight = parseFloat(getComputedStyle(cell).paddingLeft);
-                  cell.style.padding = (originalPaddingTopBottom * scale) + 'px ' + (originalPaddingLeftRight * scale) + 'px';
-              });
-          }
-      });
-  }
-
-  Defer(function() {
-      const debouncedAdjust = debounce(adjustTableScale, 100);
-      window.addEventListener('resize', debouncedAdjust);
-      debouncedAdjust(); // 初回実行
-  }, 100);
+    Defer(function() {
+        const debouncedAdjust = debounce(adjustTableScale, 100);
+        window.addEventListener('resize', debouncedAdjust);
+        debouncedAdjust(); // 初回実行
+    }, 100);
 }
   
 /* GPUアクセラレーション除去 */
