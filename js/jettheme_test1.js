@@ -868,17 +868,6 @@ const jo = {};
         }
         for (var g, e = 0; e < c; e++) e == c - 1 ? tZ[M](i[0]) : (g = e == c - 1 ? u[P] - 1 : l.round(u[P] / c) * e, (g = 0 == e ? u[0] : u[g][to]) && g[U][q + H](i[0], g));
       }
-      if (tB && tB != ts && tE && null !== tZ[D]) {
-        for (var m = tZ[_]("h2,h3,h4,h5,h6"), p = o[A]("div"), t = tZ[v](tR), y = [], e = 0; e < m[P]; e++) {
-          var b = m[e], w = b[ta], I = d(b[$][j]("H", ""));
-          b.id = w, y[z]({
-            level: I,
-            title: b[ta],
-            id: w
-          });
-        }
-        null === t ? t = tZ[D] : t[to] && (t = t[to]), 0 < y[P] && (p[h] = tE(y)[W](), t && t[U][q + H](p, t));
-      }
     }
   }
 
