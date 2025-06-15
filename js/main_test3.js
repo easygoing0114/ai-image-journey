@@ -28,10 +28,6 @@ if (document.querySelector('.markdown') !== null) {
   Defer.js('https://cdn.jsdelivr.net/npm/marked-extended-tables/lib/index.umd.js', 'markedplugin', 100);
 }
 
-if (document.querySelector('canvas') !== null) {
-  Defer.js('https://cdn.jsdelivr.net/npm/html2canvas-pro/dist/html2canvas-pro.min.js', 'canvaspro', 100);
-}
-
 if (document.querySelector('.twitter-tweet') !== null) {
   Defer.js('https://platform.twitter.com/widgets.js', 'twitter', 100);
 }
