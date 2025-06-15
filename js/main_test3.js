@@ -388,17 +388,11 @@ Defer(function() {
     
     if (imageEagerLoad.length === 0) return;
 
-    // 初回の要素を0.2秒後に処理
-    const firstImage = imageEagerLoad[0];
-    Defer(function() {
-        firstImage.removeAttribute('loading');
-    }, 200);
-
     // 残りの要素を0.2秒間隔で処理
-    imageEagerLoad.slice(1).forEach((img, index) => {
+    imageEagerLoad.slice(2).forEach((img, index) => {
         Defer(function() {
             img.removeAttribute('loading');
-        }, 400 + (index * 200)); // 初回の0.2秒 + 0.2秒の間隔
+        }, (index * 200)); // 初回の0.2秒 + 0.2秒の間隔
     });
 }, 200);
 
