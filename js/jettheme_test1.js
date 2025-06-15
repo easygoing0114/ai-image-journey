@@ -821,11 +821,7 @@ const jo = {};
     })) : tq(tN, "show");
   }), n["add" + k](ti, function() {
     (1 <= this[R] && null !== t4 ? t2 : t3)(t4, "shadow-sm"), (1e3 <= this[R] && null !== tT ? t3 : t2)(tT, "d-none");
-  }, !1), tU && tU["add" + k](tr, function(t) {
-    t3(tQ, "loader");
-  }), tF && tF["add" + k](tl, function(t) {
-    t[J](), eu(this[O]), "add-comment" != tQ[U].id && o[y]("add-comment")[M](tQ);
-  });
+  }, !1);
 
   function eg(t) {
     if (t && (o[x + k](td, eg), o[x + k](tc, eg), o[x + k](ti, eg)), Defer.domz(".custom-posts", 1, null, jo[th], null, {
