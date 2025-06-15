@@ -569,7 +569,6 @@ if (document.querySelector('.table-responsive') !== null) {
       tables.forEach(function(table) {
           var tableResponsive = table.parentElement;
           var tableResponsiveWidth = tableResponsive.clientWidth;
-          var tableResponsiveFontSize = parseFloat(getComputedStyle(tableResponsive).fontSize);
           var tableWidth = table.scrollWidth;
           var tableHeight = table.scrollHeight;          
 
