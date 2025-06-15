@@ -525,6 +525,12 @@ if (document.querySelector('.chartjs') !== null) {
         window[funcName]();
       }
     });
+
+    document.querySelectorAll('.chartjs').forEach(canvas => {
+      canvas.style.width = 'auto';
+      canvas.style.height = 'auto';
+    });
+
   }
 
   document.addEventListener('DOMContentLoaded', function() {
