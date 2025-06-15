@@ -545,8 +545,16 @@ if (document.querySelector('.table-responsive') !== null) {
           var tableResponsiveWidth = tableResponsive.clientWidth;
           var tableResponsiveFontSize = parseFloat(getComputedStyle(tableResponsive).fontSize);
           var tableWidth = table.scrollWidth;
-          var tableHeight = table.scrollHeight;
+          var tableHeight = table.scrollHeight;          
 
+          // 常にリセット処理を実行
+          table.style.height = 'auto';
+          table.querySelectorAll('th, td').forEach(function(cell) {
+              cell.style.fontSize = '';
+              cell.style.padding = '';
+          });
+
+          // 条件判定とスケール調整
           if (tableWidth > tableResponsiveWidth) {
               var scale = tableResponsiveWidth / tableWidth;
               table.style.width = tableResponsiveWidth + 'px';
@@ -557,12 +565,6 @@ if (document.querySelector('.table-responsive') !== null) {
                   var originalPaddingTopBottom = parseFloat(getComputedStyle(cell).paddingTop);
                   var originalPaddingLeftRight = parseFloat(getComputedStyle(cell).paddingLeft);
                   cell.style.padding = (originalPaddingTopBottom * scale) + 'px ' + (originalPaddingLeftRight * scale) + 'px';
-              });
-          } else {
-              table.style.height = 'auto';
-              table.querySelectorAll('th, td').forEach(function(cell) {
-                  cell.style.fontSize = '';
-                  cell.style.padding = '';
               });
           }
       });
