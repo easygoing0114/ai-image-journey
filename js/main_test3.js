@@ -533,11 +533,9 @@ if (document.querySelector('.chartjs') !== null) {
 
   }
 
-  document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(function() {
+  Defer(function() {
       executeChart()
-    }, 2000);
-  });
+  }, 2000);
 
 }
 
