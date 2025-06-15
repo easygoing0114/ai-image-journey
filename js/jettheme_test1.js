@@ -641,675 +641,258 @@ Defer(function() {
 /*js@0.5.5/main.js*/
 const jo = {};
 !function t() {
-  var windowObj = window;
-  var documentObj = document;
-  var setTimeoutFn = setTimeout;
-  var clearTimeoutFn = clearTimeout;
-  var dateObj = Date;
-  var mathObj = Math;
-  var parseIntFn = parseInt;
-  var encodeURIComponentFn = encodeURIComponent;
-  var regexObj = RegExp;
-  var xmlHttpRequestObj = XMLHttpRequest;
-  var localStorageObj = localStorage;
-  var jsonObj = JSON;
-  var imageObj = Image;
-  var innerHTMLProp = "innerHTML";
-  var tagNameProp = "tagName";
-  var getElementByIdFn = "getElementById";
-  var querySelectorFn = "querySelector";
-  var querySelectorAllFn = "querySelectorAll";
-  var createElementFn = "createElement";
-  var classNameProp = "className";
-  var replaceFn = "replace";
-  var lastIndexOfFn = "lastIndexOf";
-  var eventListenerProp = "EventListener";
-  var removeFn = "remove";
-  var lengthProp = "length";
-  var sliceFn = "slice";
-  var pushFn = "push";
-  var attributeFn = "Attribute";
-  var checkedProp = "checked";
-  var offsetWidthProp = "offsetWidth";
-  var toFixedFn = "toFixed";
-  var pageYOffsetProp = "pageYOffset";
-  var appendChildFn = "appendChild";
-  var firstChildProp = "firstChild";
-  var insertStr = "insert";
-  var beforeStr = "Before";
-  var matchFn = "match";
-  var hrefProp = "href";
-  var targetProp = "target";
-  var locationProp = "location";
-  var splitFn = "split";
-  var trimFn = "trim";
-  var openFn = "open";
-  var sendFn = "send";
-  var randomFn = "random";
-  var parentElementProp = "parentElement";
-  var preventDefaultFn = "preventDefault";
-  var substrFn = "substr";
-  var setRequestHeaderFn = "setRequestHeader";
-  var responseTextProp = "responseText";
-  var titleProp = "title";
-  var ceilFn = "ceil";
-  var floorFn = "floor";
-  var textContentProp = "textContent";
-  var itemFn = "Item";
-  var nextSiblingProp = "nextSibling";
-  var loadEvent = "load";
-  var falseStr = "false";
-  var scrollEvent = "scroll";
-  var clickEvent = "click";
-  var mousemoveEvent = "mousemove";
-  var touchstartEvent = "touchstart";
-  var changeEvent = "change";
-  var undefinedStr = "undefined";
-  var functionStr = "function";
-  var contentTypeHeader = "Content-Type";
-  var paginationStr = "pagination";
-  var loadCustomPostsFn = "loadCustomPosts";
-  var customPostsStr = "custom_posts";
-  var adsbygoogleStr = "adsbygoogle";
-  var httpsStr = "https://";
-  var bloggerDomain = "www.blogger.com/";
-  var rwStr = "-rw";
-  var devicePixelRatioProp = "devicePixelRatio";
-  var isPreviewFlag = typeof isPreview !== undefinedStr && isPreview;
-  var siteUrl = typeof siteUrl !== undefinedStr ? siteUrl[substrFn](0, siteUrl[lengthProp] - 1)[replaceFn](/(^\w+:|^)\/\//, "") : "";
-  var baseUrl = httpsStr + siteUrl;
-  var currentUrl = typeof currentUrl !== undefinedStr ? currentUrl : "";
-  var blogId = typeof blogId !== undefinedStr ? blogId : "";
-  var blogTitle = typeof blogTitle !== undefinedStr ? blogTitle : "";
-  var titleSeparator = typeof titleSeparator !== undefinedStr ? titleSeparator : " - ";
-  var pageTitle = typeof pageTitle !== undefinedStr ? pageTitle : "Page";
-  var analyticId = typeof analyticId !== undefinedStr && analyticId;
-  var caPubAdsense = typeof caPubAdsense !== undefinedStr && caPubAdsense[replaceFn](/^\D+/g, "");
-  var adsenseClientId = !!caPubAdsense && "ca-pub-" + caPubAdsense;
-  var innerAdsDelimiter = typeof innerAdsDelimiter !== undefinedStr ? innerAdsDelimiter : "p,br,div";
-  var ignoreAdsDelimiter = typeof ignoreAdsDelimiter !== undefinedStr ? ignoreAdsDelimiter : "pre,ul,ol,table,blockquote";
-  var autoTOC = typeof autoTOC !== undefinedStr && autoTOC;
-  var tocTemplateFn = typeof toc_temp === functionStr && toc_temp;
-  var positionTOC = typeof positionTOC !== undefinedStr && positionTOC;
-  var jtCallbackFn = typeof jtCallback === functionStr && jtCallback;
+  var e, a, n = window, o = document, r = setTimeout, s = clearTimeout, i = Date, l = Math, d = parseInt, c = (btoa, encodeURIComponent), u = RegExp, f = XMLHttpRequest, g = (alert, localStorage), m = JSON, p = Image, h = "innerHTML", $ = "tagName", y = "getElementById", v = "querySelector", _ = "querySelectorAll", A = "createElement", b = "className", j = "replace", w = "lastIndexOf", k = "EventListener", x = "remove", P = "length", I = "slice", z = "push", S = "Attribute", C = "checked", B = "offsetWidth", E = "toFixed", R = "pageYOffset", M = "appendChild", D = "firstChild", q = "insert", H = "Before", L = "match", O = "href", G = "target", N = "location", T = "split", W = "trim", Y = "open", F = "send", Q = "random", U = "parentElement", J = "preventDefault", V = "substr", X = "setRequestHeader", K = "responseText", Z = "title", tt = "ceil", te = "floor", ta = "textContent", tn = "Item", to = "nextSibling", tr = "load", ts = "false", ti = "scroll", tl = "click", td = "mousemove", tc = "touchstart", tu = "change", tf = "undefined", tg = "function", tm = "Content-Type", tp = "pagination", th = "loadCustomPosts", t$ = "custom_posts", ty = "adsbygoogle", tv = "https://", t_ = "www.blogger.com/", tA = "-rw", tb = "devicePixelRatio", tj = typeof isPreview !== tf && isPreview, tw = tv + (typeof siteUrl !== tf ? siteUrl[V](0, siteUrl[P] - 1)[j](/(^\w+:|^)\/\//, "") : ""), tk = typeof currentUrl !== tf ? currentUrl : "", tx = typeof blogId !== tf ? blogId : "", tP = typeof blogTitle !== tf ? blogTitle : "", tI = typeof titleSeparator !== tf ? titleSeparator : " - ", t0 = typeof pageTitle !== tf ? pageTitle : "Page", t9 = typeof analyticId !== tf && analyticId, tz = typeof caPubAdsense !== tf && caPubAdsense[j](/^\D+/g, ""), tS = !!tz && "ca-pub-" + tz, tC = typeof innerAdsDelimiter !== tf ? innerAdsDelimiter : "p,br,div", t8 = typeof ignoreAdsDelimiter !== tf ? ignoreAdsDelimiter : "pre,ul,ol,table,blockquote", tB = typeof autoTOC !== tf && autoTOC, tE = typeof toc_temp === tg && toc_temp, tR = typeof positionTOC !== tf && positionTOC, tM = typeof jtCallback === tg && jtCallback;
 
-  function tD(element, className) {
-    return -1 < (" " + element[classNameProp] + " ").indexOf(" " + className + " ");
+  function tD(t, e) {
+    return -1 < (" " + t[b] + " ").indexOf(" " + e + " ");
   }
 
-  function t2(element, className) {
-    var currentClasses;
-    tD(element, className) || ("" !== (currentClasses = element[classNameProp]) && (className = " " + className), element[classNameProp] = currentClasses + className);
+  function t2(t, e) {
+    var a;
+    tD(t, e) || ("" != (a = t[b]) && (e = " " + e), t[b] = a + e);
   }
 
-  function t3(element, className) {
-    element[classNameProp] = element[classNameProp][replaceFn](new regexObj("(?:^|\\s)" + className + "(?!\\S)"), "")[trimFn]();
+  function t3(t, e) {
+    t[b] = t[b][j](new u("(?:^|\\s)" + e + "(?!\\S)"), "")[W]();
   }
 
-  function tq(element, className, delay) {
-    t3(element, className);
-    setTimeoutFn(function() {
-      t3(element, "d-block");
-    }, delay || 300);
+  function tq(t, e, a) {
+    t3(t, e), r(function() {
+      t3(t, "d-block");
+    }, a || 300);
   }
 
-  function tH(array, value) {
-    for (var i = 0; i < array[lengthProp]; i++) {
-      if (array[i] === value) return true;
-    }
-    return false;
+  function tH(t, e) {
+    for (var a = 0; a < t[P]; a++)
+      if (t[a] === e) return !0;
+    return !1;
   }
 
-  function tL(param, url) {
-    return !!(param = new regexObj("[?&]" + param + "=([^&#=]*)")).test(url) && url[matchFn](param)[1];
+  function tL(t, e) {
+    return !!(t = new u("[?&]" + t + "=([^&#=]*)")).test(e) && e[L](t)[1];
   }
 
-  function tO(jsonString) {
+  function tO(t) {
     try {
-      return jsonObj.parse(jsonString);
+      return m.parse(t);
     } catch (e) {
-      return false;
+      return !1;
     }
   }
 
-  var webpTestFn = function(callback) {
-    callback || (rwStr = "");
+  e = function(t) {
+    t || (tA = "");
+  }, (a = new p).onload = a.onerror = function() {
+    e(2 == a.height);
+  }, a.src = "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA";
+
+  var t4 = o[y]("header"), t1 = o[y]("search-toggle"), t7 = o[y]("search-header"), tG = o[y]("navbar-toggle"), tN = o[y]("navbar"), tT = o[y]("back-to-top"), tW = o[y]("dark-toggler"), tY = o[v]("html"), tF = o[y]("comment-button"), tQ = o[y]("threaded-comment-form"), tU = o[y]("comment-editor"), tJ = o[y]("comment-editor-src"), tV = o[y]("comment-script"), tX = o[_](".comment-reply"), t5 = o[_](".entry-text noscript"), t6 = o[_](".contact-form-blogger"), tK = o[y]("ads-post"), tZ = o[y]("post-body"), et = o[v](".related-posts"), ee = o[v](".related-inline"), ea = tL("page", tk), en = null !== g && 1 == g["get" + tn]("lazy");
+
+  var eo = 0;
+  n["add" + k](ti, function() {
+    var t, e = this[R];
+    e < eo && tD(t4, "header-hidden") ? t = r(function() {
+      t3(t4, "header-hidden");
+    }, 500) : eo < e && tD(t4, "header-animate") && (s(t), t2(t4, "header-hidden")), eo = e;
+  }, !1);
+
+  var er = function(t) {
+    var e, a, o, r, s, i, l, d;
+    "IMG" == t[$] && ((d = t["get" + S]("data-src"))[L](/(bp.blogspot|googleusercontent)/) ? (l = en ? n[tb] && 1 < n[tb] ? n[tb] : 1.5 : 1, e = (t[B] * l)[E](0), a = (t[U][B] * l)[E](0), o = (t[U][U][B] * l)[E](0), r = (t.offsetHeight * l)[E](0), s = d[T]("/"), i = d[w]("=") + 1, l = "", l = tD(t[U], "ratio") ? "w" + ImgSize + "-e90" + tA : "w" + ImgSize + "-e90" + tA, d = d[L](/(img\/a|proxy\/)/) ? i ? d[I](0, i) + l : d + "=" + l : d[j](s[s[P] - 2], l), t["set" + S]("data-src", d)) : d[L](/(img.youtube|i.ytimg)/) && (d = d[V](0, d[w]("/")) + "/mqdefault.jpg", t["set" + S]("data-src", d)));
   };
-  var webpImage = new imageObj();
-  webpImage.onload = webpImage.onerror = function() {
-    webpTestFn(2 === webpImage.height);
-  };
-  webpImage.src = "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA";
 
-  var headerElement = documentObj[getElementByIdFn]("header");
-  var searchToggle = documentObj[getElementByIdFn]("search-toggle");
-  var searchHeader = documentObj[getElementByIdFn]("search-header");
-  var navbarToggle = documentObj[getElementByIdFn]("navbar-toggle");
-  var navbarElement = documentObj[getElementByIdFn]("navbar");
-  var backToTop = documentObj[getElementByIdFn]("back-to-top");
-  var darkToggler = documentObj[getElementByIdFn]("dark-toggler");
-  var htmlElement = documentObj[querySelectorFn]("html");
-  var commentButton = documentObj[getElementByIdFn]("comment-button");
-  var threadedCommentForm = documentObj[getElementByIdFn]("threaded-comment-form");
-  var commentEditor = documentObj[getElementByIdFn]("comment-editor");
-  var commentEditorSrc = documentObj[getElementByIdFn]("comment-editor-src");
-  var commentScript = documentObj[getElementByIdFn]("comment-script");
-  var commentReplies = documentObj[querySelectorAllFn](".comment-reply");
-  var noscriptElements = documentObj[querySelectorAllFn](".entry-text noscript");
-  var contactForms = documentObj[querySelectorAllFn](".contact-form-blogger");
-  var adsPostElement = documentObj[getElementByIdFn]("ads-post");
-  var postBodyElement = documentObj[getElementByIdFn]("post-body");
-  var relatedPosts = documentObj[querySelectorFn](".related-posts");
-  var relatedInline = documentObj[querySelectorFn](".related-inline");
-  var currentPage = tL("page", currentUrl);
-  var isLazyLoading = null !== localStorageObj && 1 == localStorageObj["get" + itemFn]("lazy");
-
-  var lastScrollY = 0;
-  windowObj["add" + eventListenerProp](scrollEvent, function() {
-    var timeoutId, scrollY = this[pageYOffsetProp];
-    scrollY < lastScrollY && tD(headerElement, "header-hidden") ? timeoutId = setTimeoutFn(function() {
-      t3(headerElement, "header-hidden");
-    }, 500) : lastScrollY < scrollY && tD(headerElement, "header-animate") && (clearTimeoutFn(timeoutId), t2(headerElement, "header-hidden"));
-    lastScrollY = scrollY;
-  }, false);
-
-  var processImage = function(element) {
-    var src, width, parentWidth, grandparentWidth, height, parts, equalIndex, newSrc;
-    if ("IMG" === element[tagNameProp]) {
-      src = element["get" + attributeFn]("data-src");
-      if (src[matchFn](/(bp.blogspot|googleusercontent)/)) {
-        var pixelRatio = isLazyLoading ? windowObj[devicePixelRatioProp] && 1 < windowObj[devicePixelRatioProp] ? windowObj[devicePixelRatioProp] : 1.5 : 1;
-        width = (element[offsetWidthProp] * pixelRatio)[toFixedFn](0);
-        parentWidth = (element[parentElementProp][offsetWidthProp] * pixelRatio)[toFixedFn](0);
-        grandparentWidth = (element[parentElementProp][parentElementProp][offsetWidthProp] * pixelRatio)[toFixedFn](0);
-        height = (element.offsetHeight * pixelRatio)[toFixedFn](0);
-        parts = src[splitFn]("/");
-        equalIndex = src[lastIndexOfFn]("=") + 1;
-        newSrc = "";
-        newSrc = tD(element[parentElementProp], "ratio") ? "w" + ImgSize + "-e90" + rwStr : "w" + ImgSize + "-e90" + rwStr;
-        src = src[matchFn](/(img\/a|proxy\/)/) ? equalIndex ? src[sliceFn](0, equalIndex) + newSrc : src + "=" + newSrc : src[replaceFn](parts[parts[lengthProp] - 2], newSrc);
-        element["set" + attributeFn]("data-src", src);
-      } else if (src[matchFn](/(img.youtube|i.ytimg)/)) {
-        src = src[substrFn](0, src[lastIndexOfFn]("/")) + "/mqdefault.jpg";
-        element["set" + attributeFn]("data-src", src);
-      }
+  var es = function(t) {
+    var e, a, r, s, i, u, f, g;
+    function m(t, i, l) {
+      var d = o[A]("li"), c = o[A]("span");
+      return t2(c, "btn  rounded-pill jt-icon-center"), c[h] = l || t, c["set" + S]("data-page", t), t == i ? t2(c, "jt-btn-primary") : (t2(c, "jt-btn-light hover-btn-primary"), c["add" + k](tl, function(t) {
+        var o;
+        t[J](), 1 == (g = c["get" + S]("data-page")) ? (o = a ? tw + "/search" + s + "?max-results=" + e + "&page=" + g : tw, n[N][O] = o) : (o = (g - 1) * e, Defer.js(tw + "/feeds/posts/summary/" + r + "?start-index=" + o + "&alt=json&callback=jo." + tp + "_date&max-results=1"));
+      })), d[M](c), d;
     }
-  };
-
-  var processPagination = function(element) {
-    var postsPerPage, label, encodedLabel, labelPath, maxResults, currentPageNum, effectivePostsPerPage, currentPageIndex;
-    function createPageItem(pageNum, currentPage, label) {
-      var li = documentObj[createElementFn]("li");
-      var span = documentObj[createElementFn]("span");
-      t2(span, "btn rounded-pill jt-icon-center");
-      span[innerHTMLProp] = label || pageNum;
-      span["set" + attributeFn]("data-page", pageNum);
-      if (pageNum == currentPage) {
-        t2(span, "jt-btn-primary");
-      } else {
-        t2(span, "jt-btn-light hover-btn-primary");
-        span["add" + eventListenerProp](clickEvent, function(event) {
-          var url;
-          event[preventDefaultFn]();
-          var page = span["get" + attributeFn]("data-page");
-          if (1 == page) {
-            url = encodedLabel ? baseUrl + "/search" + labelPath + "?max-results=" + postsPerPage + "&page=" + page : baseUrl;
-            windowObj[locationProp][hrefProp] = url;
-          } else {
-            url = (page - 1) * postsPerPage;
-            Defer.js(baseUrl + "/feeds/posts/summary/" + label + "?start-index=" + url + "&alt=json&callback=jo." + paginationStr + "_date&max-results=1");
-          }
-        });
-      }
-      li[appendChildFn](span);
-      return li;
-    }
-    if (element["get" + attributeFn]("data-pagination") != falseStr) {
-      postsPerPage = element["get" + attributeFn]("data-posts");
-      encodedLabel = encodeURIComponentFn(label = element["get" + attributeFn]("data-label"));
-      label = encodedLabel ? "-/" + encodedLabel + "/" : "";
-      labelPath = encodedLabel ? "/label/" + encodedLabel : "";
-      Defer.js(baseUrl + "/feeds/posts/summary/" + label + "?alt=json&callback=jo." + paginationStr + "_key&max-results=1");
-      maxResults = tL("max-results", currentUrl);
-      currentPageNum = tL("page", currentUrl);
-      effectivePostsPerPage = maxResults || postsPerPage;
-      currentPageIndex = currentPageNum || 1;
-      jo[paginationStr + "_key"] = function(data) {
-        var feed = data.feed;
-        var totalResults = parseIntFn(feed.openSearch$totalResults.$t);
-        if (postsPerPage < totalResults) {
-          var paginationData = function calculatePagination(total, current, pageSize, maxPages) {
-            total = parseIntFn(total);
-            current = parseIntFn(current);
-            pageSize = parseIntFn(pageSize);
-            maxPages = parseIntFn(maxPages);
-            var startPage, endPage, totalPages = mathObj[ceilFn](total / pageSize);
-            if (current < 1) current = 1;
-            else if (totalPages < current) current = totalPages;
-            endPage = totalPages <= maxPages ? (startPage = 1, totalPages) : (halfMax = mathObj[floorFn](maxPages / 2), halfMaxCeil = mathObj[ceilFn](maxPages / 2) - 1, current <= halfMax ? (startPage = 1, maxPages) : totalPages <= current + halfMaxCeil ? (startPage = totalPages - maxPages + 1, totalPages) : (startPage = current - halfMax, current + halfMaxCeil));
-            var startIndex = (current - 1) * pageSize;
-            var endIndex = mathObj.min(startIndex + pageSize - 1, total - 1);
-            var pages = [];
-            for (var i = 0; i < endPage + 1 - startPage; i++) pages[pushFn](i);
-            pages = pages.map(function(i) {
-              return startPage + i;
-            });
-            return {
-              totalItems: total,
-              currentPage: current,
-              pageSize: pageSize,
-              totalPages: totalPages,
-              startPage: startPage,
-              endPage: endPage,
-              startIndex: startIndex,
-              endIndex: endIndex,
-              pages: pages
-            };
-          }(totalResults, currentPageIndex, effectivePostsPerPage, 5);
-          var ul = documentObj[createElementFn]("ul");
-          var totalPages = paginationData.totalPages;
-          if (1 != paginationData.currentPage) {
-            var prevItem = createPageItem(paginationData.currentPage - 1, "", '<svg aria-hidden="true" class="jt-icon"><use xlink:href="#i-arrow-l"/></svg>');
-            ul[appendChildFn](prevItem);
-          }
-          if (!tH(paginationData.pages, 1)) {
-            var firstPageItem = createPageItem(1, paginationData.currentPage, "1 . .");
-            ul[appendChildFn](firstPageItem);
-          }
-          for (var i = 0; i < paginationData.pages[lengthProp]; i++) {
-            var pageItem = createPageItem(paginationData.pages[i], paginationData.currentPage);
-            ul[appendChildFn](pageItem);
-          }
-          if (!tH(paginationData.pages, totalPages)) {
-            var lastPageItem = createPageItem(totalPages, paginationData.currentPage, ". . " + totalPages);
-            ul[appendChildFn](lastPageItem);
-          }
-          if (paginationData.currentPage != totalPages) {
-            var nextItem = createPageItem(paginationData.currentPage + 1, "", '<svg aria-hidden="true" class="jt-icon"><use xlink:href="#i-arrow-r"/></svg>');
-            ul[appendChildFn](nextItem);
-          }
-          element[innerHTMLProp] = "";
-          t2(ul, "pagination mb-0");
-          element[appendChildFn](ul);
-          t3(element, "visually-hidden");
+    t["get" + S]("data-pagination") != ts ? (e = t["get" + S]("data-posts"), r = (a = c(a = t["get" + S]("data-label"))) ? "-/" + a + "/" : "", s = a ? "/label/" + a : "", Defer.js(tw + "/feeds/posts/summary/" + r + "?alt=json&callback=jo." + tp + "_key&max-results=1"), i = tL("max-results", tk), u = tL("page", tk), f = i || e, g = u || 1, jo[tp + "_key"] = function(a) {
+      var n = a.feed, r = d(n.openSearch$totalResults.$t);
+      if (e < r) {
+        var a = function t(e, a, n, o) {
+          e = d(e), a = d(a), n = d(n), o = d(o);
+          var r, s, i = l[tt](e / n);
+          a < 1 ? a = 1 : i < a && (a = i), s = i <= o ? (r = 1, i) : (e = l[te](o / 2), n = l[tt](o / 2) - 1, a <= e ? (r = 1, o) : i <= a + n ? (r = i - o + 1, i) : (r = a - e, a + n));
+          for (var c = (a - 1) * n, o = l.min(c + n - 1, e - 1), u = [], f = 0; f < s + 1 - r; f++) u[z](f);
+          return u = u.map(function(t) {
+            return r + t;
+          }), {
+            totalItems: e,
+            currentPage: a,
+            pageSize: n,
+            totalPages: i,
+            startPage: r,
+            endPage: s,
+            startIndex: c,
+            endIndex: o,
+            pages: u
+          };
+        }(r, g, f, 5), s = o[A]("ul"), n = a.totalPages;
+        1 != a.currentPage && (r = m(a.currentPage - 1, "", '<svg aria-hidden="true" class="jt-icon"><use xlink:href="#i-arrow-l"/></svg>'), s[M](r)), tH(a.pages, 1) || (c = m(1, a.currentPage, "1 . ."), s[M](c));
+        for (var i = 0; i < a.pages[P]; i++) {
+          var c = m(a.pages[i], a.currentPage);
+          s[M](c);
         }
-      };
-      jo[paginationStr + "_date"] = function(data) {
-        var timestamp = data.feed.entry[0].published.$t;
-        timestamp = timestamp[substrFn](0, 19) + timestamp[substrFn](23, 29);
-        timestamp = timestamp[replaceFn]("+", "%2B");
-        var url = baseUrl + "/search" + labelPath + "?updated-max=" + timestamp + "&max-results=" + effectivePostsPerPage + "&page=" + currentPageIndex;
-        windowObj[locationProp][hrefProp] = url;
-      };
-    } else {
-      t3(element, "visually-hidden");
-    }
+        tH(a.pages, n) || (c = m(n, a.currentPage, ". . " + n), s[M](c)), a.currentPage != n && (n = m(a.currentPage + 1, "", '<svg aria-hidden="true" class="jt-icon"><use xlink:href="#i-arrow-r"/></svg>'), s[M](n)), t[h] = "", t2(s, "pagination mb-0"), t[M](s), t3(t, "visually-hidden");
+      }
+    }, jo[tp + "_date"] = function(t) {
+      t = tw + "/search" + s + "?updated-max=" + (t = (t = (t = t.feed.entry[0]).published.$t[V](0, 19) + t.published.$t[V](23, 29))[j]("+", "%2B")) + "&max-results=" + f + "&page=" + g, n[N][O] = t;
+    }) : t3(t, "visually-hidden");
   };
 
-  function ei(url, element) {
-    var xhr = new xmlHttpRequestObj();
-    xhr[openFn]("get", url);
-    xhr[setRequestHeaderFn](contentTypeHeader, "text/html");
-    xhr[sendFn](null);
-    xhr["add" + eventListenerProp](loadEvent, function() {
-      var titleMatch = xhr[responseTextProp][matchFn](/<title>(.*?)<\/title>/);
-      element[innerHTMLProp] = titleMatch[1][replaceFn](titleSeparator + blogTitle, "");
+  function ei(t, e) {
+    var a = new f;
+    a[Y]("get", t), a[X](tm, "text/html"), a[F](null), a["add" + k](tr, function() {
+      var t = a[K][L](/<title>(.*?)<\/title>/);
+      e[h] = t[1][j](tI + tP, "");
     });
   }
 
-  jo[loadCustomPostsFn] = function(element) {
-    var uniqueId = (mathObj[randomFn]() + 1).toString(36)[substrFn](7);
-    var label = element["get" + attributeFn]("data-label");
-    var title = element["get" + attributeFn]("data-title");
-    var items = element["get" + attributeFn]("data-items");
-    var shuffle = element["get" + attributeFn]("data-shuffle");
-    var noItem = element["get" + attributeFn]("data-no-item");
-    var funcName = element["get" + attributeFn]("data-func");
-    var callbackName = element["get" + attributeFn]("data-callback");
-    var maxResults = noItem ? parseIntFn(items) + 1 : items;
-    var labels = label || element[innerHTMLProp];
-    var labelArray = labels[splitFn](",");
-    var feedPath = "";
-    feedPath = 1 < labelArray[lengthProp] ? labels ? "-/" + encodeURIComponentFn(labelArray[mathObj[floorFn](mathObj[randomFn]() * labelArray[lengthProp])]) + "/?" : "?" : labels && labels != falseStr ? "-/" + encodeURIComponentFn(labels[trimFn]()) + "/?" : "?";
-    Defer.js(baseUrl + "/feeds/posts/summary/" + feedPath + "alt=json&callback=jo." + customPostsStr + "_key_" + uniqueId + "&max-results=" + maxResults);
-    jo[customPostsStr + "_key_" + uniqueId] = function(data) {
-      var totalResults = parseIntFn(data.feed.openSearch$totalResults.$t);
-      var categories = data.feed.category;
-      if (0 < totalResults) {
-        var result = {
-          title: title,
-          posts: [],
-          categories: categories
-        };
-        var entries = data.feed.entry;
-        var count = 0;
-        for (var i = 0; i < entries[lengthProp]; ++i) {
-          var entry = entries[i];
-          var url = entry.link[entry.link[lengthProp] - 1][hrefProp];
-          if (count == items) break;
-          if (url != noItem) {
-            count++;
-            var post = {};
-            post.grup_id = uniqueId;
-            post.url = url;
-            post.title = entry[titleProp].$t;
-            post.summary = entry.summary.$t[trimFn]();
-            post.img = entry.media$thumbnail && entry.media$thumbnail.url;
-            post.author = entry.author[0].name.$t;
-            post.comment = entry.thr$total && entry.thr$total.$t;
-            post.label = entry.category;
-            var date = entry.published.$t;
-            var dateObj = new dateObj(date);
-            var day = dateObj.getDate();
-            var month = dateObj.getMonth() + 1;
-            var year = dateObj.getFullYear();
-            post.date = year + "/" + month + "/" + day;
-            result.posts[pushFn](post);
-          }
+  jo[th] = function(t) {
+    var e = (l[Q]() + 1).toString(36)[V](7), a = t["get" + S]("data-label"), o = t["get" + S]("data-title"), r = t["get" + S]("data-items"), s = t["get" + S]("data-shuffle"), u = t["get" + S]("data-no-item"), f = t["get" + S]("data-func"), g = t["get" + S]("data-callback"), m = u ? d(r) + 1 : r, p = a || t[h], $ = p[T](","), a = "", a = 1 < $[P] ? p ? "-/" + c($[l[te](l[Q]() * $[P])]) + "/?" : "?" : p && p != ts ? "-/" + c(p[W]()) + "/?" : "?";
+    Defer.js(tw + "/feeds/posts/summary/" + a + "alt=json&callback=jo." + t$ + "_key_" + e + "&max-results=" + m), jo[t$ + "_key_" + e] = function(a) {
+      var c = d(a.feed.openSearch$totalResults.$t), m = a.feed.category;
+      if (0 < c) {
+        for (var p = {
+            title: o,
+            posts: [],
+            categories: m
+          }, $ = a.feed.entry, y = 0, v = 0; v < $[P]; ++v) {
+          var _, A, b = $[v], j = b.link[b.link[P] - 1][O];
+          if (y == r) break;
+          j != u && (y++, (_ = {}).grup_id = e, _.url = j, _.title = b[Z].$t, _.summary = b.summary.$t[W](), _.img = b.media$thumbnail && b.media$thumbnail.url, _.author = b.author[0].name.$t, _.comment = b.thr$total && b.thr$total.$t, _.label = b.category, A = b.published.$t, b = (j = new i(A)).getDate(), A = j.getMonth() + 1, j = j.getFullYear(), _.date = j + "/" + A + "/" + b, p.posts[z](_));
         }
-        var func = windowObj[funcName];
-        if (typeof func === functionStr && 0 < result.posts[lengthProp]) {
-          if (shuffle) {
-            result.posts = (function shuffleArray(array) {
-              var arr = array.slice();
-              for (var i = arr[lengthProp] - 1; 0 < i; i--) {
-                var j = mathObj[floorFn](mathObj[randomFn]() * (i + 1));
-                var temp = arr[i];
-                arr[i] = arr[j];
-                arr[j] = temp;
-              }
-              return arr;
-            })(result.posts)[sliceFn](0, shuffle);
+        typeof(a = n[f]) === tg && 0 < p.posts[P] && (s && (p.posts = (function t(e) {
+          for (var a = e.slice(), n = a[P] - 1; 0 < n; n--) {
+            var o = l[te](l[Q]() * (n + 1)), r = a[n];
+            a[n] = a[o], a[o] = r;
           }
-          element[innerHTMLProp] = func(result)[trimFn]();
-          t3(element, "visually-hidden");
-          Defer.domz(".lazy-" + uniqueId, 1, "loaded", processImage, null, {
-            rootMargin: "300%"
-          });
-          if (callbackName) {
-            var callback = windowObj[callbackName];
-            if (typeof callback === functionStr) callback();
-          }
-        }
+          return a;
+        })(p.posts)[I](0, s)), t[h] = a(p)[W](), t3(t, "visually-hidden"), Defer.domz(".lazy-" + e, 1, "loaded", er, null, {
+          rootMargin: "300%"
+        }), g && typeof(a = n[g]) === tg && a());
       }
     };
   };
 
-  var processPagerLinks = function(element) {
-    var links = element[querySelectorAllFn]("a");
-    for (var i = 0; i < links[lengthProp]; ++i) {
-      var link = links[i];
-      var url = link[hrefProp];
-      var span = documentObj[createElementFn]("span");
-      t2(span, "d-block pt-2");
-      link[appendChildFn](span);
-      ei(url, span);
+  var el = function(t) {
+    for (var e = t[_]("a"), a = 0; a < e[P]; ++a) {
+      var n = e[a], r = n[O], s = o[A]("span");
+      t2(s, "d-block pt-2"), n[M](s), ei(r, s);
     }
   };
 
-  function toggleHeader() {
-    (searchToggle && searchToggle[checkedProp] || navbarToggle && navbarToggle[checkedProp] ? t3 : t2)(headerElement, "header-animate");
+  function ed() {
+    (t1 && t1[C] || tG && tG[C] ? t3 : t2)(t4, "header-animate");
   }
 
-  function handleClickOutside(container, callback) {
-    function handler(event) {
-      if (!container.contains(event[targetProp])) {
-        callback();
-        removeListener();
-      }
+  function ec(t, e) {
+    function a(a) {
+      t.contains(a[G]) || (e(), n());
     }
-    var removeListener = function() {
-      documentObj[removeFn + eventListenerProp](clickEvent, handler);
+    var n = function() {
+      o[x + k](tl, a);
     };
-    documentObj["add" + eventListenerProp](clickEvent, handler);
+    o["add" + k](tl, a);
   }
 
-  function loadCommentEditor(url) {
-    if (url != commentEditorSrc[hrefProp]) {
-      t2(threadedCommentForm, "loader");
-      commentEditorSrc[hrefProp] = url;
-      commentEditor.src = url;
-    }
-    if (tD(threadedCommentForm, "d-none")) {
-      t3(threadedCommentForm, "d-none");
-      var scriptSrc = commentScript.value[matchFn](/<script.*?src='(.*?)'/)[1];
-      Defer.js(scriptSrc, "comment-js", 500, function() {
-        BLOG_CMT_createIframe(httpsStr + bloggerDomain + "rpc_relay.html");
-      });
-    }
+  function eu(t) {
+    t != tJ[O] && (t2(tQ, "loader"), tJ[O] = t, tU.src = t), tD(tQ, "d-none") && (t3(tQ, "d-none"), t = tV.value[L](/<script.*?src='(.*?)'/)[1], Defer.js(t, "comment-js", 500, function() {
+      BLOG_CMT_createIframe(tv + t_ + "rpc_relay.html");
+    }));
   }
 
-  if (searchToggle) {
-    searchToggle["add" + eventListenerProp](changeEvent, function() {
-      toggleHeader();
-      if (this[checkedProp]) {
-        setTimeoutFn(function() {
-          documentObj[getElementByIdFn]("search-input").focus();
-        }, 100);
+  t1 && t1["add" + k](tu, function() {
+    ed(), this[C] && r(function() {
+      o[y]("search-input").focus();
+    }, 100), ec(t7, function() {
+      t1[C] = !1, ed();
+    });
+  }), tG && tG["add" + k](tu, function() {
+    var t;
+    ed(), this[C] ? (t2(t = tN, "d-block"), r(function() {
+      t2(t, "show");
+    }, 100), ec(tN, function() {
+      tG[C] = !1, ed(), tq(tN, "show");
+    })) : tq(tN, "show");
+  }), tW && tW["add" + k](tl, function(t) {
+    t[J](), function t(e, a) {
+      (tD(e, a) ? t3 : t2)(e, a);
+    }(tY, "dark-mode"), null !== g && g["set" + tn]("theme", tD(tY, "dark-mode") ? "dark" : "light");
+  }), n["add" + k](ti, function() {
+    (1 <= this[R] && null !== t4 ? t2 : t3)(t4, "shadow-sm"), (1e3 <= this[R] && null !== tT ? t3 : t2)(tT, "d-none");
+  }, !1), tU && tU["add" + k](tr, function(t) {
+    t3(tQ, "loader");
+  }), tF && tF["add" + k](tl, function(t) {
+    t[J](), eu(this[O]), "add-comment" != tQ[U].id && o[y]("add-comment")[M](tQ);
+  });
+
+  for (var ef = 0; ef < tX[P]; ++ef) tX[ef]["add" + k](tl, function(t) {
+    t[J](), t = this["get" + S]("data-comment-id"), eu(this[O]), tQ[U].id != "c" + t && o[y]("c" + t)[M](tQ);
+  });
+
+  for (ef = 0; ef < t6[P]; ++ef) t6[ef]["add" + k]("submit", function(t) {
+    t[J]();
+    var e = t[G];
+    t2(e, "loading");
+    var a = new FormData(e), n = "blogID=" + tx;
+    a.forEach(function(t, e) {
+      n += "&" + c(e) + "=" + c(t);
+    }), t = tv + t_ + "contact-form.do", (a = new f)[Y]("post", t), a[X](tm, "application/x-www-form-urlencoded"), a[F](n), a.onreadystatechange = function() {
+      var t;
+      t3(e, "loading"), 4 === this.readyState && 200 === this.status && "" != this.response && ((t = tO(this[K][W]())) && "true" == t.details.emailSentStatus ? (e.reset(), t3(e, "send-error"), t2(e, "send-success")) : (t3(e, "send-success"), t2(e, "send-error")));
+    };
+  });
+
+  function eg(t) {
+    if (t && (o[x + k](td, eg), o[x + k](tc, eg), o[x + k](ti, eg)), Defer.domz(".custom-posts", 1, null, jo[th], null, {
+        rootMargin: "300%"
+      }), 0 < t5[P]) {
+      for (var e = 0; e < t5[P]; ++e) {
+        var a = t5[e], n = a[h], r = o[A]("textarea");
+        r[h] = n[j](/src="(.*?)"/g, 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" loading="lazy" lazyload="true" data-src="$1"'), (n = o[A]("div"))[h] = r.value, 0 == e && t2(n, "feature-image full-width"), a[U][q + H](n, a);
       }
-      handleClickOutside(searchHeader, function() {
-        searchToggle[checkedProp] = false;
-        toggleHeader();
-      });
-    });
-  }
-
-  if (navbarToggle) {
-    navbarToggle["add" + eventListenerProp](changeEvent, function() {
-      var navbar;
-      toggleHeader();
-      if (this[checkedProp]) {
-        t2(navbar = navbarElement, "d-block");
-        setTimeoutFn(function() {
-          t2(navbar, "show");
-        }, 100);
-        handleClickOutside(navbarElement, function() {
-          navbarToggle[checkedProp] = false;
-          toggleHeader();
-          tq(navbarElement, "show");
-        });
-      } else {
-        tq(navbarElement, "show");
-      }
-    });
-  }
-
-  if (darkToggler) {
-    darkToggler["add" + eventListenerProp](clickEvent, function(event) {
-      event[preventDefaultFn]();
-      function toggleDarkMode(element, className) {
-        (tD(element, className) ? t3 : t2)(element, className);
-      }
-      toggleDarkMode(htmlElement, "dark-mode");
-      if (null !== localStorageObj) {
-        localStorageObj["set" + itemFn]("theme", tD(htmlElement, "dark-mode") ? "dark" : "light");
-      }
-    });
-  }
-
-  windowObj["add" + eventListenerProp](scrollEvent, function() {
-    (1 <= this[pageYOffsetProp] && null !== headerElement ? t2 : t3)(headerElement, "shadow-sm");
-    (1000 <= this[pageYOffsetProp] && null !== backToTop ? t3 : t2)(backToTop, "d-none");
-  }, false);
-
-  if (commentEditor) {
-    commentEditor["add" + eventListenerProp](loadEvent, function() {
-      t3(threadedCommentForm, "loader");
-    });
-  }
-
-  if (commentButton) {
-    commentButton["add" + eventListenerProp](clickEvent, function(event) {
-      event[preventDefaultFn]();
-      loadCommentEditor(this[hrefProp]);
-      if ("add-comment" != threadedCommentForm[parentElementProp].id) {
-        documentObj[getElementByIdFn]("add-comment")[appendChildFn](threadedCommentForm);
-      }
-    });
-  }
-
-  for (var i = 0; i < commentReplies[lengthProp]; ++i) {
-    commentReplies[i]["add" + eventListenerProp](clickEvent, function(event) {
-      event[preventDefaultFn]();
-      var commentId = this["get" + attributeFn]("data-comment-id");
-      loadCommentEditor(this[hrefProp]);
-      if (threadedCommentForm[parentElementProp].id != "c" + commentId) {
-        documentObj[getElementByIdFn]("c" + commentId)[appendChildFn](threadedCommentForm);
-      }
-    });
-  }
-
-  for (i = 0; i < contactForms[lengthProp]; ++i) {
-    contactForms[i]["add" + eventListenerProp]("submit", function(event) {
-      event[preventDefaultFn]();
-      var form = event[targetProp];
-      t2(form, "loading");
-      var formData = new FormData(form);
-      var data = "blogID=" + blogId;
-      formData.forEach(function(value, key) {
-        data += "&" + encodeURIComponentFn(key) + "=" + encodeURIComponentFn(value);
-      });
-      var url = httpsStr + bloggerDomain + "contact-form.do";
-      var xhr = new xmlHttpRequestObj();
-      xhr[openFn]("post", url);
-      xhr[setRequestHeaderFn](contentTypeHeader, "application/x-www-form-urlencoded");
-      xhr[sendFn](data);
-      xhr.onreadystatechange = function() {
-        var response;
-        t3(form, "loading");
-        if (4 === this.readyState && 200 === this.status && "" != this.response) {
-          response = tO(this[responseTextProp][trimFn]());
-          if (response && "true" == response.details.emailSentStatus) {
-            form.reset();
-            t3(form, "send-error");
-            t2(form, "send-success");
-          } else {
-            t3(form, "send-success");
-            t2(form, "send-error");
-          }
-        }
-      };
-    });
-  }
-
-  function initializePage(isRemoveListeners) {
-    if (isRemoveListeners) {
-      documentObj[removeFn + eventListenerProp](mousemoveEvent, initializePage);
-      documentObj[removeFn + eventListenerProp](touchstartEvent, initializePage);
-      documentObj[removeFn + eventListenerProp](scrollEvent, initializePage);
-    }
-    Defer.domz(".custom-posts", 1, null, jo[loadCustomPostsFn], null, {
-      rootMargin: "300%"
-    });
-    if (0 < noscriptElements[lengthProp]) {
-      for (var i = 0; i < noscriptElements[lengthProp]; ++i) {
-        var noscript = noscriptElements[i];
-        var content = noscript[innerHTMLProp];
-        var textarea = documentObj[createElementFn]("textarea");
-        textarea[innerHTMLProp] = content[replaceFn](/src="(.*?)"/g, 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" loading="lazy" lazyload="true" data-src="$1"');
-        var div = documentObj[createElementFn]("div");
-        div[innerHTMLProp] = textarea.value;
-        if (0 === i) t2(div, "feature-image full-width");
-        noscript[parentElementProp][insertStr + beforeStr](div, noscript);
-      }
-      Defer.domz('[lazyload="true"]', 1, "loaded", processImage, null, {
+      Defer.domz('[lazyload="true"]', 1, "loaded", er, null, {
         rootMargin: "300%"
       });
     }
-    if (null !== postBodyElement) {
-      if (null !== relatedPosts && null !== relatedInline) {
-        relatedInline[innerHTMLProp] = relatedPosts[innerHTMLProp];
-        relatedInline["set" + attributeFn]("data-no-item", relatedPosts["get" + attributeFn]("data-no-item"));
-      }
-      if (null !== adsPostElement) {
-        var delimiters = postBodyElement[querySelectorAllFn](innerAdsDelimiter + "," + ignoreAdsDelimiter);
-        var adNodes = adsPostElement.childNodes;
-        var adCount = adNodes[lengthProp];
-        var validDelimiters = [];
-        for (var i = 0; i < delimiters[lengthProp]; i++) {
-          var closestIgnore = delimiters[i].closest(ignoreAdsDelimiter);
-          if (closestIgnore && delimiters[i] != closestIgnore) continue;
-          validDelimiters[pushFn](delimiters[i]);
+    if (null !== tZ) {
+      if (null !== et && null !== ee && (ee[h] = et[h], ee["set" + S]("data-no-item", et["get" + S]("data-no-item"))), null !== tK) {
+        for (var s = tZ[_](tC + "," + t8), i = tK.childNodes, c = i[P], u = [], e = 0; e < s[P]; e++) {
+          var f = s[e].closest(t8);
+          f && s[e] != f || u[z](s[e]);
         }
-        for (var i = 0; i < adCount; i++) {
-          var insertAfter;
-          if (i == adCount - 1) {
-            postBodyElement[appendChildFn](adNodes[0]);
-          } else {
-            insertAfter = i == adCount - 1 ? validDelimiters[lengthProp] - 1 : mathObj.round(validDelimiters[lengthProp] / adCount) * i;
-            insertAfter = 0 == i ? validDelimiters[0] : validDelimiters[insertAfter][nextSiblingProp];
-            if (insertAfter) insertAfter[parentElementProp][insertStr + beforeStr](adNodes[0], insertAfter);
-          }
-        }
+        for (var g, e = 0; e < c; e++) e == c - 1 ? tZ[M](i[0]) : (g = e == c - 1 ? u[P] - 1 : l.round(u[P] / c) * e, (g = 0 == e ? u[0] : u[g][to]) && g[U][q + H](i[0], g));
       }
-      if (autoTOC && autoTOC != falseStr && tocTemplateFn && null !== postBodyElement[firstChildProp]) {
-        var headings = postBodyElement[querySelectorAllFn]("h2,h3,h4,h5,h6");
-        var tocContainer = documentObj[createElementFn]("div");
-        var tocPosition = postBodyElement[querySelectorFn](positionTOC);
-        var tocItems = [];
-        for (var i = 0; i < headings[lengthProp]; i++) {
-          var heading = headings[i];
-          var text = heading[textContentProp];
-          var level = parseIntFn(heading[tagNameProp][replaceFn]("H", ""));
-          heading.id = text;
-          tocItems[pushFn]({
-            level: level,
-            title: heading[textContentProp],
-            id: text
+      if (tB && tB != ts && tE && null !== tZ[D]) {
+        for (var m = tZ[_]("h2,h3,h4,h5,h6"), p = o[A]("div"), t = tZ[v](tR), y = [], e = 0; e < m[P]; e++) {
+          var b = m[e], w = b[ta], I = d(b[$][j]("H", ""));
+          b.id = w, y[z]({
+            level: I,
+            title: b[ta],
+            id: w
           });
         }
-        if (null === tocPosition) {
-          tocPosition = postBodyElement[firstChildProp];
-        } else if (tocPosition[nextSiblingProp]) {
-          tocPosition = tocPosition[nextSiblingProp];
-        }
-        if (0 < tocItems[lengthProp]) {
-          tocContainer[innerHTMLProp] = tocTemplateFn(tocItems)[trimFn]();
-          if (tocPosition) tocPosition[parentElementProp][insertStr + beforeStr](tocContainer, tocPosition);
-        }
+        null === t ? t = tZ[D] : t[to] && (t = t[to]), 0 < y[P] && (p[h] = tE(y)[W](), t && t[U][q + H](p, t));
       }
     }
-    if (!isPreviewFlag) {
-      if (adsenseClientId) {
-        if (typeof adsbygoogle === undefinedStr) adsbygoogle = [];
-        Defer.js(httpsStr + "pagead2.googlesyndication.com/pagead/js/" + adsbygoogleStr + ".js?client=" + adsenseClientId, adsbygoogleStr, 100);
+    tj || (tS && (typeof adsbygoogle === tf && (adsbygoogle = []), Defer.js(tv + "pagead2.googlesyndication.com/pagead/js/" + ty + ".js?client=" + tS, ty, 100)), t9 && t9 != ts && Defer.js(tv + "www.googletagmanager.com/gtag/js?id=" + t9, "analytics", 100, function() {
+      function t() {
+        dataLayer[z](arguments);
       }
-      if (analyticId && analyticId != falseStr) {
-        Defer.js(httpsStr + "www.googletagmanager.com/gtag/js?id=" + analyticId, "analytics", 100, function() {
-          function gtag() {
-            dataLayer[pushFn](arguments);
-          }
-          gtag("js", new dateObj());
-          gtag("config", analyticId);
-        });
-      }
-      if (jtCallbackFn) jtCallbackFn();
-    }
-    if (blogId) {
-      Defer.css(httpsStr + bloggerDomain + "dyn-css/authorization.css?targetBlogID=" + blogId);
-    }
+      t("js", new Date), t("config", t9);
+    }), tM && tM()), tx && Defer.css(tv + t_ + "dyn-css/authorization.css?targetBlogID=" + tx);
   }
 
-  if (currentPage) {
-    documentObj[titleProp] = documentObj[titleProp][replaceFn](titleSeparator, titleSeparator + pageTitle + " " + currentPage + titleSeparator);
-  }
-
-  Defer.domz(".lazyload", 1, "loaded", processImage, null, {
+  ea && (o[Z] = o[Z][j](tI, tI + t0 + " " + ea + tI)), Defer.domz(".lazyload", 1, "loaded", er, null, {
     rootMargin: "300%"
-  });
-  Defer.domz("#post-pager", 1, null, processPagerLinks, null, {
+  }), Defer.domz("#post-pager", 1, null, el, null, {
     rootMargin: "300%"
-  });
-  Defer.domz("#pagination", 1, null, processPagination, null, {
+  }), Defer.domz("#pagination", 1, null, es, null, {
     rootMargin: "300%"
-  });
-
-  if (isLazyLoading) {
-    initializePage(false);
-  } else {
-    if (null !== localStorageObj) localStorageObj["set" + itemFn]("lazy", 1);
-    documentObj["add" + eventListenerProp](mousemoveEvent, initializePage);
-    documentObj["add" + eventListenerProp](touchstartEvent, initializePage);
-    documentObj["add" + eventListenerProp](scrollEvent, initializePage);
-  }
+  }), en ? eg(!1) : (null !== g && g["set" + tn]("lazy", 1), o["add" + k](td, eg), o["add" + k](tc, eg), o["add" + k](ti, eg));
 }();
