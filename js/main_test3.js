@@ -549,6 +549,7 @@ if (document.querySelector('.table-responsive') !== null) {
 
           // 常にリセット処理を実行
           table.style.height = 'auto';
+          table.style.width = 'auto';
           table.querySelectorAll('th, td').forEach(function(cell) {
               cell.style.fontSize = '';
               cell.style.padding = '';
