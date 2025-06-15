@@ -1064,21 +1064,6 @@ const jo = {};
     documentObj["add" + eventListenerProp](clickEvent, handler);
   }
 
-  function loadCommentEditor(url) {
-    if (url != commentEditorSrc[hrefProp]) {
-      t2(threadedCommentForm, "loader");
-      commentEditorSrc[hrefProp] = url;
-      commentEditor.src = url;
-    }
-    if (tD(threadedCommentForm, "d-none")) {
-      t3(threadedCommentForm, "d-none");
-      var scriptSrc = commentScript.value[matchFn](/<script.*?src='(.*?)'/)[1];
-      Defer.js(scriptSrc, "comment-js", 500, function() {
-        BLOG_CMT_createIframe(httpsStr + bloggerDomain + "rpc_relay.html");
-      });
-    }
-  }
-
   if (searchToggle) {
     searchToggle["add" + eventListenerProp](changeEvent, function() {
       toggleHeader();
@@ -1114,83 +1099,10 @@ const jo = {};
     });
   }
 
-  if (darkToggler) {
-    darkToggler["add" + eventListenerProp](clickEvent, function(event) {
-      event[preventDefaultFn]();
-      function toggleDarkMode(element, className) {
-        (tD(element, className) ? t3 : t2)(element, className);
-      }
-      toggleDarkMode(htmlElement, "dark-mode");
-      if (null !== localStorageObj) {
-        localStorageObj["set" + itemFn]("theme", tD(htmlElement, "dark-mode") ? "dark" : "light");
-      }
-    });
-  }
-
   windowObj["add" + eventListenerProp](scrollEvent, function() {
     (1 <= this[pageYOffsetProp] && null !== headerElement ? t2 : t3)(headerElement, "shadow-sm");
     (1000 <= this[pageYOffsetProp] && null !== backToTop ? t3 : t2)(backToTop, "d-none");
   }, false);
-
-  if (commentEditor) {
-    commentEditor["add" + eventListenerProp](loadEvent, function() {
-      t3(threadedCommentForm, "loader");
-    });
-  }
-
-  if (commentButton) {
-    commentButton["add" + eventListenerProp](clickEvent, function(event) {
-      event[preventDefaultFn]();
-      loadCommentEditor(this[hrefProp]);
-      if ("add-comment" != threadedCommentForm[parentElementProp].id) {
-        documentObj[getElementByIdFn]("add-comment")[appendChildFn](threadedCommentForm);
-      }
-    });
-  }
-
-  for (var i = 0; i < commentReplies[lengthProp]; ++i) {
-    commentReplies[i]["add" + eventListenerProp](clickEvent, function(event) {
-      event[preventDefaultFn]();
-      var commentId = this["get" + attributeFn]("data-comment-id");
-      loadCommentEditor(this[hrefProp]);
-      if (threadedCommentForm[parentElementProp].id != "c" + commentId) {
-        documentObj[getElementByIdFn]("c" + commentId)[appendChildFn](threadedCommentForm);
-      }
-    });
-  }
-
-  for (i = 0; i < contactForms[lengthProp]; ++i) {
-    contactForms[i]["add" + eventListenerProp]("submit", function(event) {
-      event[preventDefaultFn]();
-      var form = event[targetProp];
-      t2(form, "loading");
-      var formData = new FormData(form);
-      var data = "blogID=" + blogId;
-      formData.forEach(function(value, key) {
-        data += "&" + encodeURIComponentFn(key) + "=" + encodeURIComponentFn(value);
-      });
-      var url = httpsStr + bloggerDomain + "contact-form.do";
-      var xhr = new xmlHttpRequestObj();
-      xhr[openFn]("post", url);
-      xhr[setRequestHeaderFn](contentTypeHeader, "application/x-www-form-urlencoded");
-      xhr[sendFn](data);
-      xhr.onreadystatechange = function() {
-        var response;
-        t3(form, "loading");
-        if (4 === this.readyState && 200 === this.status && "" != this.response) {
-          response = tO(this[responseTextProp][trimFn]());
-          if (response && "true" == response.details.emailSentStatus) {
-            form.reset();
-            t3(form, "send-error");
-            t2(form, "send-success");
-          } else {
-            t3(form, "send-success");
-            t2(form, "send-error");
-          }
-        }
-      };
-    });
-  }
 
   function initializePage(isRemoveListeners) {
     if (isRemoveListeners) {
@@ -1221,72 +1133,6 @@ const jo = {};
         relatedInline[innerHTMLProp] = relatedPosts[innerHTMLProp];
         relatedInline["set" + attributeFn]("data-no-item", relatedPosts["get" + attributeFn]("data-no-item"));
       }
-      if (null !== adsPostElement) {
-        var delimiters = postBodyElement[querySelectorAllFn](innerAdsDelimiter + "," + ignoreAdsDelimiter);
-        var adNodes = adsPostElement.childNodes;
-        var adCount = adNodes[lengthProp];
-        var validDelimiters = [];
-        for (var i = 0; i < delimiters[lengthProp]; i++) {
-          var closestIgnore = delimiters[i].closest(ignoreAdsDelimiter);
-          if (closestIgnore && delimiters[i] != closestIgnore) continue;
-          validDelimiters[pushFn](delimiters[i]);
-        }
-        for (var i = 0; i < adCount; i++) {
-          var insertAfter;
-          if (i == adCount - 1) {
-            postBodyElement[appendChildFn](adNodes[0]);
-          } else {
-            insertAfter = i == adCount - 1 ? validDelimiters[lengthProp] - 1 : mathObj.round(validDelimiters[lengthProp] / adCount) * i;
-            insertAfter = 0 == i ? validDelimiters[0] : validDelimiters[insertAfter][nextSiblingProp];
-            if (insertAfter) insertAfter[parentElementProp][insertStr + beforeStr](adNodes[0], insertAfter);
-          }
-        }
-      }
-      if (autoTOC && autoTOC != falseStr && tocTemplateFn && null !== postBodyElement[firstChildProp]) {
-        var headings = postBodyElement[querySelectorAllFn]("h2,h3,h4,h5,h6");
-        var tocContainer = documentObj[createElementFn]("div");
-        var tocPosition = postBodyElement[querySelectorFn](positionTOC);
-        var tocItems = [];
-        for (var i = 0; i < headings[lengthProp]; i++) {
-          var heading = headings[i];
-          var text = heading[textContentProp];
-          var level = parseIntFn(heading[tagNameProp][replaceFn]("H", ""));
-          heading.id = text;
-          tocItems[pushFn]({
-            level: level,
-            title: heading[textContentProp],
-            id: text
-          });
-        }
-        if (null === tocPosition) {
-          tocPosition = postBodyElement[firstChildProp];
-        } else if (tocPosition[nextSiblingProp]) {
-          tocPosition = tocPosition[nextSiblingProp];
-        }
-        if (0 < tocItems[lengthProp]) {
-          tocContainer[innerHTMLProp] = tocTemplateFn(tocItems)[trimFn]();
-          if (tocPosition) tocPosition[parentElementProp][insertStr + beforeStr](tocContainer, tocPosition);
-        }
-      }
-    }
-    if (!isPreviewFlag) {
-      if (adsenseClientId) {
-        if (typeof adsbygoogle === undefinedStr) adsbygoogle = [];
-        Defer.js(httpsStr + "pagead2.googlesyndication.com/pagead/js/" + adsbygoogleStr + ".js?client=" + adsenseClientId, adsbygoogleStr, 100);
-      }
-      if (analyticId && analyticId != falseStr) {
-        Defer.js(httpsStr + "www.googletagmanager.com/gtag/js?id=" + analyticId, "analytics", 100, function() {
-          function gtag() {
-            dataLayer[pushFn](arguments);
-          }
-          gtag("js", new dateObj());
-          gtag("config", analyticId);
-        });
-      }
-      if (jtCallbackFn) jtCallbackFn();
-    }
-    if (blogId) {
-      Defer.css(httpsStr + bloggerDomain + "dyn-css/authorization.css?targetBlogID=" + blogId);
     }
   }
 
