@@ -831,23 +831,6 @@ const jo = {};
     t[J](), eu(this[O]), "add-comment" != tQ[U].id && o[y]("add-comment")[M](tQ);
   });
 
-  for (var ef = 0; ef < tX[P]; ++ef) tX[ef]["add" + k](tl, function(t) {
-    t[J](), t = this["get" + S]("data-comment-id"), eu(this[O]), tQ[U].id != "c" + t && o[y]("c" + t)[M](tQ);
-  });
-
-  for (ef = 0; ef < t6[P]; ++ef) t6[ef]["add" + k]("submit", function(t) {
-    t[J]();
-    var e = t[G];
-    t2(e, "loading");
-    var a = new FormData(e), n = "blogID=" + tx;
-    a.forEach(function(t, e) {
-      n += "&" + c(e) + "=" + c(t);
-    }), t = tv + t_ + "contact-form.do", (a = new f)[Y]("post", t), a[X](tm, "application/x-www-form-urlencoded"), a[F](n), a.onreadystatechange = function() {
-      var t;
-      t3(e, "loading"), 4 === this.readyState && 200 === this.status && "" != this.response && ((t = tO(this[K][W]())) && "true" == t.details.emailSentStatus ? (e.reset(), t3(e, "send-error"), t2(e, "send-success")) : (t3(e, "send-success"), t2(e, "send-error")));
-    };
-  });
-
   function eg(t) {
     if (t && (o[x + k](td, eg), o[x + k](tc, eg), o[x + k](ti, eg)), Defer.domz(".custom-posts", 1, null, jo[th], null, {
         rootMargin: "300%"
