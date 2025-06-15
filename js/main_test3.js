@@ -465,7 +465,7 @@ if (document.querySelector('.mermaid') !== null) {
 
     mermaid.run();
 
-  }, 3000);
+  }, 2000);
 }
 
 /* Chart.js */
@@ -530,13 +530,13 @@ if (document.querySelector('.chartjs') !== null) {
   document.addEventListener('DOMContentLoaded', function() {
     setTimeout(function() {
       executeChart()
-    }, 3000);
+    }, 2000);
   });
 
 }
 
 /* table の font-size と padding を画面の最大幅に合わせて変更 */
-if (document.querySelector('table') !== null) {
+if (document.querySelector('.table-responsive') !== null) {
   
   Defer(function() {
   
@@ -546,14 +546,12 @@ if (document.querySelector('table') !== null) {
             var tableResponsive = table.parentElement;
             var tableResponsiveWidth = tableResponsive.clientWidth;
             var tableResponsiveFontSize = parseFloat(getComputedStyle(tableResponsive).fontSize);
-            var paddingAdjustment = 2 * 1 * tableResponsiveFontSize; // 1emのpaddingが左右にあるので2emをピクセルに変換
-            var availableWidth = tableResponsiveWidth - paddingAdjustment;
             var tableWidth = table.scrollWidth;
             var tableHeight = table.scrollHeight;
 
-            if (tableWidth > availableWidth) {
-                var scale = availableWidth / tableWidth;
-                table.style.width = availableWidth + 'px';
+            if (tableWidth > tableResponsiveWidth) {
+                var scale = tableResponsiveWidth / tableWidth;
+                table.style.width = tableResponsiveWidth + 'px';
                 table.style.height = tableHeight * scale + 'px';
                 table.querySelectorAll('th, td').forEach(function(cell) {
                     var originalFontSize = parseFloat(getComputedStyle(cell).fontSize);
