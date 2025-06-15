@@ -639,691 +639,697 @@ Defer(function() {
 }, 20000);
 
 /*js@0.5.5/main.js*/
-// グローバルな名前空間オブジェクト
+// グローバルオブジェクトの定義
 const jo = {};
 
-// 即時実行関数（IIFE）でスコープを分離
-(function() {
-  // グローバルオブジェクトとメソッドのショートカット
-  const windowObj = window;
-  const documentObj = document;
-  const setTimeoutFn = setTimeout;
-  const clearTimeoutFn = clearTimeout;
-  const DateObj = Date;
-  const MathObj = Math;
-  const parseIntFn = parseInt;
-  const encodeURIFn = encodeURIComponent;
-  const RegExpObj = RegExp;
-  const XMLHttpRequestObj = XMLHttpRequest;
-  const localStorageObj = localStorage;
-  const JSONObj = JSON;
-  const ImageObj = Image;
+// 即時実行関数でコードをカプセル化
+(function initialize() {
+  // 頻繁に使用するグローバルオブジェクトやビルトイン関数の参照をキャッシュ
+  const windowRef = window;
+  const documentRef = document;
+  const setTimeoutRef = setTimeout;
+  const clearTimeoutRef = clearTimeout;
+  const DateRef = Date;
+  const MathRef = Math;
+  const parseIntRef = parseInt;
+  const encodeURIComponentRef = encodeURIComponent;
+  const RegExpRef = RegExp;
+  const XMLHttpRequestRef = XMLHttpRequest;
+  const localStorageRef = localStorage;
+  const JSONRef = JSON;
+  const ImageRef = Image;
 
-  // 頻繁に使用するプロパティやメソッドのショートカット
-  const innerHTMLProp = "innerHTML";
-  const tagNameProp = "tagName";
-  const getElementByIdFn = "getElementById";
-  const querySelectorFn = "querySelector";
-  const querySelectorAllFn = "querySelectorAll";
-  const createElementFn = "createElement";
-  const classNameProp = "className";
-  const replaceFn = "replace";
-  const lastIndexOfFn = "lastIndexOf";
-  const eventListenerFn = "EventListener";
-  const removeFn = "remove";
-  const lengthProp = "length";
-  const sliceFn = "slice";
-  const pushFn = "push";
-  const attributeFn = "Attribute";
-  const checkedProp = "checked";
-  const offsetWidthProp = "offsetWidth";
-  const toFixedFn = "toFixed";
-  const pageYOffsetProp = "pageYOffset";
-  const appendChildFn = "appendChild";
-  const firstChildProp = "firstChild";
-  const insertBeforeFn = "insertBefore";
-  const matchFn = "match";
-  const hrefProp = "href";
-  const targetProp = "target";
-  const locationProp = "location";
-  const splitFn = "split";
-  const trimFn = "trim";
-  const openFn = "open";
-  const sendFn = "send";
-  const randomFn = "random";
-  const parentElementProp = "parentElement";
-  const preventDefaultFn = "preventDefault";
-  const substrFn = "substr";
-  const setRequestHeaderFn = "setRequestHeader";
-  const responseTextProp = "responseText";
-  const titleProp = "title";
-  const ceilFn = "ceil";
-  const floorFn = "floor";
-  const textContentProp = "textContent";
-  const itemFn = "Item";
-  const nextSiblingProp = "nextSibling";
-  const loadEvent = "load";
-  const falseStr = "false";
-  const scrollEvent = "scroll";
-  const clickEvent = "click";
-  const mousemoveEvent = "mousemove";
-  const touchstartEvent = "touchstart";
-  const changeEvent = "change";
-  const undefinedStr = "undefined";
-  const functionStr = "function";
-  const contentTypeHeader = "Content-Type";
-  const paginationStr = "pagination";
-  const loadCustomPostsStr = "loadCustomPosts";
-  const customPostsStr = "custom_posts";
-  const adsbygoogleStr = "adsbygoogle";
-  const httpsPrefix = "https://";
-  const bloggerDomain = "www.blogger.com/";
-  const webpSuffix = "-rw";
-  const devicePixelRatioProp = "devicePixelRatio";
+  // よく使うDOMプロパティやメソッドの文字列定数
+  const INNER_HTML = 'innerHTML';
+  const TAG_NAME = 'tagName';
+  const GET_ELEMENT_BY_ID = 'getElementById';
+  const QUERY_SELECTOR = 'querySelector';
+  const QUERY_SELECTOR_ALL = 'querySelectorAll';
+  const CREATE_ELEMENT = 'createElement';
+  const CLASS_NAME = 'className';
+  const REPLACE = 'replace';
+  const LAST_INDEX_OF = 'lastIndexOf';
+  const EVENT_LISTENER = 'EventListener';
+  const REMOVE = 'remove';
+  const LENGTH = 'length';
+  const SLICE = 'slice';
+  const PUSH = 'push';
+  const ATTRIBUTE = 'Attribute';
+  const CHECKED = 'checked';
+  const OFFSET_WIDTH = 'offsetWidth';
+  const TO_FIXED = 'toFixed';
+  const PAGE_Y_OFFSET = 'pageYOffset';
+  const APPEND_CHILD = 'appendChild';
+  const FIRST_CHILD = 'firstChild';
+  const INSERT = 'insert';
+  const BEFORE = 'Before';
+  const MATCH = 'match';
+  const HREF = 'href';
+  const TARGET = 'target';
+  const LOCATION = 'location';
+  const SPLIT = 'split';
+  const TRIM = 'trim';
+  const OPEN = 'open';
+  const SEND = 'send';
+  const RANDOM = 'random';
+  const PARENT_ELEMENT = 'parentElement';
+  const PREVENT_DEFAULT = 'preventDefault';
+  const SUBSTR = 'substr';
+  const SET_REQUEST_HEADER = 'setRequestHeader';
+  const RESPONSE_TEXT = 'responseText';
+  const TITLE = 'title';
+  const CEIL = 'ceil';
+  const FLOOR = 'floor';
+  const TEXT_CONTENT = 'textContent';
+  const ITEM = 'Item';
+  const NEXT_SIBLING = 'nextSibling';
+  const LOAD = 'load';
+  const FALSE = 'false';
+  const SCROLL = 'scroll';
+  const CLICK = 'click';
+  const MOUSEMOVE = 'mousemove';
+  const TOUCHSTART = 'touchstart';
+  const CHANGE = 'change';
+  const UNDEFINED = 'undefined';
+  const FUNCTION = 'function';
+  const CONTENT_TYPE = 'Content-Type';
+  const PAGINATION = 'pagination';
+  const LOAD_CUSTOM_POSTS = 'loadCustomPosts';
+  const CUSTOM_POSTS = 'custom_posts';
+  const ADSENSE = 'adsbygoogle';
+  const HTTPS = 'https://';
+  const BLOGGER_URL = 'www.blogger.com/';
+  const RW = '-rw';
+  const DEVICE_PIXEL_RATIO = 'devicePixelRatio';
 
-  // グローバル設定（Bloggerテンプレート用の変数）
-  const isPreview = typeof isPreview !== undefinedStr && isPreview;
-  const siteUrl = typeof siteUrl !== undefinedStr ? siteUrl[substrFn](0, siteUrl[lengthProp] - 1)[replaceFn](/(^\w+:|^)\/\//, "") : "";
-  const currentUrl = typeof currentUrl !== undefinedStr ? currentUrl : "";
-  const blogId = typeof blogId !== undefinedStr ? blogId : "";
-  const blogTitle = typeof blogTitle !== undefinedStr ? blogTitle : "";
-  const titleSeparator = typeof titleSeparator !== undefinedStr ? titleSeparator : " - ";
-  const pageTitle = typeof pageTitle !== undefinedStr ? pageTitle : "Page";
-  const analyticId = typeof analyticId !== undefinedStr && analyticId;
-  const caPubAdsense = typeof caPubAdsense !== undefinedStr && caPubAdsense[replaceFn](/^\D+/g, "");
-  const adsenseClientId = !!caPubAdsense && "ca-pub-" + caPubAdsense;
-  const innerAdsDelimiter = typeof innerAdsDelimiter !== undefinedStr ? innerAdsDelimiter : "p,br,div";
-  const ignoreAdsDelimiter = typeof ignoreAdsDelimiter !== undefinedStr ? ignoreAdsDelimiter : "pre,ul,ol,table,blockquote";
-  const autoTOC = typeof autoTOC !== undefinedStr && autoTOC;
-  const tocTemplate = typeof toc_temp === functionStr && toc_temp;
-  const positionTOC = typeof positionTOC !== undefinedStr && positionTOC;
-  const jtCallback = typeof jtCallback === functionStr && jtCallback;
+  // グローバル変数の初期化（環境変数や設定値）
+  const isPreview = typeof isPreview !== UNDEFINED && isPreview;
+  const siteUrl = typeof siteUrl !== UNDEFINED ? siteUrl[SUBSTR](0, siteUrl[LENGTH] - 1)[REPLACE](/(^\w+:|^)\/\//, '') : '';
+  const baseUrl = HTTPS + siteUrl;
+  const currentUrl = typeof currentUrl !== UNDEFINED ? currentUrl : '';
+  const blogId = typeof blogId !== UNDEFINED ? blogId : '';
+  const blogTitle = typeof blogTitle !== UNDEFINED ? blogTitle : '';
+  const titleSeparator = typeof titleSeparator !== UNDEFINED ? titleSeparator : ' - ';
+  const pageTitle = typeof pageTitle !== UNDEFINED ? pageTitle : 'Page';
+  const analyticId = typeof analyticId !== UNDEFINED && analyticId;
+  const caPubAdsense = typeof caPubAdsense !== UNDEFINED && caPubAdsense[REPLACE](/^\D+/g, '');
+  const adsenseClientId = !!caPubAdsense && 'ca-pub-' + caPubAdsense;
+  const innerAdsDelimiter = typeof innerAdsDelimiter !== UNDEFINED ? innerAdsDelimiter : 'p,br,div';
+  const ignoreAdsDelimiter = typeof ignoreAdsDelimiter !== UNDEFINED ? ignoreAdsDelimiter : 'pre,ul,ol,table,blockquote';
+  const autoTOC = typeof autoTOC !== UNDEFINED && autoTOC;
+  const tocTempEnabled = typeof tocTemp === FUNCTION && tocTemp;
+  const positionTOC = typeof positionTOC !== UNDEFINED && positionTOC;
+  const jtCallbackEnabled = typeof jtCallback === FUNCTION && jtCallback;
 
-  const baseUrl = httpsPrefix + siteUrl;
-
-  // DOM要素のキャッシュ
-  const headerElement = documentObj[getElementByIdFn]("header");
-  const searchToggle = documentObj[getElementByIdFn]("search-toggle");
-  const searchHeader = documentObj[getElementByIdFn]("search-header");
-  const navbarToggle = documentObj[getElementByIdFn]("navbar-toggle");
-  const navbarElement = documentObj[getElementByIdFn]("navbar");
-  const backToTop = documentObj[getElementByIdFn]("back-to-top");
-  const darkToggler = documentObj[getElementByIdFn]("dark-toggler");
-  const htmlElement = documentObj[querySelectorFn]("html");
-  const commentButton = documentObj[getElementByIdFn]("comment-button");
-  const threadedCommentForm = documentObj[getElementByIdFn]("threaded-comment-form");
-  const commentEditor = documentObj[getElementByIdFn]("comment-editor");
-  const commentEditorSrc = documentObj[getElementByIdFn]("comment-editor-src");
-  const commentScript = documentObj[getElementByIdFn]("comment-script");
-  const commentReplies = documentObj[querySelectorAllFn](".comment-reply");
-  const noScriptEntries = documentObj[querySelectorAllFn](".entry-text noscript");
-  const contactForms = documentObj[querySelectorAllFn](".contact-form-blogger");
-  const adsPostElement = documentObj[getElementByIdFn]("ads-post");
-  const postBodyElement = documentObj[getElementByIdFn]("post-body");
-  const relatedPostsElement = documentObj[querySelectorFn](".related-posts");
-  const relatedInlineElement = documentObj[querySelectorFn](".related-inline");
-  const currentPage = getQueryParam("page", currentUrl);
-  const isLazyLoading = localStorageObj !== null && localStorageObj["get" + itemFn]("lazy") == "1";
-
-  // ヘッダーのスクロール処理
-  let lastScrollY = 0;
-  windowObj["add" + eventListenerFn](scrollEvent, function() {
-    const currentScrollY = this[pageYOffsetProp];
-    let timeoutId;
-    if (currentScrollY < lastScrollY && hasClass(headerElement, "header-hidden")) {
-      timeoutId = setTimeoutFn(function() {
-        removeClass(headerElement, "header-hidden");
-      }, 500);
-    } else if (lastScrollY < currentScrollY && hasClass(headerElement, "header-animate")) {
-      clearTimeoutFn(timeoutId);
-      addClass(headerElement, "header-hidden");
-    }
-    lastScrollY = currentScrollY;
-  }, false);
-
-  // クラス操作ユーティリティ
+  // クラス名に指定のクラスが含まれているかチェック
   function hasClass(element, className) {
-    return (" " + element[classNameProp] + " ").indexOf(" " + className + " ") > -1;
+    return (` ${element[CLASS_NAME]} `).indexOf(` ${className} `) > -1;
   }
 
+  // クラスを追加
   function addClass(element, className) {
     if (!hasClass(element, className)) {
-      const currentClass = element[classNameProp];
-      element[classNameProp] = currentClass ? currentClass + " " + className : className;
+      const currentClass = element[CLASS_NAME] || '';
+      element[CLASS_NAME] = currentClass + (currentClass ? ' ' : '') + className;
     }
   }
 
+  // クラスを削除
   function removeClass(element, className) {
-    element[classNameProp] = element[classNameProp][replaceFn](new RegExpObj("(?:^|\\s)" + className + "(?!\\S)"), "")[trimFn]();
+    element[CLASS_NAME] = element[CLASS_NAME][REPLACE](new RegExpRef(`(?:^|\\s)${className}(?!\\S)`), '')[TRIM]();
   }
 
+  // クラスを削除し、遅延で'd-block'を削除
   function toggleClassWithDelay(element, className, delay = 300) {
     removeClass(element, className);
-    setTimeoutFn(function() {
-      removeClass(element, "d-block");
-    }, delay);
+    setTimeoutRef(() => removeClass(element, 'd-block'), delay);
   }
 
-  function arrayIncludes(array, value) {
-    for (let i = 0; i < array[lengthProp]; i++) {
-      if (array[i] === value) return true;
+  // 配列に要素が含まれているかチェック
+  function includes(array, item) {
+    for (let i = 0; i < array[LENGTH]; i++) {
+      if (array[i] === item) return true;
     }
     return false;
   }
 
+  // URLからクエリパラメータを取得
   function getQueryParam(param, url) {
-    const regex = new RegExpObj("[?&]" + param + "=([^&#=]*)");
-    const match = url[matchFn](regex);
-    return match ? match[1] : null;
+    const regex = new RegExpRef(`[?&]${param}=([^&#=]*)`);
+    const match = url[MATCH](regex);
+    return match ? match[1] : false;
   }
 
-  function parseJSON(jsonStr) {
+  // JSONをパース（エラー処理付き）
+  function parseJSON(data) {
     try {
-      return JSONObj.parse(jsonStr);
+      return JSONRef.parse(data);
     } catch (e) {
       return false;
     }
   }
 
-  // WebPサポートチェック
-  function checkWebPSupport(callback) {
-    const img = new ImageObj();
-    img.onload = img.onerror = function() {
-      callback(img.height === 2);
-    };
-    img.src = "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA";
+  // WebP対応チェック
+  let webpSupported = true;
+  function checkWebpSupport(callback) {
+    const img = new ImageRef();
+    img.onload = img.onerror = () => callback(img.height === 2);
+    img.src = 'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
   }
-
-  checkWebPSupport(function(support) {
-    if (!support) webpSuffix = "";
+  checkWebpSupport(supported => {
+    if (!supported) webpSupported = '';
   });
 
-  // 画像の遅延読み込み処理
-  function lazyLoadImage(element) {
-    if (element[tagNameProp] === "IMG") {
-      let src = element["get" + attributeFn]("data-src");
-      if (src[matchFn](/(bp.blogspot|googleusercontent)/)) {
-        const pixelRatio = isLazyLoading ? (windowObj[devicePixelRatioProp] && windowObj[devicePixelRatioProp] > 1 ? windowObj[devicePixelRatioProp] : 1.5) : 1;
-        const width = (element[offsetWidthProp] * pixelRatio)[toFixedFn](0);
-        const parentWidth = (element[parentElementProp][offsetWidthProp] * pixelRatio)[toFixedFn](0);
-        const grandParentWidth = (element[parentElementProp][parentElementProp][offsetWidthProp] * pixelRatio)[toFixedFn](0);
-        const height = (element.offsetHeight * pixelRatio)[toFixedFn](0);
-        let parts = src[splitFn]("/");
-        const equalIndex = src[lastIndexOfFn]("=") + 1;
-        let suffix = hasClass(element[parentElementProp], "ratio") ? "w" + ImgSize + "-e90" + webpSuffix : "w" + ImgSize + "-e90" + webpSuffix;
-        if (src[matchFn](/(img\/a|proxy\/)/)) {
-          src = equalIndex ? src[sliceFn](0, equalIndex) + suffix : src + "=" + suffix;
-        } else {
-          src = src[replaceFn](parts[parts[lengthProp] - 2], suffix);
-        }
-        element["set" + attributeFn]("data-src", src);
-      } else if (src[matchFn](/(img.youtube|i.ytimg)/)) {
-        src = src[substrFn](0, src[lastIndexOfFn]("/")) + "/mqdefault.jpg";
-        element["set" + attributeFn]("data-src", src);
-      }
+  // DOM要素のキャッシュ
+  const header = documentRef[GET_ELEMENT_BY_ID]('header');
+  const searchToggle = documentRef[GET_ELEMENT_BY_ID]('search-toggle');
+  const searchHeader = documentRef[GET_ELEMENT_BY_ID]('search-header');
+  const navbarToggle = documentRef[GET_ELEMENT_BY_ID]('navbar-toggle');
+  const navbar = documentRef[GET_ELEMENT_BY_ID]('navbar');
+  const backToTop = documentRef[GET_ELEMENT_BY_ID]('back-to-top');
+  const darkToggler = documentRef[GET_ELEMENT_BY_ID]('dark-toggler');
+  const htmlElement = documentRef[QUERY_SELECTOR]('html');
+  const commentButton = documentRef[GET_ELEMENT_BY_ID]('comment-button');
+  const threadedCommentForm = documentRef[GET_ELEMENT_BY_ID]('threaded-comment-form');
+  const commentEditor = documentRef[GET_ELEMENT_BY_ID]('comment-editor');
+  const commentEditorSrc = documentRef[GET_ELEMENT_BY_ID]('comment-editor-src');
+  const commentScript = documentRef[GET_ELEMENT_BY_ID]('comment-script');
+  const commentReplies = documentRef[QUERY_SELECTOR_ALL]('.comment-reply');
+  const noscriptEntries = documentRef[QUERY_SELECTOR_ALL]('.entry-text noscript');
+  const contactForms = documentRef[QUERY_SELECTOR_ALL]('.contact-form-blogger');
+  const adsPost = documentRef[GET_ELEMENT_BY_ID]('ads-post');
+  const postBody = documentRef[GET_ELEMENT_BY_ID]('post-body');
+  const relatedPosts = documentRef[QUERY_SELECTOR]('.related-posts');
+  const relatedInline = documentRef[QUERY_SELECTOR]('.related-inline');
+  const currentPage = getQueryParam('page', currentUrl);
+  const isLazyEnabled = localStorageRef !== null && localStorageRef[`get${ITEM}`]('lazy') == '1';
+
+  // スクロール時のヘッダーアニメーション
+  let lastScrollY = 0;
+  windowRef[`add${EVENT_LISTENER}`](SCROLL, function() {
+    const scrollY = this[PAGE_Y_OFFSET];
+    let timeoutId;
+    if (scrollY < lastScrollY && hasClass(header, 'header-hidden')) {
+      timeoutId = setTimeoutRef(() => removeClass(header, 'header-hidden'), 500);
+    } else if (lastScrollY < scrollY && hasClass(header, 'header-animate')) {
+      clearTimeoutRef(timeoutId);
+      addClass(header, 'header-hidden');
+    }
+    lastScrollY = scrollY;
+  }, false);
+
+  // 画像の遅延ロード処理
+  function processLazyImage(imgElement) {
+    if (imgElement[TAG_NAME] !== 'IMG') return;
+    const dataSrc = imgElement[`get${ATTRIBUTE}`]('data-src');
+    if (dataSrc[MATCH](/(bp.blogspot|googleusercontent)/)) {
+      const pixelRatio = isLazyEnabled && windowRef[DEVICE_PIXEL_RATIO] > 1 ? windowRef[DEVICE_PIXEL_RATIO] : 1.5;
+      const imgWidth = (imgElement[OFFSET_WIDTH] * pixelRatio)[TO_FIXED](0);
+      const parentWidth = (imgElement[PARENT_ELEMENT][OFFSET_WIDTH] * pixelRatio)[TO_FIXED](0);
+      const grandParentWidth = (imgElement[PARENT_ELEMENT][PARENT_ELEMENT][OFFSET_WIDTH] * pixelRatio)[TO_FIXED](0);
+      const imgHeight = (imgElement.offsetHeight * pixelRatio)[TO_FIXED](0);
+      const urlParts = dataSrc[SPLIT]('/');
+      const sizeIndex = dataSrc[LAST_INDEX_OF]('=') + 1;
+      let sizeParam = hasClass(imgElement[PARENT_ELEMENT], 'ratio') ? `w${ImgSize}-e90${webpSupported}` : `w${ImgSize}-e90${webpSupported}`;
+      const newSrc = dataSrc[MATCH](/(img\/a|proxy\/)/) 
+        ? sizeIndex ? dataSrc[SLICE](0, sizeIndex) + sizeParam : dataSrc + '=' + sizeParam 
+        : dataSrc[REPLACE](urlParts[urlParts[LENGTH] - 2], sizeParam);
+      imgElement[`set${ATTRIBUTE}`]('data-src', newSrc);
+    } else if (dataSrc[MATCH](/(img.youtube|i.ytimg)/)) {
+      const newSrc = dataSrc[SUBSTR](0, dataSrc[LAST_INDEX_OF]('/')) + '/mqdefault.jpg';
+      imgElement[`set${ATTRIBUTE}`]('data-src', newSrc);
     }
   }
 
   // ページネーション処理
-  function setupPagination(element) {
-    const postsPerPage = element["get" + attributeFn]("data-posts");
-    const label = element["get" + attributeFn]("data-label");
-    const encodedLabel = encodeURIFn(label);
-    const labelPath = encodedLabel ? "-/" + encodedLabel + "/" : "";
-    const labelQuery = encodedLabel ? "/label/" + encodedLabel : "";
-    const maxResults = getQueryParam("max-results", currentUrl) || postsPerPage;
-    const currentPage = getQueryParam("page", currentUrl) || 1;
+  function initializePagination(paginationElement) {
+    if (paginationElement[`get${ATTRIBUTE}`]('data-pagination') === FALSE) {
+      removeClass(paginationElement, 'visually-hidden');
+      return;
+    }
+    const postsPerPage = paginationElement[`get${ATTRIBUTE}`]('data-posts');
+    const label = paginationElement[`get${ATTRIBUTE}`]('data-label');
+    const encodedLabel = encodeURIComponentRef(label);
+    const labelPath = encodedLabel ? `-/${encodedLabel}/` : '';
+    const labelQuery = encodedLabel ? `/label/${encodedLabel}` : '';
+    const maxResults = getQueryParam('max-results', currentUrl) || postsPerPage;
+    const currentPageNum = getQueryParam('page', currentUrl) || 1;
 
-    if (element["get" + attributeFn]("data-pagination") !== falseStr) {
-      Defer.js(baseUrl + "/feeds/posts/summary/" + labelPath + "?alt=json&callback=jo." + paginationStr + "_key&max-results=1");
+    Defer.js(`${baseUrl}/feeds/posts/summary/${labelPath}?alt=json&callback=jo.${PAGINATION}_key&max-results=1`);
 
-      jo[paginationStr + "_key"] = function(data) {
-        const totalPosts = parseIntFn(data.feed.openSearch$totalResults.$t);
-        if (postsPerPage < totalPosts) {
-          const paginationData = calculatePagination(totalPosts, currentPage, maxResults, 5);
-          const ul = documentObj[createElementFn]("ul");
-          if (paginationData.currentPage !== 1) {
-            ul[appendChildFn](createPaginationItem(paginationData.currentPage - 1, "", '<svg aria-hidden="true" class="jt-icon"><use xlink:href="#i-arrow-l"/></svg>'));
-          }
-          if (!arrayIncludes(paginationData.pages, 1)) {
-            ul[appendChildFn](createPaginationItem(1, paginationData.currentPage, "1 . ."));
-          }
-          for (let i = 0; i < paginationData.pages[lengthProp]; i++) {
-            ul[appendChildFn](createPaginationItem(paginationData.pages[i], paginationData.currentPage));
-          }
-          if (!arrayIncludes(paginationData.pages, paginationData.totalPages)) {
-            ul[appendChildFn](createPaginationItem(paginationData.totalPages, paginationData.currentPage, ". . " + paginationData.totalPages));
-          }
-          if (paginationData.currentPage !== paginationData.totalPages) {
-            ul[appendChildFn](createPaginationItem(paginationData.currentPage + 1, "", '<svg aria-hidden="true" class="jt-icon"><use xlink:href="#i-arrow-r"/></svg>'));
-          }
-          element[innerHTMLProp] = "";
-          addClass(ul, "pagination mb-0");
-          element[appendChildFn](ul);
-          removeClass(element, "visually-hidden");
-        }
-      };
+    jo[`${PAGINATION}_key`] = function(data) {
+      const totalPosts = parseIntRef(data.feed.openSearch$totalResults.$t);
+      if (postsPerPage >= totalPosts) return;
 
-      jo[paginationStr + "_date"] = function(data) {
-        const entry = data.feed.entry[0];
-        const published = entry.published.$t[substrFn](0, 19) + entry.published.$t[substrFn](23, 29);
-        const encodedDate = published[replaceFn]("+", "%2B");
-        const url = baseUrl + "/search" + labelQuery + "?updated-max=" + encodedDate + "&max-results=" + maxResults + "&page=" + currentPage;
-        windowObj[locationProp][hrefProp] = url;
-      };
-
-      function createPaginationItem(page, currentPage, text) {
-        const li = documentObj[createElementFn]("li");
-        const span = documentObj[createElementFn]("span");
-        addClass(span, "btn rounded-pill jt-icon-center");
-        span[innerHTMLProp] = text || page;
-        span["set" + attributeFn]("data-page", page);
-        if (page === currentPage) {
-          addClass(span, "jt-btn-primary");
-        } else {
-          addClass(span, "jt-btn-light hover-btn-primary");
-          span["add" + eventListenerFn](clickEvent, function(event) {
-            event[preventDefaultFn]();
-            let url;
-            if (page === 1) {
-              url = encodedLabel ? baseUrl + "/search" + labelQuery + "?max-results=" + postsPerPage + "&page=" + page : baseUrl;
-              windowObj[locationProp][hrefProp] = url;
-            } else {
-              const startIndex = (page - 1) * maxResults;
-              Defer.js(baseUrl + "/feeds/posts/summary/" + labelPath + "?start-index=" + startIndex + "&alt=json&callback=jo." + paginationStr + "_date&max-results=1");
-            }
-          });
-        }
-        li[appendChildFn](span);
-        return li;
-      }
-
-      function calculatePagination(totalItems, currentPage, pageSize, maxPages) {
-        totalItems = parseIntFn(totalItems);
-        currentPage = parseIntFn(currentPage);
-        pageSize = parseIntFn(pageSize);
-        maxPages = parseIntFn(maxPages);
-        const totalPages = MathObj[ceilFn](totalItems / pageSize);
-        currentPage = currentPage < 1 ? 1 : currentPage > totalPages ? totalPages : currentPage;
+      function createPagination(totalItems, currentPage, pageSize, maxPages) {
+        totalItems = parseIntRef(totalItems);
+        currentPage = parseIntRef(currentPage);
+        pageSize = parseIntRef(pageSize);
+        maxPages = parseIntRef(maxPages);
         let startPage, endPage;
+        const totalPages = MathRef[CEIL](totalItems / pageSize);
+        currentPage = MathRef.max(1, MathRef.min(currentPage, totalPages));
         if (totalPages <= maxPages) {
           startPage = 1;
           endPage = totalPages;
         } else {
-          const halfMax = MathObj[floorFn](maxPages / 2);
-          const halfMaxCeil = MathObj[ceilFn](maxPages / 2) - 1;
-          if (currentPage <= halfMax) {
+          const halfMaxPages = MathRef[FLOOR](maxPages / 2);
+          const halfMaxPagesCeil = MathRef[CEIL](maxPages / 2) - 1;
+          if (currentPage <= halfMaxPages) {
             startPage = 1;
             endPage = maxPages;
-          } else if (totalPages <= currentPage + halfMaxCeil) {
+          } else if (currentPage + halfMaxPagesCeil >= totalPages) {
             startPage = totalPages - maxPages + 1;
             endPage = totalPages;
           } else {
-            startPage = currentPage - halfMax;
-            endPage = currentPage + halfMaxCeil;
+            startPage = currentPage - halfMaxPages;
+            endPage = currentPage + halfMaxPagesCeil;
           }
         }
         const startIndex = (currentPage - 1) * pageSize;
-        const endIndex = MathObj.min(startIndex + pageSize - 1, totalItems - 1);
-        const pages = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
-        return {
-          totalItems,
-          currentPage,
-          pageSize,
-          totalPages,
-          startPage,
-          endPage,
-          startIndex,
-          endIndex,
-          pages
-        };
+        const endIndex = MathRef.min(startIndex + pageSize - 1, totalItems - 1);
+        const pages = Array.from({ [LENGTH]: endPage + 1 - startPage }, (_, i) => startPage + i);
+        return { totalItems, currentPage, pageSize, totalPages, startPage, endPage, startIndex, endIndex, pages };
       }
-    } else {
-      removeClass(element, "visually-hidden");
-    }
+
+      const paginationData = createPagination(totalPosts, currentPageNum, maxResults, 5);
+      const paginationList = documentRef[CREATE_ELEMENT]('ul');
+
+      function createPageItem(pageNum, currentPage, label = pageNum) {
+        const listItem = documentRef[CREATE_ELEMENT]('li');
+        const button = documentRef[CREATE_ELEMENT]('span');
+        addClass(button, 'btn rounded-pill jt-icon-center');
+        button[INNER_HTML] = label;
+        button[`set${ATTRIBUTE}`]('data-page', pageNum);
+        if (pageNum == currentPage) {
+          addClass(button, 'jt-btn-primary');
+        } else {
+          addClass(button, 'jt-btn-light hover-btn-primary');
+          button[`add${EVENT_LISTENER}`](CLICK, event => {
+            event[PREVENT_DEFAULT]();
+            const targetPage = button[`get${ATTRIBUTE}`]('data-page');
+            if (targetPage == 1) {
+              const url = encodedLabel ? `${baseUrl}/search${labelQuery}?max-results=${maxResults}&page=${targetPage}` : baseUrl;
+              windowRef[LOCATION][HREF] = url;
+            } else {
+              const startIndex = (targetPage - 1) * maxResults;
+              Defer.js(`${baseUrl}/feeds/posts/summary/${labelPath}?start-index=${startIndex}&alt=json&callback=jo.${PAGINATION}_date&max-results=1`);
+            }
+          });
+        }
+        listItem[APPEND_CHILD](button);
+        return listItem;
+      }
+
+      if (paginationData.currentPage != 1) {
+        paginationList[APPEND_CHILD](createPageItem(paginationData.currentPage - 1, '', '<svg aria-hidden="true" class="jt-icon"><use xlink:href="#i-arrow-l"/></svg>'));
+      }
+      if (!includes(paginationData.pages, 1)) {
+        paginationList[APPEND_CHILD](createPageItem(1, paginationData.currentPage, '1 . .'));
+      }
+      paginationData.pages.forEach(page => {
+        paginationList[APPEND_CHILD](createPageItem(page, paginationData.currentPage));
+      });
+      if (!includes(paginationData.pages, paginationData.totalPages)) {
+        paginationList[APPEND_CHILD](createPageItem(paginationData.totalPages, paginationData.currentPage, `. . ${paginationData.totalPages}`));
+      }
+      if (paginationData.currentPage != paginationData.totalPages) {
+        paginationList[APPEND_CHILD](createPageItem(paginationData.currentPage + 1, '', '<svg aria-hidden="true" class="jt-icon"><use xlink:href="#i-arrow-r"/></svg>'));
+      }
+
+      paginationElement[INNER_HTML] = '';
+      addClass(paginationList, 'pagination mb-0');
+      paginationElement[APPEND_CHILD](paginationList);
+      removeClass(paginationElement, 'visually-hidden');
+    };
+
+    jo[`${PAGINATION}_date`] = function(data) {
+      const published = data.feed.entry[0].published.$t;
+      const formattedDate = published[SUBSTR](0, 19) + published[SUBSTR](23, 29)[REPLACE]('+', '%2B');
+      const url = `${baseUrl}/search${labelQuery}?updated-max=${formattedDate}&max-results=${maxResults}&page=${currentPageNum}`;
+      windowRef[LOCATION][HREF] = url;
+    };
+  }
+
+  // ページタイトルの取得
+  function fetchPageTitle(url, element) {
+    const xhr = new XMLHttpRequestRef();
+    xhr[OPEN]('get', url);
+    xhr[SET_REQUEST_HEADER](CONTENT_TYPE, 'text/html');
+    xhr[SEND](null);
+    xhr[`add${EVENT_LISTENER}`](LOAD, () => {
+      const titleMatch = xhr[RESPONSE_TEXT][MATCH](/<title>(.*?)<\/title>/);
+      if (titleMatch) {
+        element[INNER_HTML] = titleMatch[1][REPLACE](titleSeparator + blogTitle, '');
+      }
+    });
   }
 
   // カスタム投稿の読み込み
-  jo[loadCustomPostsStr] = function(element) {
-    const uniqueId = (MathObj[randomFn]() + 1).toString(36)[substrFn](7);
-    const label = element["get" + attributeFn]("data-label") || element[innerHTMLProp];
-    const title = element["get" + attributeFn]("data-title");
-    const items = element["get" + attributeFn]("data-items");
-    const shuffle = element["get" + attributeFn]("data-shuffle");
-    const noItemUrl = element["get" + attributeFn]("data-no-item");
-    const callbackFunc = element["get" + attributeFn]("data-func");
-    const postCallback = element["get" + attributeFn]("data-callback");
-    const maxItems = noItemUrl ? parseIntFn(items) + 1 : items;
-    const labels = label[splitFn](",");
-    const labelQuery = labels[lengthProp] > 1 ? "-/" + encodeURIFn(labels[MathObj[floorFn](MathObj[randomFn]() * labels[lengthProp])]) + "/?" : label && label !== falseStr ? "-/" + encodeURIFn(label[trimFn]()) + "/?" : "?";
+  jo[LOAD_CUSTOM_POSTS] = function(element) {
+    const uniqueId = (MathRef[RANDOM]() + 1).toString(36)[SUBSTR](7);
+    const label = element[`get${ATTRIBUTE}`]('data-label') || element[INNER_HTML];
+    const title = element[`get${ATTRIBUTE}`]('data-title');
+    const itemCount = element[`get${ATTRIBUTE}`]('data-items');
+    const shuffle = element[`get${ATTRIBUTE}`]('data-shuffle');
+    const noItem = element[`get${ATTRIBUTE}`]('data-no-item');
+    const funcName = element[`get${ATTRIBUTE}`]('data-func');
+    const callbackName = element[`get${ATTRIBUTE}`]('data-callback');
+    const maxResults = noItem ? parseIntRef(itemCount) + 1 : itemCount;
+    const labels = label[SPLIT](',');
+    const labelQuery = labels[LENGTH] > 1 
+      ? label ? `-/${encodeURIComponentRef(labels[MathRef[FLOOR](MathRef[RANDOM]() * labels[LENGTH])])}/?` : '?' 
+      : label && label !== FALSE ? `-/${encodeURIComponentRef(label[TRIM]())}/?` : '?';
 
-    Defer.js(baseUrl + "/feeds/posts/summary/" + labelQuery + "alt=json&callback=jo." + customPostsStr + "_key_" + uniqueId + "&max-results=" + maxItems);
+    Defer.js(`${baseUrl}/feeds/posts/summary/${labelQuery}alt=json&callback=jo.${CUSTOM_POSTS}_key_${uniqueId}&max-results=${maxResults}`);
 
-    jo[customPostsStr + "_key_" + uniqueId] = function(data) {
-      const totalResults = parseIntFn(data.feed.openSearch$totalResults.$t);
-      const categories = data.feed.category;
-      if (totalResults > 0) {
-        const postsData = { title, posts: [], categories };
-        const entries = data.feed.entry;
-        let count = 0;
-        for (let i = 0; i < entries[lengthProp] && count < items; ++i) {
-          const entry = entries[i];
-          const url = entry.link[entry.link[lengthProp] - 1][hrefProp];
-          if (url !== noItemUrl) {
-            count++;
-            const post = {
-              grup_id: uniqueId,
-              url,
-              title: entry[titleProp].$t,
-              summary: entry.summary.$t[trimFn](),
-              img: entry.media$thumbnail && entry.media$thumbnail.url,
-              author: entry.author[0].name.$t,
-              comment: entry.thr$total && entry.thr$total.$t,
-              label: entry.category,
-              date: formatDate(entry.published.$t)
-            };
-            postsData.posts[pushFn](post);
-          }
+    jo[`${CUSTOM_POSTS}_key_${uniqueId}`] = function(data) {
+      const totalResults = parseIntRef(data.feed.openSearch$totalResults.$t);
+      if (totalResults <= 0) return;
+
+      const postsData = {
+        title,
+        posts: [],
+        categories: data.feed.category
+      };
+      const entries = data.feed.entry;
+      let itemIndex = 0;
+
+      for (let i = 0; i < entries[LENGTH] && itemIndex < itemCount; i++) {
+        const entry = entries[i];
+        const postUrl = entry.link[entry.link[LENGTH] - 1][HREF];
+        if (postUrl === noItem) continue;
+
+        itemIndex++;
+        const post = {
+          grup_id: uniqueId,
+          url: postUrl,
+          title: entry[TITLE].$t,
+          summary: entry.summary.$t[TRIM](),
+          img: entry.media$thumbnail && entry.media$thumbnail.url,
+          author: entry.author[0].name.$t,
+          comment: entry.thr$total && entry.thr$total.$t,
+          label: entry.category
+        };
+        const published = entry.published.$t;
+        const date = new DateRef(published);
+        post.date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+        postsData.posts[PUSH](post);
+      }
+
+      if (typeof windowRef[funcName] === FUNCTION && postsData.posts[LENGTH] > 0) {
+        if (shuffle) {
+          postsData.posts = (function shuffleArray(array) {
+            const shuffled = array.slice();
+            for (let i = shuffled[LENGTH] - 1; i > 0; i--) {
+              const j = MathRef[FLOOR](MathRef[RANDOM]() * (i + 1));
+              [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+          })(postsData.posts)[SLICE](0, shuffle);
         }
-        if (typeof windowObj[callbackFunc] === functionStr && postsData.posts[lengthProp] > 0) {
-          if (shuffle) {
-            postsData.posts = shuffleArray(postsData.posts)[sliceFn](0, shuffle);
-          }
-          element[innerHTMLProp] = windowObj[callbackFunc](postsData)[trimFn]();
-          removeClass(element, "visually-hidden");
-          Defer.domz(".lazy-" + uniqueId, 1, "loaded", lazyLoadImage, null, { rootMargin: "300%" });
-          if (postCallback && typeof windowObj[postCallback] === functionStr) {
-            windowObj[postCallback]();
-          }
+        element[INNER_HTML] = windowRef[funcName](postsData)[TRIM]();
+        removeClass(element, 'visually-hidden');
+        Defer.domz(`.lazy-${uniqueId}`, 1, 'loaded', processLazyImage, null, { rootMargin: '300%' });
+        if (callbackName && typeof windowRef[callbackName] === FUNCTION) {
+          windowRef[callbackName]();
         }
       }
     };
-
-    function formatDate(dateStr) {
-      const date = new DateObj(dateStr);
-      return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
-    }
-
-    function shuffleArray(array) {
-      const result = array.slice();
-      for (let i = result[lengthProp] - 1; i > 0; i--) {
-        const j = MathObj[floorFn](MathObj[randomFn]() * (i + 1));
-        [result[i], result[j]] = [result[j], result[i]];
-      }
-      return result;
-    }
   };
 
-  // ページタイトルの動的取得
-  function fetchPageTitle(url, element) {
-    const xhr = new XMLHttpRequestObj();
-    xhr[openFn]("get", url);
-    xhr[setRequestHeaderFn](contentTypeHeader, "text/html");
-    xhr[sendFn](null);
-    xhr["add" + eventListenerFn](loadEvent, function() {
-      const titleMatch = xhr[responseTextProp][matchFn](/<title>(.*?)<\/title>/);
-      element[innerHTMLProp] = titleMatch[1][replaceFn](titleSeparator + blogTitle, "");
+  // ページャーのリンクタイトルの取得
+  function initializePager(pagerElement) {
+    const links = pagerElement[QUERY_SELECTOR_ALL]('a');
+    links.forEach(link => {
+      const span = documentRef[CREATE_ELEMENT]('span');
+      addClass(span, 'd-block pt-2');
+      link[APPEND_CHILD](span);
+      fetchPageTitle(link[HREF], span);
     });
   }
 
-  // リンクにページタイトルを追加
-  function addPageTitles(element) {
-    const links = element[querySelectorAllFn]("a");
-    for (let i = 0; i < links[lengthProp]; ++i) {
-      const link = links[i];
-      const span = documentObj[createElementFn]("span");
-      addClass(span, "d-block pt-2");
-      link[appendChildFn](span);
-      fetchPageTitle(link[hrefProp], span);
-    }
+  // ヘッダーのアニメーション状態を更新
+  function updateHeaderAnimation() {
+    (searchToggle && searchToggle[CHECKED] || navbarToggle && navbarToggle[CHECKED] ? removeClass : addClass)(header, 'header-animate');
   }
 
-  // ヘッダーのアニメーション制御
-  function toggleHeaderAnimation() {
-    (searchToggle && searchToggle[checkedProp] || navbarToggle && navbarToggle[checkedProp] ? removeClass : addClass)(headerElement, "header-animate");
-  }
-
-  // クリックイベントの外部ハンドリング
-  function handleOutsideClick(element, callback) {
-    function listener(event) {
-      if (!element.contains(event[targetProp])) {
+  // 外部クリックで要素を閉じる
+  function closeOnOutsideClick(container, callback) {
+    const handleClick = event => {
+      if (!container.contains(event[TARGET])) {
         callback();
-        documentObj[removeFn + eventListenerFn](clickEvent, listener);
+        removeClickListener();
       }
-    }
-    documentObj["add" + eventListenerFn](clickEvent, listener);
+    };
+    const removeClickListener = () => {
+      documentRef[`${REMOVE}${EVENT_LISTENER}`](CLICK, handleClick);
+    };
+    documentRef[`add${EVENT_LISTENER}`](CLICK, handleClick);
   }
 
-  // コメントフォームの表示
-  function showCommentForm(url) {
-    if (url !== commentEditorSrc[hrefProp]) {
-      addClass(threadedCommentForm, "loader");
-      commentEditorSrc[hrefProp] = url;
+  // コメントフォームの初期化
+  function initializeCommentForm(url) {
+    if (url !== commentEditorSrc[HREF]) {
+      addClass(threadedCommentForm, 'loader');
+      commentEditorSrc[HREF] = url;
       commentEditor.src = url;
     }
-    if (hasClass(threadedCommentForm, "d-none")) {
-      removeClass(threadedCommentForm, "d-none");
-      const scriptSrc = commentScript.value[matchFn](/<script.*?src='(.*?)'/)[1];
-      Defer.js(scriptSrc, "comment-js", 500, function() {
-        BLOG_CMT_createIframe(httpsPrefix + bloggerDomain + "rpc_relay.html");
+    if (hasClass(threadedCommentForm, 'd-none')) {
+      removeClass(threadedCommentForm, 'd-none');
+      const scriptSrc = commentScript.value[MATCH](/<script.*?src='(.*?)'/)[1];
+      Defer.js(scriptSrc, 'comment-js', 500, () => {
+        BLOG_CMT_createIframe(`${HTTPS}${BLOGGER_URL}rpc_relay.html`);
       });
     }
   }
 
-  // イベントリスナーの設定
+  // 検索トグルのイベントリスナー
   if (searchToggle) {
-    searchToggle["add" + eventListenerFn](changeEvent, function() {
-      toggleHeaderAnimation();
-      if (this[checkedProp]) {
-        setTimeoutFn(function() {
-          documentObj[getElementByIdFn]("search-input").focus();
-        }, 100);
-        handleOutsideClick(searchHeader, function() {
-          searchToggle[checkedProp] = false;
-          toggleHeaderAnimation();
-        });
+    searchToggle[`add${EVENT_LISTENER}`](CHANGE, function() {
+      updateHeaderAnimation();
+      if (this[CHECKED]) {
+        setTimeoutRef(() => documentRef[GET_ELEMENT_BY_ID]('search-input').focus(), 100);
       }
+      closeOnOutsideClick(searchHeader, () => {
+        searchToggle[CHECKED] = false;
+        updateHeaderAnimation();
+      });
     });
   }
 
+  // ナビバートグルのイベントリスナー
   if (navbarToggle) {
-    navbarToggle["add" + eventListenerFn](changeEvent, function() {
-      toggleHeaderAnimation();
-      if (this[checkedProp]) {
-        addClass(navbarElement, "d-block");
-        setTimeoutFn(function() {
-          addClass(navbarElement, "show");
-        }, 100);
-        handleOutsideClick(navbarElement, function() {
-          navbarToggle[checkedProp] = false;
-          toggleHeaderAnimation();
-          toggleClassWithDelay(navbarElement, "show");
+    navbarToggle[`add${EVENT_LISTENER}`](CHANGE, function() {
+      updateHeaderAnimation();
+      if (this[CHECKED]) {
+        addClass(navbar, 'd-block');
+        setTimeoutRef(() => addClass(navbar, 'show'), 100);
+        closeOnOutsideClick(navbar, () => {
+          navbarToggle[CHECKED] = false;
+          updateHeaderAnimation();
+          toggleClassWithDelay(navbar, 'show');
         });
       } else {
-        toggleClassWithDelay(navbarElement, "show");
+        toggleClassWithDelay(navbar, 'show');
       }
     });
   }
 
+  // ダークモードトグルのイベントリスナー
   if (darkToggler) {
-    darkToggler["add" + eventListenerFn](clickEvent, function(event) {
-      event[preventDefaultFn]();
-      toggleClass(htmlElement, "dark-mode");
-      if (localStorageObj !== null) {
-        localStorageObj["set" + itemFn]("theme", hasClass(htmlElement, "dark-mode") ? "dark" : "light");
+    darkToggler[`add${EVENT_LISTENER}`](CLICK, event => {
+      event[PREVENT_DEFAULT]();
+      const toggleDarkMode = (element, className) => hasClass(element, className) ? removeClass(element, className) : addClass(element, className);
+      toggleDarkMode(htmlElement, 'dark-mode');
+      if (localStorageRef) {
+        localStorageRef[`set${ITEM}`]('theme', hasClass(htmlElement, 'dark-mode') ? 'dark' : 'light');
       }
     });
   }
 
-  windowObj["add" + eventListenerFn](scrollEvent, function() {
-    (this[pageYOffsetProp] >= 1 && headerElement !== null ? addClass : removeClass)(headerElement, "shadow-sm");
-    (this[pageYOffsetProp] >= 1000 && backToTop !== null ? removeClass : addClass)(backToTop, "d-none");
+  // スクロールイベントリスナー
+  windowRef[`add${EVENT_LISTENER}`](SCROLL, function() {
+    (this[PAGE_Y_OFFSET] >= 1 && header ? addClass : removeClass)(header, 'shadow-sm');
+    (this[PAGE_Y_OFFSET] >= 1000 && backToTop ? removeClass : addClass)(backToTop, 'd-none');
   }, false);
 
+  // コメントエディターのロードイベント
   if (commentEditor) {
-    commentEditor["add" + eventListenerFn](loadEvent, function() {
-      removeClass(threadedCommentForm, "loader");
-    });
+    commentEditor[`add${EVENT_LISTENER}`](LOAD, () => removeClass(threadedCommentForm, 'loader'));
   }
 
+  // コメントボタンのイベントリスナー
   if (commentButton) {
-    commentButton["add" + eventListenerFn](clickEvent, function(event) {
-      event[preventDefaultFn]();
-      showCommentForm(this[hrefProp]);
-      if (threadedCommentForm[parentElementProp].id !== "add-comment") {
-        documentObj[getElementByIdFn]("add-comment")[appendChildFn](threadedCommentForm);
+    commentButton[`add${EVENT_LISTENER}`](CLICK, event => {
+      event[PREVENT_DEFAULT]();
+      initializeCommentForm(this[HREF]);
+      if (threadedCommentForm[PARENT_ELEMENT].id !== 'add-comment') {
+        documentRef[GET_ELEMENT_BY_ID]('add-comment')[APPEND_CHILD](threadedCommentForm);
       }
     });
   }
 
-  for (let i = 0; i < commentReplies[lengthProp]; ++i) {
-    commentReplies[i]["add" + eventListenerFn](clickEvent, function(event) {
-      event[preventDefaultFn]();
-      const commentId = this["get" + attributeFn]("data-comment-id");
-      showCommentForm(this[hrefProp]);
-      if (threadedCommentForm[parentElementProp].id !== "c" + commentId) {
-        documentObj[getElementByIdFn]("c" + commentId)[appendChildFn](threadedCommentForm);
+  // コメント返信リンクのイベントリスナー
+  commentReplies.forEach(reply => {
+    reply[`add${EVENT_LISTENER}`](CLICK, event => {
+      event[PREVENT_DEFAULT]();
+      const commentId = reply[`get${ATTRIBUTE}`]('data-comment-id');
+      initializeCommentForm(reply[HREF]);
+      if (threadedCommentForm[PARENT_ELEMENT].id !== `c${commentId}`) {
+        documentRef[GET_ELEMENT_BY_ID](`c${commentId}`)[APPEND_CHILD](threadedCommentForm);
       }
     });
-  }
+  });
 
-  for (let i = 0; i < contactForms[lengthProp]; ++i) {
-    contactForms[i]["add" + eventListenerFn]("submit", function(event) {
-      event[preventDefaultFn]();
-      const form = event[targetProp];
-      addClass(form, "loading");
-      const formData = new FormData(form);
-      let dataStr = "blogID=" + blogId;
+  // コンタクトフォームのイベントリスナー
+  contactForms.forEach(form => {
+    form[`add${EVENT_LISTENER}`]('submit', event => {
+      event[PREVENT_DEFAULT]();
+      const formElement = event[TARGET];
+      addClass(formElement, 'loading');
+      const formData = new FormData(formElement);
+      let dataString = `blogID=${blogId}`;
       formData.forEach((value, key) => {
-        dataStr += "&" + encodeURIFn(key) + "=" + encodeURIFn(value);
+        dataString += `&${encodeURIComponentRef(key)}=${encodeURIComponentRef(value)}`;
       });
-      const url = httpsPrefix + bloggerDomain + "contact-form.do";
-      const xhr = new XMLHttpRequestObj();
-      xhr[openFn]("post", url);
-      xhr[setRequestHeaderFn](contentTypeHeader, "application/x-www-form-urlencoded");
-      xhr[sendFn](dataStr);
+      const xhr = new XMLHttpRequestRef();
+      xhr[OPEN]('post', `${HTTPS}${BLOGGER_URL}contact-form.do`);
+      xhr[SET_REQUEST_HEADER](CONTENT_TYPE, 'application/x-www-form-urlencoded');
+      xhr[SEND](dataString);
       xhr.onreadystatechange = function() {
-        if (this.readyState === 4 && this.status === 200 && this.response !== "") {
-          removeClass(form, "loading");
-          const response = parseJSON(this[responseTextProp][trimFn]());
-          if (response && response.details.emailSentStatus === "true") {
-            form.reset();
-            removeClass(form, "send-error");
-            addClass(form, "send-success");
+        if (this.readyState === 4 && this.status === 200 && this.response) {
+          removeClass(formElement, 'loading');
+          const response = parseJSON(this[RESPONSE_TEXT][TRIM]());
+          if (response && response.details.emailSentStatus === 'true') {
+            formElement.reset();
+            removeClass(formElement, 'send-error');
+            addClass(formElement, 'send-success');
           } else {
-            removeClass(form, "send-success");
-            addClass(form, "send-error");
+            removeClass(formElement, 'send-success');
+            addClass(formElement, 'send-error');
           }
         }
       };
     });
-  }
+  });
 
-  // メイン初期化処理
-  function initialize(shouldRemoveListeners) {
-    if (shouldRemoveListeners) {
-      documentObj[removeFn + eventListenerFn](mousemoveEvent, initialize);
-      documentObj[removeFn + eventListenerFn](touchstartEvent, initialize);
-      documentObj[removeFn + eventListenerFn](scrollEvent, initialize);
+  // 初期化処理
+  function initializePage(triggeredByEvent) {
+    if (triggeredByEvent) {
+      documentRef[`${REMOVE}${EVENT_LISTENER}`](MOUSEMOVE, initializePage);
+      documentRef[`${REMOVE}${EVENT_LISTENER}`](TOUCHSTART, initializePage);
+      documentRef[`${REMOVE}${EVENT_LISTENER}`](SCROLL, initializePage);
     }
 
-    Defer.domz(".custom-posts", 1, null, jo[loadCustomPostsStr], null, { rootMargin: "300%" });
+    // カスタム投稿の遅延ロード
+    Defer.domz('.custom-posts', 1, null, jo[LOAD_CUSTOM_POSTS], null, { rootMargin: '300%' });
 
-    if (noScriptEntries[lengthProp] > 0) {
-      for (let i = 0; i < noScriptEntries[lengthProp]; ++i) {
-        const noscript = noScriptEntries[i];
-        const content = noscript[innerHTMLProp];
-        const textarea = documentObj[createElementFn]("textarea");
-        textarea[innerHTMLProp] = content[replaceFn](/src="(.*?)"/g, 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" loading="lazy" lazyload="true" data-src="$1"');
-        const div = documentObj[createElementFn]("div");
-        div[innerHTMLProp] = textarea.value;
-        if (i === 0) addClass(div, "feature-image full-width");
-        noscript[parentElementProp][insertBeforeFn](div, noscript);
-      }
-      Defer.domz('[lazyload="true"]', 1, "loaded", lazyLoadImage, null, { rootMargin: "300%" });
+    // noscriptコンテンツの処理
+    if (noscriptEntries[LENGTH] > 0) {
+      noscriptEntries.forEach((noscript, index) => {
+        const content = noscript[INNER_HTML];
+        const textarea = documentRef[CREATE_ELEMENT]('textarea');
+        textarea[INNER_HTML] = content[REPLACE](/src="(.*?)"/g, 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" loading="lazy" lazyload="true" data-src="$1"');
+        const div = documentRef[CREATE_ELEMENT]('div');
+        div[INNER_HTML] = textarea.value;
+        if (index === 0) addClass(div, 'feature-image full-width');
+        noscript[PARENT_ELEMENT][`${INSERT}${BEFORE}`](div, noscript);
+      });
+      Defer.domz('[lazyload="true"]', 1, 'loaded', processLazyImage, null, { rootMargin: '300%' });
     }
 
-    if (postBodyElement !== null) {
-      if (relatedPostsElement !== null && relatedInlineElement !== null) {
-        relatedInlineElement[innerHTMLProp] = relatedPostsElement[innerHTMLProp];
-        relatedInlineElement["set" + attributeFn]("data-no-item", relatedPostsElement["get" + attributeFn]("data-no-item"));
+    // 投稿本文の処理
+    if (postBody) {
+      // 関連記事のコピー
+      if (relatedPosts && relatedInline) {
+        relatedInline[INNER_HTML] = relatedPosts[INNER_HTML];
+        relatedInline[`set${ATTRIBUTE}`]('data-no-item', relatedPosts[`get${ATTRIBUTE}`]('data-no-item'));
       }
 
-      if (adsPostElement !== null) {
-        const delimiters = postBodyElement[querySelectorAllFn](innerAdsDelimiter + "," + ignoreAdsDelimiter);
-        const adNodes = adsPostElement.childNodes;
-        const adCount = adNodes[lengthProp];
+      // 広告の配置
+      if (adsPost) {
+        const delimiters = postBody[QUERY_SELECTOR_ALL](`${innerAdsDelimiter},${ignoreAdsDelimiter}`);
+        const adNodes = adsPost.childNodes;
+        const adCount = adNodes[LENGTH];
         const validDelimiters = [];
-        for (let i = 0; i < delimiters[lengthProp]; i++) {
-          const closestIgnore = delimiters[i].closest(ignoreAdsDelimiter);
-          if (!closestIgnore || delimiters[i] === closestIgnore) {
-            validDelimiters[pushFn](delimiters[i]);
+        delimiters.forEach(delimiter => {
+          const closestIgnore = delimiter.closest(ignoreAdsDelimiter);
+          if (!closestIgnore || delimiter === closestIgnore) {
+            validDelimiters[PUSH](delimiter);
           }
-        }
+        });
         for (let i = 0; i < adCount; i++) {
-          const index = i === adCount - 1 ? validDelimiters[lengthProp] - 1 : MathObj.round(validDelimiters[lengthProp] / adCount) * i;
-          const target = i === 0 ? validDelimiters[0] : validDelimiters[index][nextSiblingProp];
-          if (target) {
-            target[parentElementProp][insertBeforeFn](adNodes[0], target);
-          } else if (i === adCount - 1) {
-            postBodyElement[appendChildFn](adNodes[0]);
+          if (i === adCount - 1) {
+            postBody[APPEND_CHILD](adNodes[0]);
+          } else {
+            const delimiterIndex = i === adCount - 1 ? validDelimiters[LENGTH] - 1 : MathRef.round(validDelimiters[LENGTH] / adCount) * i;
+            const targetDelimiter = i === 0 ? validDelimiters[0] : validDelimiters[delimiterIndex][NEXT_SIBLING];
+            if (targetDelimiter) {
+              targetDelimiter[PARENT_ELEMENT][`${INSERT}${BEFORE}`](adNodes[0], targetDelimiter);
+            }
           }
         }
       }
 
-      if (autoTOC && autoTOC !== falseStr && tocTemplate && postBodyElement[firstChildProp] !== null) {
-        const headings = postBodyElement[querySelectorAllFn]("h2,h3,h4,h5,h6");
-        const tocContainer = documentObj[createElementFn]("div");
+      // 目次の生成
+      if (autoTOC && autoTOC !== FALSE && tocTempEnabled && postBody[FIRST_CHILD]) {
+        const headings = postBody[QUERY_SELECTOR_ALL]('h2,h3,h4,h5,h6');
+        const tocContainer = documentRef[CREATE_ELEMENT]('div');
         const tocItems = [];
-        for (let i = 0; i < headings[lengthProp]; i++) {
-          const heading = headings[i];
-          const text = heading[textContentProp];
-          const level = parseIntFn(heading[tagNameProp][replaceFn]("H", ""));
+        headings.forEach(heading => {
+          const text = heading[TEXT_CONTENT];
+          const level = parseIntRef(heading[TAG_NAME][REPLACE]('H', ''));
           heading.id = text;
-          tocItems[pushFn]({ level, title: text, id: text });
-        }
-        let target = postBodyElement[querySelectorFn](positionTOC) || postBodyElement[firstChildProp];
-        if (target[nextSiblingProp]) target = target[nextSiblingProp];
-        if (tocItems[lengthProp] > 0) {
-          tocContainer[innerHTMLProp] = tocTemplate(tocItems)[trimFn]();
-          target[parentElementProp][insertBeforeFn](tocContainer, target);
+          tocItems[PUSH]({ level, title: text, id: text });
+        });
+        let targetElement = postBody[QUERY_SELECTOR](positionTOC) || postBody[FIRST_CHILD];
+        if (targetElement[NEXT_SIBLING]) targetElement = targetElement[NEXT_SIBLING];
+        if (tocItems[LENGTH] > 0) {
+          tocContainer[INNER_HTML] = tocTemp(tocItems)[TRIM]();
+          targetElement[PARENT_ELEMENT][`${INSERT}${BEFORE}`](tocContainer, targetElement);
         }
       }
     }
 
+    // 外部スクリプトのロード
     if (!isPreview) {
       if (adsenseClientId) {
-        if (typeof adsbygoogle === undefinedStr) adsbygoogle = [];
-        Defer.js(httpsPrefix + "pagead2.googlesyndication.com/pagead/js/" + adsbygoogleStr + ".js?client=" + adsenseClientId, adsbygoogleStr, 100);
+        if (typeof windowRef[ADSENSE] === UNDEFINED) windowRef[ADSENSE] = [];
+        Defer.js(`${HTTPS}pagead2.googlesyndication.com/pagead/js/${ADSENSE}.js?client=${adsenseClientId}`, ADSENSE, 100);
       }
-      if (analyticId && analyticId !== falseStr) {
-        Defer.js(httpsPrefix + "www.googletagmanager.com/gtag/js?id=" + analyticId, "analytics", 100, function() {
-          function gtag() { dataLayer[pushFn](arguments); }
-          gtag("js", new DateObj());
-          gtag("config", analyticId);
+      if (analyticId && analyticId !== FALSE) {
+        Defer.js(`${HTTPS}www.googletagmanager.com/gtag/js?id=${analyticId}`, 'analytics', 100, () => {
+          windowRef.dataLayer = windowRef.dataLayer || [];
+          function gtag() { windowRef.dataLayer[PUSH](arguments); }
+          gtag('js', new DateRef());
+          gtag('config', analyticId);
         });
       }
-      if (jtCallback) jtCallback();
-      if (blogId) Defer.css(httpsPrefix + bloggerDomain + "dyn-css/authorization.css?targetBlogID=" + blogId);
+      if (jtCallbackEnabled) jtCallback();
+    }
+    if (blogId) {
+      Defer.css(`${HTTPS}${BLOGGER_URL}dyn-css/authorization.css?targetBlogID=${blogId}`);
     }
   }
 
-  // ページタイトルの設定
+  // ページタイトルの更新
   if (currentPage) {
-    documentObj[titleProp] = documentObj[titleProp][replaceFn](titleSeparator, titleSeparator + pageTitle + " " + currentPage + titleSeparator);
+    documentRef[TITLE] = documentRef[TITLE][REPLACE](titleSeparator, `${titleSeparator}${pageTitle} ${currentPage}${titleSeparator}`);
   }
 
-  // 遅延読み込みの初期化
-  Defer.domz(".lazyload", 1, "loaded", lazyLoadImage, null, { rootMargin: "300%" });
-  Defer.domz("#post-pager", 1, null, addPageTitles, null, { rootMargin: "300%" });
-  Defer.domz("#pagination", 1, null, setupPagination, null, { rootMargin: "300%" });
+  // 遅延ロードの初期化
+  Defer.domz('.lazyload', 1, 'loaded', processLazyImage, null, { rootMargin: '300%' });
+  Defer.domz('#post-pager', 1, null, initializePager, null, { rootMargin: '300%' });
+  Defer.domz('#pagination', 1, null, initializePagination, null, { rootMargin: '300%' });
 
-  if (isLazyLoading) {
-    initialize(false);
+  // 初期化のトリガー設定
+  if (isLazyEnabled) {
+    initializePage(false);
   } else {
-    if (localStorageObj !== null) localStorageObj["set" + itemFn]("lazy", 1);
-    documentObj["add" + eventListenerFn](mousemoveEvent, initialize);
-    documentObj["add" + eventListenerFn](touchstartEvent, initialize);
-    documentObj["add" + eventListenerFn](scrollEvent, initialize);
+    if (localStorageRef) localStorageRef[`set${ITEM}`]('lazy', 1);
+    documentRef[`add${EVENT_LISTENER}`](MOUSEMOVE, initializePage);
+    documentRef[`add${EVENT_LISTENER}`](TOUCHSTART, initializePage);
+    documentRef[`add${EVENT_LISTENER}`](SCROLL, initializePage);
   }
 })();
