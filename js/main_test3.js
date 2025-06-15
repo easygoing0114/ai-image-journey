@@ -388,7 +388,7 @@ Defer(function() {
     
     if (imageEagerLoad.length === 0) return;
 
-    // 残りの要素を0.2秒間隔で処理
+    // 3番目以降の画像の遅延読み込みを解除
     imageEagerLoad.slice(2).forEach((img, index) => {
         Defer(function() {
             img.removeAttribute('loading');
