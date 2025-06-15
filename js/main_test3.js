@@ -569,7 +569,7 @@ if (document.querySelector('.table-responsive') !== null) {
     }
 
   Defer(function() {
-    debounce(adjustTableScale, 100);
+    debounce(adjustTableScale, 100)();
   }, 100); 
 }
   
