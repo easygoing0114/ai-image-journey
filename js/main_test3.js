@@ -612,8 +612,12 @@ if (document.querySelector('.table-responsive') !== null) {
             
             // スケール調整の判定と適用
             if (originalTableWidth > tableResponsiveWidth) {
-                var scale = tableResponsiveWidth / originalTableWidth;
-                table.style.width = tableResponsiveWidth + 'px';
+                // ボーダー分の余裕を考慮（box-sizing: border-box対応）
+                var borderBuffer = 2; // ボーダー分の余裕（px）
+                var availableWidth = tableResponsiveWidth - borderBuffer;
+                var scale = availableWidth / originalTableWidth;
+                
+                table.style.width = availableWidth + 'px';
                 table.style.height = (originalTableHeight * scale) + 'px';
                 table.querySelectorAll('th, td').forEach(function(cell) {
                     cell.style.fontSize = (originalFontSize * scale) + 'px';
