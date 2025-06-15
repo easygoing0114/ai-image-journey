@@ -880,12 +880,6 @@ const jo = {};
         null === t ? t = tZ[D] : t[to] && (t = t[to]), 0 < y[P] && (p[h] = tE(y)[W](), t && t[U][q + H](p, t));
       }
     }
-    tj || (tS && (typeof adsbygoogle === tf && (adsbygoogle = []), Defer.js(tv + "pagead2.googlesyndication.com/pagead/js/" + ty + ".js?client=" + tS, ty, 100)), t9 && t9 != ts && Defer.js(tv + "www.googletagmanager.com/gtag/js?id=" + t9, "analytics", 100, function() {
-      function t() {
-        dataLayer[z](arguments);
-      }
-      t("js", new Date), t("config", t9);
-    }), tM && tM()), tx && Defer.css(tv + t_ + "dyn-css/authorization.css?targetBlogID=" + tx);
   }
 
   ea && (o[Z] = o[Z][j](tI, tI + t0 + " " + ea + tI)), Defer.domz(".lazyload", 1, "loaded", er, null, {
