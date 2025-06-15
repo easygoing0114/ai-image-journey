@@ -613,7 +613,7 @@ if (document.querySelector('.table-responsive') !== null) {
             // スケール調整の判定と適用
             if (originalTableWidth > tableResponsiveWidth) {
                 // ボーダー分の余裕を考慮（box-sizing: border-box対応）
-                var borderBuffer = 2; // ボーダー分の余裕（px）
+                var borderBuffer = 4; // ボーダー分の余裕（px）
                 var availableWidth = tableResponsiveWidth - borderBuffer;
                 var scale = availableWidth / originalTableWidth;
                 
