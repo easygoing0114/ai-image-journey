@@ -834,15 +834,7 @@ const jo = {};
   function eg(t) {
     if (t && (o[x + k](td, eg), o[x + k](tc, eg), o[x + k](ti, eg)), Defer.domz(".custom-posts", 1, null, jo[th], null, {
         rootMargin: "300%"
-      }), 0 < t5[P]) {
-      for (var e = 0; e < t5[P]; ++e) {
-        var a = t5[e], n = a[h], r = o[A]("textarea");
-        r[h] = n[j](/src="(.*?)"/g, 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" loading="lazy" lazyload="true" data-src="$1"'), (n = o[A]("div"))[h] = r.value, 0 == e && t2(n, "feature-image full-width"), a[U][q + H](n, a);
-      }
-      Defer.domz('[lazyload="true"]', 1, "loaded", er, null, {
-        rootMargin: "300%"
-      });
-    }
+      }), 0 < t5[P]) 
     if (null !== tZ) {
       if (null !== et && null !== ee && (ee[h] = et[h], ee["set" + S]("data-no-item", et["get" + S]("data-no-item"))), null !== tK) {
         for (var s = tZ[_](tC + "," + t8), i = tK.childNodes, c = i[P], u = [], e = 0; e < s[P]; e++) {
