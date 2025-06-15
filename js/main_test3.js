@@ -537,9 +537,7 @@ if (document.querySelector('.chartjs') !== null) {
 
 /* table の font-size と padding を画面の最大幅に合わせて変更 */
 if (document.querySelector('.table-responsive') !== null) {
-  
-  Defer(function() {
-  
+   
     function adjustTableScale() {
         var tables = document.querySelectorAll('.table-responsive table');
         tables.forEach(function(table) {
@@ -570,12 +568,8 @@ if (document.querySelector('.table-responsive') !== null) {
         });
     }
 
-    const debouncedAdjustTableScale = debounce(adjustTableScale, 100);
-
-    window.addEventListener('resize', debouncedAdjustTableScale);
-    window.addEventListener('load', adjustTableScale);
-    adjustTableScale();
-      
+  Defer(function() {
+    debounce(adjustTableScale, 100);
   }, 100); 
 }
   
