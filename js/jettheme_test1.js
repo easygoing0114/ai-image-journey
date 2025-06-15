@@ -819,10 +819,6 @@ const jo = {};
     }, 100), ec(tN, function() {
       tG[C] = !1, ed(), tq(tN, "show");
     })) : tq(tN, "show");
-  }), tW && tW["add" + k](tl, function(t) {
-    t[J](), function t(e, a) {
-      (tD(e, a) ? t3 : t2)(e, a);
-    }(tY, "dark-mode"), null !== g && g["set" + tn]("theme", tD(tY, "dark-mode") ? "dark" : "light");
   }), n["add" + k](ti, function() {
     (1 <= this[R] && null !== t4 ? t2 : t3)(t4, "shadow-sm"), (1e3 <= this[R] && null !== tT ? t3 : t2)(tT, "d-none");
   }, !1), tU && tU["add" + k](tr, function(t) {
