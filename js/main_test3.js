@@ -510,7 +510,7 @@ if (document.querySelector('.chartjs') !== null) {
       });
   }
 
-  function executeChart() {
+  function executeChartjs() {
     getCurrentThemeColor();
     updateAllChartColors();
     Chart.register(ChartDataLabels);
@@ -534,7 +534,9 @@ if (document.querySelector('.chartjs') !== null) {
   }
 
   Defer(function() {
-      executeChart()
+      const debouncedChartjs = debounce(executeChartjs, 100);
+      window.addEventListener('resize', debouncedChartjs);
+      executeChartjs(); // 初回実行
   }, 2000);
 
 }
