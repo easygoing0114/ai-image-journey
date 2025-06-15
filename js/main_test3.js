@@ -470,75 +470,95 @@ if (document.querySelector('.mermaid') !== null) {
 
 /* Chart.js */
 if (document.querySelector('.chartjs') !== null) {
-
-  function getCurrentThemeColor() {
-    return getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color').trim();
-  } 
-
-  function updateAllChartColors() {
-      const currentColor = getCurrentThemeColor();
-
-      Chart.defaults.color = currentColor;
-
-      Object.values(Chart.instances).forEach(function(chart) {
-          if (chart.options.scales) {
-              Object.keys(chart.options.scales).forEach(function(scaleKey) {
-                  // 軸のティックの色
-                  if (chart.options.scales[scaleKey].ticks) {
-                      chart.options.scales[scaleKey].ticks.color = currentColor;
-                  }
-                  // 軸ラベルの色
-                  if (chart.options.scales[scaleKey].title) {
-                      chart.options.scales[scaleKey].title.color = currentColor;
-                  }
-              });
-          }
-
-          if (chart.options.plugins && chart.options.plugins.legend && chart.options.plugins.legend.labels) {
-              chart.options.plugins.legend.labels.color = currentColor;
-          }
-
-          if (chart.options.plugins && chart.options.plugins.title) {
-              chart.options.plugins.title.color = currentColor;
-          }
-
-          if (chart.options.plugins && chart.options.plugins.datalabels) {
-              chart.options.plugins.datalabels.color = currentColor;
-          }
-
-          chart.update('none');
-      });
-  }
-
-  function executeChartjs() {
-    getCurrentThemeColor();
-    updateAllChartColors();
-    Chart.register(ChartDataLabels);
-    Chart.defaults.layout.padding = 24;
+    let chartsInitialized = false;
     
-    // Get all canvas elements with class 'chartjs'
-    const canvases = document.querySelectorAll('.chartjs');
-    canvases.forEach((canvas, index) => {
-      // Call createChartN function where N is index + 1
-      const funcName = `createChart${index + 1}`;
-      if (typeof window[funcName] === 'function') {
-        window[funcName]();
-      }
-    });
-
-    document.querySelectorAll('.chartjs').forEach(canvas => {
-      canvas.style.width = 'auto';
-      canvas.style.height = 'auto';
-    });
-
-  }
-
-  Defer(function() {
-      const debouncedChartjs = debounce(executeChartjs, 100);
-      window.addEventListener('resize', debouncedChartjs);
-      executeChartjs(); // 初回実行
-  }, 2000);
-
+    function getCurrentThemeColor() {
+        return getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color').trim();
+    } 
+    
+    function updateAllChartColors() {
+        const currentColor = getCurrentThemeColor();
+        Chart.defaults.color = currentColor;
+        Object.values(Chart.instances).forEach(function(chart) {
+            if (chart.options.scales) {
+                Object.keys(chart.options.scales).forEach(function(scaleKey) {
+                    // 軸のティックの色
+                    if (chart.options.scales[scaleKey].ticks) {
+                        chart.options.scales[scaleKey].ticks.color = currentColor;
+                    }
+                    // 軸ラベルの色
+                    if (chart.options.scales[scaleKey].title) {
+                        chart.options.scales[scaleKey].title.color = currentColor;
+                    }
+                });
+            }
+            if (chart.options.plugins && chart.options.plugins.legend && chart.options.plugins.legend.labels) {
+                chart.options.plugins.legend.labels.color = currentColor;
+            }
+            if (chart.options.plugins && chart.options.plugins.title) {
+                chart.options.plugins.title.color = currentColor;
+            }
+            if (chart.options.plugins && chart.options.plugins.datalabels) {
+                chart.options.plugins.datalabels.color = currentColor;
+            }
+            chart.update('none');
+        });
+    }
+    
+    function createAllCharts() {
+        // Get all canvas elements with class 'chartjs'
+        const canvases = document.querySelectorAll('.chartjs');
+        canvases.forEach((canvas, index) => {
+            // Call createChartN function where N is index + 1
+            const funcName = `createChart${index + 1}`;
+            if (typeof window[funcName] === 'function') {
+                window[funcName]();
+            }
+        });
+    }
+    
+    function initializeCharts() {
+        // 初回のみChart.jsの設定を行う
+        if (!chartsInitialized) {
+            Chart.register(ChartDataLabels);
+            Chart.defaults.layout.padding = 24;
+            chartsInitialized = true;
+        }
+        
+        // チャート作成
+        createAllCharts();
+        
+        // テーマカラーの適用
+        updateAllChartColors();
+        
+        // Canvas要素のサイズ設定
+        document.querySelectorAll('.chartjs').forEach(canvas => {
+            canvas.style.width = 'auto';
+            canvas.style.height = 'auto';
+        });
+    }
+    
+    function handleResize() {
+        // リサイズ時はチャートの色を更新し、Chart.jsの内蔵リサイズ機能を使用
+        updateAllChartColors();
+        
+        // Chart.jsの内蔵リサイズ機能を使用（より効率的）
+        Object.values(Chart.instances).forEach(chart => {
+            chart.resize();
+        });
+        
+        // Canvas要素のサイズ設定を再適用
+        document.querySelectorAll('.chartjs').forEach(canvas => {
+            canvas.style.width = 'auto';
+            canvas.style.height = 'auto';
+        });
+    }
+    
+    Defer(function() {
+        const debouncedResize = debounce(handleResize, 100);
+        window.addEventListener('resize', debouncedResize);
+        initializeCharts(); // 初回実行
+    }, 2000);
 }
 
 /* table の font-size と padding を画面の最大幅に合わせて変更 */
