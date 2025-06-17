@@ -18,6 +18,8 @@ function sidebar_temp(e) {
   }).join("") + "</div>";
 }
 
+var ImgSize = 400;
+
 const jo = {};
 
 (function() {
