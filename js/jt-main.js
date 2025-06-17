@@ -18,211 +18,534 @@ function sidebar_temp(e) {
   }).join("") + "</div>";
 }
 
-/*js@0.5.5/main.js modified by easygoing*/
 const jo = {};
-!function t() {
-  var e, a, n = window, o = document, r = setTimeout, s = clearTimeout, i = Date, l = Math, d = parseInt, c = (btoa, encodeURIComponent), u = RegExp, f = XMLHttpRequest, g = (alert, localStorage), m = JSON, p = Image, h = "innerHTML", $ = "tagName", y = "getElementById", v = "querySelector", _ = "querySelectorAll", A = "createElement", b = "className", j = "replace", w = "lastIndexOf", k = "EventListener", x = "remove", P = "length", I = "slice", z = "push", S = "Attribute", C = "checked", B = "offsetWidth", E = "toFixed", R = "pageYOffset", M = "appendChild", D = "firstChild", q = "insert", H = "Before", L = "match", O = "href", G = "target", N = "location", T = "split", W = "trim", Y = "open", F = "send", Q = "random", U = "parentElement", J = "preventDefault", V = "substr", X = "setRequestHeader", K = "responseText", Z = "title", tt = "ceil", te = "floor", ta = "textContent", tn = "Item", to = "nextSibling", tr = "load", ts = "false", ti = "scroll", tl = "click", td = "mousemove", tc = "touchstart", tu = "change", tf = "undefined", tg = "function", tm = "Content-Type", tp = "pagination", th = "loadCustomPosts", t$ = "custom_posts", ty = "adsbygoogle", tv = "https://", t_ = "www.blogger.com/", tA = "-rw", tb = "devicePixelRatio", tj = typeof isPreview !== tf && isPreview, tw = tv + (typeof siteUrl !== tf ? siteUrl[V](0, siteUrl[P] - 1)[j](/(^\w+:|^)\/\//, "") : ""), tk = typeof currentUrl !== tf ? currentUrl : "", tx = typeof blogId !== tf ? blogId : "", tP = typeof blogTitle !== tf ? blogTitle : "", tI = typeof titleSeparator !== tf ? titleSeparator : " - ", t0 = typeof pageTitle !== tf ? pageTitle : "Page", t9 = typeof analyticId !== tf && analyticId, tz = typeof caPubAdsense !== tf && caPubAdsense[j](/^\D+/g, ""), tS = !!tz && "ca-pub-" + tz, tC = typeof innerAdsDelimiter !== tf ? innerAdsDelimiter : "p,br,div", t8 = typeof ignoreAdsDelimiter !== tf ? ignoreAdsDelimiter : "pre,ul,ol,table,blockquote", tB = typeof autoTOC !== tf && autoTOC, tE = typeof toc_temp === tg && toc_temp, tR = typeof positionTOC !== tf && positionTOC, tM = typeof jtCallback === tg && jtCallback;
 
-  function tD(t, e) {
-    return -1 < (" " + t[b] + " ").indexOf(" " + e + " ");
+(function() {
+  var windowObj = window,
+    documentObj = document,
+    setTimeoutFn = setTimeout,
+    clearTimeoutFn = clearTimeout,
+    DateObj = Date,
+    MathObj = Math,
+    parseIntFn = parseInt,
+    encodeURIComponentFn = encodeURIComponent,
+    RegExpObj = RegExp,
+    XMLHttpRequestObj = XMLHttpRequest,
+    localStorageObj = localStorage,
+    JSONObj = JSON,
+    ImageObj = Image,
+    innerHTMLProp = "innerHTML",
+    tagNameProp = "tagName",
+    getElementByIdFn = "getElementById",
+    querySelectorFn = "querySelector",
+    querySelectorAllFn = "querySelectorAll",
+    createElementFn = "createElement",
+    classNameProp = "className",
+    replaceFn = "replace",
+    lastIndexOfFn = "lastIndexOf",
+    EventListenerFn = "EventListener",
+    removeFn = "remove",
+    lengthProp = "length",
+    sliceFn = "slice",
+    pushFn = "push",
+    AttributeFn = "Attribute",
+    checkedProp = "checked",
+    offsetWidthProp = "offsetWidth",
+    toFixedFn = "toFixed",
+    pageYOffsetProp = "pageYOffset",
+    appendChildFn = "appendChild",
+    insertBeforeFn = "insertBefore",
+    matchFn = "match",
+    hrefProp = "href",
+    targetProp = "target",
+    locationProp = "location",
+    splitFn = "split",
+    trimFn = "trim",
+    openFn = "open",
+    sendFn = "send",
+    randomFn = "random",
+    parentElementProp = "parentElement",
+    preventDefaultFn = "preventDefault",
+    substrFn = "substr",
+    setRequestHeaderFn = "setRequestHeader",
+    responseTextProp = "responseText",
+    titleProp = "title",
+    ceilFn = "ceil",
+    floorFn = "floor",
+    ItemFn = "Item",
+    nextSiblingProp = "nextSibling",
+    loadEvent = "load",
+    falseStr = "false",
+    scrollEvent = "scroll",
+    clickEvent = "click",
+    mousemoveEvent = "mousemove",
+    touchstartEvent = "touchstart",
+    changeEvent = "change",
+    undefinedStr = "undefined",
+    functionStr = "function",
+    contentTypeHeader = "Content-Type",
+    paginationStr = "pagination",
+    loadCustomPostsStr = "loadCustomPosts",
+    customPostsStr = "custom_posts",
+    rwStr = "-rw",
+    devicePixelRatioProp = "devicePixelRatio",
+    isPreview = typeof isPreview !== undefinedStr && isPreview,
+    siteUrl = typeof siteUrl !== undefinedStr ? siteUrl[substrFn](0, siteUrl[lengthProp] - 1)[replaceFn](/(^\w+:|^)\/\//, "") : "",
+    currentUrl = typeof currentUrl !== undefinedStr ? currentUrl : "",
+    blogId = typeof blogId !== undefinedStr ? blogId : "",
+    blogTitle = typeof blogTitle !== undefinedStr ? blogTitle : "",
+    titleSeparator = typeof titleSeparator !== undefinedStr ? titleSeparator : " - ",
+    pageTitle = typeof pageTitle !== undefinedStr ? pageTitle : "Page",
+    analyticId = typeof analyticId !== undefinedStr && analyticId,
+    caPubAdsense = typeof caPubAdsense !== undefinedStr && caPubAdsense[replaceFn](/^\D+/g, ""),
+    innerAdsDelimiter = typeof innerAdsDelimiter !== undefinedStr ? innerAdsDelimiter : "p,br,div",
+    ignoreAdsDelimiter = typeof ignoreAdsDelimiter !== undefinedStr ? ignoreAdsDelimiter : "pre,ul,ol,table,blockquote",
+    autoTOC = typeof autoTOC !== undefinedStr && autoTOC,
+    positionTOC = typeof positionTOC !== undefinedStr && positionTOC,
+    jtCallback = typeof jtCallback === functionStr && jtCallback;
+
+  function hasClass(element, className) {
+    return -1 < (" " + element[classNameProp] + " ").indexOf(" " + className + " ");
   }
 
-  function t2(t, e) {
-    var a;
-    tD(t, e) || ("" != (a = t[b]) && (e = " " + e), t[b] = a + e);
+  function addClass(element, className) {
+    if (!hasClass(element, className)) {
+      var currentClass = element[classNameProp];
+      if (currentClass !== "") className = " " + className;
+      element[classNameProp] = currentClass + className;
+    }
   }
 
-  function t3(t, e) {
-    t[b] = t[b][j](new u("(?:^|\\s)" + e + "(?!\\S)"), "")[W]();
+  function removeClass(element, className) {
+    element[classNameProp] = element[classNameProp][replaceFn](new RegExpObj("(?:^|\\s)" + className + "(?!\\S)"), "")[trimFn]();
   }
 
-  function tq(t, e, a) {
-    t3(t, e), r(function() {
-      t3(t, "d-block");
-    }, a || 300);
+  function toggleClassWithTimeout(element, className, timeout) {
+    removeClass(element, className);
+    setTimeoutFn(function() {
+      removeClass(element, "d-block");
+    }, timeout || 300);
   }
 
-  function tH(t, e) {
-    for (var a = 0; a < t[P]; a++)
-      if (t[a] === e) return !0;
-    return !1;
+  function arrayIncludes(array, item) {
+    for (var i = 0; i < array[lengthProp]; i++) {
+      if (array[i] === item) return true;
+    }
+    return false;
   }
 
-  function tL(t, e) {
-    return !!(t = new u("[?&]" + t + "=([^&#=]*)")).test(e) && e[L](t)[1];
+  function getQueryParam(param, url) {
+    var regex = new RegExpObj("[?&]" + param + "=([^&#=]*)");
+    return regex.test(url) ? url[matchFn](regex)[1] : false;
   }
 
-  function tO(t) {
+  function parseJSON(jsonStr) {
     try {
-      return m.parse(t);
+      return JSONObj.parse(jsonStr);
     } catch (e) {
-      return !1;
+      return false;
     }
   }
 
-  e = function(t) {
-    t || (tA = "");
-  }, (a = new p).onload = a.onerror = function() {
-    e(2 == a.height);
-  }, a.src = "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA";
+  function checkWebpSupport(callback) {
+    var img = new ImageObj();
+    img.onload = img.onerror = function() {
+      callback(2 == img.height);
+    };
+    img.src = "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA";
+  }
 
-  var t4 = o[y]("header"), t1 = o[y]("search-toggle"), t7 = o[y]("search-header"), tG = o[y]("navbar-toggle"), tN = o[y]("navbar"), tT = o[y]("back-to-top"), tW = o[y]("dark-toggler"), tY = o[v]("html"), tF = o[y]("comment-button"), tQ = o[y]("threaded-comment-form"), tU = o[y]("comment-editor"), tJ = o[y]("comment-editor-src"), tV = o[y]("comment-script"), tX = o[_](".comment-reply"), t5 = o[_](".entry-text noscript"), t6 = o[_](".contact-form-blogger"), tK = o[y]("ads-post"), tZ = o[y]("post-body"), et = o[v](".related-posts"), ee = o[v](".related-inline"), ea = tL("page", tk), en = null !== g && 1 == g["get" + tn]("lazy");
+  checkWebpSupport(function(supported) {
+    if (!supported) rwStr = "";
+  });
 
-  var eo = 0;
-  n["add" + k](ti, function() {
-    var t, e = this[R];
-    e < eo && tD(t4, "header-hidden") ? t = r(function() {
-      t3(t4, "header-hidden");
-    }, 500) : eo < e && tD(t4, "header-animate") && (s(t), t2(t4, "header-hidden")), eo = e;
-  }, !1);
+  var header = documentObj[getElementByIdFn]("header"),
+    searchToggle = documentObj[getElementByIdFn]("search-toggle"),
+    searchHeader = documentObj[getElementByIdFn]("search-header"),
+    navbarToggle = documentObj[getElementByIdFn]("navbar-toggle"),
+    navbar = documentObj[getElementByIdFn]("navbar"),
+    backToTop = documentObj[getElementByIdFn]("back-to-top"),
+    adsPost = documentObj[getElementByIdFn]("ads-post"),
+    postBody = documentObj[getElementByIdFn]("post-body"),
+    relatedPosts = documentObj[querySelectorFn](".related-posts"),
+    relatedInline = documentObj[querySelectorFn](".related-inline"),
+    currentPage = getQueryParam("page", currentUrl),
+    isLazy = localStorageObj !== null && localStorageObj["get" + ItemFn]("lazy") == 1;
 
-  var er = function(t) {
-    var e, a, o, r, s, i, l, d;
-    "IMG" == t[$] && ((d = t["get" + S]("data-src"))[L](/(bp.blogspot|googleusercontent)/) ? (l = en ? n[tb] && 1 < n[tb] ? n[tb] : 1.5 : 1, e = (t[B] * l)[E](0), a = (t[U][B] * l)[E](0), o = (t[U][U][B] * l)[E](0), r = (t.offsetHeight * l)[E](0), s = d[T]("/"), i = d[w]("=") + 1, l = "", l = tD(t[U], "ratio") ? "w" + ImgSize + "-e90" + tA : "w" + ImgSize + "-e90" + tA, d = d[L](/(img\/a|proxy\/)/) ? i ? d[I](0, i) + l : d + "=" + l : d[j](s[s[P] - 2], l), t["set" + S]("data-src", d)) : d[L](/(img.youtube|i.ytimg)/) && (d = d[V](0, d[w]("/")) + "/mqdefault.jpg", t["set" + S]("data-src", d)));
-  };
-
-  var es = function(t) {
-    var e, a, r, s, i, u, f, g;
-    function m(t, i, l) {
-      var d = o[A]("li"), c = o[A]("span");
-      return t2(c, "btn  rounded-pill jt-icon-center"), c[h] = l || t, c["set" + S]("data-page", t), t == i ? t2(c, "jt-btn-primary") : (t2(c, "jt-btn-light hover-btn-primary"), c["add" + k](tl, function(t) {
-        var o;
-        t[J](), 1 == (g = c["get" + S]("data-page")) ? (o = a ? tw + "/search" + s + "?max-results=" + e + "&page=" + g : tw, n[N][O] = o) : (o = (g - 1) * e, Defer.js(tw + "/feeds/posts/summary/" + r + "?start-index=" + o + "&alt=json&callback=jo." + tp + "_date&max-results=1"));
-      })), d[M](c), d;
+  var lastScrollY = 0;
+  windowObj["add" + EventListenerFn](scrollEvent, function() {
+    var currentScrollY = this[pageYOffsetProp];
+    var timeout;
+    if (currentScrollY < lastScrollY && hasClass(header, "header-hidden")) {
+      timeout = setTimeoutFn(function() {
+        removeClass(header, "header-hidden");
+      }, 500);
+    } else if (lastScrollY < currentScrollY && hasClass(header, "header-animate")) {
+      clearTimeoutFn(timeout);
+      addClass(header, "header-hidden");
     }
-    t["get" + S]("data-pagination") != ts ? (e = t["get" + S]("data-posts"), r = (a = c(a = t["get" + S]("data-label"))) ? "-/" + a + "/" : "", s = a ? "/label/" + a : "", Defer.js(tw + "/feeds/posts/summary/" + r + "?alt=json&callback=jo." + tp + "_key&max-results=1"), i = tL("max-results", tk), u = tL("page", tk), f = i || e, g = u || 1, jo[tp + "_key"] = function(a) {
-      var n = a.feed, r = d(n.openSearch$totalResults.$t);
-      if (e < r) {
-        var a = function t(e, a, n, o) {
-          e = d(e), a = d(a), n = d(n), o = d(o);
-          var r, s, i = l[tt](e / n);
-          a < 1 ? a = 1 : i < a && (a = i), s = i <= o ? (r = 1, i) : (e = l[te](o / 2), n = l[tt](o / 2) - 1, a <= e ? (r = 1, o) : i <= a + n ? (r = i - o + 1, i) : (r = a - e, a + n));
-          for (var c = (a - 1) * n, o = l.min(c + n - 1, e - 1), u = [], f = 0; f < s + 1 - r; f++) u[z](f);
-          return u = u.map(function(t) {
-            return r + t;
-          }), {
-            totalItems: e,
-            currentPage: a,
-            pageSize: n,
-            totalPages: i,
-            startPage: r,
-            endPage: s,
-            startIndex: c,
-            endIndex: o,
-            pages: u
-          };
-        }(r, g, f, 5), s = o[A]("ul"), n = a.totalPages;
-        1 != a.currentPage && (r = m(a.currentPage - 1, "", '<svg aria-hidden="true" class="jt-icon"><use xlink:href="#i-arrow-l"/></svg>'), s[M](r)), tH(a.pages, 1) || (c = m(1, a.currentPage, "1 . ."), s[M](c));
-        for (var i = 0; i < a.pages[P]; i++) {
-          var c = m(a.pages[i], a.currentPage);
-          s[M](c);
-        }
-        tH(a.pages, n) || (c = m(n, a.currentPage, ". . " + n), s[M](c)), a.currentPage != n && (n = m(a.currentPage + 1, "", '<svg aria-hidden="true" class="jt-icon"><use xlink:href="#i-arrow-r"/></svg>'), s[M](n)), t[h] = "", t2(s, "pagination mb-0"), t[M](s), t3(t, "visually-hidden");
+    lastScrollY = currentScrollY;
+  }, false);
+
+  var processImage = function(element) {
+    if (element[tagNameProp] == "IMG") {
+      var dataSrc = element["get" + AttributeFn]("data-src");
+      if (dataSrc[matchFn](/(bp.blogspot|googleusercontent)/)) {
+        var pixelRatio = isLazy ? (windowObj[devicePixelRatioProp] && windowObj[devicePixelRatioProp] > 1 ? windowObj[devicePixelRatioProp] : 1.5) : 1;
+        var width = (element[offsetWidthProp] * pixelRatio)[toFixedFn](0);
+        var parentWidth = (element[parentElementProp][offsetWidthProp] * pixelRatio)[toFixedFn](0);
+        var grandparentWidth = (element[parentElementProp][parentElementProp][offsetWidthProp] * pixelRatio)[toFixedFn](0);
+        var height = (element.offsetHeight * pixelRatio)[toFixedFn](0);
+        var parts = dataSrc[splitFn]("/");
+        var sizeIndex = dataSrc[lastIndexOfFn]("=") + 1;
+        var sizeStr = "";
+        sizeStr = hasClass(element[parentElementProp], "ratio") ? "w" + ImgSize + "-e90" + rwStr : "w" + ImgSize + "-e90" + rwStr;
+        dataSrc = dataSrc[matchFn](/(img\/a|proxy\/)/) ? (sizeIndex ? dataSrc[sliceFn](0, sizeIndex) + sizeStr : dataSrc + "=" + sizeStr) : dataSrc[replaceFn](parts[parts[lengthProp] - 2], sizeStr);
+        element["set" + AttributeFn]("data-src", dataSrc);
+      } else if (dataSrc[matchFn](/(img.youtube|i.ytimg)/)) {
+        dataSrc = dataSrc[substrFn](0, dataSrc[lastIndexOfFn]("/")) + "/mqdefault.jpg";
+        element["set" + AttributeFn]("data-src", dataSrc);
       }
-    }, jo[tp + "_date"] = function(t) {
-      t = tw + "/search" + s + "?updated-max=" + (t = (t = (t = t.feed.entry[0]).published.$t[V](0, 19) + t.published.$t[V](23, 29))[j]("+", "%2B")) + "&max-results=" + f + "&page=" + g, n[N][O] = t;
-    }) : t3(t, "visually-hidden");
+    }
   };
 
-  function ei(t, e) {
-    var a = new f;
-    a[Y]("get", t), a[X](tm, "text/html"), a[F](null), a["add" + k](tr, function() {
-      var t = a[K][L](/<title>(.*?)<\/title>/);
-      e[h] = t[1][j](tI + tP, "");
-    });
-  }
+  var createPagination = function(element) {
+    if (element["get" + AttributeFn]("data-pagination") != falseStr) {
+      var postsPerPage = element["get" + AttributeFn]("data-posts");
+      var label = element["get" + AttributeFn]("data-label");
+      var encodedLabel = encodeURIComponentFn(label);
+      var labelPrefix = encodedLabel ? "-/" + encodedLabel + "/" : "";
+      var labelPath = encodedLabel ? "/label/" + encodedLabel : "";
+      Defer.js(siteUrl + "/feeds/posts/summary/" + labelPrefix + "?alt=json&callback=jo." + paginationStr + "_key&max-results=1");
+      var maxResults = getQueryParam("max-results", currentUrl);
+      var pageNum = getQueryParam("page", currentUrl);
+      var pageSize = maxResults || postsPerPage;
+      var currentPageNum = pageNum || 1;
 
-  jo[th] = function(t) {
-    var e = (l[Q]() + 1).toString(36)[V](7), a = t["get" + S]("data-label"), o = t["get" + S]("data-title"), r = t["get" + S]("data-items"), s = t["get" + S]("data-shuffle"), u = t["get" + S]("data-no-item"), f = t["get" + S]("data-func"), g = t["get" + S]("data-callback"), m = u ? d(r) + 1 : r, p = a || t[h], $ = p[T](","), a = "", a = 1 < $[P] ? p ? "-/" + c($[l[te](l[Q]() * $[P])]) + "/?" : "?" : p && p != ts ? "-/" + c(p[W]()) + "/?" : "?";
-    Defer.js(tw + "/feeds/posts/summary/" + a + "alt=json&callback=jo." + t$ + "_key_" + e + "&max-results=" + m), jo[t$ + "_key_" + e] = function(a) {
-      var c = d(a.feed.openSearch$totalResults.$t), m = a.feed.category;
-      if (0 < c) {
-        for (var p = {
-            title: o,
-            posts: [],
-            categories: m
-          }, $ = a.feed.entry, y = 0, v = 0; v < $[P]; ++v) {
-          var _, A, b = $[v], j = b.link[b.link[P] - 1][O];
-          if (y == r) break;
-          j != u && (y++, (_ = {}).grup_id = e, _.url = j, _.title = b[Z].$t, _.summary = b.summary.$t[W](), _.img = b.media$thumbnail && b.media$thumbnail.url, _.author = b.author[0].name.$t, _.comment = b.thr$total && b.thr$total.$t, _.label = b.category, A = b.published.$t, b = (j = new i(A)).getDate(), A = j.getMonth() + 1, j = j.getFullYear(), _.date = j + "/" + A + "/" + b, p.posts[z](_));
-        }
-        typeof(a = n[f]) === tg && 0 < p.posts[P] && (s && (p.posts = (function t(e) {
-          for (var a = e.slice(), n = a[P] - 1; 0 < n; n--) {
-            var o = l[te](l[Q]() * (n + 1)), r = a[n];
-            a[n] = a[o], a[o] = r;
+      jo[paginationStr + "_key"] = function(data) {
+        var feed = data.feed;
+        var totalResults = parseIntFn(feed.openSearch$totalResults.$t);
+        if (postsPerPage < totalResults) {
+          var paginationInfo = (function(total, current, size, maxPages) {
+            total = parseIntFn(total);
+            current = parseIntFn(current);
+            size = parseIntFn(size);
+            maxPages = parseIntFn(maxPages);
+            var totalPages = MathObj[ceilFn](total / size);
+            if (current < 1) current = 1;
+            else if (totalPages < current) current = totalPages;
+            var startPage, endPage;
+            if (totalPages <= maxPages) {
+              startPage = 1;
+              endPage = totalPages;
+            } else {
+              var halfMax = MathObj[floorFn](maxPages / 2);
+              var halfMaxCeil = MathObj[ceilFn](maxPages / 2) - 1;
+              if (current <= halfMax) {
+                startPage = 1;
+                endPage = maxPages;
+              } else if (totalPages <= current + halfMaxCeil) {
+                startPage = totalPages - maxPages + 1;
+                endPage = totalPages;
+              } else {
+                startPage = current - halfMax;
+                endPage = current + halfMaxCeil;
+              }
+            }
+            var pages = [];
+            for (var i = 0; i < endPage + 1 - startPage; i++) {
+              pages[pushFn](i);
+            }
+            pages = pages.map(function(i) {
+              return startPage + i;
+            });
+            return {
+              totalItems: total,
+              currentPage: current,
+              pageSize: size,
+              totalPages: totalPages,
+              startPage: startPage,
+              endPage: endPage,
+              startIndex: (current - 1) * size,
+              endIndex: MathObj.min((current - 1) * size + size - 1, total - 1),
+              pages: pages
+            };
+          })(totalResults, currentPageNum, pageSize, 5);
+          var ul = documentObj[createElementFn]("ul");
+          var totalPages = paginationInfo.totalPages;
+          if (paginationInfo.currentPage != 1) {
+            var prevLi = createPageItem(paginationInfo.currentPage - 1, "", '<svg aria-hidden="true" class="jt-icon"><use xlink:href="#i-arrow-l"/></svg>');
+            ul[appendChildFn](prevLi);
           }
-          return a;
-        })(p.posts)[I](0, s)), t[h] = a(p)[W](), t3(t, "visually-hidden"), Defer.domz(".lazy-" + e, 1, "loaded", er, null, {
-          rootMargin: "300%"
-        }), g && typeof(a = n[g]) === tg && a());
-      }
-    };
-  };
+          if (!arrayIncludes(paginationInfo.pages, 1)) {
+            var firstLi = createPageItem(1, paginationInfo.currentPage, "1 . .");
+            ul[appendChildFn](firstLi);
+          }
+          for (var i = 0; i < paginationInfo.pages[lengthProp]; i++) {
+            var pageLi = createPageItem(paginationInfo.pages[i], paginationInfo.currentPage);
+            ul[appendChildFn](pageLi);
+          }
+          if (!arrayIncludes(paginationInfo.pages, totalPages)) {
+            var lastLi = createPageItem(totalPages, paginationInfo.currentPage, ". . " + totalPages);
+            ul[appendChildFn](lastLi);
+          }
+          if (paginationInfo.currentPage != totalPages) {
+            var nextLi = createPageItem(paginationInfo.currentPage + 1, "", '<svg aria-hidden="true" class="jt-icon"><use xlink:href="#i-arrow-r"/></svg>');
+            ul[appendChildFn](nextLi);
+          }
+          element[innerHTMLProp] = "";
+          addClass(ul, "pagination mb-0");
+          element[appendChildFn](ul);
+          removeClass(element, "visually-hidden");
 
-  var el = function(t) {
-    for (var e = t[_]("a"), a = 0; a < e[P]; ++a) {
-      var n = e[a], r = n[O], s = o[A]("span");
-      t2(s, "d-block pt-2"), n[M](s), ei(r, s);
-    }
-  };
-
-  function ed() {
-    (t1 && t1[C] || tG && tG[C] ? t3 : t2)(t4, "header-animate");
-  }
-
-  function ec(t, e) {
-    function a(a) {
-      t.contains(a[G]) || (e(), n());
-    }
-    var n = function() {
-      o[x + k](tl, a);
-    };
-    o["add" + k](tl, a);
-  }
-
-  function eu(t) {
-    t != tJ[O] && (t2(tQ, "loader"), tJ[O] = t, tU.src = t), tD(tQ, "d-none") && (t3(tQ, "d-none"), t = tV.value[L](/<script.*?src='(.*?)'/)[1], Defer.js(t, "comment-js", 500, function() {
-      BLOG_CMT_createIframe(tv + t_ + "rpc_relay.html");
-    }));
-  }
-
-  t1 && t1["add" + k](tu, function() {
-    ed(), this[C] && r(function() {
-      o[y]("search-input").focus();
-    }, 100), ec(t7, function() {
-      t1[C] = !1, ed();
-    });
-  }), tG && tG["add" + k](tu, function() {
-    var t;
-    ed(), this[C] ? (t2(t = tN, "d-block"), r(function() {
-      t2(t, "show");
-    }, 100), ec(tN, function() {
-      tG[C] = !1, ed(), tq(tN, "show");
-    })) : tq(tN, "show");
-  }), n["add" + k](ti, function() {
-    (1 <= this[R] && null !== t4 ? t2 : t3)(t4, "shadow-sm"), (1e3 <= this[R] && null !== tT ? t3 : t2)(tT, "d-none");
-  }, !1);
-
-  function eg(t) {
-    if (t && (o[x + k](td, eg), o[x + k](tc, eg), o[x + k](ti, eg)), Defer.domz(".custom-posts", 1, null, jo[th], null, {
-        rootMargin: "300%"
-      }), 0 < t5[P]) 
-    if (null !== tZ) {
-      if (null !== et && null !== ee && (ee[h] = et[h], ee["set" + S]("data-no-item", et["get" + S]("data-no-item"))), null !== tK) {
-        for (var s = tZ[_](tC + "," + t8), i = tK.childNodes, c = i[P], u = [], e = 0; e < s[P]; e++) {
-          var f = s[e].closest(t8);
-          f && s[e] != f || u[z](s[e]);
+          function createPageItem(page, currentPage, label) {
+            var li = documentObj[createElementFn]("li");
+            var span = documentObj[createElementFn]("span");
+            addClass(span, "btn rounded-pill jt-icon-center");
+            span[innerHTMLProp] = label || page;
+            span["set" + AttributeFn]("data-page", page);
+            if (page == currentPage) {
+              addClass(span, "jt-btn-primary");
+            } else {
+              addClass(span, "jt-btn-light hover-btn-primary");
+              span["add" + EventListenerFn](clickEvent, function(e) {
+                e[preventDefaultFn]();
+                var url;
+                if (page == 1) {
+                  url = encodedLabel ? siteUrl + "/search" + labelPath + "?max-results=" + postsPerPage + "&page=" + page : siteUrl;
+                  windowObj[locationProp][hrefProp] = url;
+                } else {
+                  var startIndex = (page - 1) * postsPerPage;
+                  Defer.js(siteUrl + "/feeds/posts/summary/" + labelPrefix + "?start-index=" + startIndex + "&alt=json&callback=jo." + paginationStr + "_date&max-results=1");
+                }
+              });
+            }
+            li[appendChildFn](span);
+            return li;
+          }
         }
-        for (var g, e = 0; e < c; e++) e == c - 1 ? tZ[M](i[0]) : (g = e == c - 1 ? u[P] - 1 : l.round(u[P] / c) * e, (g = 0 == e ? u[0] : u[g][to]) && g[U][q + H](i[0], g));
+      };
+
+      jo[paginationStr + "_date"] = function(data) {
+        var published = data.feed.entry[0].published.$t;
+        var timestamp = published[substrFn](0, 19) + published[substrFn](23, 29);
+        timestamp = timestamp[replaceFn]("+", "%2B");
+        var url = siteUrl + "/search" + labelPath + "?updated-max=" + timestamp + "&max-results=" + pageSize + "&page=" + currentPageNum;
+        windowObj[locationProp][hrefProp] = url;
+      };
+    } else {
+      removeClass(element, "visually-hidden");
+    }
+  };
+
+  function fetchTitle(url, element) {
+    var xhr = new XMLHttpRequestObj();
+    xhr[openFn]("get", url);
+    xhr[setRequestHeaderFn](contentTypeHeader, "text/html");
+    xhr[sendFn](null);
+    xhr["add" + EventListenerFn](loadEvent, function() {
+      var titleMatch = xhr[responseTextProp][matchFn](/<title>(.*?)<\/title>/);
+      element[innerHTMLProp] = titleMatch[1][replaceFn](titleSeparator + blogTitle, "");
+    });
+  }
+
+  jo[loadCustomPostsStr] = function(element) {
+    var randomId = (MathObj[randomFn]() + 1).toString(36)[substrFn](7);
+    var label = element["get" + AttributeFn]("data-label");
+    var title = element["get" + AttributeFn]("data-title");
+    var itemsCount = element["get" + AttributeFn]("data-items");
+    var shuffle = element["get" + AttributeFn]("data-shuffle");
+    var noItem = element["get" + AttributeFn]("data-no-item");
+    var callbackFunc = element["get" + AttributeFn]("data-func");
+    var callback = element["get" + AttributeFn]("data-callback");
+    var maxResults = noItem ? parseIntFn(itemsCount) + 1 : itemsCount;
+    var labels = label || element[innerHTMLProp];
+    var labelArray = labels[splitFn](",");
+    var feedUrl = "";
+    feedUrl = labelArray[lengthProp] > 1 ? (labels ? "-/" + encodeURIComponentFn(labelArray[MathObj[floorFn](MathObj[randomFn]() * labelArray[lengthProp])]) + "/?" : "?") : (labels && labels != falseStr ? "-/" + encodeURIComponentFn(labels[trimFn]()) + "/?" : "?");
+    Defer.js(siteUrl + "/feeds/posts/summary/" + feedUrl + "alt=json&callback=jo." + customPostsStr + "_key_" + randomId + "&max-results=" + maxResults);
+    jo[customPostsStr + "_key_" + randomId] = function(data) {
+      var totalPosts = parseIntFn(data.feed.openSearch$totalResults.$t);
+      var categories = data.feed.category;
+      if (totalPosts > 0) {
+        var result = {
+          title: title,
+          posts: [],
+          categories: categories
+        };
+        var entries = data.feed.entry;
+        var count = 0;
+        for (var i = 0; i < entries[lengthProp]; ++i) {
+          var entry = entries[i];
+          var link = entry.link[entry.link[lengthProp] - 1][hrefProp];
+          if (count == itemsCount) break;
+          if (link != noItem) {
+            count++;
+            var post = {};
+            post.grup_id = randomId;
+            post.url = link;
+            post.title = entry[titleProp].$t;
+            post.summary = entry.summary.$t[trimFn]();
+            post.img = entry.media$thumbnail && entry.media$thumbnail.url;
+            post.author = entry.author[0].name.$t;
+            post.comment = entry.thr$total && entry.thr$total.$t;
+            post.label = entry.category;
+            var published = entry.published.$t;
+            var date = new DateObj(published);
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
+            post.date = year + "/" + month + "/" + day;
+            result.posts[pushFn](post);
+          }
+        }
+        if (typeof windowObj[callbackFunc] === functionStr && result.posts[lengthProp] > 0) {
+          if (shuffle) {
+            result.posts = (function shuffleArray(array) {
+              var arr = array.slice();
+              for (var i = arr[lengthProp] - 1; i > 0; i--) {
+                var j = MathObj[floorFn](MathObj[randomFn]() * (i + 1));
+                var temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+              }
+              return arr;
+            })(result.posts)[sliceFn](0, shuffle);
+          }
+          element[innerHTMLProp] = windowObj[callbackFunc](result)[trimFn]();
+          removeClass(element, "visually-hidden");
+          Defer.domz(".lazy-" + randomId, 1, "loaded", processImage, null, { rootMargin: "300%" });
+          if (callback && typeof windowObj[callback] === functionStr) {
+            windowObj[callback]();
+          }
+        }
+      }
+    };
+  };
+
+  var processPostPager = function(element) {
+    var links = element[querySelectorAllFn]("a");
+    for (var i = 0; i < links[lengthProp]; ++i) {
+      var link = links[i];
+      var href = link[hrefProp];
+      var span = documentObj[createElementFn]("span");
+      addClass(span, "d-block pt-2");
+      link[appendChildFn](span);
+      fetchTitle(href, span);
+    }
+  };
+
+  function toggleHeader() {
+    (searchToggle && searchToggle[checkedProp] || navbarToggle && navbarToggle[checkedProp] ? removeClass : addClass)(header, "header-animate");
+  }
+
+  function handleClickOutside(container, callback) {
+    function clickHandler(e) {
+      if (!container.contains(e[targetProp])) {
+        callback();
+        removeClickHandler();
+      }
+    }
+    function removeClickHandler() {
+      documentObj[removeFn + EventListenerFn](clickEvent, clickHandler);
+    }
+    documentObj["add" + EventListenerFn](clickEvent, clickHandler);
+  }
+
+  if (searchToggle) {
+    searchToggle["add" + EventListenerFn](changeEvent, function() {
+      toggleHeader();
+      if (this[checkedProp]) {
+        setTimeoutFn(function() {
+          documentObj[getElementByIdFn]("search-input").focus();
+        }, 100);
+      }
+      handleClickOutside(searchHeader, function() {
+        searchToggle[checkedProp] = false;
+        toggleHeader();
+      });
+    });
+  }
+
+  if (navbarToggle) {
+    navbarToggle["add" + EventListenerFn](changeEvent, function() {
+      toggleHeader();
+      if (this[checkedProp]) {
+        addClass(navbar, "d-block");
+        setTimeoutFn(function() {
+          addClass(navbar, "show");
+        }, 100);
+        handleClickOutside(navbar, function() {
+          navbarToggle[checkedProp] = false;
+          toggleHeader();
+          toggleClassWithTimeout(navbar, "show");
+        });
+      } else {
+        toggleClassWithTimeout(navbar, "show");
+      }
+    });
+  }
+
+  windowObj["add" + EventListenerFn](scrollEvent, function() {
+    (this[pageYOffsetProp] >= 1 && header !== null ? addClass : removeClass)(header, "shadow-sm");
+    (this[pageYOffsetProp] >= 1000 && backToTop !== null ? removeClass : addClass)(backToTop, "d-none");
+  }, false);
+
+  function initialize(shouldRemoveListeners) {
+    if (shouldRemoveListeners) {
+      documentObj[removeFn + EventListenerFn](mousemoveEvent, initialize);
+      documentObj[removeFn + EventListenerFn](touchstartEvent, initialize);
+      documentObj[removeFn + EventListenerFn](scrollEvent, initialize);
+    }
+    Defer.domz(".custom-posts", 1, null, jo[loadCustomPostsStr], null, { rootMargin: "300%" });
+    if (postBody !== null) {
+      if (relatedPosts !== null && relatedInline !== null) {
+        relatedInline[innerHTMLProp] = relatedPosts[innerHTMLProp];
+        relatedInline["set" + AttributeFn]("data-no-item", relatedPosts["get" + AttributeFn]("data-no-item"));
+      }
+      if (adsPost !== null) {
+        var delimiters = postBody[querySelectorAllFn](innerAdsDelimiter + "," + ignoreAdsDelimiter);
+        var adNodes = adsPost.childNodes;
+        var adCount = adNodes[lengthProp];
+        var validDelimiters = [];
+        for (var i = 0; i < delimiters[lengthProp]; i++) {
+          var closestIgnored = delimiters[i].closest(ignoreAdsDelimiter);
+          if (!closestIgnored || delimiters[i] == closestIgnored) {
+            validDelimiters[pushFn](delimiters[i]);
+          }
+        }
+        for (var i = 0; i < adCount; i++) {
+          var index;
+          if (i == adCount - 1) {
+            postBody[appendChildFn](adNodes[0]);
+          } else {
+            index = i == adCount - 1 ? validDelimiters[lengthProp] - 1 : MathObj.round(validDelimiters[lengthProp] / adCount) * i;
+            var nextNode = i == 0 ? validDelimiters[0] : validDelimiters[index][nextSiblingProp];
+            if (nextNode) {
+              nextNode[parentElementProp][insertBeforeFn](adNodes[0], nextNode);
+            }
+          }
+        }
       }
     }
   }
 
-  ea && (o[Z] = o[Z][j](tI, tI + t0 + " " + ea + tI)), Defer.domz(".lazyload", 1, "loaded", er, null, {
-    rootMargin: "300%"
-  }), Defer.domz("#post-pager", 1, null, el, null, {
-    rootMargin: "300%"
-  }), Defer.domz("#pagination", 1, null, es, null, {
-    rootMargin: "300%"
-  }), en ? eg(!1) : (null !== g && g["set" + tn]("lazy", 1), o["add" + k](td, eg), o["add" + k](tc, eg), o["add" + k](ti, eg));
-}();
+  if (currentPage) {
+    documentObj[titleProp] = documentObj[titleProp][replaceFn](titleSeparator, titleSeparator + pageTitle + " " + currentPage + titleSeparator);
+  }
+
+  Defer.domz(".lazyload", 1, "loaded", processImage, null, { rootMargin: "300%" });
+  Defer.domz("#post-pager", 1, null, processPostPager, null, { rootMargin: "300%" });
+  Defer.domz("#pagination", 1, null, createPagination, null, { rootMargin: "300%" });
+
+  if (isLazy) {
+    initialize(false);
+  } else {
+    if (localStorageObj !== null) {
+      localStorageObj["set" + ItemFn]("lazy", 1);
+    }
+    documentObj["add" + EventListenerFn](mousemoveEvent, initialize);
+    documentObj["add" + EventListenerFn](touchstartEvent, initialize);
+    documentObj["add" + EventListenerFn](scrollEvent, initialize);
+  }
+})();
