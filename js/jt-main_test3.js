@@ -602,21 +602,6 @@ const jo = {};
       documentObj[removeFn + EventListenerFn](scrollEvent, initialize);
     }
     Defer.domz(".custom-posts", 1, null, jo[loadCustomPostsStr], null, { rootMargin: "300%" });
-    if (noscriptEntries[lengthProp] > 0) {
-      for (var i = 0; i < noscriptEntries[lengthProp]; ++i) {
-        var noscript = noscriptEntries[i];
-        var content = noscript[innerHTMLProp];
-        var textarea = documentObj[createElementFn]("textarea");
-        textarea[innerHTMLProp] = content[replaceFn](/src="(.*?)"/g, 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" loading="lazy" lazyload="true" data-src="$1"');
-        var div = documentObj[createElementFn]("div");
-        div[innerHTMLProp] = textarea.value;
-        if (i == 0) {
-          addClass(div, "feature-image full-width");
-        }
-        noscript[parentElementProp][insertBeforeFn](div, noscript);
-      }
-      Defer.domz('[lazyload="true"]', 1, "loaded", processImage, null, { rootMargin: "300%" });
-    }
     if (postBody !== null) {
       if (relatedPosts !== null && relatedInline !== null) {
         relatedInline[innerHTMLProp] = relatedPosts[innerHTMLProp];
@@ -646,55 +631,6 @@ const jo = {};
           }
         }
       }
-      if (autoTOC && autoTOC != falseStr && tocTemp && postBody[firstChildProp] !== null) {
-        var headings = postBody[querySelectorAllFn]("h2,h3,h4,h5,h6");
-        var tocDiv = documentObj[createElementFn]("div");
-        var tocPosition = postBody[querySelectorFn](positionTOC);
-        var tocItems = [];
-        for (var i = 0; i < headings[lengthProp]; i++) {
-          var heading = headings[i];
-          var text = heading[textContentProp];
-          var level = parseIntFn(heading[tagNameProp][replaceFn]("H", ""));
-          heading.id = text;
-          tocItems[pushFn]({
-            level: level,
-            title: heading[textContentProp],
-            id: text
-          });
-        }
-        if (tocPosition === null) {
-          tocPosition = postBody[firstChildProp];
-        } else if (tocPosition[nextSiblingProp]) {
-          tocPosition = tocPosition[nextSiblingProp];
-        }
-        if (tocItems[lengthProp] > 0) {
-          tocDiv[innerHTMLProp] = tocTemp(tocItems)[trimFn]();
-          if (tocPosition) {
-            tocPosition[parentElementProp][insertBeforeFn](tocDiv, tocPosition);
-          }
-        }
-      }
-    }
-    if (!isPreview) {
-      if (adsenseClient) {
-        if (typeof adsbygoogle === undefinedStr) adsbygoogle = [];
-        Defer.js(httpsStr + "pagead2.googlesyndication.com/pagead/js/" + adsbygoogleStr + ".js?client=" + adsenseClient, adsbygoogleStr, 100);
-      }
-      if (analyticId && analyticId != falseStr) {
-        Defer.js(httpsStr + "www.googletagmanager.com/gtag/js?id=" + analyticId, "analytics", 100, function() {
-          function gtag() {
-            dataLayer[pushFn](arguments);
-          }
-          gtag("js", new DateObj());
-          gtag("config", analyticId);
-        });
-      }
-      if (jtCallback) {
-        jtCallback();
-      }
-    }
-    if (blogId) {
-      Defer.css(httpsStr + bloggerDomain + "dyn-css/authorization.css?targetBlogID=" + blogId);
     }
   }
 
