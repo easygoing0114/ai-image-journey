@@ -54,7 +54,6 @@ const jo = {};
     toFixedFn = "toFixed",
     pageYOffsetProp = "pageYOffset",
     appendChildFn = "appendChild",
-    firstChildProp = "firstChild",
     insertBeforeFn = "insertBefore",
     matchFn = "match",
     hrefProp = "href",
@@ -73,7 +72,6 @@ const jo = {};
     titleProp = "title",
     ceilFn = "ceil",
     floorFn = "floor",
-    textContentProp = "textContent",
     ItemFn = "Item",
     nextSiblingProp = "nextSibling",
     loadEvent = "load",
@@ -89,9 +87,6 @@ const jo = {};
     paginationStr = "pagination",
     loadCustomPostsStr = "loadCustomPosts",
     customPostsStr = "custom_posts",
-    adsbygoogleStr = "adsbygoogle",
-    httpsStr = "https://",
-    bloggerDomain = "www.blogger.com/",
     rwStr = "-rw",
     devicePixelRatioProp = "devicePixelRatio",
     isPreview = typeof isPreview !== undefinedStr && isPreview,
@@ -103,11 +98,9 @@ const jo = {};
     pageTitle = typeof pageTitle !== undefinedStr ? pageTitle : "Page",
     analyticId = typeof analyticId !== undefinedStr && analyticId,
     caPubAdsense = typeof caPubAdsense !== undefinedStr && caPubAdsense[replaceFn](/^\D+/g, ""),
-    adsenseClient = !!caPubAdsense && "ca-pub-" + caPubAdsense,
     innerAdsDelimiter = typeof innerAdsDelimiter !== undefinedStr ? innerAdsDelimiter : "p,br,div",
     ignoreAdsDelimiter = typeof ignoreAdsDelimiter !== undefinedStr ? ignoreAdsDelimiter : "pre,ul,ol,table,blockquote",
     autoTOC = typeof autoTOC !== undefinedStr && autoTOC,
-    tocTemp = typeof toc_temp === functionStr && toc_temp,
     positionTOC = typeof positionTOC !== undefinedStr && positionTOC,
     jtCallback = typeof jtCallback === functionStr && jtCallback;
 
@@ -172,16 +165,6 @@ const jo = {};
     navbarToggle = documentObj[getElementByIdFn]("navbar-toggle"),
     navbar = documentObj[getElementByIdFn]("navbar"),
     backToTop = documentObj[getElementByIdFn]("back-to-top"),
-    darkToggler = documentObj[getElementByIdFn]("dark-toggler"),
-    htmlElement = documentObj[querySelectorFn]("html"),
-    commentButton = documentObj[getElementByIdFn]("comment-button"),
-    threadedCommentForm = documentObj[getElementByIdFn]("threaded-comment-form"),
-    commentEditor = documentObj[getElementByIdFn]("comment-editor"),
-    commentEditorSrc = documentObj[getElementByIdFn]("comment-editor-src"),
-    commentScript = documentObj[getElementByIdFn]("comment-script"),
-    commentReplies = documentObj[querySelectorAllFn](".comment-reply"),
-    noscriptEntries = documentObj[querySelectorAllFn](".entry-text noscript"),
-    contactForms = documentObj[querySelectorAllFn](".contact-form-blogger"),
     adsPost = documentObj[getElementByIdFn]("ads-post"),
     postBody = documentObj[getElementByIdFn]("post-body"),
     relatedPosts = documentObj[querySelectorFn](".related-posts"),
@@ -469,21 +452,6 @@ const jo = {};
     documentObj["add" + EventListenerFn](clickEvent, clickHandler);
   }
 
-  function loadCommentForm(url) {
-    if (url != commentEditorSrc[hrefProp]) {
-      addClass(threadedCommentForm, "loader");
-      commentEditorSrc[hrefProp] = url;
-      commentEditor.src = url;
-    }
-    if (hasClass(threadedCommentForm, "d-none")) {
-      removeClass(threadedCommentForm, "d-none");
-      var scriptSrc = commentScript.value[matchFn](/<script.*?src='(.*?)'/)[1];
-      Defer.js(scriptSrc, "comment-js", 500, function() {
-        BLOG_CMT_createIframe(httpsStr + bloggerDomain + "rpc_relay.html");
-      });
-    }
-  }
-
   if (searchToggle) {
     searchToggle["add" + EventListenerFn](changeEvent, function() {
       toggleHeader();
@@ -518,82 +486,10 @@ const jo = {};
     });
   }
 
-  if (darkToggler) {
-    darkToggler["add" + EventListenerFn](clickEvent, function(e) {
-      e[preventDefaultFn]();
-      function toggleDarkMode(element, className) {
-        (hasClass(element, className) ? removeClass : addClass)(element, className);
-      }
-      toggleDarkMode(htmlElement, "dark-mode");
-      if (localStorageObj !== null) {
-        localStorageObj["set" + ItemFn]("theme", hasClass(htmlElement, "dark-mode") ? "dark" : "light");
-      }
-    });
-  }
-
   windowObj["add" + EventListenerFn](scrollEvent, function() {
     (this[pageYOffsetProp] >= 1 && header !== null ? addClass : removeClass)(header, "shadow-sm");
     (this[pageYOffsetProp] >= 1000 && backToTop !== null ? removeClass : addClass)(backToTop, "d-none");
   }, false);
-
-  if (commentEditor) {
-    commentEditor["add" + EventListenerFn](loadEvent, function() {
-      removeClass(threadedCommentForm, "loader");
-    });
-  }
-
-  if (commentButton) {
-    commentButton["add" + EventListenerFn](clickEvent, function(e) {
-      e[preventDefaultFn]();
-      loadCommentForm(this[hrefProp]);
-      if (threadedCommentForm[parentElementProp].id != "add-comment") {
-        documentObj[getElementByIdFn]("add-comment")[appendChildFn](threadedCommentForm);
-      }
-    });
-  }
-
-  for (var i = 0; i < commentReplies[lengthProp]; ++i) {
-    commentReplies[i]["add" + EventListenerFn](clickEvent, function(e) {
-      e[preventDefaultFn]();
-      var commentId = this["get" + AttributeFn]("data-comment-id");
-      loadCommentForm(this[hrefProp]);
-      if (threadedCommentForm[parentElementProp].id != "c" + commentId) {
-        documentObj[getElementByIdFn]("c" + commentId)[appendChildFn](threadedCommentForm);
-      }
-    });
-  }
-
-  for (var i = 0; i < contactForms[lengthProp]; ++i) {
-    contactForms[i]["add" + EventListenerFn]("submit", function(e) {
-      e[preventDefaultFn]();
-      var form = e[targetProp];
-      addClass(form, "loading");
-      var formData = new FormData(form);
-      var data = "blogID=" + blogId;
-      formData.forEach(function(value, key) {
-        data += "&" + encodeURIComponentFn(key) + "=" + encodeURIComponentFn(value);
-      });
-      var url = httpsStr + bloggerDomain + "contact-form.do";
-      var xhr = new XMLHttpRequestObj();
-      xhr[openFn]("post", url);
-      xhr[setRequestHeaderFn](contentTypeHeader, "application/x-www-form-urlencoded");
-      xhr[sendFn](data);
-      xhr.onreadystatechange = function() {
-        removeClass(form, "loading");
-        if (this.readyState === 4 && this.status === 200 && this.response !== "") {
-          var response = parseJSON(this[responseTextProp][trimFn]());
-          if (response && response.details.emailSentStatus == "true") {
-            form.reset();
-            removeClass(form, "send-error");
-            addClass(form, "send-success");
-          } else {
-            removeClass(form, "send-success");
-            addClass(form, "send-error");
-          }
-        }
-      };
-    });
-  }
 
   function initialize(shouldRemoveListeners) {
     if (shouldRemoveListeners) {
