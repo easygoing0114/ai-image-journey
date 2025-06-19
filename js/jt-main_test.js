@@ -328,24 +328,47 @@ const jo = {};
   };
 
     function fetchTitle(url, element) {
-    var xhr = new XMLHttpRequestObj();
-    xhr[openFn]("get", url);
-    xhr[setRequestHeaderFn](contentTypeHeader, "text/html");
-    xhr[sendFn](null);
-    xhr["add" + EventListenerFn](loadEvent, function() {
-        // ここから新しい処理
-        var titleMatch = xhr[responseTextProp][matchFn](/<title>(.*?)<\/title>/);
-        var fullTitle = titleMatch[1];
-        var targetString = titleSeparator + blogTitle;
-        
-        var index = fullTitle.indexOf(targetString);
-        if (index !== -1) {
-        element[innerHTMLProp] = fullTitle.substring(0, index);
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url);
+    xhr.setRequestHeader("Content-Type", "text/html");
+    xhr.send(null);
+    xhr.addEventListener("load", function () {
+        try {
+        var titleMatch = xhr.responseText.match(/<title>(.*?)<\/title>/);
+        if (titleMatch && titleMatch[1]) {
+            // エスケープされたセパレータとブログタイトルを除去
+            var separatorRegex = new RegExp(
+            "\\s*" + titleSeparator.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&") + "\\s*" + blogTitle,
+            "i"
+            );
+            var cleanedTitle = titleMatch[1].trim().replace(separatorRegex, "");
+            element.innerHTML = cleanedTitle || "No Title";
         } else {
-        element[innerHTMLProp] = fullTitle;
+            element.innerHTML = "No Title";
+        }
+        } catch (e) {
+        console.error("Error processing title for URL:", url, e);
+        element.innerHTML = "Error";
         }
     });
+    xhr.addEventListener("error", function () {
+        console.error("Failed to fetch URL:", url);
+        element.innerHTML = "Error";
+    });
     }
+
+    var processPostPager = function (element) {
+    var links = element.querySelectorAll("a");
+    for (var i = 0; i < links.length; i++) {
+        var link = links[i];
+        var href = link.getAttribute("href");
+        if (href) {
+        var span = document.createElement("span");
+        link.appendChild(span);
+        fetchTitle(href, span);
+        }
+    }
+    };
 
   jo[loadCustomPostsStr] = function(element) {
     var randomId = (MathObj[randomFn]() + 1).toString(36)[substrFn](7);
@@ -419,17 +442,6 @@ const jo = {};
         }
       }
     };
-  };
-
-  var processPostPager = function(element) {
-    var links = element[querySelectorAllFn]("a");
-    for (var i = 0; i < links[lengthProp]; ++i) {
-      var link = links[i];
-      var href = link[hrefProp];
-      var span = documentObj[createElementFn]("span");
-      link[appendChildFn](span);
-      fetchTitle(href, span);
-    }
   };
 
   function toggleHeader() {
