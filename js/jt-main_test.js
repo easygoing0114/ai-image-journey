@@ -328,31 +328,80 @@ const jo = {};
   };
 
     function fetchTitle(url, element) {
-        var xhr = new XMLHttpRequestObj();
-        xhr[openFn]("get", url);
-        xhr[setRequestHeaderFn](contentTypeHeader, "text/html");
-        xhr[sendFn](null);
-        xhr["add" + EventListenerFn](loadEvent, function() {
-            var titleMatch = xhr[responseTextProp][matchFn](/<title>(.*?)<\/title>/);
-            if (titleMatch) {
-                var fullTitle = titleMatch[1];
-                // 末尾の " | AI Image Journey" を削除
-                var cleanTitle = fullTitle.replace(new RegExp(titleSeparator + blogTitle + "$"), "");
-                element[innerHTMLProp] = cleanTitle;
-            } else {
-                element[innerHTMLProp] = "";
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url);
+    xhr.setRequestHeader("Content-Type", "text/html");
+    
+    xhr.addEventListener("load", function() {
+        try {
+        var titleMatch = xhr.responseText.match(/<title>(.*?)<\/title>/i);
+        if (titleMatch && titleMatch[1]) {
+            var fullTitle = titleMatch[1];
+            
+            // タグラインを除去する処理を改善
+            var cleanTitle = fullTitle;
+            
+            // パターン1: " | AI Image Journey" を除去
+            cleanTitle = cleanTitle.replace(titleSeparator + blogTitle, "");
+            
+            // パターン2: "AI Image Journey | " を除去（順序が逆の場合）
+            cleanTitle = cleanTitle.replace(blogTitle + titleSeparator, "");
+            
+            // パターン3: HTMLエンティティをデコード
+            cleanTitle = cleanTitle.replace(/&amp;/g, "&")
+                                .replace(/&lt;/g, "<")
+                                .replace(/&gt;/g, ">")
+                                .replace(/&quot;/g, '"')
+                                .replace(/&#39;/g, "'");
+            
+            // 前後の空白を除去
+            cleanTitle = cleanTitle.trim();
+            
+            // 空文字列の場合は元のタイトルを使用
+            if (cleanTitle === "") {
+            cleanTitle = fullTitle;
             }
-        });
-    }
-    var processPostPager = function(element) {
-        var links = element[querySelectorAllFn]("a");
-        for (var i = 0; i < links[lengthProp]; ++i) {
-            var link = links[i];
-            var href = link[hrefProp];
-            var span = documentObj[createElementFn]("span");
-            link[appendChildFn](span);
-            fetchTitle(href, span);
+            
+            element.innerHTML = cleanTitle;
+        } else {
+            // タイトルが取得できない場合はURLを表示
+            element.innerHTML = url;
         }
+        } catch (error) {
+        console.error("タイトル取得エラー:", error);
+        element.innerHTML = url;
+        }
+    });
+    
+    xhr.addEventListener("error", function() {
+        console.error("リクエストエラー:", url);
+        element.innerHTML = url;
+    });
+    
+    xhr.send();
+    }
+
+    var processPostPager = function(element) {
+    var links = element.querySelectorAll("a");
+    
+    for (var i = 0; i < links.length; i++) {
+        var link = links[i];
+        var href = link.href;
+        
+        // 有効なURLかチェック
+        if (href && href.indexOf("http") === 0) {
+        var span = document.createElement("span");
+        span.className = "post-title"; // CSSでスタイリング可能
+        link.appendChild(span);
+        
+        // 少し遅延を加えて同時リクエストを避ける
+        (function(url, el) {
+            setTimeout(function() {
+            fetchTitle(url, el);
+            }, i * 100); // 100ms間隔でリクエスト
+        })(href, span);
+        }
+    }
     };
 
   jo[loadCustomPostsStr] = function(element) {
