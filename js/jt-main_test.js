@@ -193,11 +193,6 @@ const jo = {};
     if (element[tagNameProp] == "IMG") {
       var dataSrc = element["get" + AttributeFn]("data-src");
       if (dataSrc[matchFn](/(bp.blogspot|googleusercontent)/)) {
-        var pixelRatio = isLazy ? (windowObj[devicePixelRatioProp] && windowObj[devicePixelRatioProp] > 1 ? windowObj[devicePixelRatioProp] : 1.5) : 1;
-        var width = (element[offsetWidthProp] * pixelRatio)[toFixedFn](0);
-        var parentWidth = (element[parentElementProp][offsetWidthProp] * pixelRatio)[toFixedFn](0);
-        var grandparentWidth = (element[parentElementProp][parentElementProp][offsetWidthProp] * pixelRatio)[toFixedFn](0);
-        var height = (element.offsetHeight * pixelRatio)[toFixedFn](0);
         var parts = dataSrc[splitFn]("/");
         var sizeIndex = dataSrc[lastIndexOfFn]("=") + 1;
         var sizeStr = "";
@@ -431,7 +426,6 @@ const jo = {};
       var link = links[i];
       var href = link[hrefProp];
       var span = documentObj[createElementFn]("span");
-//      addClass(span, "d-block pt-2");
       link[appendChildFn](span);
       fetchTitle(href, span);
     }
