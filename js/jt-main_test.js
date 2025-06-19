@@ -47,8 +47,6 @@ const jo = {};
     pushFn = "push",
     AttributeFn = "Attribute",
     checkedProp = "checked",
-    offsetWidthProp = "offsetWidth",
-    toFixedFn = "toFixed",
     pageYOffsetProp = "pageYOffset",
     appendChildFn = "appendChild",
     insertBeforeFn = "insertBefore",
@@ -85,7 +83,6 @@ const jo = {};
     loadCustomPostsStr = "loadCustomPosts",
     customPostsStr = "custom_posts",
     rwStr = "-rw",
-    devicePixelRatioProp = "devicePixelRatio",
     isPreview = typeof isPreview !== undefinedStr && isPreview,
     siteUrl = typeof siteUrl !== undefinedStr ? siteUrl[substrFn](0, siteUrl[lengthProp] - 1)[replaceFn](/(^\w+:|^)\/\//, "") : "",
     currentUrl = typeof currentUrl !== undefinedStr ? currentUrl : "",
@@ -286,7 +283,7 @@ const jo = {};
             ul[appendChildFn](nextLi);
           }
           element[innerHTMLProp] = "";
-          addClass(ul, "pagination mb-0");
+          addClass(ul, "pagination");
           element[appendChildFn](ul);
           removeClass(element, "visually-hidden");
 
