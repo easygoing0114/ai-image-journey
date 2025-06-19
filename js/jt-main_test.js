@@ -327,16 +327,25 @@ const jo = {};
     }
   };
 
-  function fetchTitle(url, element) {
+    function fetchTitle(url, element) {
     var xhr = new XMLHttpRequestObj();
     xhr[openFn]("get", url);
     xhr[setRequestHeaderFn](contentTypeHeader, "text/html");
     xhr[sendFn](null);
     xhr["add" + EventListenerFn](loadEvent, function() {
-      var titleMatch = xhr[responseTextProp][matchFn](/<title>(.*?)<\/title>/);
-      element[innerHTMLProp] = titleMatch[1][replaceFn](titleSeparator + blogTitle, "");
+        // ここから新しい処理
+        var titleMatch = xhr[responseTextProp][matchFn](/<title>(.*?)<\/title>/);
+        var fullTitle = titleMatch[1];
+        var targetString = titleSeparator + blogTitle;
+        
+        var index = fullTitle.indexOf(targetString);
+        if (index !== -1) {
+        element[innerHTMLProp] = fullTitle.substring(0, index);
+        } else {
+        element[innerHTMLProp] = fullTitle;
+        }
     });
-  }
+    }
 
   jo[loadCustomPostsStr] = function(element) {
     var randomId = (MathObj[randomFn]() + 1).toString(36)[substrFn](7);
