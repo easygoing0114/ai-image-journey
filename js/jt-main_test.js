@@ -7,7 +7,7 @@ function related_temp(e) {
 }
 
 function related_inline_temp(e) {
-  return "<div id='inline-related-article'>" + (e.title ? "<div class='pb-3'><span>" + e.title + "</span></div>" : "") + "<ul class='ps-3'>" + e.posts.map(function (data, i) {
+  return "<div id='inline-related-article'>" + (e.title ? "<div><span>" + e.title + "</span></div>" : "") + "<ul>" + e.posts.map(function (data, i) {
     return "<li class='inline-related-list'><a href='" + data.url + "'>" + data.title + "</a></li>";
   }).join("") + "</ul></div>";
 }
