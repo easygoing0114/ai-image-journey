@@ -328,46 +328,31 @@ const jo = {};
   };
 
     function fetchTitle(url, element) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", url);
-    xhr.setRequestHeader("Content-Type", "text/html");
-    xhr.send(null);
-    xhr.addEventListener("load", function () {
-        try {
-        var titleMatch = xhr.responseText.match(/<title>(.*?)<\/title>/);
-        if (titleMatch && titleMatch[1]) {
-            // エスケープされたセパレータとブログタイトルを除去
-            var separatorRegex = new RegExp(
-            "\\s*" + titleSeparator.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&") + "\\s*" + blogTitle,
-            "i"
-            );
-            var cleanedTitle = titleMatch[1].trim().replace(separatorRegex, "");
-            element.innerHTML = cleanedTitle || "No Title";
-        } else {
-            element.innerHTML = "No Title";
-        }
-        } catch (e) {
-        console.error("Error processing title for URL:", url, e);
-        element.innerHTML = "Error";
-        }
-    });
-    xhr.addEventListener("error", function () {
-        console.error("Failed to fetch URL:", url);
-        element.innerHTML = "Error";
-    });
+        var xhr = new XMLHttpRequestObj();
+        xhr[openFn]("get", url);
+        xhr[setRequestHeaderFn](contentTypeHeader, "text/html");
+        xhr[sendFn](null);
+        xhr["add" + EventListenerFn](loadEvent, function() {
+            var titleMatch = xhr[responseTextProp][matchFn](/<title>(.*?)<\/title>/);
+            if (titleMatch) {
+                var fullTitle = titleMatch[1];
+                // 末尾の " | AI Image Journey" を削除
+                var cleanTitle = fullTitle.replace(new RegExp(titleSeparator + blogTitle + "$"), "");
+                element[innerHTMLProp] = cleanTitle;
+            } else {
+                element[innerHTMLProp] = "";
+            }
+        });
     }
-
-    var processPostPager = function (element) {
-    var links = element.querySelectorAll("a");
-    for (var i = 0; i < links.length; i++) {
-        var link = links[i];
-        var href = link.getAttribute("href");
-        if (href) {
-        var span = document.createElement("span");
-        link.appendChild(span);
-        fetchTitle(href, span);
+    var processPostPager = function(element) {
+        var links = element[querySelectorAllFn]("a");
+        for (var i = 0; i < links[lengthProp]; ++i) {
+            var link = links[i];
+            var href = link[hrefProp];
+            var span = documentObj[createElementFn]("span");
+            link[appendChildFn](span);
+            fetchTitle(href, span);
         }
-    }
     };
 
   jo[loadCustomPostsStr] = function(element) {
