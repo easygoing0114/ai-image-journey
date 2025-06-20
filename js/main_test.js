@@ -15,8 +15,8 @@ if (document.querySelector('.mermaid') !== null) {
 
 if (document.querySelector('.chartjs') !== null) {
   Defer.js('https://files.ai-image-journey.com/js/chart.umd.min.js', 'chartjs', 100);
-  Defer.js('https://files.ai-image-journey.com/js/chartjs-plugin-datalabels.min.js', 'chartjsdatalabelsplugin', 200);
-  Defer.js('https://files.ai-image-journey.com/js/chartjs_arrow_plugin.js', 'chartjsarrowplugin', 200);
+  Defer.js('https://files.ai-image-journey.com/js/chartjs-plugin-datalabels.min.js', 'chartjsdatalabelsplugin', 500);
+  Defer.js('https://files.ai-image-journey.com/js/chartjs_arrow_plugin.js', 'chartjsarrowplugin', 500);
 }
 
 if (document.querySelector('.markdown') !== null) {
@@ -558,11 +558,32 @@ if (document.querySelector('.chartjs') !== null) {
 /* table の font-size と padding を画面の最大幅に合わせて変更 */
 if (document.querySelector('.table-responsive') !== null) {
     
+    // iOS Safari判定
+    function isIOSSafari() {
+        const ua = navigator.userAgent;
+        return /iPad|iPhone|iPod/.test(ua) && /Safari/.test(ua) && !/CriOS|FxiOS/.test(ua);
+    }
+    
     function adjustTableScale() {
         var tables = document.querySelectorAll('.table-responsive table');
         tables.forEach(function(table) {
             var tableResponsive = table.parentElement;
-            var tableResponsiveWidth = tableResponsive.clientWidth;
+            
+            // iOS Safariの場合は少し待ってから正確な幅を取得
+            var getAccurateWidth = function() {
+                if (isIOSSafari()) {
+                    // 複数回測定して最も信頼できる値を使用
+                    var measurements = [];
+                    for (var i = 0; i < 3; i++) {
+                        measurements.push(tableResponsive.clientWidth);
+                    }
+                    return Math.min(...measurements); // 最小値を採用（より安全）
+                } else {
+                    return tableResponsive.clientWidth;
+                }
+            };
+            
+            var tableResponsiveWidth = getAccurateWidth();
             
             // 元のサイズが保存されていない場合は保存
             if (!table.dataset.originalWidth) {
@@ -573,9 +594,16 @@ if (document.querySelector('.table-responsive') !== null) {
                     cell.style.padding = '';
                 });
                 
-                // 元のサイズを保存
-                table.dataset.originalWidth = table.scrollWidth;
-                table.dataset.originalHeight = table.scrollHeight;
+                // iOS Safariの場合、少し待ってから測定
+                if (isIOSSafari()) {
+                    setTimeout(function() {
+                        table.dataset.originalWidth = table.scrollWidth;
+                        table.dataset.originalHeight = table.scrollHeight;
+                    }, 10);
+                } else {
+                    table.dataset.originalWidth = table.scrollWidth;
+                    table.dataset.originalHeight = table.scrollHeight;
+                }
                 
                 // 元のスタイルも保存
                 var firstCell = table.querySelector('th, td');
@@ -595,6 +623,9 @@ if (document.querySelector('.table-responsive') !== null) {
             var originalFontSize = parseFloat(table.dataset.originalFontSize);
             var originalPaddingTop = parseFloat(table.dataset.originalPaddingTop);
             var originalPaddingLeft = parseFloat(table.dataset.originalPaddingLeft);
+            
+            // データが未保存の場合はスキップ
+            if (!originalTableWidth) return;
             
             // リセット処理
             table.style.height = 'auto';
@@ -630,25 +661,54 @@ if (document.querySelector('.table-responsive') !== null) {
                 var borderBottomWidth = parseFloat(tableComputedStyle.borderBottomWidth) || 0;
                 totalBorderHeight += borderTopWidth + borderBottomWidth;
                 
-                // 安全なマージンを追加
-                var safetyMargin = 4;
+                // iOS Safariの場合はより大きな安全マージンを設定
+                var safetyMargin = isIOSSafari() ? 8 : 4;
                 var availableWidth = tableResponsiveWidth - totalBorderWidth - safetyMargin;
                 var scale = availableWidth / originalTableWidth;
                 
+                // iOS Safariでフォントが小さくなりすぎないよう最小スケールを設定
+                if (isIOSSafari() && scale < 0.6) {
+                    scale = 0.6;
+                }
+                
                 table.style.width = availableWidth + 'px';
                 table.style.height = (originalTableHeight * scale) + totalBorderHeight + safetyMargin + 'px';
+                
+                // iOS Safariの場合、フォントサイズは整数に丸める
+                var scaledFontSize = originalFontSize * scale;
+                if (isIOSSafari()) {
+                    scaledFontSize = Math.round(scaledFontSize);
+                }
+                
                 table.querySelectorAll('th, td').forEach(function(cell) {
-                    cell.style.fontSize = (originalFontSize * scale) + 'px';
+                    cell.style.fontSize = scaledFontSize + 'px';
                     cell.style.padding = (originalPaddingTop * scale) + 'px ' + (originalPaddingLeft * scale) + 'px';
+                    
+                    // iOS Safariでのテキスト折り返し問題を防ぐ
+                    if (isIOSSafari()) {
+                        cell.style.whiteSpace = 'nowrap';
+                        cell.style.overflow = 'hidden';
+                        cell.style.textOverflow = 'ellipsis';
+                    }
                 });
             }
         });
     }
 
     Defer(function() {
-        const debouncedAdjust = debounce(adjustTableScale, 100);
+        const debouncedAdjust = debounce(adjustTableScale, isIOSSafari() ? 200 : 100);
+        
+        // iOS Safariの場合は追加のイベントリスナーを設定
+        if (isIOSSafari()) {
+            window.addEventListener('orientationchange', function() {
+                setTimeout(debouncedAdjust, 300); // 画面回転後少し待つ
+            });
+        }
+        
         window.addEventListener('resize', debouncedAdjust);
-        debouncedAdjust(); // 初回実行
+        
+        // 初回実行（iOS Safariの場合は少し遅らせる）
+        setTimeout(debouncedAdjust, isIOSSafari() ? 200 : 100);
     }, 100);
 }
   
@@ -670,7 +730,7 @@ Defer(function() {
       img.src = newSmallImgSrc;
     }
   });
-}, 10000);
+}, 2000);
 
 /* img の src の "w400-e90-rw" を "w800-e90-rw" に書き換え */
 Defer(function() {
@@ -682,4 +742,4 @@ Defer(function() {
       img.src = newMediumImgSrc;
     }
   });
-}, 20000);
+}, 5000);
