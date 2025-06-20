@@ -14,9 +14,9 @@ if (document.querySelector('.mermaid') !== null) {
 }
 
 if (document.querySelector('.chartjs') !== null) {
-  Defer.js('https://files.ai-image-journey.com/js/chart.umd.min.js', 'chartjs', 100);
-  Defer.js('https://files.ai-image-journey.com/js/chartjs-plugin-datalabels.min.js', 'chartjsdatalabelsplugin', 200);
-  Defer.js('https://files.ai-image-journey.com/js/chartjs_arrow_plugin.js', 'chartjsarrowplugin', 200);
+  Defer.js('https://files.ai-image-journey.com/js/chartjs-plugin-datalabels.min.js', 'chartjsdatalabelsplugin', 100);
+  Defer.js('https://files.ai-image-journey.com/js/chartjs_arrow_plugin.js', 'chartjsarrowplugin', 100);
+  Defer.js('https://files.ai-image-journey.com/js/chart.umd.min.js', 'chartjs', 200);
 }
 
 if (document.querySelector('.markdown') !== null) {
