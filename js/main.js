@@ -670,7 +670,7 @@ Defer(function() {
       img.src = newSmallImgSrc;
     }
   });
-}, 5000);
+}, 3000);
 
 /* img の src の "w400-e90-rw" を "w800-e90-rw" に書き換え */
 Defer(function() {
@@ -682,7 +682,7 @@ Defer(function() {
       img.src = newMediumImgSrc;
     }
   });
-}, 7500);
+}, 5000);
 
   /* img の src の "w800-e90-rw" を "w0-e90-rw" に 再度書き換え*/
 if (window.innerWidth > 800) {
@@ -695,5 +695,5 @@ if (window.innerWidth > 800) {
           img.src = newFullImgSrc;
         }
       });
-  }, 10000); // 20秒（200000ミリ秒）遅延実行
+  }, 15000); 
 }
