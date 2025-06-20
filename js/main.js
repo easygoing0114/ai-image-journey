@@ -670,7 +670,7 @@ Defer(function() {
       img.src = newSmallImgSrc;
     }
   });
-}, 10000);
+}, 5000);
 
 /* img の src の "w400-e90-rw" を "w800-e90-rw" に書き換え */
 Defer(function() {
@@ -682,4 +682,18 @@ Defer(function() {
       img.src = newMediumImgSrc;
     }
   });
-}, 20000);
+}, 7500);
+
+  /* img の src の "w800-e90-rw" を "w0-e90-rw" に 再度書き換え*/
+if (window.innerWidth > 800) {
+  Defer(function() {
+      var imageFullSize = document.querySelectorAll('img');
+      imageFullSize.forEach(function(img) {
+        var src = img.src;
+        if (src.includes('w800-e90-rw')) {
+          var newFullImgSrc = src.replace('w800-e90-rw', 'w0-e90-rw');
+          img.src = newFullImgSrc;
+        }
+      });
+  }, 10000); // 20秒（200000ミリ秒）遅延実行
+}
