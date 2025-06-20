@@ -9,6 +9,10 @@
 // Defer.js('your_script_url','your-script-id',100);
 
 /* 外部スクリプトの読み込み */
+if (document.querySelector('#toc') !== null) {
+  Defer.js('https://files.ai-image-journey.com/js/page_toc.js', 'page_toc', 100);
+}
+
 if (document.querySelector('.mermaid') !== null) {
   Defer.js('https://files.ai-image-journey.com/js/mermaid.min.js', 'mermaid', 100);
 }
