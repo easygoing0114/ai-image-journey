@@ -51,7 +51,7 @@ function debounce(func, wait) {
 }
 
 /* img, iframe 差し替え */
-Defer.dom('.defer-img img', 100);
+Defer.dom('.defer-img img', 300);
 Defer.dom('.defer-iframe iframe', 1500);
 
 /* 外部リンクに新しいタブで開く属性追加 */
@@ -653,7 +653,7 @@ if (document.querySelector('.table-responsive') !== null) {
         const debouncedAdjust = debounce(adjustTableScale, 100);
         window.addEventListener('resize', debouncedAdjust);
         debouncedAdjust(); // 初回実行
-    }, 100);
+    }, 1000);
 }
   
 /* GPUアクセラレーション除去 */
