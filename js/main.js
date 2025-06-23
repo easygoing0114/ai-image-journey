@@ -649,9 +649,11 @@ if (document.querySelector('.table-responsive') !== null) {
         });
     }
 
-    const debouncedAdjust = debounce(adjustTableScale, 100);
-    window.addEventListener('resize', debouncedAdjust);
-    debouncedAdjust(); // 初回実行
+    Defer(function() {
+        const debouncedAdjust = debounce(adjustTableScale, 100);
+        window.addEventListener('resize', debouncedAdjust);
+        debouncedAdjust(); // 初回実行
+    }, 100);
 }
   
 /* GPUアクセラレーション除去 */
