@@ -40,6 +40,10 @@ if (document.querySelector('.instagram-media') !== null) {
   Defer.js('https://www.instagram.com/embed.js', 'instagram', 100);
 }
 
+/* img, iframe 差し替え */
+Defer.dom('.defer-img img', 100);
+Defer.dom('.defer-iframe iframe', 1500);
+
 /* debounce関数 */
 function debounce(func, wait) {
     let timeout;
@@ -49,10 +53,6 @@ function debounce(func, wait) {
         timeout = setTimeout(() => func.apply(context, args), wait);
     };
 }
-
-/* img, iframe 差し替え */
-Defer.dom('.defer-img img', 300);
-Defer.dom('.defer-iframe iframe', 1500);
 
 /* 外部リンクに新しいタブで開く属性追加 */
 Defer(function() {
