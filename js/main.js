@@ -463,7 +463,7 @@ if (document.querySelector('.mermaid') !== null) {
 
     mermaid.run();
 
-  }, 3000);
+  }, 1000);
 }
 
 /* Chart.js */
@@ -556,7 +556,7 @@ if (document.querySelector('.chartjs') !== null) {
         const debouncedResize = debounce(handleResize, 100);
         window.addEventListener('resize', debouncedResize);
         initializeCharts(); // 初回実行
-    }, 3000);
+    }, 1000);
 }
 
 /* table の font-size と padding を画面の最大幅に合わせて変更 */
