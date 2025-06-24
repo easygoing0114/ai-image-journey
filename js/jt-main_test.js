@@ -334,22 +334,38 @@ const jo = {};
           var titleMatch = xhr[responseTextProp][matchFn](/<title>(.*?)<\/title>/);
           if (titleMatch && titleMatch[1]) {
               var title = titleMatch[1];
-              
-              // blogTitleを正規表現で除去（大文字小文字を区別しない）
+
+              // separatorとblogTitleの組み合わせをまとめて除去（例: " | AI Image Journey"）
+              var fullPattern = titleSeparator + blogTitle;
+              var fullPatternRegex = new RegExp(fullPattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+              title = title.replace(fullPatternRegex, "");
+
+              // 念の為、残っているblogTitle単体も除去
               var blogTitleRegex = new RegExp(blogTitle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
               title = title.replace(blogTitleRegex, "");
-              
-              // titleSeparatorを正規表現で除去
+
+              // 念の為、残っているseparator単体も除去
               var separatorRegex = new RegExp(titleSeparator.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
               title = title.replace(separatorRegex, "");
-              
+
               // 前後の空白を除去
               title = title.replace(/^\s+|\s+$/g, "");
-              
+
               element[innerHTMLProp] = title;
           }
       });
   }
+
+  var processPostPager = function(element) {
+    var links = element[querySelectorAllFn]("a");
+    for (var i = 0; i < links[lengthProp]; ++i) {
+      var link = links[i];
+      var href = link[hrefProp];
+      var span = documentObj[createElementFn]("span");
+      link[appendChildFn](span);
+      fetchTitle(href, span);
+    }
+  };
 
   jo[loadCustomPostsStr] = function(element) {
     var randomId = (MathObj[randomFn]() + 1).toString(36)[substrFn](7);
@@ -423,17 +439,6 @@ const jo = {};
         }
       }
     };
-  };
-
-  var processPostPager = function(element) {
-    var links = element[querySelectorAllFn]("a");
-    for (var i = 0; i < links[lengthProp]; ++i) {
-      var link = links[i];
-      var href = link[hrefProp];
-      var span = documentObj[createElementFn]("span");
-      link[appendChildFn](span);
-      fetchTitle(href, span);
-    }
   };
 
   function toggleHeader() {
