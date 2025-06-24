@@ -13,8 +13,6 @@ function sidebar_temp(e) {
   }).join("") + "</div>";
 }
 
-var ImgSize = 400;
-
 const jo = {};
 
 (function() {
@@ -188,7 +186,7 @@ const jo = {};
         var parts = dataSrc[splitFn]("/");
         var sizeIndex = dataSrc[lastIndexOfFn]("=") + 1;
         var sizeStr = "";
-        sizeStr = hasClass(element[parentElementProp], "ratio") ? "w" + ImgSize + "-e90" + rwStr : "w" + ImgSize + "-e90" + rwStr;
+        sizeStr = hasClass(element[parentElementProp], "ratio") ? "w" + 400 + "-e90" + rwStr : "w" + 400 + "-e90" + rwStr;
         dataSrc = dataSrc[matchFn](/(img\/a|proxy\/)/) ? (sizeIndex ? dataSrc[sliceFn](0, sizeIndex) + sizeStr : dataSrc + "=" + sizeStr) : dataSrc[replaceFn](parts[parts[lengthProp] - 2], sizeStr);
         element["set" + AttributeFn]("data-src", dataSrc);
       } else if (dataSrc[matchFn](/(img.youtube|i.ytimg)/)) {
