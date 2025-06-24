@@ -332,7 +332,11 @@ const jo = {};
     xhr[sendFn](null);
     xhr["add" + EventListenerFn](loadEvent, function() {
       var titleMatch = xhr[responseTextProp][matchFn](/<title>(.*?)<\/title>/);
-      element[innerHTMLProp] = titleMatch[1][replaceFn](titleSeparator + blogTitle, "");
+      console.log("Original title:", titleMatch[1]);
+      console.log("Separator + blogTitle:", titleSeparator + blogTitle);
+      var cleanTitle = titleMatch[1][replaceFn](titleSeparator + blogTitle, "");
+      console.log("Clean title:", cleanTitle);
+      element[innerHTMLProp] = cleanTitle;
     });
   }
 
