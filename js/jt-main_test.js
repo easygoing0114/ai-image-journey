@@ -326,14 +326,29 @@ const jo = {};
   };
 
   function fetchTitle(url, element) {
-    var xhr = new XMLHttpRequestObj();
-    xhr[openFn]("get", url);
-    xhr[setRequestHeaderFn](contentTypeHeader, "text/html");
-    xhr[sendFn](null);
-    xhr["add" + EventListenerFn](loadEvent, function() {
-      var titleMatch = xhr[responseTextProp][matchFn](/<title>(.*?)<\/title>/);
-      element[innerHTMLProp] = titleMatch[1][replaceFn](titleSeparator + blogTitle, "");
-    });
+      var xhr = new XMLHttpRequestObj();
+      xhr[openFn]("get", url);
+      xhr[setRequestHeaderFn](contentTypeHeader, "text/html");
+      xhr[sendFn](null);
+      xhr["add" + EventListenerFn](loadEvent, function() {
+          var titleMatch = xhr[responseTextProp][matchFn](/<title>(.*?)<\/title>/);
+          if (titleMatch && titleMatch[1]) {
+              var title = titleMatch[1];
+              
+              // blogTitleを正規表現で除去（大文字小文字を区別しない）
+              var blogTitleRegex = new RegExp(blogTitle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+              title = title.replace(blogTitleRegex, "");
+              
+              // titleSeparatorを正規表現で除去
+              var separatorRegex = new RegExp(titleSeparator.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+              title = title.replace(separatorRegex, "");
+              
+              // 前後の空白を除去
+              title = title.replace(/^\s+|\s+$/g, "");
+              
+              element[innerHTMLProp] = title;
+          }
+      });
   }
 
   jo[loadCustomPostsStr] = function(element) {
