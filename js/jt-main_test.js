@@ -325,37 +325,37 @@ const jo = {};
     }
   };
 
-function fetchTitle(url, element) {
-    var xhr = new XMLHttpRequestObj();
-    xhr[openFn]("get", url);
-    xhr[setRequestHeaderFn](contentTypeHeader, "text/html");
-    xhr[sendFn](null);
-    xhr["add" + EventListenerFn](loadEvent, function() {
-        var titleMatch = xhr[responseTextProp][matchFn](/<title>(.*?)<\/title>/);
-        if (titleMatch && titleMatch[1]) {
-            var title = titleMatch[1];
+  function fetchTitle(url, element) {
+      var xhr = new XMLHttpRequestObj();
+      xhr[openFn]("get", url);
+      xhr[setRequestHeaderFn](contentTypeHeader, "text/html");
+      xhr[sendFn](null);
+      xhr["add" + EventListenerFn](loadEvent, function() {
+          var titleMatch = xhr[responseTextProp][matchFn](/<title>(.*?)<\/title>/);
+          if (titleMatch && titleMatch[1]) {
+              var title = titleMatch[1];
 
-            // 1. blogTitleを先に除去（完全一致）
-            var blogTitleRegex = new RegExp(blogTitle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
-            title = title.replace(blogTitleRegex, "");
+              // 1. blogTitleを先に除去（完全一致）
+              var blogTitleRegex = new RegExp(blogTitle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+              title = title.replace(blogTitleRegex, "");
 
-            // 2. titleSeparatorを除去（独立したセパレーターも対象）
-            var separatorRegex = new RegExp(titleSeparator.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
-            title = title.replace(separatorRegex, "");
+              // 2. titleSeparatorを除去（独立したセパレーターも対象）
+              var separatorRegex = new RegExp(titleSeparator.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+              title = title.replace(separatorRegex, "");
 
-            // 3. セパレーターとblogTitleの組み合わせを除去
-            var fullPattern = titleSeparator + blogTitle;
-            var fullPatternRegex = new RegExp(fullPattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
-            title = title.replace(fullPatternRegex, "");
+              // 3. セパレーターとblogTitleの組み合わせを除去
+              var fullPattern = titleSeparator + blogTitle;
+              var fullPatternRegex = new RegExp(fullPattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+              title = title.replace(fullPatternRegex, "");
 
-            // 4. 前後の空白を除去
-            title = title.trim();
+              // 4. 前後の空白を除去
+              title = title.trim();
 
-            // 結果を要素に設定
-            element[innerHTMLProp] = title;
-        }
-    });
-}
+              // 結果を要素に設定
+              element[innerHTMLProp] = title;
+          }
+      });
+  }
 
   var processPostPager = function(element) {
     var links = element[querySelectorAllFn]("a");
