@@ -333,7 +333,7 @@ const jo = {};
     xhr["add" + EventListenerFn](loadEvent, function() {
       var titleMatch = xhr[responseTextProp][matchFn](/<title>(.*?)<\/title>/);
       var titleSeparator = " | ";
-      var blogTitle = "AI image journey";
+      var blogTitle = "AI Image Journey";
       console.log("Original title:", titleMatch[1]);
       console.log("Separator + blogTitle:", titleSeparator + blogTitle);
       var cleanTitle = titleMatch[1][replaceFn](titleSeparator + blogTitle, "");
