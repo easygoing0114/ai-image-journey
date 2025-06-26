@@ -9,7 +9,12 @@
 // Defer.js('your_script_url','your-script-id',100);
 
 /* 外部スクリプトの読み込み */
-if (document.querySelector('.mermaid') !== null) {
+if (document.querySelector('#toc') !== null) {
+  Defer.js('https://files.ai-image-journey.com/js/page_toc.js', 'page_toc_js', 100);
+  Defer.css('https://files.ai-image-journey.com/css/page_toc.css', 'page_toc_css', 100);
+}
+
+if (document.querySelector('.language-mermaid') !== null) {
   Defer.js('https://files.ai-image-journey.com/js/mermaid.min.js', 'mermaid', 100);
 }
 
@@ -36,6 +41,31 @@ if (document.querySelector('.instagram-media') !== null) {
   Defer.js('https://www.instagram.com/embed.js', 'instagram', 100);
 }
 
+// .language-mermaid以外の.language-要素が存在するかチェック
+function hasCodeBlocks() {
+  const languageElements = document.querySelectorAll('[class*="language-"]');
+  
+  for (let element of languageElements) {
+    const classList = Array.from(element.classList);
+    for (let className of classList) {
+      if (className.startsWith('language-') && className !== 'language-mermaid') {
+        return true;
+      }
+    }
+  }
+  
+  return false;
+}
+
+// .language-mermaid以外の.language-クラスが存在する場合にフォントチェックスクリプトを読み込み
+if (hasCodeBlocks()) {
+  Defer.js('https://files.ai-image-journey.com/js/fira_code_check.js', 'fira_code_check', 100);
+}
+
+/* img, iframe 差し替え */
+Defer.dom('.defer-img img', 100);
+Defer.dom('.defer-iframe iframe', 1500);
+
 /* debounce関数 */
 function debounce(func, wait) {
     let timeout;
@@ -45,10 +75,6 @@ function debounce(func, wait) {
         timeout = setTimeout(() => func.apply(context, args), wait);
     };
 }
-
-/* img, iframe 差し替え */
-Defer.dom('.defer-img img', 100);
-Defer.dom('.defer-iframe iframe', 1500);
 
 /* 外部リンクに新しいタブで開く属性追加 */
 Defer(function() {
@@ -375,6 +401,103 @@ if (document.querySelector('.blogcard-auto') !== null) {
   }, 100);
 }
 
+/* table の font-size と padding を画面の最大幅に合わせて変更 */
+if (document.querySelector('.table-responsive') !== null) {
+    
+    function adjustTableScale() {
+        var tables = document.querySelectorAll('.table-responsive table');
+        tables.forEach(function(table) {
+            var tableResponsive = table.parentElement;
+            var tableResponsiveWidth = tableResponsive.clientWidth;
+            
+            // 元のサイズが保存されていない場合は保存
+            if (!table.dataset.originalWidth) {
+                // 完全にリセットした状態でサイズを測定
+                table.style.cssText = '';
+                table.querySelectorAll('th, td').forEach(function(cell) {
+                    cell.style.fontSize = '';
+                    cell.style.padding = '';
+                });
+                
+                // 元のサイズを保存
+                table.dataset.originalWidth = table.scrollWidth;
+                table.dataset.originalHeight = table.scrollHeight;
+                
+                // 元のスタイルも保存
+                var firstCell = table.querySelector('th, td');
+                if (firstCell) {
+                    var computedStyle = getComputedStyle(firstCell);
+                    if (!table.dataset.originalFontSize) {
+                        table.dataset.originalFontSize = computedStyle.fontSize;
+                        table.dataset.originalPaddingTop = computedStyle.paddingTop;
+                        table.dataset.originalPaddingLeft = computedStyle.paddingLeft;
+                    }
+                }
+            }
+            
+            // 保存された元のサイズを使用
+            var originalTableWidth = parseInt(table.dataset.originalWidth);
+            var originalTableHeight = parseInt(table.dataset.originalHeight);
+            var originalFontSize = parseFloat(table.dataset.originalFontSize);
+            var originalPaddingTop = parseFloat(table.dataset.originalPaddingTop);
+            var originalPaddingLeft = parseFloat(table.dataset.originalPaddingLeft);
+            
+            // リセット処理
+            table.style.height = 'auto';
+            table.style.width = 'auto';
+            table.querySelectorAll('th, td').forEach(function(cell) {
+                cell.style.fontSize = originalFontSize + 'px';
+                cell.style.padding = originalPaddingTop + 'px ' + originalPaddingLeft + 'px';
+            });
+            
+            // スケール調整の判定と適用
+            if (originalTableWidth > tableResponsiveWidth) {
+                // テーブルの実際のボーダー幅を取得
+                var tableComputedStyle = getComputedStyle(table);
+                var borderLeftWidth = parseFloat(tableComputedStyle.borderLeftWidth) || 0;
+                var borderRightWidth = parseFloat(tableComputedStyle.borderRightWidth) || 0;
+                var totalBorderWidth = borderLeftWidth + borderRightWidth;
+                
+                // セルのボーダーも考慮（テーブルによってはcollapse border）
+                var firstCell = table.querySelector('th, td');
+                var totalBorderHeight = 0;
+                if (firstCell && tableComputedStyle.borderCollapse !== 'collapse') {
+                    var cellStyle = getComputedStyle(firstCell);
+                    var cellBorderLeft = parseFloat(cellStyle.borderLeftWidth) || 0;
+                    var cellBorderRight = parseFloat(cellStyle.borderRightWidth) || 0;
+                    var cellBorderTop = parseFloat(cellStyle.borderTopWidth) || 0;
+                    var cellBorderBottom = parseFloat(cellStyle.borderBottomWidth) || 0;
+                    totalBorderWidth += Math.max(cellBorderLeft + cellBorderRight, 2);
+                    totalBorderHeight = cellBorderTop + cellBorderBottom;
+                }
+                
+                // テーブル自体の上下ボーダー
+                var borderTopWidth = parseFloat(tableComputedStyle.borderTopWidth) || 0;
+                var borderBottomWidth = parseFloat(tableComputedStyle.borderBottomWidth) || 0;
+                totalBorderHeight += borderTopWidth + borderBottomWidth;
+                
+                // 安全なマージンを追加
+                var safetyMargin = 12;
+                var availableWidth = tableResponsiveWidth - totalBorderWidth - safetyMargin;
+                var scale = availableWidth / originalTableWidth;
+                
+                table.style.width = availableWidth + 'px';
+                table.style.height = (originalTableHeight * scale) + totalBorderHeight + safetyMargin + 'px';
+                table.querySelectorAll('th, td').forEach(function(cell) {
+                    cell.style.fontSize = (originalFontSize * scale) + 'px';
+                    cell.style.padding = (originalPaddingTop * scale) + 'px ' + (originalPaddingLeft * scale) + 'px';
+                });
+            }
+        });
+    }
+
+    Defer(function() {
+        const debouncedAdjust = debounce(adjustTableScale, 100);
+        window.addEventListener('resize', debouncedAdjust);
+        debouncedAdjust(); // 初回実行
+    }, 100);
+}
+
 /* loading="lazy" の順次解除 */
 Defer(function() {
     // すべての <img> 要素を配列に変換
@@ -459,7 +582,7 @@ if (document.querySelector('.mermaid') !== null) {
 
     mermaid.run();
 
-  }, 3000);
+  }, 1000);
 }
 
 /* Chart.js */
@@ -552,164 +675,7 @@ if (document.querySelector('.chartjs') !== null) {
         const debouncedResize = debounce(handleResize, 100);
         window.addEventListener('resize', debouncedResize);
         initializeCharts(); // 初回実行
-    }, 3000);
-}
-
-/* table の font-size と padding を画面の最大幅に合わせて変更 */
-if (document.querySelector('.table-responsive') !== null) {
-    
-    // iOS Safari判定
-    function isIOSSafari() {
-        const ua = navigator.userAgent;
-        return /iPad|iPhone|iPod/.test(ua) && /Safari/.test(ua) && !/CriOS|FxiOS/.test(ua);
-    }
-    
-    function adjustTableScale() {
-        var tables = document.querySelectorAll('.table-responsive table');
-        tables.forEach(function(table) {
-            var tableResponsive = table.parentElement;
-            
-            // iOS Safariの場合は少し待ってから正確な幅を取得
-            var getAccurateWidth = function() {
-                if (isIOSSafari()) {
-                    // 複数回測定して最も信頼できる値を使用
-                    var measurements = [];
-                    for (var i = 0; i < 3; i++) {
-                        measurements.push(tableResponsive.clientWidth);
-                    }
-                    return Math.min(...measurements); // 最小値を採用（より安全）
-                } else {
-                    return tableResponsive.clientWidth;
-                }
-            };
-            
-            var tableResponsiveWidth = getAccurateWidth();
-            
-            // 元のサイズが保存されていない場合は保存
-            if (!table.dataset.originalWidth) {
-                // 完全にリセットした状態でサイズを測定
-                table.style.cssText = '';
-                table.querySelectorAll('th, td').forEach(function(cell) {
-                    cell.style.fontSize = '';
-                    cell.style.padding = '';
-                });
-                
-                // iOS Safariの場合、少し待ってから測定
-                if (isIOSSafari()) {
-                    setTimeout(function() {
-                        table.dataset.originalWidth = table.scrollWidth;
-                        table.dataset.originalHeight = table.scrollHeight;
-                    }, 10);
-                } else {
-                    table.dataset.originalWidth = table.scrollWidth;
-                    table.dataset.originalHeight = table.scrollHeight;
-                }
-                
-                // 元のスタイルも保存
-                var firstCell = table.querySelector('th, td');
-                if (firstCell) {
-                    var computedStyle = getComputedStyle(firstCell);
-                    if (!table.dataset.originalFontSize) {
-                        table.dataset.originalFontSize = computedStyle.fontSize;
-                        table.dataset.originalPaddingTop = computedStyle.paddingTop;
-                        table.dataset.originalPaddingLeft = computedStyle.paddingLeft;
-                    }
-                }
-            }
-            
-            // 保存された元のサイズを使用
-            var originalTableWidth = parseInt(table.dataset.originalWidth);
-            var originalTableHeight = parseInt(table.dataset.originalHeight);
-            var originalFontSize = parseFloat(table.dataset.originalFontSize);
-            var originalPaddingTop = parseFloat(table.dataset.originalPaddingTop);
-            var originalPaddingLeft = parseFloat(table.dataset.originalPaddingLeft);
-            
-            // データが未保存の場合はスキップ
-            if (!originalTableWidth) return;
-            
-            // リセット処理
-            table.style.height = 'auto';
-            table.style.width = 'auto';
-            table.querySelectorAll('th, td').forEach(function(cell) {
-                cell.style.fontSize = originalFontSize + 'px';
-                cell.style.padding = originalPaddingTop + 'px ' + originalPaddingLeft + 'px';
-            });
-            
-            // スケール調整の判定と適用
-            if (originalTableWidth > tableResponsiveWidth) {
-                // テーブルの実際のボーダー幅を取得
-                var tableComputedStyle = getComputedStyle(table);
-                var borderLeftWidth = parseFloat(tableComputedStyle.borderLeftWidth) || 0;
-                var borderRightWidth = parseFloat(tableComputedStyle.borderRightWidth) || 0;
-                var totalBorderWidth = borderLeftWidth + borderRightWidth;
-                
-                // セルのボーダーも考慮（テーブルによってはcollapse border）
-                var firstCell = table.querySelector('th, td');
-                var totalBorderHeight = 0;
-                if (firstCell && tableComputedStyle.borderCollapse !== 'collapse') {
-                    var cellStyle = getComputedStyle(firstCell);
-                    var cellBorderLeft = parseFloat(cellStyle.borderLeftWidth) || 0;
-                    var cellBorderRight = parseFloat(cellStyle.borderRightWidth) || 0;
-                    var cellBorderTop = parseFloat(cellStyle.borderTopWidth) || 0;
-                    var cellBorderBottom = parseFloat(cellStyle.borderBottomWidth) || 0;
-                    totalBorderWidth += Math.max(cellBorderLeft + cellBorderRight, 2);
-                    totalBorderHeight = cellBorderTop + cellBorderBottom;
-                }
-                
-                // テーブル自体の上下ボーダー
-                var borderTopWidth = parseFloat(tableComputedStyle.borderTopWidth) || 0;
-                var borderBottomWidth = parseFloat(tableComputedStyle.borderBottomWidth) || 0;
-                totalBorderHeight += borderTopWidth + borderBottomWidth;
-                
-                // iOS Safariの場合はより大きな安全マージンを設定
-                var safetyMargin = isIOSSafari() ? 8 : 4;
-                var availableWidth = tableResponsiveWidth - totalBorderWidth - safetyMargin;
-                var scale = availableWidth / originalTableWidth;
-                
-                // iOS Safariでフォントが小さくなりすぎないよう最小スケールを設定
-                if (isIOSSafari() && scale < 0.6) {
-                    scale = 0.6;
-                }
-                
-                table.style.width = availableWidth + 'px';
-                table.style.height = (originalTableHeight * scale) + totalBorderHeight + safetyMargin + 'px';
-                
-                // iOS Safariの場合、フォントサイズは整数に丸める
-                var scaledFontSize = originalFontSize * scale;
-                if (isIOSSafari()) {
-                    scaledFontSize = Math.round(scaledFontSize);
-                }
-                
-                table.querySelectorAll('th, td').forEach(function(cell) {
-                    cell.style.fontSize = scaledFontSize + 'px';
-                    cell.style.padding = (originalPaddingTop * scale) + 'px ' + (originalPaddingLeft * scale) + 'px';
-                    
-                    // iOS Safariでのテキスト折り返し問題を防ぐ
-                    if (isIOSSafari()) {
-                        cell.style.whiteSpace = 'nowrap';
-                        cell.style.overflow = 'hidden';
-                        cell.style.textOverflow = 'ellipsis';
-                    }
-                });
-            }
-        });
-    }
-
-    Defer(function() {
-        const debouncedAdjust = debounce(adjustTableScale, isIOSSafari() ? 200 : 100);
-        
-        // iOS Safariの場合は追加のイベントリスナーを設定
-        if (isIOSSafari()) {
-            window.addEventListener('orientationchange', function() {
-                setTimeout(debouncedAdjust, 300); // 画面回転後少し待つ
-            });
-        }
-        
-        window.addEventListener('resize', debouncedAdjust);
-        
-        // 初回実行（iOS Safariの場合は少し遅らせる）
-        setTimeout(debouncedAdjust, isIOSSafari() ? 200 : 100);
-    }, 100);
+    }, 1000);
 }
   
 /* GPUアクセラレーション除去 */

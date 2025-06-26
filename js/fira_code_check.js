@@ -1,6 +1,5 @@
-// フォントの存在確認を行う関数
+// フォントの存在確認を行う関数（Canvas API使用）
 function checkFontAvailability(fontName) {
-  // Canvas APIを使用してフォントの存在を確認
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
   
@@ -32,63 +31,44 @@ function checkFontAvailabilityModern(fontName) {
   }
 }
 
-// 優先フォントリストをチェック
-function checkPreferredFonts() {
-  const preferredFonts = ['SFMono-Regular', 'Menlo', 'Monaco', 'Fira Code'];
+// 優先フォントの存在確認
+function hasPreferredMonospaceFonts() {
+  const preferredFonts = ['SFMono-Regular', 'Menlo', 'Monaco'];
   
   for (const font of preferredFonts) {
-    // モダンブラウザではCSS Font Loading APIを優先使用
     if (checkFontAvailabilityModern(font) || checkFontAvailability(font)) {
-      console.log(`Font available: ${font}`);
-      if (font === 'Fira Code') {
-        return true; // Fira Codeが既に利用可能
-      }
-      if (font !== 'Fira Code') {
-        return true; // 他の優先フォントが利用可能
-      }
-    }
-  }
-  
-  return false; // 優先フォントが見つからない
-}
-
-// .language-クラス（mermaid以外）の存在確認
-function hasCodeBlocks() {
-  const languageElements = document.querySelectorAll('[class*="language-"]');
-  
-  for (let element of languageElements) {
-    const classList = Array.from(element.classList);
-    for (let className of classList) {
-      if (className.startsWith('language-') && className !== 'language-mermaid') {
-        return true;
-      }
+      return true;
     }
   }
   
   return false;
 }
 
-// メイン処理
+// Fira Codeの存在確認
+function hasFiraCode() {
+  return checkFontAvailabilityModern('Fira Code') || checkFontAvailability('Fira Code');
+}
+
+// メイン処理：必要に応じてFira CodeのCSSを読み込み
 function loadFiraCodeIfNeeded() {
-  // コードブロックが存在しない場合は何もしない
-  if (!hasCodeBlocks()) {
+  // Fira Codeが既に存在する場合は何もしない
+  if (hasFiraCode()) {
+    console.log('Fira Code is already available');
     return;
   }
   
-  // 優先フォントが利用可能かチェック
-  const hasFiraCode = checkFontAvailabilityModern('Fira Code') || checkFontAvailability('Fira Code');
-  const hasPreferredFonts = checkPreferredFonts();
-  
-  // Fira Codeが存在しないが、他の優先フォントもない場合のみ読み込み
-  if (!hasFiraCode && !hasPreferredFonts) {
-    console.log('Loading Fira Code CSS...');
-    Defer.css('https://files.ai-image-journey.com/css/fira_code_500.css', 'fira_code_css', 100);
+  // 優先フォントが存在する場合は読み込まない
+  if (hasPreferredMonospaceFonts()) {
+    console.log('Preferred monospace fonts are available');
+    return;
   }
+  
+  // Fira Codeも優先フォントも存在しない場合のみ読み込み
+  console.log('Loading Fira Code CSS...');
+  
+  Defer.css('https://files.ai-image-journey.com/css/fira_code_500.css', 'fira_code_css', 100);
+
 }
 
-// DOM読み込み完了後に実行
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', loadFiraCodeIfNeeded);
-} else {
-  loadFiraCodeIfNeeded();
-}
+// 実行
+loadFiraCodeIfNeeded();
