@@ -10,10 +10,11 @@
 
 /* 外部スクリプトの読み込み */
 if (document.querySelector('#toc') !== null) {
-  Defer.js('https://files.ai-image-journey.com/js/page_toc.js', 'page_toc', 100);
+  Defer.js('https://files.ai-image-journey.com/js/page_toc.js', 'page_toc_js', 100);
+  Defer.css('https://files.ai-image-journey.com/css/page_toc.css', 'page_toc_css', 100);
 }
 
-if (document.querySelector('.mermaid') !== null) {
+if (document.querySelector('.language-mermaid') !== null) {
   Defer.js('https://files.ai-image-journey.com/js/mermaid.min.js', 'mermaid', 100);
 }
 
