@@ -38,7 +38,7 @@ if (document.querySelector('.bluesky-embed') !== null) {
   Defer.js('https://embed.bsky.app/static/embed.js', 'bluesky', 100);
 }
 if (document.querySelector('.text-post-media') !== null) {
-  Defer.js('https://www.threads.com/embed.js', 'instagram', 100);
+  Defer.js('https://www.threads.com/embed.js', 'threads', 100);
 }
 
 
