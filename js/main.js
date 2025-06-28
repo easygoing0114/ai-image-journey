@@ -37,9 +37,10 @@ if (document.querySelector('.twitter-tweet') !== null) {
 if (document.querySelector('.bluesky-embed') !== null) {
   Defer.js('https://embed.bsky.app/static/embed.js', 'bluesky', 100);
 }
-if (document.querySelector('.instagram-media') !== null) {
-  Defer.js('https://www.instagram.com/embed.js', 'instagram', 100);
+if (document.querySelector('.text-post-media') !== null) {
+  Defer.js('https://www.threads.com/embed.js', 'instagram', 100);
 }
+
 
 /* img, iframe 差し替え */
 Defer.dom('.defer-img img', 100);
