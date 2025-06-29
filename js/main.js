@@ -35,7 +35,7 @@ if (document.querySelector('.twitter-tweet') !== null) {
   Defer.js('https://platform.twitter.com/widgets.js', 'twitter', 500);
 }
 if (document.querySelector('.bluesky-embed') !== null) {
-  Defer.js('https://embed.bsky.app/static/embed.js', 'bluesky', 1000);
+  Defer.js('https://files.ai-image-journey.com/js/bluesky_embed_modified.js', 'bluesky', 1000);
 }
 if (document.querySelector('.text-post-media') !== null) {
   Defer.js('https://www.threads.com/embed.js', 'threads', 1500);
