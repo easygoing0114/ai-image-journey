@@ -32,19 +32,19 @@ if (document.querySelector('.markdown') !== null) {
 }
 
 if (document.querySelector('.twitter-tweet') !== null) {
-  Defer.js('https://platform.twitter.com/widgets.js', 'twitter', 500);
+  Defer.js('https://platform.twitter.com/widgets.js', 'twitter', 1500);
 }
 if (document.querySelector('.bluesky-embed') !== null) {
-  Defer.js('https://files.ai-image-journey.com/js/bluesky_embed_modified.js', 'bluesky', 1000);
+  Defer.js('https://files.ai-image-journey.com/js/bluesky_embed_modified.js', 'bluesky', 2000);
 }
 if (document.querySelector('.text-post-media') !== null) {
-  Defer.js('https://www.threads.com/embed.js', 'threads', 1500);
+  Defer.js('https://www.threads.com/embed.js', 'threads', 2500);
 }
 
 
 /* img, iframe 差し替え */
-Defer.dom('.defer-img img', 100);
-Defer.dom('.defer-iframe iframe', 2000);
+Defer.dom('img', 100);
+Defer.dom('iframe', 1000);
 
 /* debounce関数 */
 function debounce(func, wait) {
