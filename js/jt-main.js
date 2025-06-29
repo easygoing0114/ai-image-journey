@@ -1,24 +1,17 @@
 
 /*related articles*/
-function related_temp(e) {
-  return (e.title ? "<div class='widget-title position-relative text-uppercase'><span>" + e.title + "</span></div>" : "") + "<div class='row row-cols-2'>" + e.posts.map(function (data, i) {
-    return "<article class='mb-4'> <div class='related-card overflow-hidden rounded position-relative border jt-border-light bg-archive'>" + (data.img ? "<div class='item-thumbnail'><a class='related-card-img jt-bg-light  ratio ratio-4x3' href='" + data.url + "'><img alt='" + data.title + "' class='object-cover lazy-" + data.grup_id + " lazyload thumbnail-img' data-src='" + data.img + "' loading='lazy' src='data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='/></a></div>" : "") + "<div class='item-content p-4'><h2 class='item-title' itemprop='headline'><a href='" + data.url + "'>" + data.title + "</a></h2><div class='hide-element item-meta d-flex flex-wrap'>" + (data.author != "Unknown" ? "<small class='me-2'><svg aria-hidden='true' class=' jt-icon'><use xlink:href='#i-user'/></svg>" + data.author + "</small>" : "") + "<small class='me-2'><svg aria-hidden='true' class=' jt-icon'><use xlink:href='#i-clock'/></svg>" + data.date + "</small></div></div></div></article>";
-  }).join("") + "</div>";
-}
 
 function related_inline_temp(e) {
-  return "<div id='inline-related-article'>" + (e.title ? "<div class='pb-3'><span>" + e.title + "</span></div>" : "") + "<ul class='ps-3'>" + e.posts.map(function (data, i) {
+  return "<div id='inline-related-article'>" + (e.title ? "<div><span>" + e.title + "</span></div>" : "") + "<ul>" + e.posts.map(function (data, i) {
     return "<li class='inline-related-list'><a href='" + data.url + "'>" + data.title + "</a></li>";
   }).join("") + "</ul></div>";
 }
 
 function sidebar_temp(e) {
-  return (e.title ? "<div class='widget-title position-relative'><span class='item-title-text'>" + e.title + "</span></div>" : "") + "<div class='item-post-base'>" + e.posts.map(function (data, i) {
+  return (e.title ? "<div class='widget-title'><span class='item-title-text'>" + e.title + "</span></div>" : "") + "<div class='item-post-base'>" + e.posts.map(function (data, i) {
     return "<div class='item-post'><a class='item-post-link' href='" + data.url + "'>" + (data.img ? "<div class='item-thumbnail'><img alt='" + data.title + "' class='object-cover thumbnail-img lazy-" + data.grup_id + " lazyload' data-src='" + data.img + "' loading='lazy' src='data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='/></div>" : "") + "<div class='item-content'><h3 class='item-title' itemprop='headline'><span href='" + data.url + "'>" + data.title + "</span></h3><div class='item-meta '><span class='post-date'><svg aria-hidden='true' class='jt-icon'><use xlink:href='#i-clock'/></svg>" + data.date + "</span></div></div></a></div>";
   }).join("") + "</div>";
 }
-
-var ImgSize = 400;
 
 const jo = {};
 
@@ -52,8 +45,6 @@ const jo = {};
     pushFn = "push",
     AttributeFn = "Attribute",
     checkedProp = "checked",
-    offsetWidthProp = "offsetWidth",
-    toFixedFn = "toFixed",
     pageYOffsetProp = "pageYOffset",
     appendChildFn = "appendChild",
     insertBeforeFn = "insertBefore",
@@ -90,7 +81,6 @@ const jo = {};
     loadCustomPostsStr = "loadCustomPosts",
     customPostsStr = "custom_posts",
     rwStr = "-rw",
-    devicePixelRatioProp = "devicePixelRatio",
     isPreview = typeof isPreview !== undefinedStr && isPreview,
     siteUrl = typeof siteUrl !== undefinedStr ? siteUrl[substrFn](0, siteUrl[lengthProp] - 1)[replaceFn](/(^\w+:|^)\/\//, "") : "",
     currentUrl = typeof currentUrl !== undefinedStr ? currentUrl : "",
@@ -193,15 +183,10 @@ const jo = {};
     if (element[tagNameProp] == "IMG") {
       var dataSrc = element["get" + AttributeFn]("data-src");
       if (dataSrc[matchFn](/(bp.blogspot|googleusercontent)/)) {
-        var pixelRatio = isLazy ? (windowObj[devicePixelRatioProp] && windowObj[devicePixelRatioProp] > 1 ? windowObj[devicePixelRatioProp] : 1.5) : 1;
-        var width = (element[offsetWidthProp] * pixelRatio)[toFixedFn](0);
-        var parentWidth = (element[parentElementProp][offsetWidthProp] * pixelRatio)[toFixedFn](0);
-        var grandparentWidth = (element[parentElementProp][parentElementProp][offsetWidthProp] * pixelRatio)[toFixedFn](0);
-        var height = (element.offsetHeight * pixelRatio)[toFixedFn](0);
         var parts = dataSrc[splitFn]("/");
         var sizeIndex = dataSrc[lastIndexOfFn]("=") + 1;
         var sizeStr = "";
-        sizeStr = hasClass(element[parentElementProp], "ratio") ? "w" + ImgSize + "-e90" + rwStr : "w" + ImgSize + "-e90" + rwStr;
+        sizeStr = hasClass(element[parentElementProp], "ratio") ? "w" + 400 + "-e90" + rwStr : "w" + 400 + "-e90" + rwStr;
         dataSrc = dataSrc[matchFn](/(img\/a|proxy\/)/) ? (sizeIndex ? dataSrc[sliceFn](0, sizeIndex) + sizeStr : dataSrc + "=" + sizeStr) : dataSrc[replaceFn](parts[parts[lengthProp] - 2], sizeStr);
         element["set" + AttributeFn]("data-src", dataSrc);
       } else if (dataSrc[matchFn](/(img.youtube|i.ytimg)/)) {
@@ -296,7 +281,7 @@ const jo = {};
             ul[appendChildFn](nextLi);
           }
           element[innerHTMLProp] = "";
-          addClass(ul, "pagination mb-0");
+          addClass(ul, "pagination");
           element[appendChildFn](ul);
           removeClass(element, "visually-hidden");
 
@@ -347,9 +332,23 @@ const jo = {};
     xhr[sendFn](null);
     xhr["add" + EventListenerFn](loadEvent, function() {
       var titleMatch = xhr[responseTextProp][matchFn](/<title>(.*?)<\/title>/);
-      element[innerHTMLProp] = titleMatch[1][replaceFn](titleSeparator + blogTitle, "");
+      var titleSeparator = " | ";
+      var blogTitle = "AI Image Journey";
+      var cleanTitle = titleMatch[1][replaceFn](titleSeparator + blogTitle, "");
+      element[innerHTMLProp] = cleanTitle;
     });
   }
+
+  var processPostPager = function(element) {
+    var links = element[querySelectorAllFn]("a");
+    for (var i = 0; i < links[lengthProp]; ++i) {
+      var link = links[i];
+      var href = link[hrefProp];
+      var span = documentObj[createElementFn]("span");
+      link[appendChildFn](span);
+      fetchTitle(href, span);
+    }
+  };
 
   jo[loadCustomPostsStr] = function(element) {
     var randomId = (MathObj[randomFn]() + 1).toString(36)[substrFn](7);
@@ -423,18 +422,6 @@ const jo = {};
         }
       }
     };
-  };
-
-  var processPostPager = function(element) {
-    var links = element[querySelectorAllFn]("a");
-    for (var i = 0; i < links[lengthProp]; ++i) {
-      var link = links[i];
-      var href = link[hrefProp];
-      var span = documentObj[createElementFn]("span");
-      addClass(span, "d-block pt-2");
-      link[appendChildFn](span);
-      fetchTitle(href, span);
-    }
   };
 
   function toggleHeader() {
