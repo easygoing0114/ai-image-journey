@@ -32,13 +32,13 @@ if (document.querySelector('.markdown') !== null) {
 }
 
 if (document.querySelector('.twitter-tweet') !== null) {
-  Defer.js('https://platform.twitter.com/widgets.js', 'twitter', 100);
+  Defer.js('https://platform.twitter.com/widgets.js', 'twitter', 1000);
 }
 if (document.querySelector('.bluesky-embed') !== null) {
-  Defer.js('https://embed.bsky.app/static/embed.js', 'bluesky', 100);
+  Defer.js('https://embed.bsky.app/static/embed.js', 'bluesky', 1000);
 }
 if (document.querySelector('.text-post-media') !== null) {
-  Defer.js('https://www.threads.com/embed.js', 'threads', 100);
+  Defer.js('https://www.threads.com/embed.js', 'threads', 1000);
 }
 
 
