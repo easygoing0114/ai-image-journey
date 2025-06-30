@@ -20,8 +20,8 @@ if (document.querySelector('.language-mermaid') !== null) {
 
 if (document.querySelector('.chartjs') !== null) {
   Defer.js('https://files.ai-image-journey.com/js/chart.umd.min.js', 'chartjs', 100);
-  Defer.js('https://files.ai-image-journey.com/js/chartjs-plugin-datalabels.min.js', 'chartjsdatalabelsplugin', 500);
-  Defer.js('https://files.ai-image-journey.com/js/chartjs_arrow_plugin.js', 'chartjsarrowplugin', 500);
+  Defer.js('https://files.ai-image-journey.com/js/chartjs-plugin-datalabels.min.js', 'chartjsdatalabelsplugin', 300);
+  Defer.js('https://files.ai-image-journey.com/js/chartjs_arrow_plugin.js', 'chartjsarrowplugin', 300);
 }
 
 if (document.querySelector('.markdown') !== null) {
@@ -563,7 +563,7 @@ if (document.querySelector('.mermaid') !== null) {
 
     mermaid.run();
 
-  }, 1000);
+  }, 1500);
 }
 
 /* Chart.js */
@@ -656,7 +656,7 @@ if (document.querySelector('.chartjs') !== null) {
         const debouncedResize = debounce(handleResize, 100);
         window.addEventListener('resize', debouncedResize);
         initializeCharts(); // 初回実行
-    }, 1000);
+    }, 1500);
 }
   
 /* GPUアクセラレーション除去 */
