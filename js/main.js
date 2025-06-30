@@ -10,25 +10,25 @@
 
 /* 外部スクリプトの読み込み */
 if (document.querySelector('#toc') !== null) {
-  Defer.js('https://files.ai-image-journey.com/js/page_toc.js', 'page_toc_js', 100);
-  Defer.css('https://files.ai-image-journey.com/css/page_toc.css', 'page_toc_css', 100);
+  Defer.js('https://files.ai-image-journey.com/js/page_toc.js', 'page_toc_js', 500);
+  Defer.css('https://files.ai-image-journey.com/css/page_toc.css', 'page_toc_css', 500);
 }
 
 if (document.querySelector('.language-mermaid') !== null) {
-  Defer.js('https://files.ai-image-journey.com/js/mermaid.min.js', 'mermaid', 100);
+  Defer.js('https://files.ai-image-journey.com/js/mermaid.min.js', 'mermaid', 500);
 }
 
 if (document.querySelector('.chartjs') !== null) {
-  Defer.js('https://files.ai-image-journey.com/js/chart.umd.min.js', 'chartjs', 100);
-  Defer.js('https://files.ai-image-journey.com/js/chartjs-plugin-datalabels.min.js', 'chartjsdatalabelsplugin', 500);
-  Defer.js('https://files.ai-image-journey.com/js/chartjs_arrow_plugin.js', 'chartjsarrowplugin', 500);
+  Defer.js('https://files.ai-image-journey.com/js/chart.umd.min.js', 'chartjs', 500);
+  Defer.js('https://files.ai-image-journey.com/js/chartjs-plugin-datalabels.min.js', 'chartjsdatalabelsplugin', 1000);
+  Defer.js('https://files.ai-image-journey.com/js/chartjs_arrow_plugin.js', 'chartjsarrowplugin', 1000);
 }
 
 if (document.querySelector('.markdown') !== null) {
-  Defer.js('https://cdnjs.cloudflare.com/ajax/libs/turndown/7.2.0/turndown.min.js', 'turndown', 100);
-  Defer.js('https://unpkg.com/turndown-plugin-gfm/dist/turndown-plugin-gfm.js', 'turndownplugin', 100);
-  Defer.js('https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js', 'marked', 100);
-  Defer.js('https://cdn.jsdelivr.net/npm/marked-extended-tables/lib/index.umd.js', 'markedplugin', 100);
+  Defer.js('https://cdnjs.cloudflare.com/ajax/libs/turndown/7.2.0/turndown.min.js', 'turndown', 500);
+  Defer.js('https://unpkg.com/turndown-plugin-gfm/dist/turndown-plugin-gfm.js', 'turndownplugin', 500);
+  Defer.js('https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js', 'marked', 500);
+  Defer.js('https://cdn.jsdelivr.net/npm/marked-extended-tables/lib/index.umd.js', 'markedplugin', 500);
 }
 
 if (document.querySelector('.twitter-tweet') !== null) {
@@ -563,7 +563,7 @@ if (document.querySelector('.mermaid') !== null) {
 
     mermaid.run();
 
-  }, 1000);
+  }, 1500);
 }
 
 /* Chart.js */
@@ -656,7 +656,7 @@ if (document.querySelector('.chartjs') !== null) {
         const debouncedResize = debounce(handleResize, 100);
         window.addEventListener('resize', debouncedResize);
         initializeCharts(); // 初回実行
-    }, 1000);
+    }, 1500);
 }
   
 /* GPUアクセラレーション除去 */
