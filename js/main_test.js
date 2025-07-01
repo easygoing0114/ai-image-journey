@@ -480,7 +480,7 @@ if (document.querySelector('.table-responsive') !== null) {
 }
 
 /* Aspect Ratio を調整 */
-if (document.querySelector('.ar1_1, .ar16_9, .ar9_16') !== null) {
+if (document.querySelector('.ar1_1, .ar16_9, .ar9_16, .ar5_7, .ar7_5') !== null) {
     
     // アスペクト比を調整するスクリプト
     function resizeAspectRatios() {
@@ -506,11 +506,28 @@ if (document.querySelector('.ar1_1, .ar16_9, .ar9_16') !== null) {
             const height = Math.round(actualWidth * 16 / 9);
             element.style.height = height + 'px';
         });
+        
+        // .ar5_7 クラスを持つすべての要素を取得（1:√2 白銀比縦長）
+        const silverTallElements = document.querySelectorAll('.ar5_7');
+        silverTallElements.forEach(element => {
+            const actualWidth = element.offsetWidth;
+            const height = Math.round(actualWidth * Math.sqrt(2)); // √2 ≈ 1.4142
+            element.style.height = height + 'px';
+        });
+        
+        // .ar7_5 クラスを持つすべての要素を取得（√2:1 白銀比横長）
+        const silverWideElements = document.querySelectorAll('.ar7_5');
+        silverWideElements.forEach(element => {
+            const actualWidth = element.offsetWidth;
+            const height = Math.round(actualWidth / Math.sqrt(2)); // 1/√2 ≈ 0.7071
+            element.style.height = height + 'px';
+        });
     }
 
     // debounce付きのリサイズハンドラーを作成
     const debouncedResize = debounce(resizeAspectRatios, 100);
 
+    // 修正: ResizeObserver変数をスコープ外で宣言
     let resizeObserver;
     
     if (window.ResizeObserver) {
@@ -528,6 +545,14 @@ if (document.querySelector('.ar1_1, .ar16_9, .ar9_16') !== null) {
                     const actualWidth = element.offsetWidth;
                     const height = Math.round(actualWidth * 16 / 9);
                     element.style.height = height + 'px';
+                } else if (element.classList.contains('ar5_7')) {
+                    const actualWidth = element.offsetWidth;
+                    const height = Math.round(actualWidth * Math.sqrt(2)); // 白銀比縦長 1:√2
+                    element.style.height = height + 'px';
+                } else if (element.classList.contains('ar7_5')) {
+                    const actualWidth = element.offsetWidth;
+                    const height = Math.round(actualWidth / Math.sqrt(2)); // 白銀比横長 √2:1
+                    element.style.height = height + 'px';
                 }
             });
         });
@@ -542,7 +567,7 @@ if (document.querySelector('.ar1_1, .ar16_9, .ar9_16') !== null) {
         
         // ResizeObserver で要素監視開始（存在する場合のみ）
         if (resizeObserver) {
-            document.querySelectorAll('.ar1_1, .ar16_9, .ar9_16').forEach(element => {
+            document.querySelectorAll('.ar1_1, .ar16_9, .ar9_16, .ar5_7, .ar7_5').forEach(element => {
                 resizeObserver.observe(element);
             });
         }
