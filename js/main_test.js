@@ -32,20 +32,20 @@ if (document.querySelector('.markdown') !== null) {
 }
 
 if (document.querySelector('.twitter-tweet') !== null) {
-  Defer.js('https://platform.twitter.com/widgets.js', 'twitter', 1500);
+  Defer.js('https://platform.twitter.com/widgets.js', 'twitter', 1000);
 }
 if (document.querySelector('.bluesky-embed') !== null) {
-  Defer.js('https://embed.bsky.app/static/embed.js', 'bluesky', 2000);
-  Defer.js('https://files.ai-image-journey.com/js/bluesky-title-adder.js', 'bluesky_title_adder', 2000);
+  Defer.js('https://embed.bsky.app/static/embed.js', 'bluesky', 1500);
+  Defer.js('https://files.ai-image-journey.com/js/bluesky-title-adder.js', 'bluesky_title_adder', 1500);
 }
 if (document.querySelector('.text-post-media') !== null) {
-  Defer.js('https://www.threads.com/embed.js', 'threads', 2500);
+  Defer.js('https://www.threads.com/embed.js', 'threads', 2000);
 }
 
 
 /* img, iframe 差し替え */
 Defer.dom('img', 100);
-Defer.dom('iframe', 1000);
+Defer.dom('iframe', 500);
 
 /* debounce関数 */
 function debounce(func, wait) {
@@ -607,7 +607,7 @@ if (document.querySelector('.ar1_1, .ar16_9, .ar9_16, .ar5_7, .ar7_5') !== null)
                 resizeObserver.observe(element);
             });
         }
-    }, 1500);
+    }, 1000);
 }
 
 /* loading="lazy" の順次解除 */
