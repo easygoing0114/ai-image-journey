@@ -488,7 +488,11 @@ if (document.querySelector('.ar1_1, .ar16_9, .ar9_16, .ar5_7, .ar7_5') !== null)
         const squareElements = document.querySelectorAll('.ar1_1');
         squareElements.forEach(element => {
             const actualWidth = element.offsetWidth;
-            element.style.height = actualWidth + 'px';
+            // 子のiframe要素の高さを調整
+            const iframe = element.querySelector('iframe');
+            if (iframe) {
+                iframe.style.height = actualWidth + 'px';
+            }
         });
         
         // .ar16_9 クラスを持つすべての要素を取得（16:9 横長）
@@ -496,7 +500,11 @@ if (document.querySelector('.ar1_1, .ar16_9, .ar9_16, .ar5_7, .ar7_5') !== null)
         wideElements.forEach(element => {
             const actualWidth = element.offsetWidth;
             const height = Math.round(actualWidth * 9 / 16);
-            element.style.height = height + 'px';
+            // 子のiframe要素の高さを調整
+            const iframe = element.querySelector('iframe');
+            if (iframe) {
+                iframe.style.height = height + 'px';
+            }
         });
         
         // .ar9_16 クラスを持つすべての要素を取得（9:16 縦長）
@@ -504,7 +512,11 @@ if (document.querySelector('.ar1_1, .ar16_9, .ar9_16, .ar5_7, .ar7_5') !== null)
         tallElements.forEach(element => {
             const actualWidth = element.offsetWidth;
             const height = Math.round(actualWidth * 16 / 9);
-            element.style.height = height + 'px';
+            // 子のiframe要素の高さを調整
+            const iframe = element.querySelector('iframe');
+            if (iframe) {
+                iframe.style.height = height + 'px';
+            }
         });
         
         // .ar5_7 クラスを持つすべての要素を取得（1:√2 白銀比縦長）
@@ -512,7 +524,11 @@ if (document.querySelector('.ar1_1, .ar16_9, .ar9_16, .ar5_7, .ar7_5') !== null)
         silverTallElements.forEach(element => {
             const actualWidth = element.offsetWidth;
             const height = Math.round(actualWidth * Math.sqrt(2)); // √2 ≈ 1.4142
-            element.style.height = height + 'px';
+            // 子のiframe要素の高さを調整
+            const iframe = element.querySelector('iframe');
+            if (iframe) {
+                iframe.style.height = height + 'px';
+            }
         });
         
         // .ar7_5 クラスを持つすべての要素を取得（√2:1 白銀比横長）
@@ -520,7 +536,11 @@ if (document.querySelector('.ar1_1, .ar16_9, .ar9_16, .ar5_7, .ar7_5') !== null)
         silverWideElements.forEach(element => {
             const actualWidth = element.offsetWidth;
             const height = Math.round(actualWidth / Math.sqrt(2)); // 1/√2 ≈ 0.7071
-            element.style.height = height + 'px';
+            // 子のiframe要素の高さを調整
+            const iframe = element.querySelector('iframe');
+            if (iframe) {
+                iframe.style.height = height + 'px';
+            }
         });
     }
 
@@ -536,28 +556,44 @@ if (document.querySelector('.ar1_1, .ar16_9, .ar9_16, .ar5_7, .ar7_5') !== null)
                 const element = entry.target;
                 if (element.classList.contains('ar1_1')) {
                     const actualWidth = element.offsetWidth;
-                    element.style.height = actualWidth + 'px';
+                    const iframe = element.querySelector('iframe');
+                    if (iframe) {
+                        iframe.style.height = actualWidth + 'px';
+                    }
                 } else if (element.classList.contains('ar16_9')) {
                     const actualWidth = element.offsetWidth;
                     const height = Math.round(actualWidth * 9 / 16);
-                    element.style.height = height + 'px';
+                    const iframe = element.querySelector('iframe');
+                    if (iframe) {
+                        iframe.style.height = height + 'px';
+                    }
                 } else if (element.classList.contains('ar9_16')) {
                     const actualWidth = element.offsetWidth;
                     const height = Math.round(actualWidth * 16 / 9);
-                    element.style.height = height + 'px';
+                    const iframe = element.querySelector('iframe');
+                    if (iframe) {
+                        iframe.style.height = height + 'px';
+                    }
                 } else if (element.classList.contains('ar5_7')) {
                     const actualWidth = element.offsetWidth;
                     const height = Math.round(actualWidth * Math.sqrt(2)); // 白銀比縦長 1:√2
-                    element.style.height = height + 'px';
+                    const iframe = element.querySelector('iframe');
+                    if (iframe) {
+                        iframe.style.height = height + 'px';
+                    }
                 } else if (element.classList.contains('ar7_5')) {
                     const actualWidth = element.offsetWidth;
                     const height = Math.round(actualWidth / Math.sqrt(2)); // 白銀比横長 √2:1
-                    element.style.height = height + 'px';
+                    const iframe = element.querySelector('iframe');
+                    if (iframe) {
+                        iframe.style.height = height + 'px';
+                    }
                 }
             });
         });
     }  
 
+    // 修正: Defer.js の遅延を iframe の遅延読み込み（1000ms）より長く設定
     Defer(function() {
         // 初回実行
         resizeAspectRatios();
