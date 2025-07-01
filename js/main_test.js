@@ -593,7 +593,6 @@ if (document.querySelector('.ar1_1, .ar16_9, .ar9_16, .ar5_7, .ar7_5') !== null)
         });
     }  
 
-    // 修正: Defer.js の遅延を iframe の遅延読み込み（1000ms）より長く設定
     Defer(function() {
         // 初回実行
         resizeAspectRatios();
@@ -607,7 +606,7 @@ if (document.querySelector('.ar1_1, .ar16_9, .ar9_16, .ar5_7, .ar7_5') !== null)
                 resizeObserver.observe(element);
             });
         }
-    }, 1000);
+    }, 100);
 }
 
 /* loading="lazy" の順次解除 */
