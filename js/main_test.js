@@ -20,8 +20,8 @@ if (document.querySelector('.language-mermaid') !== null) {
 
 if (document.querySelector('.chartjs') !== null) {
   Defer.js('https://files.ai-image-journey.com/js/chart.umd.min.js', 'chartjs', 100);
-  Defer.js('https://files.ai-image-journey.com/js/chartjs-plugin-datalabels.min.js', 'chartjsdatalabelsplugin', 500);
-  Defer.js('https://files.ai-image-journey.com/js/chartjs_arrow_plugin.js', 'chartjsarrowplugin', 500);
+  Defer.js('https://files.ai-image-journey.com/js/chartjs-plugin-datalabels.min.js', 'chartjsdatalabelsplugin', 300);
+  Defer.js('https://files.ai-image-journey.com/js/chartjs_arrow_plugin.js', 'chartjsarrowplugin', 300);
 }
 
 if (document.querySelector('.markdown') !== null) {
@@ -32,39 +32,20 @@ if (document.querySelector('.markdown') !== null) {
 }
 
 if (document.querySelector('.twitter-tweet') !== null) {
-  Defer.js('https://platform.twitter.com/widgets.js', 'twitter', 100);
+  Defer.js('https://platform.twitter.com/widgets.js', 'twitter', 1500);
 }
 if (document.querySelector('.bluesky-embed') !== null) {
-  Defer.js('https://embed.bsky.app/static/embed.js', 'bluesky', 100);
+  Defer.js('https://embed.bsky.app/static/embed.js', 'bluesky', 2000);
+  Defer.js('https://files.ai-image-journey.com/js/bluesky-title-adder.js', 'bluesky_title_adder', 2000);
 }
-if (document.querySelector('.instagram-media') !== null) {
-  Defer.js('https://www.instagram.com/embed.js', 'instagram', 100);
-}
-
-// .language-mermaid以外の.language-要素が存在するかチェック
-function hasCodeBlocks() {
-  const languageElements = document.querySelectorAll('[class*="language-"]');
-  
-  for (let element of languageElements) {
-    const classList = Array.from(element.classList);
-    for (let className of classList) {
-      if (className.startsWith('language-') && className !== 'language-mermaid') {
-        return true;
-      }
-    }
-  }
-  
-  return false;
+if (document.querySelector('.text-post-media') !== null) {
+  Defer.js('https://www.threads.com/embed.js', 'threads', 2500);
 }
 
-// .language-mermaid以外の.language-クラスが存在する場合にフォントチェックスクリプトを読み込み
-if (hasCodeBlocks()) {
-  Defer.js('https://files.ai-image-journey.com/js/fira_code_check.js', 'fira_code_check', 100);
-}
 
 /* img, iframe 差し替え */
-Defer.dom('.defer-img img', 100);
-Defer.dom('.defer-iframe iframe', 1500);
+Defer.dom('img', 100);
+Defer.dom('iframe', 1000);
 
 /* debounce関数 */
 function debounce(func, wait) {
@@ -498,6 +479,76 @@ if (document.querySelector('.table-responsive') !== null) {
     }, 100);
 }
 
+/* Aspect Ratio を調整 */
+if (document.querySelector('.ar1_1, .ar16_9, .ar9_16') !== null) {
+    
+    // アスペクト比を調整するスクリプト
+    function resizeAspectRatios() {
+        // .ar1_1 クラスを持つすべての要素を取得（1:1 正方形）
+        const squareElements = document.querySelectorAll('.ar1_1');
+        squareElements.forEach(element => {
+            const actualWidth = element.offsetWidth;
+            element.style.height = actualWidth + 'px';
+        });
+        
+        // .ar16_9 クラスを持つすべての要素を取得（16:9 横長）
+        const wideElements = document.querySelectorAll('.ar16_9');
+        wideElements.forEach(element => {
+            const actualWidth = element.offsetWidth;
+            const height = Math.round(actualWidth * 9 / 16);
+            element.style.height = height + 'px';
+        });
+        
+        // .ar9_16 クラスを持つすべての要素を取得（9:16 縦長）
+        const tallElements = document.querySelectorAll('.ar9_16');
+        tallElements.forEach(element => {
+            const actualWidth = element.offsetWidth;
+            const height = Math.round(actualWidth * 16 / 9);
+            element.style.height = height + 'px';
+        });
+    }
+
+    // debounce付きのリサイズハンドラーを作成
+    const debouncedResize = debounce(resizeAspectRatios, 100);
+
+    let resizeObserver;
+    
+    if (window.ResizeObserver) {
+        resizeObserver = new ResizeObserver(entries => {
+            entries.forEach(entry => {
+                const element = entry.target;
+                if (element.classList.contains('ar1_1')) {
+                    const actualWidth = element.offsetWidth;
+                    element.style.height = actualWidth + 'px';
+                } else if (element.classList.contains('ar16_9')) {
+                    const actualWidth = element.offsetWidth;
+                    const height = Math.round(actualWidth * 9 / 16);
+                    element.style.height = height + 'px';
+                } else if (element.classList.contains('ar9_16')) {
+                    const actualWidth = element.offsetWidth;
+                    const height = Math.round(actualWidth * 16 / 9);
+                    element.style.height = height + 'px';
+                }
+            });
+        });
+    }  
+
+    Defer(function() {
+        // 初回実行
+        resizeAspectRatios();
+        
+        // リサイズイベントリスナー追加
+        window.addEventListener('resize', debouncedResize);
+        
+        // ResizeObserver で要素監視開始（存在する場合のみ）
+        if (resizeObserver) {
+            document.querySelectorAll('.ar1_1, .ar16_9, .ar9_16').forEach(element => {
+                resizeObserver.observe(element);
+            });
+        }
+    }, 1500);
+}
+
 /* loading="lazy" の順次解除 */
 Defer(function() {
     // すべての <img> 要素を配列に変換
@@ -582,7 +633,7 @@ if (document.querySelector('.mermaid') !== null) {
 
     mermaid.run();
 
-  }, 1000);
+  }, 1500);
 }
 
 /* Chart.js */
@@ -675,7 +726,7 @@ if (document.querySelector('.chartjs') !== null) {
         const debouncedResize = debounce(handleResize, 100);
         window.addEventListener('resize', debouncedResize);
         initializeCharts(); // 初回実行
-    }, 1000);
+    }, 1500);
 }
   
 /* GPUアクセラレーション除去 */
