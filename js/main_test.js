@@ -21,6 +21,7 @@ if (document.querySelector('.language-mermaid') !== null) {
 if (document.querySelector('.chartjs') !== null) {
   Defer.js('https://files.ai-image-journey.com/js/chart.umd.min.js', 'chartjs', 100);
   Defer.js('https://files.ai-image-journey.com/js/chartjs-plugin-datalabels.min.js', 'chartjsdatalabelsplugin', 300);
+  Defer.js('https://files.ai-image-journey.com/js/chartjs-adapter-date-fns.bundle.min.js', 'chartjsadapterdatefns', 300);
   Defer.js('https://files.ai-image-journey.com/js/chartjs_arrow_plugin.js', 'chartjsarrowplugin', 300);
 }
 
