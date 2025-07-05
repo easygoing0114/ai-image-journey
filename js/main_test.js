@@ -711,7 +711,7 @@ if (document.querySelector('.chartjs') !== null) {
         if (!container) return 24; // デフォルト値
         
         const containerWidth = container.offsetWidth;
-        return Math.round(containerWidth * 0.1); // 10%
+        return Math.round(containerWidth * 0.08); // 10%
     }
     
     function updateChartPadding() {
