@@ -705,6 +705,32 @@ if (document.querySelector('.chartjs') !== null) {
         return getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color').trim();
     } 
     
+    function calculateDynamicPadding() {
+        // コンテナの実際の表示幅を取得
+        const container = document.querySelector('.chartjs-container');
+        if (!container) return 24; // デフォルト値
+        
+        const containerWidth = container.offsetWidth;
+        return Math.round(containerWidth * 0.1); // 10%
+    }
+    
+    function updateChartPadding() {
+        const newPadding = calculateDynamicPadding();
+        
+        // 既存のチャートのpaddingを更新
+        Object.values(Chart.instances).forEach(function(chart) {
+            if (chart.options.layout) {
+                chart.options.layout.padding = newPadding;
+            } else {
+                chart.options.layout = { padding: newPadding };
+            }
+            chart.update('none');
+        });
+        
+        // 新しいチャート用のデフォルト値も更新
+        Chart.defaults.layout.padding = newPadding;
+    }
+    
     function updateAllChartColors() {
         const currentColor = getCurrentThemeColor();
         Chart.defaults.color = currentColor;
@@ -750,7 +776,11 @@ if (document.querySelector('.chartjs') !== null) {
         // 初回のみChart.jsの設定を行う
         if (!chartsInitialized) {
             Chart.register(ChartDataLabels);
-            Chart.defaults.layout.padding = 24;
+            
+            // 動的paddingを計算して設定
+            const initialPadding = calculateDynamicPadding();
+            Chart.defaults.layout.padding = initialPadding;
+            
             chartsInitialized = true;
         }
         
@@ -768,7 +798,8 @@ if (document.querySelector('.chartjs') !== null) {
     }
     
     function handleResize() {
-        // リサイズ時はチャートの色を更新し、Chart.jsの内蔵リサイズ機能を使用
+        // リサイズ時はpaddingとチャートの色を更新
+        updateChartPadding();
         updateAllChartColors();
         
         // Chart.jsの内蔵リサイズ機能を使用（より効率的）
