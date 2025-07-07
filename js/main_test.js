@@ -15,14 +15,14 @@ if (document.querySelector('#toc') !== null) {
 }
 
 if (document.querySelector('.language-mermaid') !== null) {
-  Defer.js('https://files.ai-image-journey.com/js/mermaid.min.js', 'mermaid', 100);
+  Defer.js('https://files.ai-image-journey.com/js/mermaid.min.js', 'mermaid', 500);
 }
 
 if (document.querySelector('.chartjs') !== null) {
-  Defer.js('https://files.ai-image-journey.com/js/chart.umd.min.js', 'chartjs', 100);
-  Defer.js('https://files.ai-image-journey.com/js/chartjs-plugin-datalabels.min.js', 'chartjsdatalabelsplugin', 300);
-  Defer.js('https://files.ai-image-journey.com/js/chartjs-adapter-date-fns.bundle.min.js', 'chartjsadapterdatefns', 300);
-  Defer.js('https://files.ai-image-journey.com/js/chartjs_arrow_plugin.js', 'chartjsarrowplugin', 300);
+  Defer.js('https://files.ai-image-journey.com/js/chart.umd.min.js', 'chartjs', 500);
+  Defer.js('https://files.ai-image-journey.com/js/chartjs-plugin-datalabels.min.js', 'chartjsdatalabelsplugin', 800);
+  Defer.js('https://files.ai-image-journey.com/js/chartjs-adapter-date-fns.bundle.min.js', 'chartjsadapterdatefns', 800);
+  Defer.js('https://files.ai-image-journey.com/js/chartjs_arrow_plugin.js', 'chartjsarrowplugin', 800);
 }
 
 if (document.querySelector('.markdown') !== null) {
