@@ -32,12 +32,12 @@ if (document.querySelector('.markdown') !== null) {
   Defer.js('https://cdn.jsdelivr.net/npm/marked-extended-tables/lib/index.umd.js', 'markedplugin', 100);
 }
 
-if (document.querySelector('.twitter-tweet') !== null) {
-  Defer.js('https://platform.twitter.com/widgets.js', 'twitter', 1000);
-}
 if (document.querySelector('.bluesky-embed') !== null) {
   Defer.js('https://embed.bsky.app/static/embed.js', 'bluesky', 1500);
   Defer.js('https://files.ai-image-journey.com/js/bluesky-title-adder.js', 'bluesky_title_adder', 1500);
+}
+if (document.querySelector('.twitter-tweet') !== null) {
+  Defer.js('https://platform.twitter.com/widgets.js', 'twitter', 2000);
 }
 if (document.querySelector('.text-post-media') !== null) {
   Defer.js('https://www.threads.com/embed.js', 'threads', 2000);
