@@ -23,6 +23,7 @@ if (document.querySelector('.chartjs') !== null) {
   Defer.js('https://files.ai-image-journey.com/js/chartjs-plugin-datalabels.min.js', 'chartjsdatalabelsplugin', 800);
   Defer.js('https://files.ai-image-journey.com/js/chartjs-adapter-date-fns.bundle.min.js', 'chartjsadapterdatefns', 800);
   Defer.js('https://files.ai-image-journey.com/js/chartjs_arrow_plugin.js', 'chartjsarrowplugin', 800);
+  Defer.js('https://files.ai-image-journey.com/js/papaprase.js', 'papapease', 800);
 }
 
 if (document.querySelector('.markdown') !== null) {
