@@ -15,15 +15,15 @@ if (document.querySelector('#toc') !== null) {
 }
 
 if (document.querySelector('.language-mermaid') !== null) {
-  Defer.js('https://files.ai-image-journey.com/js/mermaid.min.js', 'mermaid', 500);
+  Defer.js('https://files.ai-image-journey.com/js/mermaid.min.js', 'mermaid', 100);
 }
 
 if (document.querySelector('.chartjs') !== null) {
-  Defer.js('https://files.ai-image-journey.com/js/chart.umd.min.js', 'chartjs', 500);
-  Defer.js('https://files.ai-image-journey.com/js/chartjs-plugin-datalabels.min.js', 'chartjsdatalabelsplugin', 800);
-  Defer.js('https://files.ai-image-journey.com/js/chartjs-adapter-date-fns.bundle.min.js', 'chartjsadapterdatefns', 800);
-  Defer.js('https://files.ai-image-journey.com/js/chartjs_arrow_plugin.js', 'chartjsarrowplugin', 800);
-  Defer.js('https://files.ai-image-journey.com/js/papaprase.js', 'papapease', 800);
+  Defer.js('https://files.ai-image-journey.com/js/chart.umd.min.js', 'chartjs', 100);
+  Defer.js('https://files.ai-image-journey.com/js/chartjs-plugin-datalabels.min.js', 'chartjsdatalabelsplugin', 300);
+  Defer.js('https://files.ai-image-journey.com/js/chartjs-adapter-date-fns.bundle.min.js', 'chartjsadapterdatefns', 300);
+  Defer.js('https://files.ai-image-journey.com/js/chartjs_arrow_plugin.js', 'chartjsarrowplugin', 300);
+  Defer.js('https://files.ai-image-journey.com/js/papaprase.js', 'papapease', 300);
 }
 
 if (document.querySelector('.markdown') !== null) {
@@ -34,14 +34,14 @@ if (document.querySelector('.markdown') !== null) {
 }
 
 if (document.querySelector('.bluesky-embed') !== null) {
-  Defer.js('https://embed.bsky.app/static/embed.js', 'bluesky', 1500);
-  Defer.js('https://files.ai-image-journey.com/js/bluesky-title-adder.js', 'bluesky_title_adder', 1500);
+  Defer.js('https://embed.bsky.app/static/embed.js', 'bluesky', 1000);
+  Defer.js('https://files.ai-image-journey.com/js/bluesky-title-adder.js', 'bluesky_title_adder', 1000);
 }
 if (document.querySelector('.twitter-tweet') !== null) {
-  Defer.js('https://platform.twitter.com/widgets.js', 'twitter', 2000);
+  Defer.js('https://platform.twitter.com/widgets.js', 'twitter', 1500);
 }
 if (document.querySelector('.text-post-media') !== null) {
-  Defer.js('https://www.threads.com/embed.js', 'threads', 2000);
+  Defer.js('https://www.threads.com/embed.js', 'threads', 1500);
 }
 
 
