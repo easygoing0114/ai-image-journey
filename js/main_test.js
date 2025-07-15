@@ -712,7 +712,20 @@ if (document.querySelector('.chartjs') !== null) {
         if (!container) return 24; // デフォルト値
         
         const containerWidth = container.offsetWidth;
-        return Math.round(containerWidth * 0.08); // 10%
+        const containerHeight = container.offsetHeight;
+        
+        // アスペクト比を計算（幅/高さ）
+        const aspectRatio = containerWidth / containerHeight;
+        
+        // アスペクト比に応じて係数を選択
+        let coefficient;
+        if (aspectRatio >= 1) {
+            coefficient = 0.05; // 横長または正方形の場合
+        } else {
+            coefficient = 0.1;  // 縦長の場合
+        }
+        
+        return Math.round(containerWidth * coefficient);
     }
     
     function updateChartPadding() {
