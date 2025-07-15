@@ -722,7 +722,7 @@ if (document.querySelector('.chartjs') !== null) {
         if (aspectRatio >= 1) {
             coefficient = 0.05; // 横長または正方形の場合
         } else {
-            coefficient = 0.1;  // 縦長の場合
+            coefficient = 0.15;  // 縦長の場合
         }
         
         return Math.round(containerWidth * coefficient);
