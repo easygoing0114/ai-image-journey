@@ -706,12 +706,12 @@ if (document.querySelector('.chartjs') !== null) {
         return getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color').trim();
     } 
     
-    function calculateDynamicPadding() {
+    function calculateDynamicPadding(specificContainer = null) {
         console.log('=== calculateDynamicPadding 開始 ===');
         
-        // コンテナの実際の表示幅を取得
-        const container = document.querySelector('.chartjs-container');
-        console.log('コンテナ要素:', container);
+        // 特定のコンテナが指定されていない場合は最初のコンテナを使用
+        const container = specificContainer || document.querySelector('.chartjs-container');
+        console.log('対象コンテナ要素:', container);
         
         if (!container) {
             console.log('コンテナが見つかりません - デフォルト値24を返します');
@@ -747,12 +747,22 @@ if (document.querySelector('.chartjs') !== null) {
         return calculatedPadding;
     }
     
+    function findContainerForChart(canvas) {
+        // canvasの親要素を遡って.chartjs-containerを探す
+        let parent = canvas.parentElement;
+        while (parent && parent !== document.body) {
+            if (parent.classList.contains('chartjs-container')) {
+                return parent;
+            }
+            parent = parent.parentElement;
+        }
+        return null;
+    }
+    
     function updateChartPadding() {
         console.log('=== updateChartPadding 開始 ===');
-        const newPadding = calculateDynamicPadding();
-        console.log('新しいパディング値:', newPadding);
         
-        // 既存のチャートのpaddingを更新
+        // 既存のチャートのpaddingを個別に更新
         const chartInstances = Object.values(Chart.instances);
         console.log('既存のチャート数:', chartInstances.length);
         
@@ -760,21 +770,29 @@ if (document.querySelector('.chartjs') !== null) {
             console.log(`チャート${index + 1}の更新開始`);
             console.log('更新前のpadding:', chart.options.layout?.padding);
             
-            if (chart.options.layout) {
-                chart.options.layout.padding = newPadding;
-            } else {
-                chart.options.layout = { padding: newPadding };
-            }
+            // このチャートに対応するコンテナを見つける
+            const canvas = chart.canvas;
+            const container = findContainerForChart(canvas);
+            console.log(`チャート${index + 1}のコンテナ:`, container);
             
-            console.log('更新後のpadding:', chart.options.layout.padding);
-            chart.update('none');
-            console.log(`チャート${index + 1}の更新完了`);
+            if (container) {
+                const newPadding = calculateDynamicPadding(container);
+                console.log(`チャート${index + 1}の新しいパディング値:`, newPadding);
+                
+                if (chart.options.layout) {
+                    chart.options.layout.padding = newPadding;
+                } else {
+                    chart.options.layout = { padding: newPadding };
+                }
+                
+                console.log('更新後のpadding:', chart.options.layout.padding);
+                chart.update('none');
+                console.log(`チャート${index + 1}の更新完了`);
+            } else {
+                console.log(`チャート${index + 1}のコンテナが見つかりません`);
+            }
         });
         
-        // 新しいチャート用のデフォルト値も更新
-        console.log('Chart.defaults.layout.padding更新前:', Chart.defaults.layout?.padding);
-        Chart.defaults.layout.padding = newPadding;
-        console.log('Chart.defaults.layout.padding更新後:', Chart.defaults.layout.padding);
         console.log('=== updateChartPadding 終了 ===');
     }
     
@@ -827,6 +845,40 @@ if (document.querySelector('.chartjs') !== null) {
         console.log('=== createAllCharts 終了 ===');
     }
     
+    function applyIndividualPadding() {
+        console.log('=== applyIndividualPadding 開始 ===');
+        
+        // 作成されたチャートに対して個別のパディングを適用
+        const chartInstances = Object.values(Chart.instances);
+        console.log('作成されたチャート数:', chartInstances.length);
+        
+        chartInstances.forEach(function(chart, index) {
+            console.log(`チャート${index + 1}の個別パディング設定開始`);
+            
+            const canvas = chart.canvas;
+            const container = findContainerForChart(canvas);
+            console.log(`チャート${index + 1}のコンテナ:`, container);
+            
+            if (container) {
+                const padding = calculateDynamicPadding(container);
+                console.log(`チャート${index + 1}の個別パディング値:`, padding);
+                
+                if (chart.options.layout) {
+                    chart.options.layout.padding = padding;
+                } else {
+                    chart.options.layout = { padding: padding };
+                }
+                
+                chart.update('none');
+                console.log(`チャート${index + 1}の個別パディング設定完了`);
+            } else {
+                console.log(`チャート${index + 1}のコンテナが見つかりません`);
+            }
+        });
+        
+        console.log('=== applyIndividualPadding 終了 ===');
+    }
+    
     function initializeCharts() {
         console.log('=== initializeCharts 開始 ===');
         console.log('chartsInitialized:', chartsInitialized);
@@ -836,10 +888,8 @@ if (document.querySelector('.chartjs') !== null) {
             console.log('Chart.jsの初期設定を開始');
             Chart.register(ChartDataLabels);
             
-            // 動的paddingを計算して設定
-            const initialPadding = calculateDynamicPadding();
-            console.log('初期パディング値:', initialPadding);
-            Chart.defaults.layout.padding = initialPadding;
+            // デフォルトのパディングは最小値に設定（個別で上書きする）
+            Chart.defaults.layout.padding = 24;
             console.log('Chart.defaults.layout.padding設定完了:', Chart.defaults.layout.padding);
             
             chartsInitialized = true;
@@ -848,6 +898,9 @@ if (document.querySelector('.chartjs') !== null) {
         
         // チャート作成
         createAllCharts();
+        
+        // 各チャートに個別のパディングを適用
+        applyIndividualPadding();
         
         // テーマカラーの適用
         updateAllChartColors();
@@ -863,7 +916,7 @@ if (document.querySelector('.chartjs') !== null) {
     
     function handleResize() {
         console.log('=== handleResize 開始 ===');
-        // リサイズ時はpaddingとチャートの色を更新
+        // リサイズ時は個別のpaddingとチャートの色を更新
         updateChartPadding();
         updateAllChartColors();
         
