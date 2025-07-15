@@ -707,42 +707,75 @@ if (document.querySelector('.chartjs') !== null) {
     } 
     
     function calculateDynamicPadding() {
+        console.log('=== calculateDynamicPadding 開始 ===');
+        
         // コンテナの実際の表示幅を取得
         const container = document.querySelector('.chartjs-container');
-        if (!container) return 24; // デフォルト値
+        console.log('コンテナ要素:', container);
+        
+        if (!container) {
+            console.log('コンテナが見つかりません - デフォルト値24を返します');
+            return 24; // デフォルト値
+        }
         
         const containerWidth = container.offsetWidth;
         const containerHeight = container.offsetHeight;
         
+        console.log('コンテナサイズ:', {
+            width: containerWidth,
+            height: containerHeight
+        });
+        
         // アスペクト比を計算（幅/高さ）
         const aspectRatio = containerWidth / containerHeight;
+        console.log('アスペクト比:', aspectRatio);
         
         // アスペクト比に応じて係数を選択
         let coefficient;
         if (aspectRatio >= 1) {
             coefficient = 0.05; // 横長または正方形の場合
+            console.log('横長/正方形 - 係数:', coefficient);
         } else {
             coefficient = 0.15;  // 縦長の場合
+            console.log('縦長 - 係数:', coefficient);
         }
         
-        return Math.round(containerWidth * coefficient);
+        const calculatedPadding = Math.round(containerWidth * coefficient);
+        console.log('計算されたパディング:', calculatedPadding);
+        console.log('=== calculateDynamicPadding 終了 ===');
+        
+        return calculatedPadding;
     }
     
     function updateChartPadding() {
+        console.log('=== updateChartPadding 開始 ===');
         const newPadding = calculateDynamicPadding();
+        console.log('新しいパディング値:', newPadding);
         
         // 既存のチャートのpaddingを更新
-        Object.values(Chart.instances).forEach(function(chart) {
+        const chartInstances = Object.values(Chart.instances);
+        console.log('既存のチャート数:', chartInstances.length);
+        
+        chartInstances.forEach(function(chart, index) {
+            console.log(`チャート${index + 1}の更新開始`);
+            console.log('更新前のpadding:', chart.options.layout?.padding);
+            
             if (chart.options.layout) {
                 chart.options.layout.padding = newPadding;
             } else {
                 chart.options.layout = { padding: newPadding };
             }
+            
+            console.log('更新後のpadding:', chart.options.layout.padding);
             chart.update('none');
+            console.log(`チャート${index + 1}の更新完了`);
         });
         
         // 新しいチャート用のデフォルト値も更新
+        console.log('Chart.defaults.layout.padding更新前:', Chart.defaults.layout?.padding);
         Chart.defaults.layout.padding = newPadding;
+        console.log('Chart.defaults.layout.padding更新後:', Chart.defaults.layout.padding);
+        console.log('=== updateChartPadding 終了 ===');
     }
     
     function updateAllChartColors() {
@@ -775,27 +808,42 @@ if (document.querySelector('.chartjs') !== null) {
     }
     
     function createAllCharts() {
+        console.log('=== createAllCharts 開始 ===');
         // Get all canvas elements with class 'chartjs'
         const canvases = document.querySelectorAll('.chartjs');
+        console.log('見つかったcanvas要素数:', canvases.length);
+        
         canvases.forEach((canvas, index) => {
             // Call createChartN function where N is index + 1
             const funcName = `createChart${index + 1}`;
+            console.log(`${funcName}関数を呼び出し中...`);
             if (typeof window[funcName] === 'function') {
                 window[funcName]();
+                console.log(`${funcName}関数の実行完了`);
+            } else {
+                console.log(`${funcName}関数が見つかりません`);
             }
         });
+        console.log('=== createAllCharts 終了 ===');
     }
     
     function initializeCharts() {
+        console.log('=== initializeCharts 開始 ===');
+        console.log('chartsInitialized:', chartsInitialized);
+        
         // 初回のみChart.jsの設定を行う
         if (!chartsInitialized) {
+            console.log('Chart.jsの初期設定を開始');
             Chart.register(ChartDataLabels);
             
             // 動的paddingを計算して設定
             const initialPadding = calculateDynamicPadding();
+            console.log('初期パディング値:', initialPadding);
             Chart.defaults.layout.padding = initialPadding;
+            console.log('Chart.defaults.layout.padding設定完了:', Chart.defaults.layout.padding);
             
             chartsInitialized = true;
+            console.log('Chart.jsの初期設定完了');
         }
         
         // チャート作成
@@ -809,9 +857,12 @@ if (document.querySelector('.chartjs') !== null) {
             canvas.style.width = 'auto';
             canvas.style.height = 'auto';
         });
+        
+        console.log('=== initializeCharts 終了 ===');
     }
     
     function handleResize() {
+        console.log('=== handleResize 開始 ===');
         // リサイズ時はpaddingとチャートの色を更新
         updateChartPadding();
         updateAllChartColors();
@@ -826,12 +877,15 @@ if (document.querySelector('.chartjs') !== null) {
             canvas.style.width = 'auto';
             canvas.style.height = 'auto';
         });
+        console.log('=== handleResize 終了 ===');
     }
     
     Defer(function() {
+        console.log('=== Deferコールバック開始 ===');
         const debouncedResize = debounce(handleResize, 100);
         window.addEventListener('resize', debouncedResize);
         initializeCharts(); // 初回実行
+        console.log('=== Deferコールバック終了 ===');
     }, 1500);
 }
   
