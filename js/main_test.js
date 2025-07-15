@@ -736,7 +736,7 @@ if (document.querySelector('.chartjs') !== null) {
             coefficient = 0.05; // 横長または正方形の場合
             console.log('横長/正方形 - 係数:', coefficient);
         } else {
-            coefficient = 0.15;  // 縦長の場合
+            coefficient = 0.1;  // 縦長の場合
             console.log('縦長 - 係数:', coefficient);
         }
         
