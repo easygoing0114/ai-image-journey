@@ -81,53 +81,80 @@ Defer(function () {
     }
 }, 100);
 
-/* dark-mode ボタン */
+/* dark-mode */
 Defer(function() {
   var darkModeButtons = document.querySelectorAll(".toggle-dark-mode-btn");
+  var htmlElement = document.querySelector("html");
+  var themeColorMeta = document.querySelector("#theme-color-meta");
+  var appleStatusMeta = document.querySelector("#apple-status-bar-meta");
+  var twitterThemeMeta = document.querySelector("#twitter-theme");
 
+  // テーマ色の定義
+  var colors = {
+    light: {
+      theme: "#fffffa",
+      appleStatus: "default",
+      twitter: "light"
+    },
+    dark: {
+      theme: "#1b1212", 
+      appleStatus: "black-translucent",
+      twitter: "dark"
+    }
+  };
+
+  // メタタグを更新する関数
+  function updateMetaTags(theme) {
+    var colorSet = colors[theme];
+    
+    if (themeColorMeta) {
+      themeColorMeta.setAttribute('content', colorSet.theme);
+    }
+    if (appleStatusMeta) {
+      appleStatusMeta.setAttribute('content', colorSet.appleStatus);
+    }
+    if (twitterThemeMeta) {
+      twitterThemeMeta.setAttribute('content', colorSet.twitter);
+    }
+  }
+
+  // テーマを適用する関数
+  function applyTheme(theme) {
+    if (theme === 'dark') {
+      htmlElement.classList.add("dark-mode");
+    } else {
+      htmlElement.classList.remove("dark-mode");
+    }
+    updateMetaTags(theme);
+    localStorage.setItem('theme', theme);
+  }
+
+  // ボタンクリックイベント
   darkModeButtons.forEach(function(button) {
-      button.addEventListener("click", function() {
-          var htmlElement = document.querySelector("html");
-          var classList = htmlElement.classList;
-          var isDarkMode = classList.contains("dark-mode");
-          var twitterThemeMeta = document.querySelector("#twitter-theme");
-
-          if (isDarkMode) {
-              classList.remove("dark-mode");
-              localStorage.setItem('theme', 'light'); // ライトモードを記憶
-              if (twitterThemeMeta) {
-                  twitterThemeMeta.setAttribute('content', 'light'); // Metaタグを更新
-              }
-          } else {
-              classList.add("dark-mode");
-              localStorage.setItem('theme', 'dark'); // ダークモードを記憶
-              if (twitterThemeMeta) {
-                  twitterThemeMeta.setAttribute('content', 'dark'); // Metaタグを更新
-              }
-          }
-          
-          // Chart.jsの色を更新（テンプレート関数を呼び出し）
-          if (typeof updateAllChartColors === 'function') {
-              setTimeout(function() {
-                  updateAllChartColors();
-              }, 100); // CSSの適用を待つ
-          }
-      });
+    button.addEventListener("click", function() {
+      var isDarkMode = htmlElement.classList.contains("dark-mode");
+      var newTheme = isDarkMode ? 'light' : 'dark';
+      
+      applyTheme(newTheme);
+      
+      // Chart.jsの色を更新
+      if (typeof updateAllChartColors === 'function') {
+        setTimeout(function() {
+          updateAllChartColors();
+        }, 100);
+      }
+    });
   });
 
-  // ページ読み込み時にlocalStorageの値をチェックして適用
+  // 初期化：保存されたテーマをチェック
   var savedTheme = localStorage.getItem('theme');
-  var twitterThemeMeta = document.querySelector("#twitter-theme");
-  if (savedTheme === 'dark') {
-      document.querySelector("html").classList.add("dark-mode");
-      if (twitterThemeMeta) {
-          twitterThemeMeta.setAttribute('content', 'dark'); // Metaタグを更新
-      }
-  } else {
-      if (twitterThemeMeta) {
-          twitterThemeMeta.setAttribute('content', 'light'); // Metaタグを更新
-      }
+  
+  if (savedTheme === 'light') {
+    // 保存されたテーマがライトの場合のみ変更
+    applyTheme('light');
   }
+  // ダークの場合は既にHTMLで設定済みなので何もしない
+
 }, 100);
 
 // テキストエリアの高さ自動調整
