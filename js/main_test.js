@@ -94,23 +94,17 @@ Defer(function () {
 
       // Chart.jsの色を更新
       if (typeof updateAllChartColors === 'function') {
-        setTimeout(function() {
-          updateAllChartColors();
-        }, 100);
+        updateAllChartColors();
       }
 
       // Mermaidチャートを再描画
       if (typeof updateMermaidTheme === 'function') {
-        setTimeout(function() {
-          updateMermaidTheme(newTheme);
-        }, 100);
+        updateMermaidTheme(newTheme);
       }
 
             // Blueskyの埋め込みテーマを更新
       if (window.bluesky && typeof window.bluesky.updateThemes === 'function') {
-        setTimeout(function() {
-          window.bluesky.updateThemes();
-        }, 150);
+        window.bluesky.updateThemes();
       }
 
     });
