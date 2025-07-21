@@ -715,6 +715,29 @@ if (document.querySelector('.language-mermaid') !== null) {
         mermaid.initialize(mermaidConfig);
       }
 
+      // すべての親要素のサイズを事前に固定（レイアウトシフト防止）
+      const chartSizeInfo = [];
+      mermaidElements.forEach((element, index) => {
+        const parentFigure = element.closest('.mermaid-chart');
+        if (parentFigure) {
+          const computedStyle = window.getComputedStyle(parentFigure);
+          const hadOriginalWidth = parentFigure.style.width !== '';
+          const hadOriginalHeight = parentFigure.style.height !== '';
+          
+          // 現在のサイズを固定
+          parentFigure.style.width = computedStyle.width;
+          parentFigure.style.height = computedStyle.height;
+          
+          chartSizeInfo[index] = {
+            parentFigure: parentFigure,
+            hadOriginalWidth: hadOriginalWidth,
+            hadOriginalHeight: hadOriginalHeight
+          };
+        } else {
+          chartSizeInfo[index] = null;
+        }
+      });
+
       // 各Mermaidチャートを再描画（順次処理）
       const processChart = function(index) {
         if (index >= mermaidElements.length) {
@@ -735,25 +758,6 @@ if (document.querySelector('.language-mermaid') !== null) {
         if (!copyElement) {
           processChart(index + 1);
           return;
-        }
-        
-        // 親要素を取得（.mermaid-chartのfigure要素）
-        const parentFigure = element.closest('.mermaid-chart');
-        
-        // レイアウトシフト防止のため親要素のサイズを固定
-        let hadOriginalWidth = false;
-        let hadOriginalHeight = false;
-        
-        if (parentFigure) {
-          const computedStyle = window.getComputedStyle(parentFigure);
-          
-          // 元々width/heightが設定されていたかチェック
-          hadOriginalWidth = parentFigure.style.width !== '';
-          hadOriginalHeight = parentFigure.style.height !== '';
-          
-          // 現在の計算されたサイズを親要素に適用
-          parentFigure.style.width = computedStyle.width;
-          parentFigure.style.height = computedStyle.height;
         }
         
         // 保存されたソースコードを取得
@@ -779,13 +783,14 @@ if (document.querySelector('.language-mermaid') !== null) {
 
         // 描画完了後の後処理関数
         const onRenderComplete = function() {
-          // 親要素のサイズを元に戻す（元々設定されていなかった場合は削除）
-          if (parentFigure) {
-            if (!hadOriginalWidth) {
-              parentFigure.style.removeProperty('width');
+          // 現在のチャートのサイズを元に戻す
+          const sizeInfo = chartSizeInfo[index];
+          if (sizeInfo && sizeInfo.parentFigure) {
+            if (!sizeInfo.hadOriginalWidth) {
+              sizeInfo.parentFigure.style.removeProperty('width');
             }
-            if (!hadOriginalHeight) {
-              parentFigure.style.removeProperty('height');
+            if (!sizeInfo.hadOriginalHeight) {
+              sizeInfo.parentFigure.style.removeProperty('height');
             }
           }
           
