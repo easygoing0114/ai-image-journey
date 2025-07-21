@@ -6,6 +6,7 @@ window.bluesky = window.bluesky || {
 
 /**
  * ダークモードの状態を判定する関数（修正版）
+ * テンプレートのisDarkMode()関数と統一
  */
 function isDarkMode() {
     // localStorageの値を最優先で参照
@@ -14,12 +15,8 @@ function isDarkMode() {
         return savedTheme === 'dark';
     }
     
-    // localStorageに値がない場合はユーザーのシステム設定を参照
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        return true;
-    }
-    
-    // 最後の手段としてHTMLクラスを参照
+    // localStorageに値がない場合はHTMLクラスを参照
+    // システム設定よりもHTMLクラスを優先（テンプレートと統一）
     return document.documentElement.classList.contains('dark-mode');
 }
 
@@ -74,7 +71,6 @@ function scan(node) {
         // ダークモード対応：手動設定がない場合は自動判定
         var colorMode = embed.dataset.blueskyEmbedColorMode;
         if (!colorMode) {
-            // 修正：テーマ設定完了まで少し待機
             colorMode = isDarkMode() ? 'dark' : 'light';
         }
         searchParams.set('colorMode', colorMode);
@@ -120,14 +116,14 @@ function updateBlueskyEmbedThemes() {
 // グローバルに関数を公開
 window.bluesky.updateThemes = updateBlueskyEmbedThemes;
 
-// 修正：テーマ設定の初期化を待ってからスキャンを実行
+// 修正：テーマ設定の確認後にスキャンを実行
 function initializeBlueskyEmbeds() {
-    // テーマ設定が完了するまで短時間待機
-    setTimeout(function() {
-        scan();
-    }, 50); // 50ms待機
+    // DOM読み込み完了後に即座にスキャン実行
+    // テーマの初期化はHTMLクラスで既に完了しているはず
+    scan();
 }
 
+// DOMContentLoaded時またはすでに読み込み完了時に実行
 if (['interactive', 'complete'].indexOf(document.readyState) !== -1) {
     initializeBlueskyEmbeds();
 }
