@@ -8,6 +8,12 @@ window.bluesky = window.bluesky || {
  * ダークモードの状態を判定する関数
  */
 function isDarkMode() {
+    // localStorageの値を優先的に参照
+    var savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        return savedTheme === 'dark';
+    }
+    // localStorageに値がない場合はHTMLクラスを参照
     return document.documentElement.classList.contains('dark-mode');
 }
 
