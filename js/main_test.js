@@ -105,6 +105,13 @@ Defer(function () {
           window.bluesky.updateThemes();
         }, 100);
       }
+
+      // Mermaidチャートを再描画
+      if (typeof updateMermaidTheme === 'function') {
+        setTimeout(function() {
+          updateMermaidTheme(newTheme);
+        }, 150);
+      }
     });
   });
 }, 100);
@@ -605,7 +612,7 @@ Defer(function() {
     });
 }, 200);
 
-/* mermaid 読み込み */
+/* mermaid */
 if (document.querySelector('.language-mermaid') !== null) {
 
   // 既存の図表にスタイルを適用
@@ -664,6 +671,50 @@ if (document.querySelector('.language-mermaid') !== null) {
   }
 
   updateMermaidGanttCharts()
+
+  // Mermaidチャートのテーマ更新機能（グローバル関数として定義）
+  window.updateMermaidTheme = function(theme) {
+    try {
+      // 現在のMermaidチャートをすべて取得
+      var mermaidElements = document.querySelectorAll('.mermaid');
+      
+      if (mermaidElements.length === 0) {
+        return; // Mermaidチャートが存在しない場合は何もしない
+      }
+
+      // テーマに応じた設定（元の初期化と同じ構造）
+      var mermaidConfig = {
+        startOnLoad: false,
+        theme: theme === 'dark' ? 'dark' : 'default'
+      };
+
+      // Mermaidの設定を更新
+      mermaid.initialize(mermaidConfig);
+
+      // 各Mermaidチャートを再描画
+      mermaidElements.forEach(function(element, index) {
+        // 現在表示されているチャート定義を使用（日付更新済み）
+        var currentCode = element.textContent.trim();
+        
+        // 既存の描画内容をクリア
+        element.innerHTML = '';
+        element.textContent = currentCode;
+        
+        // チャートを再描画
+        mermaid.run({
+          nodes: [element]
+        });
+      });
+
+    } catch (error) {
+      console.warn('Mermaidチャートの更新中にエラーが発生しました:', error);
+      
+      // エラーが発生した場合の代替処理：ページリロード提案
+      if (confirm('チャートのテーマ更新でエラーが発生しました。ページを再読み込みしますか？')) {
+        window.location.reload();
+      }
+    }
+  };
 
   Defer(function () {
 
