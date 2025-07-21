@@ -737,6 +737,23 @@ if (document.querySelector('.language-mermaid') !== null) {
           return;
         }
         
+        // 親要素を取得（.mermaid-chartのfigure要素）
+        const parentFigure = element.closest('.mermaid-chart');
+        
+        // レイアウトシフト防止のため親要素のサイズを固定
+        let originalParentStyles = null;
+        if (parentFigure) {
+          const computedStyle = window.getComputedStyle(parentFigure);
+          originalParentStyles = {
+            width: parentFigure.style.width,
+            height: parentFigure.style.height
+          };
+          
+          // 現在の計算されたサイズを親要素に適用
+          parentFigure.style.width = computedStyle.width;
+          parentFigure.style.height = computedStyle.height;
+        }
+        
         // 保存されたソースコードを取得
         const originalCode = copyElement.textContent.trim();
         let updatedCode = originalCode;
@@ -758,6 +775,19 @@ if (document.querySelector('.language-mermaid') !== null) {
         const uniqueId = 'mermaid-' + Date.now() + '-' + index;
         element.id = uniqueId;
 
+        // 描画完了後の後処理関数
+        const onRenderComplete = function() {
+          // 親要素のサイズをautoに戻す
+          if (parentFigure && originalParentStyles) {
+            parentFigure.style.width = originalParentStyles.width || 'auto';
+            parentFigure.style.height = originalParentStyles.height || 'auto';
+          }
+          
+          setTimeout(function() {
+            processChart(index + 1);
+          }, 100);
+        };
+
         try {
           // Mermaidバージョンに応じた描画方法を選択
           if (typeof mermaid.run === 'function') {
@@ -765,26 +795,22 @@ if (document.querySelector('.language-mermaid') !== null) {
               nodes: [element],
               suppressErrors: false
             }).then(function() {
-              setTimeout(function() {
-                processChart(index + 1);
-              }, 100);
+              onRenderComplete();
             }).catch(function(error) {
-              processChart(index + 1);
+              onRenderComplete();
             });
           } else if (typeof mermaid.render === 'function') {
             mermaid.render(uniqueId + '-svg', updatedCode).then(function(result) {
               element.innerHTML = result.svg;
-              setTimeout(function() {
-                processChart(index + 1);
-              }, 100);
+              onRenderComplete();
             }).catch(function(error) {
-              processChart(index + 1);
+              onRenderComplete();
             });
           } else {
-            processChart(index + 1);
+            onRenderComplete();
           }
         } catch (error) {
-          processChart(index + 1);
+          onRenderComplete();
         }
       };
 
