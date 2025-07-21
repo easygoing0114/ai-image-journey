@@ -99,19 +99,20 @@ Defer(function () {
         }, 100);
       }
 
-      // Blueskyの埋め込みテーマを更新
-      if (window.bluesky && typeof window.bluesky.updateThemes === 'function') {
-        setTimeout(function() {
-          window.bluesky.updateThemes();
-        }, 100);
-      }
-
       // Mermaidチャートを再描画
       if (typeof updateMermaidTheme === 'function') {
         setTimeout(function() {
           updateMermaidTheme(newTheme);
+        }, 100);
+      }
+
+            // Blueskyの埋め込みテーマを更新
+      if (window.bluesky && typeof window.bluesky.updateThemes === 'function') {
+        setTimeout(function() {
+          window.bluesky.updateThemes();
         }, 150);
       }
+
     });
   });
 }, 100);
