@@ -5,15 +5,21 @@ window.bluesky = window.bluesky || {
 };
 
 /**
- * ダークモードの状態を判定する関数
+ * ダークモードの状態を判定する関数（修正版）
  */
 function isDarkMode() {
-    // localStorageの値を優先的に参照
+    // localStorageの値を最優先で参照
     var savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
         return savedTheme === 'dark';
     }
-    // localStorageに値がない場合はHTMLクラスを参照
+    
+    // localStorageに値がない場合はユーザーのシステム設定を参照
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return true;
+    }
+    
+    // 最後の手段としてHTMLクラスを参照
     return document.documentElement.classList.contains('dark-mode');
 }
 
@@ -68,6 +74,7 @@ function scan(node) {
         // ダークモード対応：手動設定がない場合は自動判定
         var colorMode = embed.dataset.blueskyEmbedColorMode;
         if (!colorMode) {
+            // 修正：テーマ設定完了まで少し待機
             colorMode = isDarkMode() ? 'dark' : 'light';
         }
         searchParams.set('colorMode', colorMode);
@@ -113,11 +120,19 @@ function updateBlueskyEmbedThemes() {
 // グローバルに関数を公開
 window.bluesky.updateThemes = updateBlueskyEmbedThemes;
 
+// 修正：テーマ設定の初期化を待ってからスキャンを実行
+function initializeBlueskyEmbeds() {
+    // テーマ設定が完了するまで短時間待機
+    setTimeout(function() {
+        scan();
+    }, 50); // 50ms待機
+}
+
 if (['interactive', 'complete'].indexOf(document.readyState) !== -1) {
-    scan();
+    initializeBlueskyEmbeds();
 }
 else {
     document.addEventListener('DOMContentLoaded', function () {
-        scan();
+        initializeBlueskyEmbeds();
     });
 }

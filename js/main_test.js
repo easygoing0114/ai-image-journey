@@ -640,7 +640,7 @@ if (document.querySelector('.language-mermaid') !== null) {
   // Mermaidコードを検出して処理
   function updateMermaidGanttCharts() {
     // <code class="mermaid"> 要素をすべて取得
-    const mermaidElements = document.querySelectorAll('code.mermaid');
+    const mermaidElements = document.querySelectorAll('.mermaid');
     
     mermaidElements.forEach((element) => {
       const code = element.textContent;
