@@ -6,7 +6,7 @@ window.bluesky = window.bluesky || {
 
 /**
  * ダークモードの状態を判定する関数（修正版）
- * テンプレートのisDarkMode()関数と統一
+ * localStorageを最優先し、テーマ初期化完了後の状態を正確に取得
  */
 function isDarkMode() {
     // localStorageの値を最優先で参照
@@ -16,8 +16,37 @@ function isDarkMode() {
     }
     
     // localStorageに値がない場合はHTMLクラスを参照
-    // システム設定よりもHTMLクラスを優先（テンプレートと統一）
     return document.documentElement.classList.contains('dark-mode');
+}
+
+/**
+ * テーマが確実に初期化されるまで待機する関数
+ */
+function waitForThemeInitialization() {
+    return new Promise(function(resolve) {
+        // テーマ初期化が完了しているかチェック
+        var checkTheme = function() {
+            var savedTheme = localStorage.getItem('theme');
+            var htmlHasDarkMode = document.documentElement.classList.contains('dark-mode');
+            
+            // localStorageに値があり、HTMLクラスと一致している場合は初期化完了
+            if (savedTheme && ((savedTheme === 'dark') === htmlHasDarkMode)) {
+                resolve();
+                return;
+            }
+            
+            // localStorageに値がない場合でも、HTMLクラスが設定されていれば初期化完了とみなす
+            if (!savedTheme && htmlHasDarkMode !== null) {
+                resolve();
+                return;
+            }
+            
+            // まだ初期化が完了していない場合は少し待機
+            setTimeout(checkTheme, 10);
+        };
+        
+        checkTheme();
+    });
 }
 
 /**
@@ -116,11 +145,17 @@ function updateBlueskyEmbedThemes() {
 // グローバルに関数を公開
 window.bluesky.updateThemes = updateBlueskyEmbedThemes;
 
-// 修正：テーマ設定の確認後にスキャンを実行
-function initializeBlueskyEmbeds() {
-    // DOM読み込み完了後に即座にスキャン実行
-    // テーマの初期化はHTMLクラスで既に完了しているはず
-    scan();
+/**
+ * テーマ初期化完了後にスキャンを実行する関数
+ */
+async function initializeBlueskyEmbeds() {
+    // テーマの初期化が完了するまで待機
+    await waitForThemeInitialization();
+    
+    // 少し余裕をもって待機（テーマ設定の反映を確実にする）
+    setTimeout(function() {
+        scan();
+    }, 50);
 }
 
 // DOMContentLoaded時またはすでに読み込み完了時に実行
