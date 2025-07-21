@@ -647,7 +647,7 @@ if (document.querySelector('.language-mermaid') !== null) {
   // Mermaidコードを検出して処理
   function updateMermaidGanttCharts() {
     // <code class="mermaid"> 要素をすべて取得
-    const mermaidElements = document.querySelectorAll('.mermaid');
+    const mermaidElements = document.querySelectorAll('.language-mermaid');
     
     mermaidElements.forEach((element) => {
       const code = element.textContent;
@@ -672,11 +672,32 @@ if (document.querySelector('.language-mermaid') !== null) {
 
   updateMermaidGanttCharts()
 
+  // 初回変換前に.language-mermaidの内容を保存する関数
+  function preserveMermaidSource() {
+    const languageMermaidElements = document.querySelectorAll('.language-mermaid');
+    
+    languageMermaidElements.forEach(function(element) {
+      // 既にコピーが存在する場合はスキップ
+      if (element.nextElementSibling && element.nextElementSibling.classList.contains('language-mermaid-copy')) {
+        return;
+      }
+      
+      // .language-mermaid-copyを作成
+      const copyElement = document.createElement('code');
+      copyElement.className = 'language-mermaid-copy';
+      copyElement.style.display = 'none';
+      copyElement.textContent = element.textContent;
+      
+      // 元の要素の直後に挿入
+      element.parentNode.insertBefore(copyElement, element.nextSibling);
+    });
+  }
+
   // Mermaidチャートのテーマ更新機能（グローバル関数として定義）
   window.updateMermaidTheme = function(theme) {
     try {
       // 現在のMermaidチャートをすべて取得
-      var mermaidElements = document.querySelectorAll('.mermaid');
+      var mermaidElements = document.querySelectorAll('.language-mermaid');
       
       if (mermaidElements.length === 0) {
         return; // Mermaidチャートが存在しない場合は何もしない
@@ -693,12 +714,29 @@ if (document.querySelector('.language-mermaid') !== null) {
 
       // 各Mermaidチャートを再描画
       mermaidElements.forEach(function(element, index) {
-        // 現在表示されているチャート定義を使用（日付更新済み）
-        var currentCode = element.textContent.trim();
+        // 対応する.language-mermaid-copyからソースコードを取得
+        var copyElement = null;
         
+        // 前の要素が.language-mermaid-copyかチェック
+        if (element.previousElementSibling && element.previousElementSibling.classList.contains('language-mermaid-copy')) {
+          copyElement = element.previousElementSibling;
+        }
+        // 次の要素が.language-mermaid-copyかチェック
+        else if (element.nextElementSibling && element.nextElementSibling.classList.contains('language-mermaid-copy')) {
+          copyElement = element.nextElementSibling;
+        }
+        
+        if (!copyElement) {
+          console.warn('対応する.language-mermaid-copyが見つかりません', element);
+          return;
+        }
+        
+        // 保存されたソースコードを取得
+        var originalCode = copyElement.textContent.trim();
+                
         // 既存の描画内容をクリア
         element.innerHTML = '';
-        element.textContent = currentCode;
+        element.textContent = updatedCode;
         
         // チャートを再描画
         mermaid.run({
