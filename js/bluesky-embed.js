@@ -94,42 +94,30 @@ function scan(node) {
 }
 
 /**
- * ダークモードの切り替えを監視して埋め込みを再スキャンする
+ * 既存のBluesky埋め込みのテーマを更新する関数
  */
-function observeDarkModeChanges() {
-    // MutationObserver でクラス変更を監視
-    var observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-                // ダークモードが切り替わった場合、既存の埋め込みを更新
-                var containers = document.querySelectorAll('.bluesky-embed');
-                containers.forEach(function(container) {
-                    var iframe = container.querySelector('iframe[data-bluesky-id]');
-                    if (iframe) {
-                        var currentSrc = iframe.src;
-                        var url = new URL(currentSrc);
-                        var newColorMode = isDarkMode() ? 'dark' : 'light';
-                        url.searchParams.set('colorMode', newColorMode);
-                        iframe.src = url.toString();
-                    }
-                });
-            }
-        });
-    });
-
-    observer.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ['class']
+function updateBlueskyEmbedThemes() {
+    var containers = document.querySelectorAll('.bluesky-embed');
+    containers.forEach(function(container) {
+        var iframe = container.querySelector('iframe[data-bluesky-id]');
+        if (iframe) {
+            var currentSrc = iframe.src;
+            var url = new URL(currentSrc);
+            var newColorMode = isDarkMode() ? 'dark' : 'light';
+            url.searchParams.set('colorMode', newColorMode);
+            iframe.src = url.toString();
+        }
     });
 }
 
+// グローバルに関数を公開
+window.bluesky.updateThemes = updateBlueskyEmbedThemes;
+
 if (['interactive', 'complete'].indexOf(document.readyState) !== -1) {
     scan();
-    observeDarkModeChanges();
 }
 else {
     document.addEventListener('DOMContentLoaded', function () {
         scan();
-        observeDarkModeChanges();
     });
 }
