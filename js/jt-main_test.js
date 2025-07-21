@@ -151,33 +151,52 @@ const jo = {};
     if (!supported) rwStr = "";
   });
 
-  var header = documentObj[getElementByIdFn]("header"),
-    searchToggle = documentObj[getElementByIdFn]("search-toggle"),
-    searchHeader = documentObj[getElementByIdFn]("search-header"),
-    navbarToggle = documentObj[getElementByIdFn]("navbar-toggle"),
-    navbar = documentObj[getElementByIdFn]("navbar"),
-    backToTop = documentObj[getElementByIdFn]("back-to-top"),
-    adsPost = documentObj[getElementByIdFn]("ads-post"),
-    postBody = documentObj[getElementByIdFn]("post-body"),
-    relatedPosts = documentObj[querySelectorFn](".related-posts"),
-    relatedInline = documentObj[querySelectorFn](".related-inline"),
-    currentPage = getQueryParam("page", currentUrl),
-    isLazy = localStorageObj !== null && localStorageObj["get" + ItemFn]("lazy") == 1;
+// ヘッダー制御の修正版
+var header = documentObj[getElementByIdFn]("header"),
+  searchToggle = documentObj[getElementByIdFn]("search-toggle"),
+  searchHeader = documentObj[getElementByIdFn]("search-header"),
+  navbarToggle = documentObj[getElementByIdFn]("navbar-toggle"),
+  navbar = documentObj[getElementByIdFn]("navbar"),
+  backToTop = documentObj[getElementByIdFn]("back-to-top"),
+  adsPost = documentObj[getElementByIdFn]("ads-post"),
+  postBody = documentObj[getElementByIdFn]("post-body"),
+  relatedPosts = documentObj[querySelectorFn](".related-posts"),
+  relatedInline = documentObj[querySelectorFn](".related-inline"),
+  currentPage = getQueryParam("page", currentUrl),
+  isLazy = localStorageObj !== null && localStorageObj["get" + ItemFn]("lazy") == 1;
 
-  var lastScrollY = 0;
-  windowObj["add" + EventListenerFn](scrollEvent, function() {
-    var currentScrollY = this[pageYOffsetProp];
-    var timeout;
-    if (currentScrollY < lastScrollY && hasClass(header, "header-hidden")) {
-      timeout = setTimeoutFn(function() {
+var lastScrollY = 0;
+var headerTimeout; // タイムアウト変数をスコープ外で定義
+
+windowObj["add" + EventListenerFn](scrollEvent, function() {
+  var currentScrollY = this[pageYOffsetProp];
+  
+  // ヘッダーが存在しない場合は処理をスキップ
+  if (!header) return;
+  
+  if (currentScrollY < lastScrollY && hasClass(header, "header-hidden")) {
+    // 既存のタイムアウトをクリア
+    if (headerTimeout) {
+      clearTimeoutFn(headerTimeout);
+    }
+    headerTimeout = setTimeoutFn(function() {
+      // ヘッダーが依然として存在することを確認
+      if (header && hasClass(header, "header-hidden")) {
         removeClass(header, "header-hidden");
-      }, 500);
-    } else if (lastScrollY < currentScrollY && hasClass(header, "header-animate")) {
-      clearTimeoutFn(timeout);
+      }
+    }, 500);
+  } else if (lastScrollY < currentScrollY && hasClass(header, "header-animate")) {
+    // 既存のタイムアウトをクリア
+    if (headerTimeout) {
+      clearTimeoutFn(headerTimeout);
+    }
+    // ヘッダーが存在することを確認してからクラスを追加
+    if (header) {
       addClass(header, "header-hidden");
     }
-    lastScrollY = currentScrollY;
-  }, false);
+  }
+  lastScrollY = currentScrollY;
+}, false);
 
   var processImage = function(element) {
     if (element[tagNameProp] == "IMG") {
