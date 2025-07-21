@@ -741,13 +741,15 @@ if (document.querySelector('.language-mermaid') !== null) {
         const parentFigure = element.closest('.mermaid-chart');
         
         // レイアウトシフト防止のため親要素のサイズを固定
-        let originalParentStyles = null;
+        let hadOriginalWidth = false;
+        let hadOriginalHeight = false;
+        
         if (parentFigure) {
           const computedStyle = window.getComputedStyle(parentFigure);
-          originalParentStyles = {
-            width: parentFigure.style.width,
-            height: parentFigure.style.height
-          };
+          
+          // 元々width/heightが設定されていたかチェック
+          hadOriginalWidth = parentFigure.style.width !== '';
+          hadOriginalHeight = parentFigure.style.height !== '';
           
           // 現在の計算されたサイズを親要素に適用
           parentFigure.style.width = computedStyle.width;
@@ -777,10 +779,14 @@ if (document.querySelector('.language-mermaid') !== null) {
 
         // 描画完了後の後処理関数
         const onRenderComplete = function() {
-          // 親要素のサイズをautoに戻す
-          if (parentFigure && originalParentStyles) {
-            parentFigure.style.width = originalParentStyles.width || 'auto';
-            parentFigure.style.height = originalParentStyles.height || 'auto';
+          // 親要素のサイズを元に戻す（元々設定されていなかった場合は削除）
+          if (parentFigure) {
+            if (!hadOriginalWidth) {
+              parentFigure.style.removeProperty('width');
+            }
+            if (!hadOriginalHeight) {
+              parentFigure.style.removeProperty('height');
+            }
           }
           
           setTimeout(function() {
