@@ -34,7 +34,7 @@ if (document.querySelector('.markdown') !== null) {
 }
 
 if (document.querySelector('.bluesky-embed') !== null) {
-  Defer.js('https://embed.bsky.app/static/embed.js', 'bluesky', 1000);
+  Defer.js('https://files.ai-image-journey.com/js/bluesky-embed.js', 'bluesky-embed', 1000);
   Defer.js('https://files.ai-image-journey.com/js/bluesky-title-adder.js', 'bluesky_title_adder', 1000);
 }
 if (document.querySelector('.twitter-tweet') !== null) {
