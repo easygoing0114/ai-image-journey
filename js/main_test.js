@@ -87,11 +87,10 @@ Defer(function () {
 
   darkModeButtons.forEach(function(button) {
     button.addEventListener("click", function() {
-      var isDarkMode = typeof window.isDarkMode === 'function' ? window.isDarkMode() : document.documentElement.classList.contains('dark-mode');
+      var isDarkMode = htmlElement.classList.contains("dark-mode");
       var newTheme = isDarkMode ? 'light' : 'dark';
-      if (typeof window.applyTheme === 'function') {
-        window.applyTheme(newTheme);
-      }
+
+      applyTheme(newTheme);
 
       // Chart.jsの色を更新
       if (typeof updateAllChartColors === 'function') {
