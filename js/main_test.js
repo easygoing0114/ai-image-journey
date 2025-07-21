@@ -81,7 +81,26 @@ Defer(function () {
     }
 }, 100);
 
+/* dark-mode ボタン */
+Defer(function () {
+  var darkModeButtons = document.querySelectorAll(".toggle-dark-mode-btn");
 
+  darkModeButtons.forEach(function(button) {
+    button.addEventListener("click", function() {
+      var isDarkMode = htmlElement.classList.contains("dark-mode");
+      var newTheme = isDarkMode ? 'light' : 'dark';
+
+      applyTheme(newTheme);
+
+      // Chart.jsの色を更新
+      if (typeof updateAllChartColors === 'function') {
+        setTimeout(function() {
+          updateAllChartColors();
+        }, 100);
+      }
+    });
+  });
+}, 100);
 
 // テキストエリアの高さ自動調整
 if (document.querySelector('textarea') !== null) {
