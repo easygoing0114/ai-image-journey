@@ -78,6 +78,38 @@ function updateThemes() {
 }
 
 /**
+ * Extract title text from a Bluesky embed element
+ * @param {Element} embed The original embed element
+ * @returns {string} Title text
+ */
+function extractTitleFromEmbed(embed) {
+    // Try to get text from the first <p> element within the embed
+    var firstParagraph = embed.querySelector('p');
+    if (firstParagraph && firstParagraph.textContent) {
+        var text = firstParagraph.textContent.trim();
+        // Remove URLs and clean up the text
+        text = text.replace(/https?:\/\/[^\s]+/g, '').trim();
+        // Take first 50 characters
+        if (text.length > 50) {
+            text = text.slice(0, 47) + '...';
+        }
+        return text || 'Bluesky Embed';
+    }
+    
+    // Fallback: try to get any text content from the embed
+    var textContent = embed.textContent;
+    if (textContent) {
+        var cleanText = textContent.trim().replace(/https?:\/\/[^\s]+/g, '').trim();
+        if (cleanText.length > 50) {
+            cleanText = cleanText.slice(0, 47) + '...';
+        }
+        return cleanText || 'Bluesky Embed';
+    }
+    
+    return 'Bluesky Embed';
+}
+
+/**
  * Scan the document for all elements with the data-bluesky-uri attribute,
  * and initialize them as Bluesky embeds.
  *
@@ -96,6 +128,10 @@ function scan(node) {
         if (!aturi) {
             continue;
         }
+        
+        // Extract title from the original embed content before replacing it
+        var titleText = extractTitleFromEmbed(embed);
+        
         var ref_url = location.origin + location.pathname;
         var searchParams = new URLSearchParams();
         searchParams.set('id', id);
@@ -116,6 +152,9 @@ function scan(node) {
         iframe.style.flexGrow = '1';
         iframe.frameBorder = '0';
         iframe.scrolling = 'no';
+        
+        // Set the title attribute on the iframe
+        iframe.title = titleText;
         
         var container = document.createElement('div');
         container.style.maxWidth = '600px';
