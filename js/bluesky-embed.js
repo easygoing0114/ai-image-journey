@@ -3,6 +3,7 @@ var EMBED_URL = 'https://embed.bsky.app';
 window.bluesky = window.bluesky || {
     scan: scan,
     updateThemes: updateThemes,
+    redrawEmbeds: redrawEmbeds,
 };
 
 /**
@@ -53,6 +54,62 @@ function getCurrentTheme() {
     
     // Default to light
     return 'light';
+}
+
+/**
+ * Redraw all existing Bluesky embeds with the current theme
+ * This completely recreates the embeds to ensure theme changes are applied
+ */
+function redrawEmbeds() {
+    var existingEmbeds = document.querySelectorAll('.bluesky-embed');
+    var currentTheme = getCurrentTheme();
+    
+    // Store the original URIs and settings before removing embeds
+    var embedsToRedraw = [];
+    
+    for (var i = 0; i < existingEmbeds.length; i++) {
+        var embed = existingEmbeds[i];
+        var iframe = embed.querySelector('iframe[data-bluesky-id]');
+        
+        if (iframe) {
+            // Extract the AT URI from the iframe src
+            var src = iframe.src;
+            var match = src.match(/\/embed\/(.+?)\?/);
+            
+            if (match) {
+                var aturi = 'at://' + match[1];
+                var customColorMode = embed.getAttribute('data-bluesky-embed-color-mode');
+                
+                // Create a placeholder element to replace the embed
+                var placeholder = document.createElement('div');
+                placeholder.setAttribute('data-bluesky-uri', aturi);
+                
+                // Preserve custom color mode if it was explicitly set
+                if (customColorMode && customColorMode !== currentTheme) {
+                    placeholder.setAttribute('data-bluesky-embed-color-mode', customColorMode);
+                }
+                
+                embedsToRedraw.push({
+                    element: placeholder,
+                    parent: embed.parentNode
+                });
+            }
+        }
+    }
+    
+    // Remove existing embeds and insert placeholders
+    for (var j = 0; j < embedsToRedraw.length; j++) {
+        var item = embedsToRedraw[j];
+        var existingEmbed = item.parent.querySelector('.bluesky-embed');
+        
+        if (existingEmbed) {
+            item.parent.insertBefore(item.element, existingEmbed);
+            item.parent.removeChild(existingEmbed);
+        }
+    }
+    
+    // Rescan the document to recreate embeds with new theme
+    scan();
 }
 
 /**
