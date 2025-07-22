@@ -102,17 +102,9 @@ Defer(function () {
         updateMermaidTheme(newTheme);
       }
 
-      // Blueskyの埋め込みテーマを更新＋再描画
-      if (window.bluesky) {
-        // 既存のテーマ更新
-        if (typeof window.bluesky.updateThemes === 'function') {
-          window.bluesky.updateThemes();
-        }
-        
-        // 埋め込みを再描画（より確実にテーマを反映）
-        if (typeof window.bluesky.redrawEmbeds === 'function') {
-          window.bluesky.redrawEmbeds();
-        }
+            // Blueskyの埋め込みテーマを更新
+      if (window.bluesky && typeof window.bluesky.updateThemes === 'function') {
+        window.bluesky.updateThemes();
       }
 
     });
