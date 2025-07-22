@@ -14,16 +14,16 @@ if (document.querySelector('#toc') !== null) {
   Defer.css('https://files.ai-image-journey.com/css/page_toc.css', 'page_toc_css', 100);
 }
 
-if (document.querySelector('.language-mermaid') !== null) {
-  Defer.js('https://files.ai-image-journey.com/js/mermaid.min.js', 'mermaid', 100);
-}
-
 if (document.querySelector('.chartjs') !== null) {
   Defer.js('https://files.ai-image-journey.com/js/chart.umd.min.js', 'chartjs', 100);
   Defer.js('https://files.ai-image-journey.com/js/chartjs-plugin-datalabels.min.js', 'chartjsdatalabelsplugin', 300);
   Defer.js('https://files.ai-image-journey.com/js/chartjs-adapter-date-fns.bundle.min.js', 'chartjsadapterdatefns', 300);
   Defer.js('https://files.ai-image-journey.com/js/chartjs_arrow_plugin.js', 'chartjsarrowplugin', 300);
   Defer.js('https://files.ai-image-journey.com/js/papaprase.js', 'papapease', 300);
+}
+
+if (document.querySelector('.language-mermaid') !== null) {
+  Defer.js('https://files.ai-image-journey.com/js/mermaid.min.js', 'mermaid', 100);
 }
 
 if (document.querySelector('.markdown') !== null) {
@@ -607,6 +607,196 @@ Defer(function() {
     });
 }, 200);
 
+/* Chart.js */
+if (document.querySelector('.chartjs') !== null) {
+    let chartsInitialized = false;
+    
+    function getCurrentThemeColor() {
+        return getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color').trim();
+    } 
+    
+    function calculateDynamicPadding(specificContainer = null) {
+        
+        // 特定のコンテナが指定されていない場合は最初のコンテナを使用
+        const container = specificContainer || document.querySelector('.chartjs-container');
+        
+        if (!container) {
+            return 24; // デフォルト値
+        }
+        
+        const containerWidth = container.offsetWidth;
+        const containerHeight = container.offsetHeight;
+                
+        // アスペクト比を計算（幅/高さ）
+        const aspectRatio = containerWidth / containerHeight;
+        
+        // アスペクト比に応じて係数を選択
+        let coefficient;
+        if (aspectRatio >= 1) {
+            coefficient = 0.05; // 横長または正方形の場合
+        } else {
+            coefficient = 0.1;  // 縦長の場合
+        }
+        
+        const calculatedPadding = Math.round(containerWidth * coefficient);
+        
+        return calculatedPadding;
+    }
+    
+    function findContainerForChart(canvas) {
+        // canvasの親要素を遡って.chartjs-containerを探す
+        let parent = canvas.parentElement;
+        while (parent && parent !== document.body) {
+            if (parent.classList.contains('chartjs-container')) {
+                return parent;
+            }
+            parent = parent.parentElement;
+        }
+        return null;
+    }
+    
+    function updateChartPadding() {
+        
+        // 既存のチャートのpaddingを個別に更新
+        const chartInstances = Object.values(Chart.instances);
+        
+        chartInstances.forEach(function(chart, index) {
+            
+            // このチャートに対応するコンテナを見つける
+            const canvas = chart.canvas;
+            const container = findContainerForChart(canvas);
+            
+            if (container) {
+                const newPadding = calculateDynamicPadding(container);
+                
+                if (chart.options.layout) {
+                    chart.options.layout.padding = newPadding;
+                } else {
+                    chart.options.layout = { padding: newPadding };
+                }
+                
+                chart.update('none');
+            } 
+        });
+    }
+    
+    function updateAllChartColors() {
+        const currentColor = getCurrentThemeColor();
+        Chart.defaults.color = currentColor;
+        Object.values(Chart.instances).forEach(function(chart) {
+            if (chart.options.scales) {
+                Object.keys(chart.options.scales).forEach(function(scaleKey) {
+                    // 軸のティックの色
+                    if (chart.options.scales[scaleKey].ticks) {
+                        chart.options.scales[scaleKey].ticks.color = currentColor;
+                    }
+                    // 軸ラベルの色
+                    if (chart.options.scales[scaleKey].title) {
+                        chart.options.scales[scaleKey].title.color = currentColor;
+                    }
+                });
+            }
+            if (chart.options.plugins && chart.options.plugins.legend && chart.options.plugins.legend.labels) {
+                chart.options.plugins.legend.labels.color = currentColor;
+            }
+            if (chart.options.plugins && chart.options.plugins.title) {
+                chart.options.plugins.title.color = currentColor;
+            }
+            if (chart.options.plugins && chart.options.plugins.datalabels) {
+                chart.options.plugins.datalabels.color = currentColor;
+            }
+            chart.update('none');
+        });
+    }
+    
+    function createAllCharts() {
+        // Get all canvas elements with class 'chartjs'
+        const canvases = document.querySelectorAll('.chartjs');
+        
+        canvases.forEach((canvas, index) => {
+            // Call createChartN function where N is index + 1
+            const funcName = `createChart${index + 1}`;
+            if (typeof window[funcName] === 'function') {
+                window[funcName]();
+            } 
+        });
+    }
+    
+    function applyIndividualPadding() {
+        
+        // 作成されたチャートに対して個別のパディングを適用
+        const chartInstances = Object.values(Chart.instances);
+        
+        chartInstances.forEach(function(chart, index) {
+            
+            const canvas = chart.canvas;
+            const container = findContainerForChart(canvas);
+            
+            if (container) {
+                const padding = calculateDynamicPadding(container);
+                
+                if (chart.options.layout) {
+                    chart.options.layout.padding = padding;
+                } else {
+                    chart.options.layout = { padding: padding };
+                }
+                
+                chart.update('none');
+            } 
+        });
+    }
+    
+    function initializeCharts() {
+        
+        // 初回のみChart.jsの設定を行う
+        if (!chartsInitialized) {
+            Chart.register(ChartDataLabels);
+            
+            // デフォルトのパディングは最小値に設定（個別で上書きする）
+            Chart.defaults.layout.padding = 24;
+            chartsInitialized = true;
+        }
+        
+        // チャート作成
+        createAllCharts();
+        
+        // 各チャートに個別のパディングを適用
+        applyIndividualPadding();
+        
+        // テーマカラーの適用
+        updateAllChartColors();
+        
+        // Canvas要素のサイズ設定
+        document.querySelectorAll('.chartjs').forEach(canvas => {
+            canvas.style.width = 'auto';
+            canvas.style.height = 'auto';
+        });
+    }
+    
+    function handleResize() {
+        // リサイズ時は個別のpaddingとチャートの色を更新
+        updateChartPadding();
+        updateAllChartColors();
+        
+        // Chart.jsの内蔵リサイズ機能を使用（より効率的）
+        Object.values(Chart.instances).forEach(chart => {
+            chart.resize();
+        });
+        
+        // Canvas要素のサイズ設定を再適用
+        document.querySelectorAll('.chartjs').forEach(canvas => {
+            canvas.style.width = 'auto';
+            canvas.style.height = 'auto';
+        });
+    }
+    
+    Defer(function() {
+        const debouncedResize = debounce(handleResize, 100);
+        window.addEventListener('resize', debouncedResize);
+        initializeCharts(); // 初回実行
+    }, 1500);
+}
+
 /* mermaid */
 if (document.querySelector('.language-mermaid') !== null) {
 
@@ -819,196 +1009,6 @@ if (document.querySelector('.language-mermaid') !== null) {
     mermaid.run();
 
   }, 1500);
-}
-
-/* Chart.js */
-if (document.querySelector('.chartjs') !== null) {
-    let chartsInitialized = false;
-    
-    function getCurrentThemeColor() {
-        return getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color').trim();
-    } 
-    
-    function calculateDynamicPadding(specificContainer = null) {
-        
-        // 特定のコンテナが指定されていない場合は最初のコンテナを使用
-        const container = specificContainer || document.querySelector('.chartjs-container');
-        
-        if (!container) {
-            return 24; // デフォルト値
-        }
-        
-        const containerWidth = container.offsetWidth;
-        const containerHeight = container.offsetHeight;
-                
-        // アスペクト比を計算（幅/高さ）
-        const aspectRatio = containerWidth / containerHeight;
-        
-        // アスペクト比に応じて係数を選択
-        let coefficient;
-        if (aspectRatio >= 1) {
-            coefficient = 0.05; // 横長または正方形の場合
-        } else {
-            coefficient = 0.1;  // 縦長の場合
-        }
-        
-        const calculatedPadding = Math.round(containerWidth * coefficient);
-        
-        return calculatedPadding;
-    }
-    
-    function findContainerForChart(canvas) {
-        // canvasの親要素を遡って.chartjs-containerを探す
-        let parent = canvas.parentElement;
-        while (parent && parent !== document.body) {
-            if (parent.classList.contains('chartjs-container')) {
-                return parent;
-            }
-            parent = parent.parentElement;
-        }
-        return null;
-    }
-    
-    function updateChartPadding() {
-        
-        // 既存のチャートのpaddingを個別に更新
-        const chartInstances = Object.values(Chart.instances);
-        
-        chartInstances.forEach(function(chart, index) {
-            
-            // このチャートに対応するコンテナを見つける
-            const canvas = chart.canvas;
-            const container = findContainerForChart(canvas);
-            
-            if (container) {
-                const newPadding = calculateDynamicPadding(container);
-                
-                if (chart.options.layout) {
-                    chart.options.layout.padding = newPadding;
-                } else {
-                    chart.options.layout = { padding: newPadding };
-                }
-                
-                chart.update('none');
-            } 
-        });
-    }
-    
-    function updateAllChartColors() {
-        const currentColor = getCurrentThemeColor();
-        Chart.defaults.color = currentColor;
-        Object.values(Chart.instances).forEach(function(chart) {
-            if (chart.options.scales) {
-                Object.keys(chart.options.scales).forEach(function(scaleKey) {
-                    // 軸のティックの色
-                    if (chart.options.scales[scaleKey].ticks) {
-                        chart.options.scales[scaleKey].ticks.color = currentColor;
-                    }
-                    // 軸ラベルの色
-                    if (chart.options.scales[scaleKey].title) {
-                        chart.options.scales[scaleKey].title.color = currentColor;
-                    }
-                });
-            }
-            if (chart.options.plugins && chart.options.plugins.legend && chart.options.plugins.legend.labels) {
-                chart.options.plugins.legend.labels.color = currentColor;
-            }
-            if (chart.options.plugins && chart.options.plugins.title) {
-                chart.options.plugins.title.color = currentColor;
-            }
-            if (chart.options.plugins && chart.options.plugins.datalabels) {
-                chart.options.plugins.datalabels.color = currentColor;
-            }
-            chart.update('none');
-        });
-    }
-    
-    function createAllCharts() {
-        // Get all canvas elements with class 'chartjs'
-        const canvases = document.querySelectorAll('.chartjs');
-        
-        canvases.forEach((canvas, index) => {
-            // Call createChartN function where N is index + 1
-            const funcName = `createChart${index + 1}`;
-            if (typeof window[funcName] === 'function') {
-                window[funcName]();
-            } 
-        });
-    }
-    
-    function applyIndividualPadding() {
-        
-        // 作成されたチャートに対して個別のパディングを適用
-        const chartInstances = Object.values(Chart.instances);
-        
-        chartInstances.forEach(function(chart, index) {
-            
-            const canvas = chart.canvas;
-            const container = findContainerForChart(canvas);
-            
-            if (container) {
-                const padding = calculateDynamicPadding(container);
-                
-                if (chart.options.layout) {
-                    chart.options.layout.padding = padding;
-                } else {
-                    chart.options.layout = { padding: padding };
-                }
-                
-                chart.update('none');
-            } 
-        });
-    }
-    
-    function initializeCharts() {
-        
-        // 初回のみChart.jsの設定を行う
-        if (!chartsInitialized) {
-            Chart.register(ChartDataLabels);
-            
-            // デフォルトのパディングは最小値に設定（個別で上書きする）
-            Chart.defaults.layout.padding = 24;
-            chartsInitialized = true;
-        }
-        
-        // チャート作成
-        createAllCharts();
-        
-        // 各チャートに個別のパディングを適用
-        applyIndividualPadding();
-        
-        // テーマカラーの適用
-        updateAllChartColors();
-        
-        // Canvas要素のサイズ設定
-        document.querySelectorAll('.chartjs').forEach(canvas => {
-            canvas.style.width = 'auto';
-            canvas.style.height = 'auto';
-        });
-    }
-    
-    function handleResize() {
-        // リサイズ時は個別のpaddingとチャートの色を更新
-        updateChartPadding();
-        updateAllChartColors();
-        
-        // Chart.jsの内蔵リサイズ機能を使用（より効率的）
-        Object.values(Chart.instances).forEach(chart => {
-            chart.resize();
-        });
-        
-        // Canvas要素のサイズ設定を再適用
-        document.querySelectorAll('.chartjs').forEach(canvas => {
-            canvas.style.width = 'auto';
-            canvas.style.height = 'auto';
-        });
-    }
-    
-    Defer(function() {
-        const debouncedResize = debounce(handleResize, 100);
-        window.addEventListener('resize', debouncedResize);
-        initializeCharts(); // 初回実行
-    }, 1500);
 }
   
 /* GPUアクセラレーション除去 */
