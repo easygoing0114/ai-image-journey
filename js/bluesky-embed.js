@@ -3,52 +3,6 @@ var EMBED_URL = 'https://embed.bsky.app';
 window.bluesky = window.bluesky || {
     scan: scan,
 };
-
-/**
- * ダークモードの状態を判定する関数（修正版）
- * localStorageを最優先し、テーマ初期化完了後の状態を正確に取得
- */
-function isDarkMode() {
-    // localStorageの値を最優先で参照
-    var savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-        return savedTheme === 'dark';
-    }
-    
-    // localStorageに値がない場合はHTMLクラスを参照
-    return document.documentElement.classList.contains('dark-mode');
-}
-
-/**
- * テーマが確実に初期化されるまで待機する関数
- */
-function waitForThemeInitialization() {
-    return new Promise(function(resolve) {
-        // テーマ初期化が完了しているかチェック
-        var checkTheme = function() {
-            var savedTheme = localStorage.getItem('theme');
-            var htmlHasDarkMode = document.documentElement.classList.contains('dark-mode');
-            
-            // localStorageに値があり、HTMLクラスと一致している場合は初期化完了
-            if (savedTheme && ((savedTheme === 'dark') === htmlHasDarkMode)) {
-                resolve();
-                return;
-            }
-            
-            // localStorageに値がない場合でも、HTMLクラスが設定されていれば初期化完了とみなす
-            if (!savedTheme && htmlHasDarkMode !== null) {
-                resolve();
-                return;
-            }
-            
-            // まだ初期化が完了していない場合は少し待機
-            setTimeout(checkTheme, 10);
-        };
-        
-        checkTheme();
-    });
-}
-
 /**
  * Listen for messages from the Bluesky embed iframe and adjust the height of
  * the iframe accordingly.
@@ -72,7 +26,6 @@ window.addEventListener('message', function (event) {
         embed.style.height = "".concat(height, "px");
     }
 });
-
 /**
  * Scan the document for all elements with the data-bluesky-aturi attribute,
  * and initialize them as Bluesky embeds.
@@ -96,14 +49,9 @@ function scan(node) {
         if (ref_url.startsWith('http')) {
             searchParams.set('ref_url', encodeURIComponent(ref_url));
         }
-
-        // ダークモード対応：手動設定がない場合は自動判定
-        var colorMode = embed.dataset.blueskyEmbedColorMode;
-        if (!colorMode) {
-            colorMode = isDarkMode() ? 'dark' : 'light';
+        if (embed.dataset.blueskyEmbedColorMode) {
+            searchParams.set('colorMode', embed.dataset.blueskyEmbedColorMode);
         }
-        searchParams.set('colorMode', colorMode);
-
         var iframe = document.createElement('iframe');
         iframe.setAttribute('data-bluesky-id', id);
         iframe.src = "".concat(EMBED_URL, "/embed/").concat(aturi.slice('at://'.length), "?").concat(searchParams.toString());
@@ -124,46 +72,9 @@ function scan(node) {
         embed.replaceWith(container);
     }
 }
-
-/**
- * 既存のBluesky埋め込みのテーマを更新する関数
- */
-function updateBlueskyEmbedThemes() {
-    var containers = document.querySelectorAll('.bluesky-embed');
-    containers.forEach(function(container) {
-        var iframe = container.querySelector('iframe[data-bluesky-id]');
-        if (iframe) {
-            var currentSrc = iframe.src;
-            var url = new URL(currentSrc);
-            var newColorMode = isDarkMode() ? 'dark' : 'light';
-            url.searchParams.set('colorMode', newColorMode);
-            iframe.src = url.toString();
-        }
-    });
-}
-
-// グローバルに関数を公開
-window.bluesky.updateThemes = updateBlueskyEmbedThemes;
-
-/**
- * テーマ初期化完了後にスキャンを実行する関数
- */
-async function initializeBlueskyEmbeds() {
-    // テーマの初期化が完了するまで待機
-    await waitForThemeInitialization();
-    
-    // 少し余裕をもって待機（テーマ設定の反映を確実にする）
-    setTimeout(function() {
-        scan();
-    }, 50);
-}
-
-// DOMContentLoaded時またはすでに読み込み完了時に実行
 if (['interactive', 'complete'].indexOf(document.readyState) !== -1) {
-    initializeBlueskyEmbeds();
+    scan();
 }
 else {
-    document.addEventListener('DOMContentLoaded', function () {
-        initializeBlueskyEmbeds();
-    });
+    document.addEventListener('DOMContentLoaded', function () { return scan(); });
 }
