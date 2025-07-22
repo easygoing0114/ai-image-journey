@@ -14,14 +14,14 @@ if (document.querySelector('#toc') !== null) {
   Defer.css('https://files.ai-image-journey.com/css/page_toc.css', 'page_toc_css', 100);
 }
 
-if (document.querySelector('.language-mermaid') !== null) {
-  Defer.js('https://files.ai-image-journey.com/js/mermaid.min.js', 'mermaid', 100);
-}
-
 if (document.querySelector('.chartjs') !== null) {
   Defer.js('https://files.ai-image-journey.com/js/chart.umd.min.js', 'chartjs', 100);
   Defer.js('https://files.ai-image-journey.com/js/chartjs-plugin-datalabels.min.js', 'chartjsdatalabelsplugin', 300);
   Defer.js('https://files.ai-image-journey.com/js/chartjs_arrow_plugin.js', 'chartjsarrowplugin', 300);
+}
+
+if (document.querySelector('.language-mermaid') !== null) {
+  Defer.js('https://files.ai-image-journey.com/js/mermaid.min.js', 'mermaid', 100);
 }
 
 if (document.querySelector('.markdown') !== null) {
@@ -106,26 +106,10 @@ Defer(function() {
           
           // Chart.jsの色を更新（テンプレート関数を呼び出し）
           if (typeof updateAllChartColors === 'function') {
-              setTimeout(function() {
-                  updateAllChartColors();
-              }, 100); // CSSの適用を待つ
+                updateAllChartColors();
           }
       });
   });
-
-  // ページ読み込み時にlocalStorageの値をチェックして適用
-  var savedTheme = localStorage.getItem('theme');
-  var twitterThemeMeta = document.querySelector("#twitter-theme");
-  if (savedTheme === 'dark') {
-      document.querySelector("html").classList.add("dark-mode");
-      if (twitterThemeMeta) {
-          twitterThemeMeta.setAttribute('content', 'dark'); // Metaタグを更新
-      }
-  } else {
-      if (twitterThemeMeta) {
-          twitterThemeMeta.setAttribute('content', 'light'); // Metaタグを更新
-      }
-  }
 }, 100);
 
 // テキストエリアの高さ自動調整
@@ -494,78 +478,6 @@ Defer(function() {
     });
 }, 200);
 
-/* mermaid 読み込み */
-if (document.querySelector('.mermaid') !== null) {
-
-  // 既存の図表にスタイルを適用
-  document.querySelectorAll('figure.mermaid-chart').forEach(figure => {
-    figure.classList.add('box-img', 'box-img640');
-  });
-
-  const isDarkMode = document.documentElement.classList.contains('dark-mode');
-
-  // gantt チャートの再診日付を更新
-  // 今日の日付を取得 (YYYY-MM-DD形式)
-  const today = new Date().toISOString().split('T')[0]; // 2025-06-09
-
-  // 最新の日付を検出する関数
-  function findLatestDate(code) {
-    const dateRegex = /\d{4}-\d{2}-\d{2}/g;
-    const dates = code.match(dateRegex);
-    if (!dates) return null;
-    
-    // 日付を比較して最新の日付を見つける
-    return dates.reduce((latest, current) => {
-      return new Date(current) > new Date(latest) ? current : latest;
-    }, dates[0]);
-  }
-
-  // 最新の日付を今日の日付に置換
-  function replaceLatestDate(code, latestDate, newDate) {
-    const regex = new RegExp(latestDate, 'g');
-    return code.replace(regex, newDate);
-  }
-
-  // Mermaidコードを検出して処理
-  function updateMermaidGanttCharts() {
-    // <code class="mermaid"> 要素をすべて取得
-    const mermaidElements = document.querySelectorAll('code.mermaid');
-    
-    mermaidElements.forEach((element) => {
-      const code = element.textContent;
-      
-      // 'gantt' を含むか確認
-      if (code.includes('gantt')) {
-        const latestDate = findLatestDate(code);
-        if (latestDate) {
-          // 最新の日付を今日の日付に置換
-          const updatedCode = replaceLatestDate(code, latestDate, today);
-          // 置換後のコードを要素に戻す
-          element.textContent = updatedCode;
-          
-          // Mermaid.jsを再レンダリング（Mermaidがページにロードされている場合）
-          if (typeof mermaid !== 'undefined') {
-            mermaid.init(undefined, element);
-          }
-        }
-      }
-    });
-  }
-
-  updateMermaidGanttCharts()
-
-  Defer(function () {
-
-    mermaid.initialize({
-      startOnLoad: false, // 手動初期化のためfalseに
-      theme: isDarkMode ? 'dark' : 'default',
-    });
-
-    mermaid.run();
-
-  }, 1500);
-}
-
 /* Chart.js */
 if (document.querySelector('.chartjs') !== null) {
     let chartsInitialized = false;
@@ -657,6 +569,78 @@ if (document.querySelector('.chartjs') !== null) {
         window.addEventListener('resize', debouncedResize);
         initializeCharts(); // 初回実行
     }, 1500);
+}
+
+/* mermaid */
+if (document.querySelector('.mermaid') !== null) {
+
+  // 既存の図表にスタイルを適用
+  document.querySelectorAll('figure.mermaid-chart').forEach(figure => {
+    figure.classList.add('box-img', 'box-img640');
+  });
+
+  const isDarkMode = document.documentElement.classList.contains('dark-mode');
+
+  // gantt チャートの再診日付を更新
+  // 今日の日付を取得 (YYYY-MM-DD形式)
+  const today = new Date().toISOString().split('T')[0]; // 2025-06-09
+
+  // 最新の日付を検出する関数
+  function findLatestDate(code) {
+    const dateRegex = /\d{4}-\d{2}-\d{2}/g;
+    const dates = code.match(dateRegex);
+    if (!dates) return null;
+    
+    // 日付を比較して最新の日付を見つける
+    return dates.reduce((latest, current) => {
+      return new Date(current) > new Date(latest) ? current : latest;
+    }, dates[0]);
+  }
+
+  // 最新の日付を今日の日付に置換
+  function replaceLatestDate(code, latestDate, newDate) {
+    const regex = new RegExp(latestDate, 'g');
+    return code.replace(regex, newDate);
+  }
+
+  // Mermaidコードを検出して処理
+  function updateMermaidGanttCharts() {
+    // <code class="mermaid"> 要素をすべて取得
+    const mermaidElements = document.querySelectorAll('code.mermaid');
+    
+    mermaidElements.forEach((element) => {
+      const code = element.textContent;
+      
+      // 'gantt' を含むか確認
+      if (code.includes('gantt')) {
+        const latestDate = findLatestDate(code);
+        if (latestDate) {
+          // 最新の日付を今日の日付に置換
+          const updatedCode = replaceLatestDate(code, latestDate, today);
+          // 置換後のコードを要素に戻す
+          element.textContent = updatedCode;
+          
+          // Mermaid.jsを再レンダリング（Mermaidがページにロードされている場合）
+          if (typeof mermaid !== 'undefined') {
+            mermaid.init(undefined, element);
+          }
+        }
+      }
+    });
+  }
+
+  updateMermaidGanttCharts()
+
+  Defer(function () {
+
+    mermaid.initialize({
+      startOnLoad: false, // 手動初期化のためfalseに
+      theme: isDarkMode ? 'dark' : 'default',
+    });
+
+    mermaid.run();
+
+  }, 1500);
 }
   
 /* GPUアクセラレーション除去 */
