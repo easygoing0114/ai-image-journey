@@ -180,7 +180,7 @@ if (document.querySelector('.blogcard-auto') !== null) {
           'huggingface.co/bluepen5805/blue_pencil-xl': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/55619f31-4395-4e9b-a94d-208460a9f7d2/00494-20240623160056-880978405-30-5.jpeg',
           'huggingface.co/bluepen5805/noob_v_pencil-XL': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/5d4020ad-6777-4077-b53e-4432e9263d45/00000-20241211153415-1954655588-30-5.jpeg',
           'huggingface.co/zer0int': 'https://cdn-avatars.huggingface.co/v1/production/uploads/6490359a877fc29cb1b09451/b-oU9m0-ceQQ1tyt2G_pq.png',
-          'huggingface.co/easygoing0114': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhPnTwjMymZ1GmW7M0av29ua0DpqyeFZ2QLf3INk-i0rgWAepGwtta79Kn7mtrSSkfCPHHAaFL2Yywvp7sRP3-JAteLQYJsxX-SSTwrd_BKld9pBGxsByp2q9feoXdizjP0MTD5_0V8glo9J0qLVxyegs_qPumq6ijA_13hzLOzjLE2ejs/w400-e90-rw/profile%202025.5.10.png'
+          'huggingface.co/easygoing0114': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiKzWXmfTDkoH5OnJYmwEZqWQueeSSUxi1Er1rbq-9XdJufMgSuc13JXC211c_dJQkbHhxpd-vcGFOBbBb4mL1EF93uBWmZ60RcQkvsUDN6qBKTuSKzZqSZTpGS_s24aPD08Ad1uhqFNAWLI1HNrczz2CF4EQEyfg1z0utrkY6Bz7fOjw/w400-e90-rw/Profile_silver_hair_man.png'
         };
         
         // デフォルトのCivitai画像
@@ -615,7 +615,6 @@ if (document.querySelector('.chartjs') !== null) {
     } 
     
     function calculateDynamicPadding(specificContainer = null) {
-        
         // 特定のコンテナが指定されていない場合は最初のコンテナを使用
         const container = specificContainer || document.querySelector('.chartjs-container');
         
@@ -623,11 +622,32 @@ if (document.querySelector('.chartjs') !== null) {
             return 24; // デフォルト値
         }
         
-        const containerWidth = container.offsetWidth;
-        const containerHeight = container.offsetHeight;
-                
-        // アスペクト比を計算（幅/高さ）
-        const aspectRatio = containerWidth / containerHeight;
+        // canvasエレメントを直接取得してそのサイズを使用
+        const canvas = container.querySelector('canvas.chartjs');
+        if (!canvas) {
+            return 24;
+        }
+        
+        // canvasの親要素でfigcaptionを含まない要素のサイズを取得
+        const canvasWrapper = canvas.parentElement;
+        let referenceWidth, referenceHeight;
+        
+        // canvasのcomputedStyleから実際のサイズを取得
+        const canvasStyle = getComputedStyle(canvas);
+        const canvasRect = canvas.getBoundingClientRect();
+        
+        referenceWidth = canvasRect.width || parseFloat(canvasStyle.width) || container.offsetWidth;
+        referenceHeight = canvasRect.height || parseFloat(canvasStyle.height);
+        
+        // 高さが取得できない場合は、アスペクト比から推定
+        if (!referenceHeight || referenceHeight === 0) {
+            // Chart.jsのデフォルトアスペクト比（通常は2）または設定されたアスペクト比を使用
+            const defaultAspectRatio = 2; // または設定から取得
+            referenceHeight = referenceWidth / defaultAspectRatio;
+        }
+        
+        // アスペクト比を計算
+        const aspectRatio = referenceWidth / referenceHeight;
         
         // アスペクト比に応じて係数を選択
         let coefficient;
@@ -637,9 +657,9 @@ if (document.querySelector('.chartjs') !== null) {
             coefficient = 0.1;  // 縦長の場合
         }
         
-        const calculatedPadding = Math.round(containerWidth * coefficient);
+        const calculatedPadding = Math.round(referenceWidth * coefficient);
         
-        return calculatedPadding;
+        return Math.max(calculatedPadding, 24); // 最小パディングを保証
     }
     
     function findContainerForChart(canvas) {
@@ -793,7 +813,7 @@ if (document.querySelector('.chartjs') !== null) {
         const debouncedResize = debounce(handleResize, 100);
         window.addEventListener('resize', debouncedResize);
         initializeCharts(); // 初回実行
-    }, 1500);
+    }, 2000);
 }
 
 /* mermaid */
@@ -806,7 +826,7 @@ if (document.querySelector('.language-mermaid') !== null) {
 
   const isDarkMode = document.documentElement.classList.contains('dark-mode');
 
-  // gantt チャートの再診日付を更新
+  // gantt チャートの最新日付を更新
   // 今日の日付を取得 (YYYY-MM-DD形式)
   const today = new Date().toISOString().split('T')[0];
 
