@@ -806,7 +806,7 @@ if (document.querySelector('.language-mermaid') !== null) {
 
   const isDarkMode = document.documentElement.classList.contains('dark-mode');
 
-  // gantt チャートの再診日付を更新
+  // gantt チャートの最新日付を更新
   // 今日の日付を取得 (YYYY-MM-DD形式)
   const today = new Date().toISOString().split('T')[0];
 
