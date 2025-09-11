@@ -793,7 +793,7 @@ if (document.querySelector('.chartjs') !== null) {
         const debouncedResize = debounce(handleResize, 100);
         window.addEventListener('resize', debouncedResize);
         initializeCharts(); // 初回実行
-    }, 1500);
+    }, 2000);
 }
 
 /* mermaid */
