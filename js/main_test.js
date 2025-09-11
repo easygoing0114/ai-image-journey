@@ -615,6 +615,7 @@ if (document.querySelector('.chartjs') !== null) {
     } 
     
     function calculateDynamicPadding(specificContainer = null) {
+        
         // 特定のコンテナが指定されていない場合は最初のコンテナを使用
         const container = specificContainer || document.querySelector('.chartjs-container');
         
@@ -622,32 +623,11 @@ if (document.querySelector('.chartjs') !== null) {
             return 24; // デフォルト値
         }
         
-        // canvasエレメントを直接取得してそのサイズを使用
-        const canvas = container.querySelector('canvas.chartjs');
-        if (!canvas) {
-            return 24;
-        }
-        
-        // canvasの親要素でfigcaptionを含まない要素のサイズを取得
-        const canvasWrapper = canvas.parentElement;
-        let referenceWidth, referenceHeight;
-        
-        // canvasのcomputedStyleから実際のサイズを取得
-        const canvasStyle = getComputedStyle(canvas);
-        const canvasRect = canvas.getBoundingClientRect();
-        
-        referenceWidth = canvasRect.width || parseFloat(canvasStyle.width) || container.offsetWidth;
-        referenceHeight = canvasRect.height || parseFloat(canvasStyle.height);
-        
-        // 高さが取得できない場合は、アスペクト比から推定
-        if (!referenceHeight || referenceHeight === 0) {
-            // Chart.jsのデフォルトアスペクト比（通常は2）または設定されたアスペクト比を使用
-            const defaultAspectRatio = 2; // または設定から取得
-            referenceHeight = referenceWidth / defaultAspectRatio;
-        }
-        
-        // アスペクト比を計算
-        const aspectRatio = referenceWidth / referenceHeight;
+        const containerWidth = container.offsetWidth;
+        const containerHeight = container.offsetHeight;
+                
+        // アスペクト比を計算（幅/高さ）
+        const aspectRatio = containerWidth / containerHeight;
         
         // アスペクト比に応じて係数を選択
         let coefficient;
@@ -657,9 +637,9 @@ if (document.querySelector('.chartjs') !== null) {
             coefficient = 0.1;  // 縦長の場合
         }
         
-        const calculatedPadding = Math.round(referenceWidth * coefficient);
+        const calculatedPadding = Math.round(containerWidth * coefficient);
         
-        return Math.max(calculatedPadding, 24); // 最小パディングを保証
+        return calculatedPadding;
     }
     
     function findContainerForChart(canvas) {
