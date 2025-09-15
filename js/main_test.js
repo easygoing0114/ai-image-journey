@@ -163,7 +163,18 @@ if (document.querySelector('.blogcard-auto') !== null) {
         this.BLOGGER_IMAGE_DOMAIN = 'blogger.googleusercontent.com';
         
         // カスタム画像のマッピング
-        this.CUSTOM_IMAGES = {
+        this.CUSTOM_IMAGES = {   
+          // GitHub
+          'github.com/easygoing0114': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjCVXA9lGHLmQZqpHFx_m1MEfgolO1f8ksTQfLJcHDa5-rH86NWJ-ufv4TgNOAPOMcFfIFEpqBzjV3xPRQ-85oKG-GWDI8zRiUku_ZFtVcOJACWm97gJH_PsadwGx9GujgPRu3RVtBY25qnG0UiTVBzOErzfsEI5Q0ZAnkzkp5odc7BAw/w400-e90-rw/Profile_image_20250824.png',
+
+          // Hugging Face models
+          'huggingface.co/bluepen5805/blue_pencil-flux1': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ff1638f0-0295-45e8-b038-d7f376f26873/ComfyUI_00023_.jpeg',
+          'huggingface.co/bluepen5805/anima_pencil-xl': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/48499ad8-33bb-4a2c-aac8-af6c6edcc280/00494-20240625200426-223644773-30-5.jpeg',
+          'huggingface.co/bluepen5805/blue_pencil-xl': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/55619f31-4395-4e9b-a94d-208460a9f7d2/00494-20240623160056-880978405-30-5.jpeg',
+          'huggingface.co/bluepen5805/noob_v_pencil-XL': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/5d4020ad-6777-4077-b53e-4432e9263d45/00000-20241211153415-1954655588-30-5.jpeg',
+          'huggingface.co/zer0int': 'https://cdn-avatars.huggingface.co/v1/production/uploads/6490359a877fc29cb1b09451/b-oU9m0-ceQQ1tyt2G_pq.png',
+          'huggingface.co/easygoing0114': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjCVXA9lGHLmQZqpHFx_m1MEfgolO1f8ksTQfLJcHDa5-rH86NWJ-ufv4TgNOAPOMcFfIFEpqBzjV3xPRQ-85oKG-GWDI8zRiUku_ZFtVcOJACWm97gJH_PsadwGx9GujgPRu3RVtBY25qnG0UiTVBzOErzfsEI5Q0ZAnkzkp5odc7BAw/w400-e90-rw/Profile_image_20250824.png',
+
           // Civitai models
           'civitai.com/models/722776': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ff1638f0-0295-45e8-b038-d7f376f26873/ComfyUI_00023_.jpeg',
           'civitai.com/models/261336': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/48499ad8-33bb-4a2c-aac8-af6c6edcc280/00494-20240625200426-223644773-30-5.jpeg',
@@ -172,15 +183,8 @@ if (document.querySelector('.blogcard-auto') !== null) {
           'civitai.com/models/260267': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/b50708a9-a0a2-4a62-a688-cbd15abb65e4/image%20(24).jpeg',
           'civitai.com/models/1027203': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/5d4020ad-6777-4077-b53e-4432e9263d45/00000-20241211153415-1954655588-30-5.jpeg',
           'civitai.com/models/1188071': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/44382db0-b992-4058-b8b1-369a58cc2604/animagine-xl-4.0-opt.jpeg',
-          'civitai.com/models/1356520': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjslEk_MbcW7rmbFx4f3uB5iN8zNVKrFJV7qLSuoc8WJsLxq0aR04ug4Suqef9fK4A5QcaprR-dFgqxsNpj-Pk6j3-lAIix8bRtiRs3OXLy3G2cLUqdE-0bY-hEiTEFLbRnLJU9hbysUPAL-78n39qmQYB7mxvRunFo_Xpx5HDVIKNUBLE/w400-e90-rw/Flux1_euler_Anime%20Illustration%20of%20%20A%20young%20girl%20holding%20a%20chalkboard%20that%20says%20flan%20t5%20and%20te-only.png',
-          
-          // Hugging Face models
-          'huggingface.co/bluepen5805/blue_pencil-flux1': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ff1638f0-0295-45e8-b038-d7f376f26873/ComfyUI_00023_.jpeg',
-          'huggingface.co/bluepen5805/anima_pencil-xl': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/48499ad8-33bb-4a2c-aac8-af6c6edcc280/00494-20240625200426-223644773-30-5.jpeg',
-          'huggingface.co/bluepen5805/blue_pencil-xl': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/55619f31-4395-4e9b-a94d-208460a9f7d2/00494-20240623160056-880978405-30-5.jpeg',
-          'huggingface.co/bluepen5805/noob_v_pencil-XL': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/5d4020ad-6777-4077-b53e-4432e9263d45/00000-20241211153415-1954655588-30-5.jpeg',
-          'huggingface.co/zer0int': 'https://cdn-avatars.huggingface.co/v1/production/uploads/6490359a877fc29cb1b09451/b-oU9m0-ceQQ1tyt2G_pq.png',
-          'huggingface.co/easygoing0114': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiKzWXmfTDkoH5OnJYmwEZqWQueeSSUxi1Er1rbq-9XdJufMgSuc13JXC211c_dJQkbHhxpd-vcGFOBbBb4mL1EF93uBWmZ60RcQkvsUDN6qBKTuSKzZqSZTpGS_s24aPD08Ad1uhqFNAWLI1HNrczz2CF4EQEyfg1z0utrkY6Bz7fOjw/w400-e90-rw/Profile_silver_hair_man.png'
+          'civitai.com/models/1356520': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjCVXA9lGHLmQZqpHFx_m1MEfgolO1f8ksTQfLJcHDa5-rH86NWJ-ufv4TgNOAPOMcFfIFEpqBzjV3xPRQ-85oKG-GWDI8zRiUku_ZFtVcOJACWm97gJH_PsadwGx9GujgPRu3RVtBY25qnG0UiTVBzOErzfsEI5Q0ZAnkzkp5odc7BAw/w400-e90-rw/Profile_image_20250824.png'
+
         };
         
         // デフォルトのCivitai画像
@@ -654,6 +658,26 @@ if (document.querySelector('.chartjs') !== null) {
         return null;
     }
     
+    function wrapChartjsCanvas() {
+        // すべての.chartjsクラスを持つcanvas要素を取得
+        const canvases = document.querySelectorAll('canvas.chartjs');
+        
+        canvases.forEach(canvas => {
+            // 既にラッパーで囲まれているかチェック
+            if (canvas.parentElement && canvas.parentElement.classList.contains('chartjs-wrapper')) {
+                return; // 既にラップされている場合はスキップ
+            }
+            
+            // 新しいdiv要素を作成
+            const wrapper = document.createElement('div');
+            wrapper.classList.add('chartjs-wrapper');
+            
+            // canvasの親要素にwrapperを挿入し、canvasをwrapperの中に移動
+            canvas.parentNode.insertBefore(wrapper, canvas);
+            wrapper.appendChild(canvas);
+        });
+    }
+    
     function updateChartPadding() {
         
         // 既存のチャートのpaddingを個別に更新
@@ -747,6 +771,9 @@ if (document.querySelector('.chartjs') !== null) {
     
     function initializeCharts() {
         
+        // Canvas要素をdivで囲む処理を最初に実行
+        wrapChartjsCanvas();
+        
         // 初回のみChart.jsの設定を行う
         if (!chartsInitialized) {
             Chart.register(ChartDataLabels);
@@ -793,7 +820,7 @@ if (document.querySelector('.chartjs') !== null) {
         const debouncedResize = debounce(handleResize, 100);
         window.addEventListener('resize', debouncedResize);
         initializeCharts(); // 初回実行
-    }, 2000);
+    }, 1500);
 }
 
 /* mermaid */
