@@ -110,6 +110,59 @@ Defer(function () {
   });
 }, 100);
 
+// img-spacer の子要素の高さをそろえる
+function alignToMinHeight() {
+  const container = document.querySelector('.img-spacer');
+  if (!container) return;
+  
+  const children = Array.from(container.children);
+  
+  // 一度高さをリセット
+  children.forEach(child => {
+    child.style.height = '';
+  });
+  
+  // 各子要素の高さを取得
+  const heights = children.map(child => child.offsetHeight);
+  
+  // 最小の高さを見つける
+  const minHeight = Math.min(...heights);
+  
+  // 全ての子要素を最小の高さに揃える
+  children.forEach(child => {
+    child.style.height = `${minHeight}px`;
+  });
+}
+
+// ページ読み込み時に実行
+window.addEventListener('load', alignToMinHeight);
+
+// 画像の読み込み完了を確実にするため
+window.addEventListener('load', () => {
+  const images = document.querySelectorAll('.img-spacer img');
+  let loadedCount = 0;
+  
+  images.forEach(img => {
+    if (img.complete) {
+      loadedCount++;
+    } else {
+      img.addEventListener('load', () => {
+        loadedCount++;
+        if (loadedCount === images.length) {
+          alignToMinHeight();
+        }
+      });
+    }
+  });
+  
+  if (loadedCount === images.length) {
+    alignToMinHeight();
+  }
+});
+
+// ウィンドウリサイズ時にも再計算
+window.addEventListener('resize', alignToMinHeight);
+
 // テキストエリアの高さ自動調整
 if (document.querySelector('textarea') !== null) {
   Defer(function() {
