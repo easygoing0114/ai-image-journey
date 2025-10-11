@@ -22,9 +22,9 @@ if (document.querySelector('.chartjs') !== null) {
   Defer.js('https://files.ai-image-journey.com/js/papaprase.js', 'papapease', 300);
 }
 
-//if (document.querySelector('.language-mermaid') !== null) {
-//  Defer.js('https://files.ai-image-journey.com/js/mermaid-custom.min.js', 'mermaid', 100);
-//}
+if (document.querySelector('.language-mermaid') !== null) {
+  Defer.js('https://files.ai-image-journey.com/js/mermaid-custom.min.js', 'mermaid', 100);
+}
 
 if (document.querySelector('.markdown') !== null) {
   Defer.js('https://cdnjs.cloudflare.com/ajax/libs/turndown/7.2.0/turndown.min.js', 'turndown', 100);
@@ -1025,30 +1025,16 @@ if (document.querySelector('.language-mermaid') !== null) {
     }
   };
 
-  // カスタムビルドしたMermaidを読み込み
-  Defer.js('https://files.ai-image-journey.com/js/mermaid-custom.min.js', 'mermaid', 100, function() {
-    console.log('Mermaid loaded:', typeof mermaid);
-    console.log('Mermaid object:', mermaid);
-    console.log('Mermaid.initialize:', typeof mermaid.initialize);
-    console.log('Mermaid.run:', typeof mermaid.run);
-    
-    try {
-      mermaid.initialize({
-        startOnLoad: false,
-        theme: isDarkMode ? 'dark' : 'default',
-      });
+  Defer(function () {
 
-      mermaid.run().then(() => {
-        console.log('Mermaid run completed successfully');
-      }).catch((error) => {
-        console.error('Mermaid run error:', error);
-        console.error('Error details:', error.message, error.stack);
-      });
-    } catch (e) {
-      console.error('Mermaid initialization error:', e);
-      console.error('Error details:', e.message, e.stack);
-    }
-  });
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: isDarkMode ? 'dark' : 'default',
+    });
+
+    mermaid.run();
+
+  }, 1500);
 }
   
 /* GPUアクセラレーション除去 */
