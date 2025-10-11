@@ -1,4 +1,4 @@
-import { _ as __name, U as lineBreakRegex, j as distExports } from "./mermaid-custom-BFg8r2ws.js";
+import { _ as __name, U as lineBreakRegex, j as distExports } from "./mermaid-custom-CdtnJ-re.js";
 var drawRect = /* @__PURE__ */ __name((element, rectData) => {
   const rectElement = element.append("rect");
   rectElement.attr("x", rectData.x);

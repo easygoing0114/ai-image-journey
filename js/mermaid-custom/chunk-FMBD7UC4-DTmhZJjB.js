@@ -1,4 +1,4 @@
-import { _ as __name } from "./mermaid-custom-BFg8r2ws.js";
+import { _ as __name } from "./mermaid-custom-CdtnJ-re.js";
 var getIconStyles = /* @__PURE__ */ __name(() => `
   /* Font Awesome icon styling - consolidated */
   .label-icon {

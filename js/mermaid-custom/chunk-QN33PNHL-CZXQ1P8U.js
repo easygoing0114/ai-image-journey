@@ -1,4 +1,4 @@
-import { _ as __name, e as configureSvgSize, l as log } from "./mermaid-custom-BFg8r2ws.js";
+import { _ as __name, e as configureSvgSize, l as log } from "./mermaid-custom-CdtnJ-re.js";
 var setupViewPortForSVG = /* @__PURE__ */ __name((svg, padding, cssDiagram, useMaxWidth) => {
   svg.attr("class", cssDiagram);
   const { width, height, x, y } = calculateDimensionsWithPadding(svg, padding);

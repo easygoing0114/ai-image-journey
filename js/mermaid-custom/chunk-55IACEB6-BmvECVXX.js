@@ -1,4 +1,4 @@
-import { _ as __name, d as select } from "./mermaid-custom-BFg8r2ws.js";
+import { _ as __name, d as select } from "./mermaid-custom-CdtnJ-re.js";
 var getDiagramElement = /* @__PURE__ */ __name((id, securityLevel) => {
   let sandboxElement;
   if (securityLevel === "sandbox") {

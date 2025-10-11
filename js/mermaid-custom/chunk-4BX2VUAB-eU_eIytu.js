@@ -1,4 +1,4 @@
-import { _ as __name } from "./mermaid-custom-BFg8r2ws.js";
+import { _ as __name } from "./mermaid-custom-CdtnJ-re.js";
 function populateCommonDb(ast, db) {
   var _a, _b, _c;
   if (ast.accDescr) {

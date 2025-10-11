@@ -1,4 +1,4 @@
-import { aM as constant, aN as interpolateNumber, aO as interpolateRgb, aP as interpolateString, aQ as color } from "./mermaid-custom-BFg8r2ws.js";
+import { aM as constant, aN as interpolateNumber, aO as interpolateRgb, aP as interpolateString, aQ as color } from "./mermaid-custom-CdtnJ-re.js";
 import { i as initRange } from "./init-ZxktEp_H.js";
 import { e as exponent, f as formatSpecifier, a as formatPrefix, b as format } from "./defaultLocale-DVr69WTU.js";
 function ascending(a, b) {

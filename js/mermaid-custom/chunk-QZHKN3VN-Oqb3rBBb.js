@@ -1,5 +1,5 @@
 var _a;
-import { _ as __name } from "./mermaid-custom-BFg8r2ws.js";
+import { _ as __name } from "./mermaid-custom-CdtnJ-re.js";
 var ImperativeState = (_a = class {
   /**
    * @param init - Function that creates the default state.
