@@ -22,6 +22,10 @@ if (document.querySelector('.chartjs') !== null) {
   Defer.js('https://files.ai-image-journey.com/js/papaprase.js', 'papapease', 300);
 }
 
+if (document.querySelector('.language-mermaid') !== null) {
+  Defer.js('https://files.ai-image-journey.com/js/mermaid-custom.min.js', 'mermaid', 100);
+}
+
 if (document.querySelector('.markdown') !== null) {
   Defer.js('https://cdnjs.cloudflare.com/ajax/libs/turndown/7.2.0/turndown.min.js', 'turndown', 100);
   Defer.js('https://unpkg.com/turndown-plugin-gfm/dist/turndown-plugin-gfm.js', 'turndownplugin', 100);
@@ -37,14 +41,6 @@ if (document.querySelector('.twitter-tweet') !== null) {
 }
 if (document.querySelector('.text-post-media') !== null) {
   Defer.js('https://www.threads.com/embed.js', 'threads', 1500);
-}
-
-if (document.querySelector('.language-mermaid') !== null) {
-  // ESM版を動的インポート
-  import('https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs')
-    .then(module => {
-      const mermaid = module.default;
-    });
 }
 
 
