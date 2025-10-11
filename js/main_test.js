@@ -1025,13 +1025,29 @@ if (document.querySelector('.language-mermaid') !== null) {
     }
   };
 
+  // カスタムビルドしたMermaidを読み込み
   Defer.js('https://files.ai-image-journey.com/js/mermaid-custom.min.js', 'mermaid', 100, function() {
-    mermaid.initialize({
-      startOnLoad: false,
-      theme: isDarkMode ? 'dark' : 'default',
-    });
+    console.log('Mermaid loaded:', typeof mermaid);
+    console.log('Mermaid object:', mermaid);
+    console.log('Mermaid.initialize:', typeof mermaid.initialize);
+    console.log('Mermaid.run:', typeof mermaid.run);
+    
+    try {
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: isDarkMode ? 'dark' : 'default',
+      });
 
-    mermaid.run();
+      mermaid.run().then(() => {
+        console.log('Mermaid run completed successfully');
+      }).catch((error) => {
+        console.error('Mermaid run error:', error);
+        console.error('Error details:', error.message, error.stack);
+      });
+    } catch (e) {
+      console.error('Mermaid initialization error:', e);
+      console.error('Error details:', e.message, e.stack);
+    }
   });
 }
   
