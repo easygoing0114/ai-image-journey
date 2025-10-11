@@ -22,9 +22,9 @@ if (document.querySelector('.chartjs') !== null) {
   Defer.js('https://files.ai-image-journey.com/js/papaprase.js', 'papapease', 300);
 }
 
-//if (document.querySelector('.language-mermaid') !== null) {
-//  Defer.js('https://files.ai-image-journey.com/js/mermaid-custom.min.js', 'mermaid', 100);
-//}
+if (document.querySelector('.language-mermaid') !== null) {
+  Defer.js('https://files.ai-image-journey.com/js/mermaid-custom/mermaid-custom.min.js', 'mermaid', 100);
+}
 
 if (document.querySelector('.markdown') !== null) {
   Defer.js('https://cdnjs.cloudflare.com/ajax/libs/turndown/7.2.0/turndown.min.js', 'turndown', 100);
@@ -823,21 +823,24 @@ if (document.querySelector('.chartjs') !== null) {
     }, 1500);
 }
 
-/* mermaid - チャンク版 */
+/* mermaid */
 if (document.querySelector('.language-mermaid') !== null) {
 
-  // 既存のコード（変更なし）
+  // 既存の図表にスタイルを適用
   document.querySelectorAll('.mermaid-chart').forEach(figure => {
     figure.classList.add('box-img', 'box-img640');
   });
 
   const isDarkMode = document.documentElement.classList.contains('dark-mode');
+
+  // gantt チャートの最新日付を更新
   const today = new Date().toISOString().split('T')[0];
 
   function findLatestDate(code) {
     const dateRegex = /\d{4}-\d{2}-\d{2}/g;
     const dates = code.match(dateRegex);
     if (!dates) return null;
+    
     return dates.reduce((latest, current) => {
       return new Date(current) > new Date(latest) ? current : latest;
     }, dates[0]);
@@ -850,13 +853,16 @@ if (document.querySelector('.language-mermaid') !== null) {
 
   function updateMermaidGanttCharts() {
     const mermaidElements = document.querySelectorAll('.language-mermaid');
+    
     mermaidElements.forEach((element) => {
       const code = element.textContent;
+      
       if (code.includes('gantt')) {
         const latestDate = findLatestDate(code);
         if (latestDate) {
           const updatedCode = replaceLatestDate(code, latestDate, today);
           element.textContent = updatedCode;
+          
           if (typeof mermaid !== 'undefined') {
             mermaid.init(undefined, element);
           }
@@ -867,14 +873,17 @@ if (document.querySelector('.language-mermaid') !== null) {
 
   function preserveMermaidSource() {
     const languageMermaidElements = document.querySelectorAll('.language-mermaid');
+    
     languageMermaidElements.forEach(function(element) {
       if (element.nextElementSibling && element.nextElementSibling.classList.contains('language-mermaid-copy')) {
         return;
       }
+      
       const copyElement = document.createElement('code');
       copyElement.className = 'language-mermaid-copy';
       copyElement.style.display = 'none';
       copyElement.textContent = element.textContent;
+      
       element.parentNode.insertBefore(copyElement, element.nextSibling);
     });
   }
@@ -884,7 +893,10 @@ if (document.querySelector('.language-mermaid') !== null) {
   window.updateMermaidTheme = function(theme) {
     try {
       const mermaidElements = document.querySelectorAll('.language-mermaid');
-      if (mermaidElements.length === 0) return;
+      
+      if (mermaidElements.length === 0) {
+        return;
+      }
 
       document.querySelectorAll('.language-mermaid svg').forEach(svg => {
         svg.remove();
@@ -900,10 +912,14 @@ if (document.querySelector('.language-mermaid') !== null) {
       }
 
       const processChart = function(index) {
-        if (index >= mermaidElements.length) return;
+        if (index >= mermaidElements.length) {
+          return;
+        }
+
         const element = mermaidElements[index];
         
         let copyElement = null;
+        
         if (element.previousElementSibling && element.previousElementSibling.classList.contains('language-mermaid-copy')) {
           copyElement = element.previousElementSibling;
         } else if (element.nextElementSibling && element.nextElementSibling.classList.contains('language-mermaid-copy')) {
@@ -916,6 +932,7 @@ if (document.querySelector('.language-mermaid') !== null) {
         }
         
         const parentFigure = element.closest('.mermaid-chart');
+            
         if (parentFigure) {
           const computedStyle = window.getComputedStyle(parentFigure);
           parentFigure.style.width = computedStyle.width;
@@ -944,6 +961,7 @@ if (document.querySelector('.language-mermaid') !== null) {
             parentFigure.style.removeProperty('width');
             parentFigure.style.removeProperty('height');
           }
+          
           processChart(index + 1);
         };
 
@@ -952,13 +970,18 @@ if (document.querySelector('.language-mermaid') !== null) {
             mermaid.run({
               nodes: [element],
               suppressErrors: false
-            }).then(onRenderComplete).catch(onRenderComplete);
+            }).then(function() {
+              onRenderComplete();
+            }).catch(function(error) {
+              onRenderComplete();
+            });
           } else if (typeof mermaid.render === 'function') {
-            mermaid.render(uniqueId + '-svg', updatedCode)
-              .then(function(result) {
-                element.innerHTML = result.svg;
-                onRenderComplete();
-              }).catch(onRenderComplete);
+            mermaid.render(uniqueId + '-svg', updatedCode).then(function(result) {
+              element.innerHTML = result.svg;
+              onRenderComplete();
+            }).catch(function(error) {
+              onRenderComplete();
+            });
           } else {
             onRenderComplete();
           }
@@ -968,6 +991,7 @@ if (document.querySelector('.language-mermaid') !== null) {
       };
 
       processChart(0);
+
     } catch (error) {
       if (confirm('チャートのテーマ更新でエラーが発生しました。ページを再読み込みしますか？')) {
         window.location.reload();
@@ -975,37 +999,23 @@ if (document.querySelector('.language-mermaid') !== null) {
     }
   };
 
-  // 🔥 メインファイルのみを読み込み（チャンクは自動的に読み込まれる）
-  function loadMermaidWhenIdle() {
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(loadMermaidScript, { timeout: 3000 });
-    } else {
-      setTimeout(loadMermaidScript, 2000);
+  // Mermaidが読み込まれるまで待機してから初期化
+  Defer(function () {
+    // mermaidが読み込まれているか確認
+    if (typeof mermaid === 'undefined') {
+      console.error('Mermaid not loaded');
+      return;
     }
-  }
 
-  function loadMermaidScript() {
-    Defer.js(
-      'https://files.ai-image-journey.com/js/mermaid-custom/mermaid-custom.min.js',
-      'mermaid',
-      100,
-      function() {
-        mermaid.initialize({
-          startOnLoad: false,
-          theme: isDarkMode ? 'dark' : 'default',
-        });
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: isDarkMode ? 'dark' : 'default',
+    });
 
-        updateMermaidGanttCharts();
-        mermaid.run();
-      }
-    );
-  }
+    updateMermaidGanttCharts();
+    mermaid.run();
 
-  if (document.readyState === 'complete') {
-    loadMermaidWhenIdle();
-  } else {
-    window.addEventListener('load', loadMermaidWhenIdle);
-  }
+  }, 1500);
 }
   
 /* GPUアクセラレーション除去 */
