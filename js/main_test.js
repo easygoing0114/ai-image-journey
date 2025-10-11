@@ -40,17 +40,11 @@ if (document.querySelector('.text-post-media') !== null) {
 }
 
 if (document.querySelector('.language-mermaid') !== null) {
-  // メインのエントリーポイントのみをモジュールとしてロード
-  const script = document.createElement('script');
-  script.type = 'module';
-  script.src = 'https://files.ai-image-journey.com/js/mermaid-custom/mermaid-custom.js';
-  
-  // ロード完了後の処理が必要な場合
-  script.onload = function() {
-    console.log('Mermaid custom loaded');
-  };
-  
-  document.head.appendChild(script);
+  // ESM版を動的インポート
+  import('https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs')
+    .then(module => {
+      const mermaid = module.default;
+    });
 }
 
 
