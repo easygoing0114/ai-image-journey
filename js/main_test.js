@@ -22,9 +22,9 @@ if (document.querySelector('.chartjs') !== null) {
   Defer.js('https://files.ai-image-journey.com/js/papaprase.js', 'papapease', 300);
 }
 
-if (document.querySelector('.language-mermaid') !== null) {
-  Defer.js('https://files.ai-image-journey.com/js/mermaid-custom.min.js', 'mermaid', 100);
-}
+//if (document.querySelector('.language-mermaid') !== null) {
+//  Defer.js('https://files.ai-image-journey.com/js/mermaid-custom.min.js', 'mermaid', 100);
+//}
 
 if (document.querySelector('.markdown') !== null) {
   Defer.js('https://cdnjs.cloudflare.com/ajax/libs/turndown/7.2.0/turndown.min.js', 'turndown', 100);
@@ -1025,16 +1025,14 @@ if (document.querySelector('.language-mermaid') !== null) {
     }
   };
 
-  Defer(function () {
-
+  Defer.js('https://files.ai-image-journey.com/js/mermaid-custom.min.js', 'mermaid', 100, function() {
     mermaid.initialize({
       startOnLoad: false,
       theme: isDarkMode ? 'dark' : 'default',
     });
 
     mermaid.run();
-
-  }, 1500);
+  });
 }
   
 /* GPUアクセラレーション除去 */
