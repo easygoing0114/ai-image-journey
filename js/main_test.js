@@ -40,43 +40,17 @@ if (document.querySelector('.text-post-media') !== null) {
 }
 
 if (document.querySelector('.language-mermaid') !== null) {
-  // mermaid-customディレクトリ内の全JSファイルのリスト
-  const mermaidCustomFiles = [
-    '_basePickBy-B2xZYPv6.js',
-    '_baseUniq-D3PCRIMc.js',
-    'arc-BdQdmodH.js',
-    'channel-CqYIOgL7.js',
-    'chunk-4BX2VUAB-eU_eIytu.js',
-    'chunk-55IACEB6-BmvECVXX.js',
-    'chunk-B4BG7PRW-2ptSRdeN.js',
-    'chunk-DI55MBZ5-BIwusD9r.js',
-    'chunk-FMBD7UC4-DTmhZJjB.js',
-    'chunk-QN33PNHL-CZXQ1P8U.js',
-    'chunk-QZHKN3VN-Oqb3rBBb.js',
-    'chunk-TZMSLE5B-DWu0bqfo.js',
-    'clone-DfIovUaV.js',
-    'dagre-6UL2VRFP-CcFLlX-u.js',
-    'defaultLocale-DVr69WTU.js',
-    'diagram-PSM6KHXK-Di5AYIyA.js',
-    'diagram-QEK2KX5R-BSyexkKQ.js',
-    'diagram-S2PKOQOG-B2JhHWiM.js',
-    'flowDiagram-NV44I4VS-D5GnHt9E.js',
-    'ganttDiagram-LVOFAZNH-jcGSPWzK.js',
-    'graph-CbZqqt41.js',
-    'init-ZxktEp_H.js',
-    'layout-DIz1O_6D.js',
-    'linear-B7nEiPR_.js',
-    'mermaid-custom-CdtnJ-re.js',
-    'mermaid-custom.js',
-    'ordinal-DSZU4PqD.js'
-  ];
-
-  const basePath = 'https://files.ai-image-journey.com/js/mermaid-custom/';
+  // メインのエントリーポイントのみをモジュールとしてロード
+  const script = document.createElement('script');
+  script.type = 'module';
+  script.src = 'https://files.ai-image-journey.com/js/mermaid-custom/mermaid-custom.js';
   
-  // 各ファイルを順次ロード
-  mermaidCustomFiles.forEach((file, index) => {
-    Defer.js(basePath + file, 'mermaid-custom-' + index, 100);
-  });
+  // ロード完了後の処理が必要な場合
+  script.onload = function() {
+    console.log('Mermaid custom loaded');
+  };
+  
+  document.head.appendChild(script);
 }
 
 
