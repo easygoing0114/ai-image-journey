@@ -23,7 +23,7 @@ if (document.querySelector('.chartjs') !== null) {
 }
 
 if (document.querySelector('.language-mermaid') !== null) {
-  Defer.js('https://files.ai-image-journey.com/js/mermaid-custom/mermaid-custom.min.js', 'mermaid', 100);
+  Defer.js('https://files.ai-image-journey.com/js/mermaid.min.js', 'mermaid', 100);
 }
 
 if (document.querySelector('.markdown') !== null) {
@@ -826,17 +826,21 @@ if (document.querySelector('.chartjs') !== null) {
 /* mermaid */
 if (document.querySelector('.language-mermaid') !== null) {
 
+  // 既存の図表にスタイルを適用
   document.querySelectorAll('.mermaid-chart').forEach(figure => {
     figure.classList.add('box-img', 'box-img640');
   });
 
   const isDarkMode = document.documentElement.classList.contains('dark-mode');
+
+  // gantt チャートの最新日付を更新
   const today = new Date().toISOString().split('T')[0];
 
   function findLatestDate(code) {
     const dateRegex = /\d{4}-\d{2}-\d{2}/g;
     const dates = code.match(dateRegex);
     if (!dates) return null;
+    
     return dates.reduce((latest, current) => {
       return new Date(current) > new Date(latest) ? current : latest;
     }, dates[0]);
@@ -849,13 +853,16 @@ if (document.querySelector('.language-mermaid') !== null) {
 
   function updateMermaidGanttCharts() {
     const mermaidElements = document.querySelectorAll('.language-mermaid');
+    
     mermaidElements.forEach((element) => {
       const code = element.textContent;
+      
       if (code.includes('gantt')) {
         const latestDate = findLatestDate(code);
         if (latestDate) {
           const updatedCode = replaceLatestDate(code, latestDate, today);
           element.textContent = updatedCode;
+          
           if (typeof mermaid !== 'undefined') {
             mermaid.init(undefined, element);
           }
@@ -866,46 +873,30 @@ if (document.querySelector('.language-mermaid') !== null) {
 
   function preserveMermaidSource() {
     const languageMermaidElements = document.querySelectorAll('.language-mermaid');
+    
     languageMermaidElements.forEach(function(element) {
       if (element.nextElementSibling && element.nextElementSibling.classList.contains('language-mermaid-copy')) {
         return;
       }
+      
       const copyElement = document.createElement('code');
       copyElement.className = 'language-mermaid-copy';
       copyElement.style.display = 'none';
       copyElement.textContent = element.textContent;
+      
       element.parentNode.insertBefore(copyElement, element.nextSibling);
     });
   }
 
   preserveMermaidSource();
 
-  window.fixMermaidChartSizes = function() {
-    const mermaidElements = document.querySelectorAll('.language-mermaid');
-    mermaidElements.forEach(function(element) {
-      const parentFigure = element.closest('.mermaid-chart');
-      if (parentFigure && !parentFigure.hasAttribute('data-original-size-fixed')) {
-        const computedStyle = window.getComputedStyle(parentFigure);
-        parentFigure.style.width = computedStyle.width;
-        parentFigure.style.height = computedStyle.height;
-        parentFigure.setAttribute('data-original-size-fixed', 'true');
-      }
-    });
-  };
-
-  window.unfixMermaidChartSizes = function() {
-    const mermaidCharts = document.querySelectorAll('.mermaid-chart[data-original-size-fixed]');
-    mermaidCharts.forEach(function(chart) {
-      chart.style.removeProperty('width');
-      chart.style.removeProperty('height');
-      chart.removeAttribute('data-original-size-fixed');
-    });
-  };
-
   window.updateMermaidTheme = function(theme) {
     try {
       const mermaidElements = document.querySelectorAll('.language-mermaid');
-      if (mermaidElements.length === 0) return;
+      
+      if (mermaidElements.length === 0) {
+        return;
+      }
 
       document.querySelectorAll('.language-mermaid svg').forEach(svg => {
         svg.remove();
@@ -921,10 +912,14 @@ if (document.querySelector('.language-mermaid') !== null) {
       }
 
       const processChart = function(index) {
-        if (index >= mermaidElements.length) return;
+        if (index >= mermaidElements.length) {
+          return;
+        }
+
         const element = mermaidElements[index];
         
         let copyElement = null;
+        
         if (element.previousElementSibling && element.previousElementSibling.classList.contains('language-mermaid-copy')) {
           copyElement = element.previousElementSibling;
         } else if (element.nextElementSibling && element.nextElementSibling.classList.contains('language-mermaid-copy')) {
@@ -934,6 +929,14 @@ if (document.querySelector('.language-mermaid') !== null) {
         if (!copyElement) {
           processChart(index + 1);
           return;
+        }
+        
+        const parentFigure = element.closest('.mermaid-chart');
+            
+        if (parentFigure) {
+          const computedStyle = window.getComputedStyle(parentFigure);
+          parentFigure.style.width = computedStyle.width;
+          parentFigure.style.height = computedStyle.height;
         }
         
         const originalCode = copyElement.textContent.trim();
@@ -954,6 +957,11 @@ if (document.querySelector('.language-mermaid') !== null) {
         element.id = uniqueId;
 
         const onRenderComplete = function() {
+          if (parentFigure) {
+            parentFigure.style.removeProperty('width');
+            parentFigure.style.removeProperty('height');
+          }
+          
           processChart(index + 1);
         };
 
@@ -962,13 +970,18 @@ if (document.querySelector('.language-mermaid') !== null) {
             mermaid.run({
               nodes: [element],
               suppressErrors: false
-            }).then(onRenderComplete).catch(onRenderComplete);
+            }).then(function() {
+              onRenderComplete();
+            }).catch(function(error) {
+              onRenderComplete();
+            });
           } else if (typeof mermaid.render === 'function') {
-            mermaid.render(uniqueId + '-svg', updatedCode)
-              .then(function(result) {
-                element.innerHTML = result.svg;
-                onRenderComplete();
-              }).catch(onRenderComplete);
+            mermaid.render(uniqueId + '-svg', updatedCode).then(function(result) {
+              element.innerHTML = result.svg;
+              onRenderComplete();
+            }).catch(function(error) {
+              onRenderComplete();
+            });
           } else {
             onRenderComplete();
           }
@@ -986,8 +999,9 @@ if (document.querySelector('.language-mermaid') !== null) {
     }
   };
 
-  // 🔥 修正：Mermaidを初期化して、必要なチャンクを検出・プリロード
+  // Mermaidが読み込まれるまで待機してから初期化
   Defer(function () {
+    // mermaidが読み込まれているか確認
     if (typeof mermaid === 'undefined') {
       console.error('Mermaid not loaded');
       return;
@@ -999,52 +1013,7 @@ if (document.querySelector('.language-mermaid') !== null) {
     });
 
     updateMermaidGanttCharts();
-    
-    // 🔥 ダミーレンダリングでチャンクをロード
-    // 実際の描画は行わず、チャンクのロードのみ実行
-    async function preloadChunks() {
-      const mermaidElements = document.querySelectorAll('.language-mermaid');
-      
-      // 各要素をダミーコンテナで事前解析してチャンクをロード
-      const preloadPromises = Array.from(mermaidElements).map(async (element) => {
-        const code = element.textContent.trim();
-        
-        // 非表示のダミーコンテナを作成
-        const dummyContainer = document.createElement('div');
-        dummyContainer.style.cssText = 'position: absolute; left: -9999px; top: -9999px; visibility: hidden;';
-        dummyContainer.className = 'mermaid';
-        dummyContainer.textContent = code;
-        document.body.appendChild(dummyContainer);
-        
-        try {
-          // ダミーコンテナでレンダリング（チャンクがロードされる）
-          await mermaid.run({ nodes: [dummyContainer], suppressErrors: true });
-        } catch (e) {
-          // エラーは無視
-        } finally {
-          // ダミーコンテナを削除
-          dummyContainer.remove();
-        }
-      });
-      
-      // すべてのチャンクのロードを待機
-      await Promise.all(preloadPromises);
-      
-      // 少し待機して解析完了を確実にする
-      return new Promise(resolve => setTimeout(resolve, 200));
-    }
-    
-    // チャンクのプリロード完了後に本番レンダリング
-    preloadChunks().then(() => {
-      // すべてのチャンクがロード・解析済みなので、Forced Reflowなしでレンダリング
-      requestAnimationFrame(() => {
-        mermaid.run();
-      });
-    }).catch((error) => {
-      console.error('Chunk preload error:', error);
-      // エラーでも通常のレンダリングを試行
-      mermaid.run();
-    });
+    mermaid.run();
 
   }, 1500);
 }
