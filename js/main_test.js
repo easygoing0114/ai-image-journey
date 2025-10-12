@@ -89,11 +89,6 @@ Defer(function () {
       var isDarkMode = htmlElement.classList.contains("dark-mode");
       var newTheme = isDarkMode ? 'light' : 'dark';
 
-      // 🔥 追加：Mermaidチャートのサイズを固定（レイアウトシフト防止）
-      if (typeof fixMermaidChartSizes === 'function') {
-        fixMermaidChartSizes();
-      }
-
       applyTheme(newTheme);
 
       // Chart.jsの色を更新
@@ -106,18 +101,10 @@ Defer(function () {
         updateMermaidTheme(newTheme);
       }
 
-      // Blueskyの埋め込みテーマを更新
+            // Blueskyの埋め込みテーマを更新
       if (window.bluesky && typeof window.bluesky.updateThemes === 'function') {
         window.bluesky.updateThemes();
       }
-
-      // 🔥 追加：再描画完了後にサイズ固定を解除
-      // updateMermaidTheme が完了するまで待機
-      setTimeout(function() {
-        if (typeof unfixMermaidChartSizes === 'function') {
-          unfixMermaidChartSizes();
-        }
-      }, 500); // チャート再描画に十分な時間を確保
 
     });
   });
@@ -893,13 +880,10 @@ if (document.querySelector('.language-mermaid') !== null) {
 
   preserveMermaidSource();
 
-  // サイズ固定用のヘルパー関数
   window.fixMermaidChartSizes = function() {
     const mermaidElements = document.querySelectorAll('.language-mermaid');
-    
     mermaidElements.forEach(function(element) {
       const parentFigure = element.closest('.mermaid-chart');
-      
       if (parentFigure && !parentFigure.hasAttribute('data-original-size-fixed')) {
         const computedStyle = window.getComputedStyle(parentFigure);
         parentFigure.style.width = computedStyle.width;
@@ -909,10 +893,8 @@ if (document.querySelector('.language-mermaid') !== null) {
     });
   };
 
-  // サイズ固定解除用のヘルパー関数
   window.unfixMermaidChartSizes = function() {
     const mermaidCharts = document.querySelectorAll('.mermaid-chart[data-original-size-fixed]');
-    
     mermaidCharts.forEach(function(chart) {
       chart.style.removeProperty('width');
       chart.style.removeProperty('height');
@@ -1004,6 +986,7 @@ if (document.querySelector('.language-mermaid') !== null) {
     }
   };
 
+  // 🔥 修正：Mermaidを初期化して、必要なチャンクを検出・プリロード
   Defer(function () {
     if (typeof mermaid === 'undefined') {
       console.error('Mermaid not loaded');
@@ -1017,7 +1000,49 @@ if (document.querySelector('.language-mermaid') !== null) {
 
     updateMermaidGanttCharts();
     
-    requestAnimationFrame(function() {
+    // 🔥 ダミーレンダリングでチャンクをロード
+    // 実際の描画は行わず、チャンクのロードのみ実行
+    async function preloadChunks() {
+      const mermaidElements = document.querySelectorAll('.language-mermaid');
+      
+      // 各要素をダミーコンテナで事前解析してチャンクをロード
+      const preloadPromises = Array.from(mermaidElements).map(async (element) => {
+        const code = element.textContent.trim();
+        
+        // 非表示のダミーコンテナを作成
+        const dummyContainer = document.createElement('div');
+        dummyContainer.style.cssText = 'position: absolute; left: -9999px; top: -9999px; visibility: hidden;';
+        dummyContainer.className = 'mermaid';
+        dummyContainer.textContent = code;
+        document.body.appendChild(dummyContainer);
+        
+        try {
+          // ダミーコンテナでレンダリング（チャンクがロードされる）
+          await mermaid.run({ nodes: [dummyContainer], suppressErrors: true });
+        } catch (e) {
+          // エラーは無視
+        } finally {
+          // ダミーコンテナを削除
+          dummyContainer.remove();
+        }
+      });
+      
+      // すべてのチャンクのロードを待機
+      await Promise.all(preloadPromises);
+      
+      // 少し待機して解析完了を確実にする
+      return new Promise(resolve => setTimeout(resolve, 200));
+    }
+    
+    // チャンクのプリロード完了後に本番レンダリング
+    preloadChunks().then(() => {
+      // すべてのチャンクがロード・解析済みなので、Forced Reflowなしでレンダリング
+      requestAnimationFrame(() => {
+        mermaid.run();
+      });
+    }).catch((error) => {
+      console.error('Chunk preload error:', error);
+      // エラーでも通常のレンダリングを試行
       mermaid.run();
     });
 
