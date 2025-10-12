@@ -89,6 +89,11 @@ Defer(function () {
       var isDarkMode = htmlElement.classList.contains("dark-mode");
       var newTheme = isDarkMode ? 'light' : 'dark';
 
+      // 🔥 追加：Mermaidチャートのサイズを固定（レイアウトシフト防止）
+      if (typeof fixMermaidChartSizes === 'function') {
+        fixMermaidChartSizes();
+      }
+
       applyTheme(newTheme);
 
       // Chart.jsの色を更新
@@ -101,10 +106,18 @@ Defer(function () {
         updateMermaidTheme(newTheme);
       }
 
-            // Blueskyの埋め込みテーマを更新
+      // Blueskyの埋め込みテーマを更新
       if (window.bluesky && typeof window.bluesky.updateThemes === 'function') {
         window.bluesky.updateThemes();
       }
+
+      // 🔥 追加：再描画完了後にサイズ固定を解除
+      // updateMermaidTheme が完了するまで待機
+      setTimeout(function() {
+        if (typeof unfixMermaidChartSizes === 'function') {
+          unfixMermaidChartSizes();
+        }
+      }, 500); // チャート再描画に十分な時間を確保
 
     });
   });
@@ -826,21 +839,17 @@ if (document.querySelector('.chartjs') !== null) {
 /* mermaid */
 if (document.querySelector('.language-mermaid') !== null) {
 
-  // 既存の図表にスタイルを適用
   document.querySelectorAll('.mermaid-chart').forEach(figure => {
     figure.classList.add('box-img', 'box-img640');
   });
 
   const isDarkMode = document.documentElement.classList.contains('dark-mode');
-
-  // gantt チャートの最新日付を更新
   const today = new Date().toISOString().split('T')[0];
 
   function findLatestDate(code) {
     const dateRegex = /\d{4}-\d{2}-\d{2}/g;
     const dates = code.match(dateRegex);
     if (!dates) return null;
-    
     return dates.reduce((latest, current) => {
       return new Date(current) > new Date(latest) ? current : latest;
     }, dates[0]);
@@ -853,16 +862,13 @@ if (document.querySelector('.language-mermaid') !== null) {
 
   function updateMermaidGanttCharts() {
     const mermaidElements = document.querySelectorAll('.language-mermaid');
-    
     mermaidElements.forEach((element) => {
       const code = element.textContent;
-      
       if (code.includes('gantt')) {
         const latestDate = findLatestDate(code);
         if (latestDate) {
           const updatedCode = replaceLatestDate(code, latestDate, today);
           element.textContent = updatedCode;
-          
           if (typeof mermaid !== 'undefined') {
             mermaid.init(undefined, element);
           }
@@ -873,30 +879,51 @@ if (document.querySelector('.language-mermaid') !== null) {
 
   function preserveMermaidSource() {
     const languageMermaidElements = document.querySelectorAll('.language-mermaid');
-    
     languageMermaidElements.forEach(function(element) {
       if (element.nextElementSibling && element.nextElementSibling.classList.contains('language-mermaid-copy')) {
         return;
       }
-      
       const copyElement = document.createElement('code');
       copyElement.className = 'language-mermaid-copy';
       copyElement.style.display = 'none';
       copyElement.textContent = element.textContent;
-      
       element.parentNode.insertBefore(copyElement, element.nextSibling);
     });
   }
 
   preserveMermaidSource();
 
+  // サイズ固定用のヘルパー関数
+  window.fixMermaidChartSizes = function() {
+    const mermaidElements = document.querySelectorAll('.language-mermaid');
+    
+    mermaidElements.forEach(function(element) {
+      const parentFigure = element.closest('.mermaid-chart');
+      
+      if (parentFigure && !parentFigure.hasAttribute('data-original-size-fixed')) {
+        const computedStyle = window.getComputedStyle(parentFigure);
+        parentFigure.style.width = computedStyle.width;
+        parentFigure.style.height = computedStyle.height;
+        parentFigure.setAttribute('data-original-size-fixed', 'true');
+      }
+    });
+  };
+
+  // サイズ固定解除用のヘルパー関数
+  window.unfixMermaidChartSizes = function() {
+    const mermaidCharts = document.querySelectorAll('.mermaid-chart[data-original-size-fixed]');
+    
+    mermaidCharts.forEach(function(chart) {
+      chart.style.removeProperty('width');
+      chart.style.removeProperty('height');
+      chart.removeAttribute('data-original-size-fixed');
+    });
+  };
+
   window.updateMermaidTheme = function(theme) {
     try {
       const mermaidElements = document.querySelectorAll('.language-mermaid');
-      
-      if (mermaidElements.length === 0) {
-        return;
-      }
+      if (mermaidElements.length === 0) return;
 
       document.querySelectorAll('.language-mermaid svg').forEach(svg => {
         svg.remove();
@@ -912,14 +939,10 @@ if (document.querySelector('.language-mermaid') !== null) {
       }
 
       const processChart = function(index) {
-        if (index >= mermaidElements.length) {
-          return;
-        }
-
+        if (index >= mermaidElements.length) return;
         const element = mermaidElements[index];
         
         let copyElement = null;
-        
         if (element.previousElementSibling && element.previousElementSibling.classList.contains('language-mermaid-copy')) {
           copyElement = element.previousElementSibling;
         } else if (element.nextElementSibling && element.nextElementSibling.classList.contains('language-mermaid-copy')) {
@@ -929,14 +952,6 @@ if (document.querySelector('.language-mermaid') !== null) {
         if (!copyElement) {
           processChart(index + 1);
           return;
-        }
-        
-        const parentFigure = element.closest('.mermaid-chart');
-            
-        if (parentFigure) {
-          const computedStyle = window.getComputedStyle(parentFigure);
-          parentFigure.style.width = computedStyle.width;
-          parentFigure.style.height = computedStyle.height;
         }
         
         const originalCode = copyElement.textContent.trim();
@@ -957,11 +972,6 @@ if (document.querySelector('.language-mermaid') !== null) {
         element.id = uniqueId;
 
         const onRenderComplete = function() {
-          if (parentFigure) {
-            parentFigure.style.removeProperty('width');
-            parentFigure.style.removeProperty('height');
-          }
-          
           processChart(index + 1);
         };
 
@@ -970,18 +980,13 @@ if (document.querySelector('.language-mermaid') !== null) {
             mermaid.run({
               nodes: [element],
               suppressErrors: false
-            }).then(function() {
-              onRenderComplete();
-            }).catch(function(error) {
-              onRenderComplete();
-            });
+            }).then(onRenderComplete).catch(onRenderComplete);
           } else if (typeof mermaid.render === 'function') {
-            mermaid.render(uniqueId + '-svg', updatedCode).then(function(result) {
-              element.innerHTML = result.svg;
-              onRenderComplete();
-            }).catch(function(error) {
-              onRenderComplete();
-            });
+            mermaid.render(uniqueId + '-svg', updatedCode)
+              .then(function(result) {
+                element.innerHTML = result.svg;
+                onRenderComplete();
+              }).catch(onRenderComplete);
           } else {
             onRenderComplete();
           }
@@ -999,9 +1004,7 @@ if (document.querySelector('.language-mermaid') !== null) {
     }
   };
 
-  // Mermaidが読み込まれるまで待機してから初期化
   Defer(function () {
-    // mermaidが読み込まれているか確認
     if (typeof mermaid === 'undefined') {
       console.error('Mermaid not loaded');
       return;
@@ -1013,7 +1016,10 @@ if (document.querySelector('.language-mermaid') !== null) {
     });
 
     updateMermaidGanttCharts();
-    mermaid.run();
+    
+    requestAnimationFrame(function() {
+      mermaid.run();
+    });
 
   }, 1500);
 }
