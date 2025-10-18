@@ -1013,8 +1013,8 @@ if (document.querySelector('.language-mermaid') !== null) {
     });
 
     updateMermaidGanttCharts();
-    updateMermaidTheme();
     mermaid.run();
+    updateMermaidTheme();
 
   }, 1500);
 }
