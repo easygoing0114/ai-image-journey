@@ -4,11 +4,6 @@
 
 'IntersectionObserver'in window||document.write('<script src="https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver"><\/script>');
 
-// Defer.js example
-// Defer.css('your_css_url','your-style-id',100);
-// Defer.js('your_script_url','your-script-id',100);
-
-/* 外部スクリプトの読み込み */
 if (document.querySelector('#toc') !== null) {
   Defer.js('https://files.ai-image-journey.com/js/page_toc.js', 'page_toc_js', 100);
   Defer.css('https://files.ai-image-journey.com/css/page_toc.css', 'page_toc_css', 100);
