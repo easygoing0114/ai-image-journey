@@ -597,11 +597,11 @@ Defer(function() {
     
     if (imageEagerLoad.length === 0) return;
 
-    // 3番目以降の画像の遅延読み込みを解除
-    imageEagerLoad.slice(2).forEach((img, index) => {
+    // すべての画像の遅延読み込みを順次解除
+    imageEagerLoad.forEach((img, index) => {
         Defer(function() {
             img.removeAttribute('loading');
-        }, (index * 200)); // 初回の0.2秒 + 0.2秒の間隔
+        }, (index * 200)); // 0.2秒の間隔で順次解除
     });
 }, 200);
 
