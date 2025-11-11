@@ -178,8 +178,9 @@ if (document.querySelector('.blogcard-auto') !== null) {
           'civitai.com/models/260267': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/b50708a9-a0a2-4a62-a688-cbd15abb65e4/image%20(24).jpeg',
           'civitai.com/models/1027203': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/5d4020ad-6777-4077-b53e-4432e9263d45/00000-20241211153415-1954655588-30-5.jpeg',
           'civitai.com/models/1188071': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/44382db0-b992-4058-b8b1-369a58cc2604/animagine-xl-4.0-opt.jpeg',
-          'civitai.com/models/1356520': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjCVXA9lGHLmQZqpHFx_m1MEfgolO1f8ksTQfLJcHDa5-rH86NWJ-ufv4TgNOAPOMcFfIFEpqBzjV3xPRQ-85oKG-GWDI8zRiUku_ZFtVcOJACWm97gJH_PsadwGx9GujgPRu3RVtBY25qnG0UiTVBzOErzfsEI5Q0ZAnkzkp5odc7BAw/w400-e90-rw/Profile_image_20250824.png'
-
+          'civitai.com/models/1356520': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgnwPTigmuL8PCTQ0LYH3psdmMJrjX5E6airywZe7ZAUqKzjscylMiyKIlCFx4K3p5Icx7vOb7pXDxohMMXChooPYvgadslw2qQs-N_qQD8cEW_haXr-rbLhUotCNHxUSIKkJ9JDmf8J3qMU6qjnt0S8R0sT0JG844K5bnm8Bc2Lip33T4/w400-e90-rw/Flux1_euler_Anime%20Illustration%20of%20%20A%20young%20girl%20holding%20a%20chalkboard%20that%20says%20flan%20t5%20and%20te-only.png',
+          'civitai.com/models/2081436': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj4YTSY3VXkYyY3tukvgxw585ybaUXS0FTD8_1VWTo_nIIdBBL9Uk2Mr5ftwIOZLW6LL2Kd2YpZdXIYQ_wyLOOMSzZA38OgKpLoZ7EDSgOhX49vYeJzh08XGvoTb2H8z5_5aZGYFnFji3RrLWMs8M7pMtFOiffgYHOR8_U-42zBfdtivw/w400-e90-rw/HiDream_I1-Dev_clear_photoreal_compare.png',
+          'civitai.com/models/2110148': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEix1Z4fRSVlZ6sYPVo00fSFG16mokYEd9zLXK9wgCWOl56kOqE6Lhxrf55T9JRbT9zDpXwpEWRd-4Uw48-6AcGFvPAmdM82fXyJMSMUwShoOPaXeFxz4Yk-qnENi37oi9O2tA_1uIbgxTFRYP0lImzUNC98Kwjk02CuXHd1y82ojvxMog/w400-e90-rw/Upscale_Detailer_color_correct_00036_close_up.png'
         };
         
         // デフォルトのCivitai画像
@@ -316,35 +317,49 @@ if (document.querySelector('.blogcard-auto') !== null) {
           return null;
         }
       }
+
+      // 単一のリンクを処理して即座に表示する関数
+      async processLink(card) {
+        try {
+          const link = card.querySelector('a');
+          if (!link) return;
+
+          const url = link.getAttribute('href');
+          if (!url) return;
+
+          let metadata;
+          try {
+            metadata = await this.fetchPageData(url);
+          } catch (error) {
+            metadata = null;
+          }
+
+          const cardHTML = metadata ? this.createCardHTML(metadata) : this.createFallbackCardHTML(link, url);
+          
+          // 完了したら即座にDOMに反映
+          card.insertAdjacentHTML('afterend', cardHTML);
+          card.remove();
+        } catch (error) {
+//          console.error(`Error processing link: ${error.message}`);
+        }
+      }
   
+      // 並行処理でリンクを置換する関数（0.5秒間隔で開始）
       async replaceLinks() {
         const blogcards = document.querySelectorAll('.blogcard-auto');
-        for (const card of blogcards) {
-          try {
-            const link = card.querySelector('a');
-            if (!link) continue;
-  
-            const url = link.getAttribute('href');
-            if (!url) continue;
-  
-  //          console.log('Processing:', card, link, url);
-  
-            let metadata;
-            try {
-              metadata = await this.fetchPageData(url);
-            } catch (error) {
-              metadata = null;
-            }
-  
-            const cardHTML = metadata ? this.createCardHTML(metadata) : this.createFallbackCardHTML(link, url);
-            
-            card.insertAdjacentHTML('afterend', cardHTML);
-            card.remove();
-          } catch (error) {
-  //          console.error(`Error processing link: ${error.message}`);
-            continue;
-          }
-        }
+        
+        // 0.5秒間隔で処理を開始し、完了次第表示
+        const promises = Array.from(blogcards).map((card, index) => {
+          return new Promise(resolve => {
+            setTimeout(async () => {
+              await this.processLink(card);
+              resolve();
+            }, index * 500); // 0.5秒 = 500ミリ秒
+          });
+        });
+        
+        // すべての処理が完了するまで待機（表示は各々完了次第行われる）
+        await Promise.all(promises);
       }
   
       isSameDomain(url) {
