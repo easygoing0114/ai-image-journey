@@ -184,7 +184,7 @@ windowObj["add" + EventListenerFn](scrollEvent, function() {
       if (header && hasClass(header, "header-hidden")) {
         removeClass(header, "header-hidden");
       }
-    }, 500);
+    }, 200);
   } else if (lastScrollY < currentScrollY && hasClass(header, "header-animate")) {
     // 既存のタイムアウトをクリア
     if (headerTimeout) {
