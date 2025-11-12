@@ -54,13 +54,7 @@ function debounce(func, wait) {
 }
 
 /* header アニメーション */
-// スクロール位置を記録する変数
-let lastScrollTop = 0;
-const header = document.getElementById('header');
-// スクロールの閾値（ビューポート高さの5% = 5svh相当）
-const scrollThreshold = window.innerHeight * 0.05;
 
-// ヘッダーを表示する処理（debounce適用）
 // スクロール位置を記録する変数
 let lastScrollTop = 0;
 const header = document.getElementById('header');
