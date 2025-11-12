@@ -61,10 +61,23 @@ const header = document.getElementById('header');
 const scrollThreshold = window.innerHeight * 0.05;
 
 // ヘッダーを表示する処理（debounce適用）
-const showHeader = debounce(function() {
-  header.classList.remove('header-move-up');
-  header.classList.add('header-move-down');
-}, 500);
+// スクロール位置を記録する変数
+let lastScrollTop = 0;
+const header = document.getElementById('header');
+// スクロールの閾値（ビューポート高さの5% = 5svh相当）
+const scrollThreshold = window.innerHeight * 0.05;
+
+// debounce用のタイムアウトIDを保持
+let showHeaderTimeout;
+
+// ヘッダーを表示する処理（debounce適用）
+function showHeader() {
+  clearTimeout(showHeaderTimeout);
+  showHeaderTimeout = setTimeout(function() {
+    header.classList.remove('header-move-up');
+    header.classList.add('header-move-down');
+  }, 500);
+}
 
 // スクロール処理の本体
 function handleScroll() {
@@ -72,6 +85,8 @@ function handleScroll() {
   
   // 上にスクロール（下方向に移動）
   if (currentScroll > lastScrollTop && currentScroll > scrollThreshold) {
+    // 待機中のヘッダー表示をキャンセル
+    clearTimeout(showHeaderTimeout);
     // ヘッダーを隠す（即座に実行）
     header.classList.remove('header-move-down');
     header.classList.add('header-move-up');
