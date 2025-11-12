@@ -57,7 +57,14 @@ function debounce(func, wait) {
 // スクロール位置を記録する変数
 let lastScrollTop = 0;
 const header = document.getElementById('header');
-const scrollThreshold = 5; // スクロールの閾値（ピクセル）
+// スクロールの閾値（ビューポート高さの5% = 5svh相当）
+const scrollThreshold = window.innerHeight * 0.1;
+
+// ヘッダーを表示する処理（debounce適用）
+const showHeader = debounce(function() {
+  header.classList.remove('header-move-up');
+  header.classList.add('header-move-down');
+}, 500);
 
 // スクロール処理の本体
 function handleScroll() {
@@ -65,25 +72,21 @@ function handleScroll() {
   
   // 上にスクロール（下方向に移動）
   if (currentScroll > lastScrollTop && currentScroll > scrollThreshold) {
-    // ヘッダーを隠す
+    // ヘッダーを隠す（即座に実行）
     header.classList.remove('header-move-down');
     header.classList.add('header-move-up');
   } 
   // 下にスクロール（上方向に移動）
   else if (currentScroll < lastScrollTop) {
-    // ヘッダーを表示
-    header.classList.remove('header-move-up');
-    header.classList.add('header-move-down');
+    // ヘッダーを表示（debounce適用）
+    showHeader();
   }
   
   lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
 }
 
-// debounce関数を適用（500ms）
-const debouncedHandleScroll = debounce(handleScroll, 500);
-
 // スクロールイベントのリスナー
-window.addEventListener('scroll', debouncedHandleScroll, false);
+window.addEventListener('scroll', handleScroll, false);
 
 /* 外部リンクに新しいタブで開く属性追加 */
 Defer(function() {
