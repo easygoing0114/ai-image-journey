@@ -53,6 +53,38 @@ function debounce(func, wait) {
     };
 }
 
+/* header アニメーション */
+// スクロール位置を記録する変数
+let lastScrollTop = 0;
+const header = document.getElementById('header');
+const scrollThreshold = 5; // スクロールの閾値（ピクセル）
+
+// スクロール処理の本体
+function handleScroll() {
+  const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+  
+  // 上にスクロール（下方向に移動）
+  if (currentScroll > lastScrollTop && currentScroll > scrollThreshold) {
+    // ヘッダーを隠す
+    header.classList.remove('header-move-down');
+    header.classList.add('header-move-up');
+  } 
+  // 下にスクロール（上方向に移動）
+  else if (currentScroll < lastScrollTop) {
+    // ヘッダーを表示
+    header.classList.remove('header-move-up');
+    header.classList.add('header-move-down');
+  }
+  
+  lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+}
+
+// debounce関数を適用（500ms）
+const debouncedHandleScroll = debounce(handleScroll, 500);
+
+// スクロールイベントのリスナー
+window.addEventListener('scroll', debouncedHandleScroll, false);
+
 /* 外部リンクに新しいタブで開く属性追加 */
 Defer(function() {
   const links = document.querySelectorAll('a');
