@@ -70,7 +70,7 @@ function showHeader() {
   showHeaderTimeout = setTimeout(function() {
     header.classList.remove('header-move-up');
     header.classList.add('header-move-down');
-  }, 500);
+  }, 300);
 }
 
 // スクロール処理の本体
