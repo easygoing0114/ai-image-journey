@@ -393,13 +393,13 @@ if (document.querySelector('.blogcard-auto') !== null) {
       async replaceLinks() {
         const blogcards = document.querySelectorAll('.blogcard-auto');
         
-        // 0.5秒間隔で処理を開始し、完了次第表示
+        // 0.3秒間隔で処理を開始し、完了次第表示
         const promises = Array.from(blogcards).map((card, index) => {
           return new Promise(resolve => {
             setTimeout(async () => {
               await this.processLink(card);
               resolve();
-            }, index * 500); // 0.5秒 = 500ミリ秒
+            }, index * 300); // 0.3秒 = 300ミリ秒
           });
         });
         
