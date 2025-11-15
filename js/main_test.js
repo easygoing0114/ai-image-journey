@@ -98,6 +98,19 @@ Defer(function() {
   window.addEventListener('scroll', handleScroll, false);
 }, 100);
 
+/* ヘッダー検索トグル */
+Defer(function() {
+// ボタンとドロップダウン要素を取得
+    const headerSearchButton = document.getElementById('header-search-button');
+    const headerSearchDropdown = document.getElementById('header-search-dropdown');
+
+    // クリックイベントを追加
+    headerSearchButton.addEventListener('click', function() {
+      // classList.toggle でクラスを追加/削除
+      headerSearchDropdown.classList.toggle('dropdown-visible');
+    });
+}, 100);
+
 /* 外部リンクに新しいタブで開く属性追加 */
 Defer(function() {
   const links = document.querySelectorAll('a');
