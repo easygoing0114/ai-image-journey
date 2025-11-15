@@ -98,30 +98,41 @@ Defer(function() {
   window.addEventListener('scroll', handleScroll, false);
 }, 100);
 
-/* ヘッダー検索トグル */
-Defer(function() {
-// ボタンとドロップダウン要素を取得
-    const headerSearchButton = document.getElementById('header-search-button');
+/* 共通の遅延実行関数（既にページに定義されている前提） */
+Defer(function () {
+    // 要素取得（存在チェック付き）
+    const headerSearchButton   = document.getElementById('header-search-button');
     const headerSearchDropdown = document.getElementById('header-search-dropdown');
+    const headerMenuButton     = document.getElementById('header-menu-button');
+    const navbarMenu           = document.getElementById('navbar-menu');
 
-    // クリックイベントを追加
-    headerSearchButton.addEventListener('click', function() {
-      // classList.toggle でクラスを追加/削除
-      headerSearchDropdown.classList.toggle('dropdown-visible');
-    });
-}, 100);
+    // どちらかがクリックされたら
+    // 1. 自分はトグル
+    // 2. 相手は強制的に非表示
+    const toggleAndHideOther = (targetDropdown, otherDropdown) => {
+        // 自分をトグル
+        targetDropdown.classList.toggle('dropdown-visible');
 
-/* ヘッダーメニュートグル */
-Defer(function() {
-// ボタンとドロップダウン要素を取得
-    const headerMenuButton = document.getElementById('header-menu-button');
-    const navbarMenu = document.getElementById('navbar-menu');
+        // 相手が表示されていたら強制的に閉じる
+        if (otherDropdown.classList.contains('dropdown-visible')) {
+            otherDropdown.classList.remove('dropdown-visible');
+        }
+    };
 
-    // クリックイベントを追加
-    headerMenuButton.addEventListener('click', function() {
-      // classList.toggle でクラスを追加/削除
-      navbarMenu.classList.toggle('dropdown-visible');
-    });
+    // 検索ボタン
+    if (headerSearchButton && headerSearchDropdown) {
+        headerSearchButton.addEventListener('click', function () {
+            toggleAndHideOther(headerSearchDropdown, navbarMenu);
+        });
+    }
+
+    // メニューボタン
+    if (headerMenuButton && navbarMenu) {
+        headerMenuButton.addEventListener('click', function () {
+            toggleAndHideOther(navbarMenu, headerSearchDropdown);
+        });
+    }
+
 }, 100);
 
 /* 外部リンクに新しいタブで開く属性追加 */
