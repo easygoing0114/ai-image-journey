@@ -111,6 +111,19 @@ Defer(function() {
     });
 }, 100);
 
+/* ヘッダーメニュートグル */
+Defer(function() {
+// ボタンとドロップダウン要素を取得
+    const headerMenuButton = document.getElementById('header-menu-button');
+    const navbarMenu = document.getElementById('navbar-menu');
+
+    // クリックイベントを追加
+    headerMenuButton.addEventListener('click', function() {
+      // classList.toggle でクラスを追加/削除
+      navbarMenu.classList.toggle('dropdown-visible');
+    });
+}, 100);
+
 /* 外部リンクに新しいタブで開く属性追加 */
 Defer(function() {
   const links = document.querySelectorAll('a');
