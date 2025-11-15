@@ -53,6 +53,51 @@ function debounce(func, wait) {
     };
 }
 
+/* header アニメーション */
+Defer(function() {
+  // スクロール位置を記録する変数
+  let lastScrollTop = 0;
+  const header = document.getElementById('header');
+  // スクロールの閾値（ビューポート高さの5% = 5svh相当）
+  const scrollThreshold = window.innerHeight * 0.05;
+
+  // debounce用のタイムアウトIDを保持
+  let showHeaderTimeout;
+
+  // ヘッダーを表示する処理（debounce適用）
+  function showHeader() {
+    clearTimeout(showHeaderTimeout);
+    showHeaderTimeout = setTimeout(function() {
+      header.classList.remove('header-move-up');
+      header.classList.add('header-move-down');
+    }, 500);
+  }
+
+  // スクロール処理の本体
+  function handleScroll() {
+    const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+    
+    // 上にスクロール（下方向に移動）
+    if (currentScroll > lastScrollTop && currentScroll > scrollThreshold) {
+      // 待機中のヘッダー表示をキャンセル
+      clearTimeout(showHeaderTimeout);
+      // ヘッダーを隠す（即座に実行）
+      header.classList.remove('header-move-down');
+      header.classList.add('header-move-up');
+    } 
+    // 下にスクロール（上方向に移動）
+    else if (currentScroll < lastScrollTop) {
+      // ヘッダーを表示（debounce適用）
+      showHeader();
+    }
+    
+    lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+  }
+
+  // スクロールイベントのリスナー
+  window.addEventListener('scroll', handleScroll, false);
+}, 100);
+
 /* 外部リンクに新しいタブで開く属性追加 */
 Defer(function() {
   const links = document.querySelectorAll('a');
@@ -317,35 +362,49 @@ if (document.querySelector('.blogcard-auto') !== null) {
           return null;
         }
       }
+
+      // 単一のリンクを処理して即座に表示する関数
+      async processLink(card) {
+        try {
+          const link = card.querySelector('a');
+          if (!link) return;
+
+          const url = link.getAttribute('href');
+          if (!url) return;
+
+          let metadata;
+          try {
+            metadata = await this.fetchPageData(url);
+          } catch (error) {
+            metadata = null;
+          }
+
+          const cardHTML = metadata ? this.createCardHTML(metadata) : this.createFallbackCardHTML(link, url);
+          
+          // 完了したら即座にDOMに反映
+          card.insertAdjacentHTML('afterend', cardHTML);
+          card.remove();
+        } catch (error) {
+//          console.error(`Error processing link: ${error.message}`);
+        }
+      }
   
+      // 並行処理でリンクを置換する関数（0.5秒間隔で開始）
       async replaceLinks() {
         const blogcards = document.querySelectorAll('.blogcard-auto');
-        for (const card of blogcards) {
-          try {
-            const link = card.querySelector('a');
-            if (!link) continue;
-  
-            const url = link.getAttribute('href');
-            if (!url) continue;
-  
-  //          console.log('Processing:', card, link, url);
-  
-            let metadata;
-            try {
-              metadata = await this.fetchPageData(url);
-            } catch (error) {
-              metadata = null;
-            }
-  
-            const cardHTML = metadata ? this.createCardHTML(metadata) : this.createFallbackCardHTML(link, url);
-            
-            card.insertAdjacentHTML('afterend', cardHTML);
-            card.remove();
-          } catch (error) {
-  //          console.error(`Error processing link: ${error.message}`);
-            continue;
-          }
-        }
+        
+        // 0.3秒間隔で処理を開始し、完了次第表示
+        const promises = Array.from(blogcards).map((card, index) => {
+          return new Promise(resolve => {
+            setTimeout(async () => {
+              await this.processLink(card);
+              resolve();
+            }, index * 300); // 0.3秒 = 300ミリ秒
+          });
+        });
+        
+        // すべての処理が完了するまで待機（表示は各々完了次第行われる）
+        await Promise.all(promises);
       }
   
       isSameDomain(url) {
