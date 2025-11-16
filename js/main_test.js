@@ -59,7 +59,7 @@ Defer(function() {
   let lastScrollTop = 0;
   const header = document.getElementById('header');
   // スクロールの閾値（ビューポート高さの5% = 5svh相当）
-  const scrollThreshold = window.innerHeight * 0.05;
+  const scrollThreshold = window.innerHeight * 0.03;
 
   // debounce用のタイムアウトIDを保持
   let showHeaderTimeout;
@@ -70,7 +70,7 @@ Defer(function() {
     showHeaderTimeout = setTimeout(function() {
       header.classList.remove('header-move-up');
       header.classList.add('header-move-down');
-    }, 500);
+    }, 300);
   }
 
   // スクロール処理の本体
