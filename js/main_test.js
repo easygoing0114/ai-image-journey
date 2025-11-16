@@ -40,7 +40,7 @@ if (document.querySelector('.text-post-media') !== null) {
 
 
 /* img, iframe 差し替え */
-Defer.dom('img', 100);
+Defer.dom('img', 200);
 Defer.dom('iframe', 500);
 
 /* debounce関数 */
@@ -451,13 +451,13 @@ if (document.querySelector('.blogcard-auto') !== null) {
       async replaceLinks() {
         const blogcards = document.querySelectorAll('.blogcard-auto');
         
-        // 0.3秒間隔で処理を開始し、完了次第表示
+        // 0.5秒間隔で処理を開始し、完了次第表示
         const promises = Array.from(blogcards).map((card, index) => {
           return new Promise(resolve => {
             setTimeout(async () => {
               await this.processLink(card);
               resolve();
-            }, index * 300); // 0.3秒 = 300ミリ秒
+            }, index * 500); 
           });
         });
         
@@ -478,7 +478,7 @@ if (document.querySelector('.blogcard-auto') !== null) {
     // 実行
     const generator = new LinkPreviewGenerator('https://get-blogcard-info-to-blogger.easygoing0114.workers.dev/');
     generator.replaceLinks();
-  }, 100);
+  }, 200);
 }
 
 /* table の font-size と padding を画面の最大幅に合わせて変更 */
