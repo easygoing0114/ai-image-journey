@@ -98,7 +98,6 @@ Defer(function() {
   window.addEventListener('scroll', handleScroll, false);
 }, 100);
 
-/* 共通の遅延実行関数（既にページに定義されている前提） */
 Defer(function () {
     // 要素取得（存在チェック付き）
     const headerSearchButton   = document.getElementById('header-search-button');
@@ -106,32 +105,54 @@ Defer(function () {
     const headerMenuButton     = document.getElementById('header-menu-button');
     const navbarMenu           = document.getElementById('navbar-menu');
 
-    // どちらかがクリックされたら
-    // 1. 自分はトグル
-    // 2. 相手は強制的に非表示
+    // 共通関数：自分はトグル、相手は強制非表示
     const toggleAndHideOther = (targetDropdown, otherDropdown) => {
-        // 自分をトグル
         targetDropdown.classList.toggle('dropdown-visible');
-
-        // 相手が表示されていたら強制的に閉じる
-        if (otherDropdown.classList.contains('dropdown-visible')) {
+        if (otherDropdown && otherDropdown.classList.contains('dropdown-visible')) {
             otherDropdown.classList.remove('dropdown-visible');
         }
     };
 
-    // 検索ボタン
+    // 検索ボタンクリック
     if (headerSearchButton && headerSearchDropdown) {
         headerSearchButton.addEventListener('click', function () {
             toggleAndHideOther(headerSearchDropdown, navbarMenu);
         });
     }
 
-    // メニューボタン
+    // メニューボタンクリック
     if (headerMenuButton && navbarMenu) {
         headerMenuButton.addEventListener('click', function () {
             toggleAndHideOther(navbarMenu, headerSearchDropdown);
         });
     }
+
+    // === スクロール時に両方閉じる ===
+    let ticking = false;
+    const closeBothOnScroll = () => {
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                headerSearchDropdown?.classList.remove('dropdown-visible');
+                navbarMenu?.classList.remove('dropdown-visible');
+                ticking = false;
+            });
+            ticking = true;
+        }
+    };
+
+    // スクロールイベント（パフォーマンス考慮：requestAnimationFrameで制御）
+    window.addEventListener('scroll', closeBothOnScroll, { passive: true });
+
+    // === （任意）ドキュメント全体クリックで閉じる ===
+    document.addEventListener('click', function (e) {
+        const isSearchClick = headerSearchButton?.contains(e.target) || headerSearchDropdown?.contains(e.target);
+        const isMenuClick   = headerMenuButton?.contains(e.target) || navbarMenu?.contains(e.target);
+
+        if (!isSearchClick && !isMenuClick) {
+            headerSearchDropdown?.classList.remove('dropdown-visible');
+            navbarMenu?.classList.remove('dropdown-visible');
+        }
+    });
 
 }, 100);
 
