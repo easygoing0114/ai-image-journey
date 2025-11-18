@@ -40,7 +40,7 @@ if (document.querySelector('.text-post-media') !== null) {
 
 
 /* img, iframe 差し替え */
-Defer.dom('img', 200);
+Defer.dom('img', 300);
 Defer.dom('iframe', 500);
 
 /* debounce関数 */
@@ -721,7 +721,7 @@ Defer(function() {
             img.removeAttribute('loading');
         }, (index * 200)); // 0.2秒の間隔で順次解除
     });
-}, 200);
+}, 100);
 
 /* Chart.js */
 if (document.querySelector('.chartjs') !== null) {
