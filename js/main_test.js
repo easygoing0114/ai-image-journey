@@ -207,48 +207,27 @@ Defer(function () {
   });
 }, 100);
 
-// テキストエリアの高さ自動調整
-if (document.querySelector('textarea') !== null) {
-  Defer(function () {
+/* テキストエリアの高さ調整 */
+document.querySelectorAll('textarea[data-auto-resize], textarea.auto-resize').forEach(textarea => {
+  const minHeight = 24;
 
-    function createAutoResizeTextarea() {
-      const textareas = document.querySelectorAll('textarea');
+  const resize = () => {
+    if (textarea._resizing) return;
+    textarea._resizing = true;
 
-      textareas.forEach(textarea => {
-        function adjustHeight() {
-          textarea.style.height = 'auto';
-          textarea.style.height = Math.max(textarea.scrollHeight, 24) + 'px';
-        }
+    requestAnimationFrame(() => {
+      textarea.style.height = 'auto';
 
-        adjustHeight();
-
-        // 全てのイベントを監視
-        ['input', 'paste', 'cut', 'keydown', 'keyup'].forEach(event => {
-          textarea.addEventListener(event, () => {
-            setTimeout(adjustHeight, 0);
-          });
-        });
-
-        // 定期的な値チェック（最も確実）
-        let lastValue = textarea.value;
-        const checkInterval = setInterval(() => {
-          if (textarea.value !== lastValue) {
-            lastValue = textarea.value;
-            adjustHeight();
-          }
-
-          // textareaが削除された場合はintervalをクリア
-          if (!document.contains(textarea)) {
-            clearInterval(checkInterval);
-          }
-        }, 50);
+      requestAnimationFrame(() => {
+        textarea.style.height = Math.max(textarea.scrollHeight, minHeight) + 'px';
+        textarea._resizing = false;
       });
-    }
+    });
+  };
 
-    createAutoResizeTextarea();
-
-  }, 100);
-}
+  textarea.addEventListener('input', resize);
+  resize(); // 初期化
+});
 
 /* リンクカードの作成 */
 if (document.querySelector('.blogcard-auto') !== null) {
