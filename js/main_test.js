@@ -616,42 +616,38 @@ Defer(function () {
 
 /* Chart.js */
 if (document.querySelector('.chartjs') !== null) {
+
+  // ⚠️ 注意: debounce 関数、Chart.js、ChartDataLabels、Defer 関数は外部で宣言・ロードされているものとします。
+  // function debounce(func, wait) { ... }
+  // function Defer(func, delay) { ... }
+
   let chartsInitialized = false;
+  let isResizeScheduled = false; // リサイズ処理のrAFフラグ
+  let isInitScheduled = false;   // 初期化処理のrAFフラグ
 
   function getCurrentThemeColor() {
     return getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color').trim();
   }
 
   function calculateDynamicPadding(specificContainer = null) {
-
-    // 特定のコンテナが指定されていない場合は最初のコンテナを使用
     const container = specificContainer || document.querySelector('.chartjs-container');
-
     if (!container) {
-      return 24; // デフォルト値
+      return 24;
     }
-
     const containerWidth = container.offsetWidth;
     const containerHeight = container.offsetHeight;
-
-    // アスペクト比を計算（幅/高さ）
     const aspectRatio = containerWidth / containerHeight;
 
-    // アスペクト比に応じて係数を選択
     let coefficient;
     if (aspectRatio >= 1) {
-      coefficient = 0.05; // 横長または正方形の場合
+      coefficient = 0.05;
     } else {
-      coefficient = 0.1;  // 縦長の場合
+      coefficient = 0.1;
     }
-
-    const calculatedPadding = Math.round(containerWidth * coefficient);
-
-    return calculatedPadding;
+    return Math.round(containerWidth * coefficient);
   }
 
   function findContainerForChart(canvas) {
-    // canvasの親要素を遡って.chartjs-containerを探す
     let parent = canvas.parentElement;
     while (parent && parent !== document.body) {
       if (parent.classList.contains('chartjs-container')) {
@@ -663,168 +659,162 @@ if (document.querySelector('.chartjs') !== null) {
   }
 
   function wrapChartjsCanvas() {
-    // すべての.chartjsクラスを持つcanvas要素を取得
     const canvases = document.querySelectorAll('canvas.chartjs');
-
     canvases.forEach(canvas => {
-      // 既にラッパーで囲まれているかチェック
       if (canvas.parentElement && canvas.parentElement.classList.contains('chartjs-wrapper')) {
-        return; // 既にラップされている場合はスキップ
+        return;
       }
-
-      // 新しいdiv要素を作成
       const wrapper = document.createElement('div');
       wrapper.classList.add('chartjs-wrapper');
-
-      // canvasの親要素にwrapperを挿入し、canvasをwrapperの中に移動
       canvas.parentNode.insertBefore(wrapper, canvas);
       wrapper.appendChild(canvas);
     });
   }
 
-  function updateChartPadding() {
+  // ==========================================================
+  // rAFで実行される、レイアウト・描画に関する主要なロジック
+  // ==========================================================
 
-    // 既存のチャートのpaddingを個別に更新
+  function applyChartUpdates() {
+    const currentColor = getCurrentThemeColor();
+    // Chart.js がロードされていない可能性を考慮してチェック
+    if (typeof Chart === 'undefined' || !Chart.instances) return;
+
     const chartInstances = Object.values(Chart.instances);
+    Chart.defaults.color = currentColor;
 
-    chartInstances.forEach(function (chart, index) {
-
-      // このチャートに対応するコンテナを見つける
+    chartInstances.forEach(function (chart) {
       const canvas = chart.canvas;
       const container = findContainerForChart(canvas);
 
+      // 1. 動的パディングの更新
       if (container) {
         const newPadding = calculateDynamicPadding(container);
-
-        if (chart.options.layout) {
-          chart.options.layout.padding = newPadding;
-        } else {
-          chart.options.layout = { padding: newPadding };
-        }
-
-        chart.update('none');
+        if (!chart.options.layout) chart.options.layout = {};
+        chart.options.layout.padding = newPadding;
       }
-    });
-  }
 
-  function updateAllChartColors() {
-    const currentColor = getCurrentThemeColor();
-    Chart.defaults.color = currentColor;
-    Object.values(Chart.instances).forEach(function (chart) {
+      // 2. テーマカラーの更新 (ロジックは元のコードから維持)
       if (chart.options.scales) {
         Object.keys(chart.options.scales).forEach(function (scaleKey) {
-          // 軸のティックの色
-          if (chart.options.scales[scaleKey].ticks) {
-            chart.options.scales[scaleKey].ticks.color = currentColor;
-          }
-          // 軸ラベルの色
-          if (chart.options.scales[scaleKey].title) {
-            chart.options.scales[scaleKey].title.color = currentColor;
-          }
+          const scale = chart.options.scales[scaleKey];
+          if (scale.ticks) scale.ticks.color = currentColor;
+          if (scale.title) scale.title.color = currentColor;
         });
       }
-      if (chart.options.plugins && chart.options.plugins.legend && chart.options.plugins.legend.labels) {
-        chart.options.plugins.legend.labels.color = currentColor;
+      if (chart.options.plugins) {
+        if (chart.options.plugins.legend && chart.options.plugins.legend.labels) {
+          chart.options.plugins.legend.labels.color = currentColor;
+        }
+        if (chart.options.plugins.title) {
+          chart.options.plugins.title.color = currentColor;
+        }
+        if (chart.options.plugins.datalabels) {
+          chart.options.plugins.datalabels.color = currentColor;
+        }
       }
-      if (chart.options.plugins && chart.options.plugins.title) {
-        chart.options.plugins.title.color = currentColor;
-      }
-      if (chart.options.plugins && chart.options.plugins.datalabels) {
-        chart.options.plugins.datalabels.color = currentColor;
-      }
+
+      // 3. Chart.jsに再描画を通知
       chart.update('none');
     });
+
+    // 4. Canvas要素のスタイルをリセットし、親要素にサイズを委ねる
+    document.querySelectorAll('.chartjs').forEach(canvas => {
+      canvas.style.width = 'auto';
+      canvas.style.height = 'auto';
+    });
+
+    isResizeScheduled = false; // フラグはリサイズ/初期化両方でリセット
+    isInitScheduled = false;
   }
 
   function createAllCharts() {
-    // Get all canvas elements with class 'chartjs'
-    const canvases = document.querySelectorAll('.chartjs');
+    // Chart.js がロードされていない可能性を考慮してチェック
+    if (typeof Chart === 'undefined') return;
 
+    const canvases = document.querySelectorAll('.chartjs');
     canvases.forEach((canvas, index) => {
-      // Call createChartN function where N is index + 1
       const funcName = `createChart${index + 1}`;
-      if (typeof window[funcName] === 'function') {
+      // 既にインスタンス化されていないかチェックを追加
+      if (typeof window[funcName] === 'function' && !Chart.getChart(canvas)) {
         window[funcName]();
       }
     });
   }
 
-  function applyIndividualPadding() {
-
-    // 作成されたチャートに対して個別のパディングを適用
-    const chartInstances = Object.values(Chart.instances);
-
-    chartInstances.forEach(function (chart, index) {
-
-      const canvas = chart.canvas;
-      const container = findContainerForChart(canvas);
-
-      if (container) {
-        const padding = calculateDynamicPadding(container);
-
-        if (chart.options.layout) {
-          chart.options.layout.padding = padding;
-        } else {
-          chart.options.layout = { padding: padding };
-        }
-
-        chart.update('none');
-      }
-    });
-  }
+  // ==========================================================
+  // 初期化ロジック (rAFで実行)
+  // ==========================================================
 
   function initializeCharts() {
-
-    // Canvas要素をdivで囲む処理を最初に実行
+    // 1. DOM操作
     wrapChartjsCanvas();
 
-    // 初回のみChart.jsの設定を行う
+    // 2. 初回のみChart.jsの設定を行う
     if (!chartsInitialized) {
-      Chart.register(ChartDataLabels);
-
-      // デフォルトのパディングは最小値に設定（個別で上書きする）
+      if (typeof ChartDataLabels !== 'undefined') {
+        Chart.register(ChartDataLabels);
+      }
+      if (!Chart.defaults.layout) Chart.defaults.layout = {};
       Chart.defaults.layout.padding = 24;
       chartsInitialized = true;
     }
 
-    // チャート作成
+    // 3. チャート作成（インスタンス化）
     createAllCharts();
 
-    // 各チャートに個別のパディングを適用
-    applyIndividualPadding();
-
-    // テーマカラーの適用
-    updateAllChartColors();
-
-    // Canvas要素のサイズ設定
-    document.querySelectorAll('.chartjs').forEach(canvas => {
-      canvas.style.width = 'auto';
-      canvas.style.height = 'auto';
-    });
+    // 4. パディングと色の適用、再描画 (rAFによる描画タイミングの最適化)
+    applyChartUpdates();
   }
+
+  /**
+   * 初期化処理を requestAnimationFrame にスケジュールする
+   */
+  function scheduleInitializeCharts() {
+    if (!isInitScheduled) {
+      isInitScheduled = true;
+      requestAnimationFrame(initializeCharts);
+    }
+  }
+
+  // ==========================================================
+  // リサイズロジック (rAFで実行)
+  // ==========================================================
 
   function handleResize() {
-    // リサイズ時は個別のpaddingとチャートの色を更新
-    updateChartPadding();
-    updateAllChartColors();
+    // パディングと色の更新、再描画を rAF で同期的に行う
+    applyChartUpdates();
 
-    // Chart.jsの内蔵リサイズ機能を使用（より効率的）
-    Object.values(Chart.instances).forEach(chart => {
-      chart.resize();
-    });
-
-    // Canvas要素のサイズ設定を再適用
-    document.querySelectorAll('.chartjs').forEach(canvas => {
-      canvas.style.width = 'auto';
-      canvas.style.height = 'auto';
-    });
+    // Chart.js の内蔵リサイズ機能を使用
+    if (typeof Chart !== 'undefined' && Chart.instances) {
+      Object.values(Chart.instances).forEach(chart => {
+        chart.resize();
+      });
+    }
   }
 
+  /**
+   * リサイズ処理を requestAnimationFrame にスケジュールする
+   */
+  function scheduleHandleResize() {
+    if (!isResizeScheduled) {
+      isResizeScheduled = true;
+      requestAnimationFrame(handleResize);
+    }
+  }
+
+  // ==========================================================
+  // イベントリスナー設定（Defer.js 維持）
+  // ==========================================================
+
   Defer(function () {
-    const debouncedResize = debounce(handleResize, 100);
-    window.addEventListener('resize', debouncedResize);
-    initializeCharts(); // 初回実行
-  }, 1500);
+    // Defer 実行後、リサイズ処理を debounce と rAF でスケジュール
+    const debouncedSchedule = debounce(scheduleHandleResize, 100);
+    window.addEventListener('resize', debouncedSchedule);
+
+    // 初回実行も rAF でスケジュール
+    scheduleInitializeCharts();
+  }, 1500); // 元の遅延時間 1500ms を維持
 }
 
 /* mermaid */
