@@ -291,7 +291,7 @@ if (document.querySelector('.blogcard-auto') !== null) {
           'civitai.com/models/2081436': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj4YTSY3VXkYyY3tukvgxw585ybaUXS0FTD8_1VWTo_nIIdBBL9Uk2Mr5ftwIOZLW6LL2Kd2YpZdXIYQ_wyLOOMSzZA38OgKpLoZ7EDSgOhX49vYeJzh08XGvoTb2H8z5_5aZGYFnFji3RrLWMs8M7pMtFOiffgYHOR8_U-42zBfdtivw/w400-e90-rw/HiDream_I1-Dev_clear_photoreal_compare.png',
           'civitai.com/models/2110148': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEix1Z4fRSVlZ6sYPVo00fSFG16mokYEd9zLXK9wgCWOl56kOqE6Lhxrf55T9JRbT9zDpXwpEWRd-4Uw48-6AcGFvPAmdM82fXyJMSMUwShoOPaXeFxz4Yk-qnENi37oi9O2tA_1uIbgxTFRYP0lImzUNC98Kwjk02CuXHd1y82ojvxMog/w400-e90-rw/Upscale_Detailer_color_correct_00036_close_up.png',
           'civitai.com/models/2130524': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiBWz6GckEdtrHg2vdLCq5T6yUfO305n0iTOUvp7I2xEHi5hXtLJwKgRk7FtK7Ulh_UXxMRJ2VPV8Hmq-8E4f6hpMgmVyCcSH7h4uUAPiyUIRzxqxMF8xfsOzeFbJC5fnoN4TwXNTghJIcR8x_0JsoqI7wgLWxSvzn81JZBcsHVjBZV3Q/w400-e90-rw/anipen_clear_00118_.png',
-          'civitai.com/models/2143257': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjf6iG4qss5wWVyAfKjoKouZX6-HhKG_hftCLTpAh6bn6VT1Kr9x0Jz02uERG9-8LkaBjjoZqSpZWgysz_8JXWJ4J8iyilyN53TAekEi9sx-C_OX7FpTIbY_4hN3xJBJYPeWMk15b8C7Quy5YCbbXw4n9MFsxZkYCiQsNImPdnAOZHgZA/w400-e90-rw/Qwen-Image-Edit-2509_clear_cover_image1.png',
+          'civitai.com/models/2143257': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEheBuAqh9OA5Tfi9iB1XL6Q-yop8bxArkTYDdU3hhFM2cPjoOVdYtGLOHuzLbrheQtkJnVLk85Wti1a5mXGptBLJLK3HYXPWEWxEhq8vAVeYl8Yb8wZwHvVqlb_HZl7sccoiNI0_Vuq5_4z_0njJZO7GB-jyI8FHAaHck71m1cub1ChBg/w400-e90-rw/Qwen-Image_original_vae_photoreal_close_up.png',
         };
 
         // デフォルトのCivitai画像
