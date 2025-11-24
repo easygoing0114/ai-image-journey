@@ -207,27 +207,65 @@ Defer(function () {
   });
 }, 100);
 
-/* テキストエリアの高さ調整 */
-document.querySelectorAll('textarea[data-auto-resize], textarea.auto-resize').forEach(textarea => {
-  const minHeight = 24;
+// テキストエリアの高さ自動調整
+if (document.querySelector('textarea') !== null) {
+  // Deferなどの非同期処理を削除し、純粋な処理に置き換えることを推奨
+  // ※ もしDeferが必要なら残してもOKですが、処理の本質ではないためここでは除外
 
-  const resize = () => {
-    if (textarea._resizing) return;
-    textarea._resizing = true;
+  function createAutoResizeTextarea() {
+    const textareas = document.querySelectorAll('textarea');
 
-    requestAnimationFrame(() => {
-      textarea.style.height = 'auto';
+    textareas.forEach(textarea => {
+      let isScheduled = false; // rAFが既にスケジュールされているかを管理
 
-      requestAnimationFrame(() => {
-        textarea.style.height = Math.max(textarea.scrollHeight, minHeight) + 'px';
-        textarea._resizing = false;
+      function adjustHeight() {
+        // 1. まず現在のスタイルをリセットして正しい scrollHeight を取得
+        textarea.style.height = 'auto';
+
+        // 2. 正しい高さに設定 (最小値は24pxとしています)
+        // ※ Math.max(textarea.scrollHeight, 24) はブラウザがスクロールバーを
+        //    含むかどうかで変わる場合があるので、paddingなども考慮するなら
+        //    textarea.scrollHeight + (padding/borderの差分) の方が確実な場合もあります。
+        textarea.style.height = Math.max(textarea.scrollHeight, 24) + 'px';
+
+        // 処理が完了したので、フラグをリセット
+        isScheduled = false;
+      }
+
+      function scheduleAdjustHeight() {
+        if (!isScheduled) {
+          isScheduled = true;
+          // 次の描画フレーム直前で adjustHeight を実行
+          requestAnimationFrame(adjustHeight);
+        }
+      }
+
+      // 初期ロード時に高さを設定
+      scheduleAdjustHeight();
+
+      // イベント発生時に rAF に処理を委ねる
+      // rAF が既にスケジュールされていれば、不要な再スケジュールを防ぐ
+      ['input', 'paste', 'cut', 'keydown', 'keyup'].forEach(event => {
+        textarea.addEventListener(event, scheduleAdjustHeight);
       });
-    });
-  };
 
-  textarea.addEventListener('input', resize);
-  resize(); // 初期化
-});
+      // ResizeObserver を利用して、テキストエリアの親要素などのサイズ変更時にも
+      // 高さが再調整されるようにするとさらに堅牢になりますが、ここでは割愛します。
+
+      // ※ 元コードの setInterval によるチェックは、イベントで捕捉できない
+      //    特殊なケース（IMEの変換確定など）の対策でしたが、ちらつきの原因の
+      //    一つでもあったため、基本的に不要と判断し削除しています。
+      //    必要であれば、setInterval内で scheduleAdjustHeight を実行してください。
+    });
+  }
+
+  // DOMがロードされた後に実行
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', createAutoResizeTextarea);
+  } else {
+    createAutoResizeTextarea();
+  }
+}
 
 /* リンクカードの作成 */
 if (document.querySelector('.blogcard-auto') !== null) {
