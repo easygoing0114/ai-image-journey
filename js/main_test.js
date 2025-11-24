@@ -209,8 +209,6 @@ Defer(function () {
 
 // テキストエリアの高さ自動調整
 if (document.querySelector('textarea') !== null) {
-  // Deferなどの非同期処理を削除し、純粋な処理に置き換えることを推奨
-  // ※ もしDeferが必要なら残してもOKですが、処理の本質ではないためここでは除外
 
   function createAutoResizeTextarea() {
     const textareas = document.querySelectorAll('textarea');
@@ -219,16 +217,9 @@ if (document.querySelector('textarea') !== null) {
       let isScheduled = false; // rAFが既にスケジュールされているかを管理
 
       function adjustHeight() {
-        // 1. まず現在のスタイルをリセットして正しい scrollHeight を取得
         textarea.style.height = 'auto';
-
-        // 2. 正しい高さに設定 (最小値は24pxとしています)
-        // ※ Math.max(textarea.scrollHeight, 24) はブラウザがスクロールバーを
-        //    含むかどうかで変わる場合があるので、paddingなども考慮するなら
-        //    textarea.scrollHeight + (padding/borderの差分) の方が確実な場合もあります。
         textarea.style.height = Math.max(textarea.scrollHeight, 24) + 'px';
 
-        // 処理が完了したので、フラグをリセット
         isScheduled = false;
       }
 
@@ -249,13 +240,6 @@ if (document.querySelector('textarea') !== null) {
         textarea.addEventListener(event, scheduleAdjustHeight);
       });
 
-      // ResizeObserver を利用して、テキストエリアの親要素などのサイズ変更時にも
-      // 高さが再調整されるようにするとさらに堅牢になりますが、ここでは割愛します。
-
-      // ※ 元コードの setInterval によるチェックは、イベントで捕捉できない
-      //    特殊なケース（IMEの変換確定など）の対策でしたが、ちらつきの原因の
-      //    一つでもあったため、基本的に不要と判断し削除しています。
-      //    必要であれば、setInterval内で scheduleAdjustHeight を実行してください。
     });
   }
 
