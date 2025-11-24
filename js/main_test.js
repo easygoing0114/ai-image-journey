@@ -581,9 +581,6 @@ if (document.querySelector('.table-responsive') !== null) {
     });
   }
 
-  /**
-   * requestAnimationFrame を使って adjustTableScale の実行をスケジュールする
-   */
   function scheduleAdjustTableScale() {
     if (!isScheduled) {
       isScheduled = true;
@@ -595,19 +592,14 @@ if (document.querySelector('.table-responsive') !== null) {
     }
   }
 
-  // debounce を使って、リサイズイベントの発生頻度を制限
-  // debounce(scheduleAdjustTableScale, 100) は、debounceが外部で宣言されている前提で利用
   const debouncedSchedule = debounce(scheduleAdjustTableScale, 100);
 
-  // Defer は不要と判断し、直接リスナーを登録
   window.addEventListener('resize', debouncedSchedule);
 
-  // 初回実行
-  // document.readyStateに応じて実行タイミングを制御しても良いが、簡潔性のために直接実行
   scheduleAdjustTableScale();
 }
 
-/* Aspect Ratio を調整 */
+/* Aspect Ratio を調整
 if (document.querySelector('.ar1_1, .ar16_9, .ar9_16, .ar5_7, .ar7_5') !== null) {
 
   // アスペクト比を調整するスクリプト
@@ -736,6 +728,7 @@ if (document.querySelector('.ar1_1, .ar16_9, .ar9_16, .ar5_7, .ar7_5') !== null)
     }
   }, 100);
 }
+*/
 
 /* loading="lazy" の順次解除 */
 Defer(function () {
