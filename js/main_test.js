@@ -64,13 +64,13 @@ Defer(function () {
   // debounce用のタイムアウトIDを保持
   let showHeaderTimeout;
 
-  // ヘッダーを表示する処理（debounce適用）
+  // ヘッダーを表示する処理
   function showHeader() {
     clearTimeout(showHeaderTimeout);
     showHeaderTimeout = setTimeout(function () {
       header.classList.remove('header-move-up');
       header.classList.add('header-move-down');
-    }, 300);
+    }, 200);
   }
 
   // スクロール処理の本体
@@ -87,7 +87,6 @@ Defer(function () {
     }
     // 下にスクロール（上方向に移動）
     else if (currentScroll < lastScrollTop) {
-      // ヘッダーを表示（debounce適用）
       showHeader();
     }
 
