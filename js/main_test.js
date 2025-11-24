@@ -618,14 +618,13 @@ Defer(function () {
 if (document.querySelector('.chartjs') !== null) {
 
   // ⚠️ 注意: debounce 関数、Chart.js、ChartDataLabels、Defer 関数は外部で宣言・ロードされているものとします。
-  // function debounce(func, wait) { ... }
-  // function Defer(func, delay) { ... }
 
   let chartsInitialized = false;
-  let isResizeScheduled = false; // リサイズ処理のrAFフラグ
-  let isInitScheduled = false;   // 初期化処理のrAFフラグ
+  let isResizeScheduled = false;
+  let isInitScheduled = false;
 
   function getCurrentThemeColor() {
+    // CSS変数から現在のテーマカラーを取得
     return getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color').trim();
   }
 
@@ -673,14 +672,17 @@ if (document.querySelector('.chartjs') !== null) {
 
   // ==========================================================
   // rAFで実行される、レイアウト・描画に関する主要なロジック
+  // 【テーマカラー切り替え修正箇所】
   // ==========================================================
 
   function applyChartUpdates() {
     const currentColor = getCurrentThemeColor();
-    // Chart.js がロードされていない可能性を考慮してチェック
     if (typeof Chart === 'undefined' || !Chart.instances) return;
 
     const chartInstances = Object.values(Chart.instances);
+
+    // ★修正1: グローバルなデフォルトカラーを設定
+    // Chart.jsのバージョンによっては this.options.color ではなく Chart.defaults.color を使う必要がある
     Chart.defaults.color = currentColor;
 
     chartInstances.forEach(function (chart) {
@@ -694,24 +696,41 @@ if (document.querySelector('.chartjs') !== null) {
         chart.options.layout.padding = newPadding;
       }
 
-      // 2. テーマカラーの更新 (ロジックは元のコードから維持)
+      // 2. ★修正2: 個別オプションのテーマカラーの更新
+
+      // 軸のティック、グリッド、軸ラベルの色
       if (chart.options.scales) {
         Object.keys(chart.options.scales).forEach(function (scaleKey) {
           const scale = chart.options.scales[scaleKey];
-          if (scale.ticks) scale.ticks.color = currentColor;
-          if (scale.title) scale.title.color = currentColor;
+
+          // ティックの色を更新
+          if (scale.ticks) {
+            scale.ticks.color = currentColor;
+          }
+          // グリッドラインの色を更新（必要であれば追加）
+          if (scale.grid) {
+            scale.grid.color = currentColor + '33'; // 例: 33は透明度
+          }
+          // 軸タイトル（ラベル）の色を更新
+          if (scale.title) {
+            scale.title.color = currentColor;
+          }
         });
       }
-      if (chart.options.plugins) {
-        if (chart.options.plugins.legend && chart.options.plugins.legend.labels) {
-          chart.options.plugins.legend.labels.color = currentColor;
-        }
-        if (chart.options.plugins.title) {
-          chart.options.plugins.title.color = currentColor;
-        }
-        if (chart.options.plugins.datalabels) {
-          chart.options.plugins.datalabels.color = currentColor;
-        }
+
+      // 凡例（Legend）の色
+      if (chart.options.plugins && chart.options.plugins.legend && chart.options.plugins.legend.labels) {
+        chart.options.plugins.legend.labels.color = currentColor;
+      }
+
+      // タイトル（Title）の色
+      if (chart.options.plugins && chart.options.plugins.title) {
+        chart.options.plugins.title.color = currentColor;
+      }
+
+      // データラベル（Datalabels）の色
+      if (chart.options.plugins && chart.options.plugins.datalabels) {
+        chart.options.plugins.datalabels.color = currentColor;
       }
 
       // 3. Chart.jsに再描画を通知
@@ -724,33 +743,27 @@ if (document.querySelector('.chartjs') !== null) {
       canvas.style.height = 'auto';
     });
 
-    isResizeScheduled = false; // フラグはリサイズ/初期化両方でリセット
+    isResizeScheduled = false;
     isInitScheduled = false;
   }
 
+  // (createAllCharts, initializeCharts, scheduleInitializeCharts 関数は変更なし)
+
   function createAllCharts() {
-    // Chart.js がロードされていない可能性を考慮してチェック
     if (typeof Chart === 'undefined') return;
 
     const canvases = document.querySelectorAll('.chartjs');
     canvases.forEach((canvas, index) => {
       const funcName = `createChart${index + 1}`;
-      // 既にインスタンス化されていないかチェックを追加
       if (typeof window[funcName] === 'function' && !Chart.getChart(canvas)) {
         window[funcName]();
       }
     });
   }
 
-  // ==========================================================
-  // 初期化ロジック (rAFで実行)
-  // ==========================================================
-
   function initializeCharts() {
-    // 1. DOM操作
     wrapChartjsCanvas();
 
-    // 2. 初回のみChart.jsの設定を行う
     if (!chartsInitialized) {
       if (typeof ChartDataLabels !== 'undefined') {
         Chart.register(ChartDataLabels);
@@ -760,16 +773,10 @@ if (document.querySelector('.chartjs') !== null) {
       chartsInitialized = true;
     }
 
-    // 3. チャート作成（インスタンス化）
     createAllCharts();
-
-    // 4. パディングと色の適用、再描画 (rAFによる描画タイミングの最適化)
     applyChartUpdates();
   }
 
-  /**
-   * 初期化処理を requestAnimationFrame にスケジュールする
-   */
   function scheduleInitializeCharts() {
     if (!isInitScheduled) {
       isInitScheduled = true;
@@ -777,15 +784,11 @@ if (document.querySelector('.chartjs') !== null) {
     }
   }
 
-  // ==========================================================
-  // リサイズロジック (rAFで実行)
-  // ==========================================================
+  // (handleResize, scheduleHandleResize 関数は変更なし)
 
   function handleResize() {
-    // パディングと色の更新、再描画を rAF で同期的に行う
     applyChartUpdates();
 
-    // Chart.js の内蔵リサイズ機能を使用
     if (typeof Chart !== 'undefined' && Chart.instances) {
       Object.values(Chart.instances).forEach(chart => {
         chart.resize();
@@ -793,9 +796,6 @@ if (document.querySelector('.chartjs') !== null) {
     }
   }
 
-  /**
-   * リサイズ処理を requestAnimationFrame にスケジュールする
-   */
   function scheduleHandleResize() {
     if (!isResizeScheduled) {
       isResizeScheduled = true;
@@ -808,13 +808,12 @@ if (document.querySelector('.chartjs') !== null) {
   // ==========================================================
 
   Defer(function () {
-    // Defer 実行後、リサイズ処理を debounce と rAF でスケジュール
     const debouncedSchedule = debounce(scheduleHandleResize, 100);
     window.addEventListener('resize', debouncedSchedule);
 
     // 初回実行も rAF でスケジュール
     scheduleInitializeCharts();
-  }, 1500); // 元の遅延時間 1500ms を維持
+  }, 1500);
 }
 
 /* mermaid */
