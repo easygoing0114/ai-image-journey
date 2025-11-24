@@ -488,8 +488,10 @@ if (document.querySelector('.blogcard-auto') !== null) {
   }, 200);
 }
 
-/* table の font-size と padding を画面の最大幅に合わせて変更 */
 if (document.querySelector('.table-responsive') !== null) {
+
+  // スケール調整処理の実行を rAF に委ねるためのフラグ
+  let isScheduled = false;
 
   function adjustTableScale() {
     var tables = document.querySelectorAll('.table-responsive table');
@@ -568,6 +570,7 @@ if (document.querySelector('.table-responsive') !== null) {
         var availableWidth = tableResponsiveWidth - totalBorderWidth - safetyMargin;
         var scale = availableWidth / originalTableWidth;
 
+        // DOM書き込み（スタイル適用）
         table.style.width = availableWidth + 'px';
         table.style.height = (originalTableHeight * scale) + totalBorderHeight + safetyMargin + 'px';
         table.querySelectorAll('th, td').forEach(function (cell) {
@@ -578,11 +581,30 @@ if (document.querySelector('.table-responsive') !== null) {
     });
   }
 
-  Defer(function () {
-    const debouncedAdjust = debounce(adjustTableScale, 100);
-    window.addEventListener('resize', debouncedAdjust);
-    debouncedAdjust(); // 初回実行
-  }, 100);
+  /**
+   * requestAnimationFrame を使って adjustTableScale の実行をスケジュールする
+   */
+  function scheduleAdjustTableScale() {
+    if (!isScheduled) {
+      isScheduled = true;
+      // 次の描画フレームの直前に adjustTableScale を実行
+      requestAnimationFrame(() => {
+        adjustTableScale();
+        isScheduled = false; // 処理完了後にフラグをリセット
+      });
+    }
+  }
+
+  // debounce を使って、リサイズイベントの発生頻度を制限
+  // debounce(scheduleAdjustTableScale, 100) は、debounceが外部で宣言されている前提で利用
+  const debouncedSchedule = debounce(scheduleAdjustTableScale, 100);
+
+  // Defer は不要と判断し、直接リスナーを登録
+  window.addEventListener('resize', debouncedSchedule);
+
+  // 初回実行
+  // document.readyStateに応じて実行タイミングを制御しても良いが、簡潔性のために直接実行
+  scheduleAdjustTableScale();
 }
 
 /* Aspect Ratio を調整 */
