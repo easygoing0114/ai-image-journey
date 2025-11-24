@@ -820,6 +820,8 @@ if (document.querySelector('.chartjs') !== null) {
 /* mermaid */
 if (document.querySelector('.language-mermaid') !== null) {
 
+  // ⚠️ 注意: mermaid オブジェクト、Defer 関数は外部で宣言・ロードされているものとします。
+
   // 既存の図表にスタイルを適用
   document.querySelectorAll('.mermaid-chart').forEach(figure => {
     figure.classList.add('box-img', 'box-img640');
@@ -827,7 +829,6 @@ if (document.querySelector('.language-mermaid') !== null) {
 
   const isDarkMode = document.documentElement.classList.contains('dark-mode');
 
-  // gantt チャートの最新日付を更新
   // 今日の日付を取得 (YYYY-MM-DD形式)
   const today = new Date().toISOString().split('T')[0];
 
@@ -837,7 +838,6 @@ if (document.querySelector('.language-mermaid') !== null) {
     const dates = code.match(dateRegex);
     if (!dates) return null;
 
-    // 日付を比較して最新の日付を見つける
     return dates.reduce((latest, current) => {
       return new Date(current) > new Date(latest) ? current : latest;
     }, dates[0]);
@@ -849,12 +849,16 @@ if (document.querySelector('.language-mermaid') !== null) {
     return code.replace(regex, newDate);
   }
 
-  // Mermaidコードを検出して処理
+  // -------------------------------------------------------------------
+  // 初回実行時：Gantt日付更新と描画の競合回避
+  // -------------------------------------------------------------------
+
+  // Mermaidコードを検出して処理 (初回実行専用。DOMを直接更新する)
   function updateMermaidGanttCharts() {
     const mermaidElements = document.querySelectorAll('.language-mermaid');
 
     mermaidElements.forEach((element) => {
-      const code = element.textContent;
+      const code = element.textContent.trim();
 
       if (code.includes('gantt')) {
         const latestDate = findLatestDate(code);
@@ -862,33 +866,35 @@ if (document.querySelector('.language-mermaid') !== null) {
           const updatedCode = replaceLatestDate(code, latestDate, today);
           element.textContent = updatedCode;
 
-          if (typeof mermaid !== 'undefined') {
-            mermaid.init(undefined, element);
-          }
+          // 初回は Deferred 実行ブロックで mermaid.run() が呼ばれるため、
+          // ここでは DOM 更新のみ行い、init/run は呼び出さない。
+          // 元のコードの mermaid.init() は削除。
         }
       }
     });
   }
 
-  updateMermaidGanttCharts()
+  // DOMのコードを更新（初回描画の前に実行）
+  updateMermaidGanttCharts();
 
   // 初回変換前に.language-mermaidの内容を保存する関数
   function preserveMermaidSource() {
     const languageMermaidElements = document.querySelectorAll('.language-mermaid');
 
     languageMermaidElements.forEach(function (element) {
-      // 既にコピーが存在する場合はスキップ
       if (element.nextElementSibling && element.nextElementSibling.classList.contains('language-mermaid-copy')) {
         return;
       }
 
-      // .language-mermaid-copyを作成
+      // ★注意：Ganttの日付更新後のコードをオリジナルとして保存する
+      // （テーマ変更時にも最新の日付を使用するため）
+      const originalCode = element.textContent.trim();
+
       const copyElement = document.createElement('code');
       copyElement.className = 'language-mermaid-copy';
       copyElement.style.display = 'none';
-      copyElement.textContent = element.textContent;
+      copyElement.textContent = originalCode;
 
-      // 元の要素の直後に挿入
       element.parentNode.insertBefore(copyElement, element.nextSibling);
     });
   }
@@ -896,21 +902,27 @@ if (document.querySelector('.language-mermaid') !== null) {
   // Mermaidソースを保存
   preserveMermaidSource();
 
+  // -------------------------------------------------------------------
+  // テーマ更新ロジック (requestAnimationFrameによる最適化)
+  // -------------------------------------------------------------------
+
   // Mermaidチャートのテーマ更新機能（グローバル関数として定義）
   window.updateMermaidTheme = function (theme) {
+    if (typeof mermaid === 'undefined') return;
+
+    const mermaidElements = document.querySelectorAll('.language-mermaid');
+
+    if (mermaidElements.length === 0) {
+      return;
+    }
+
     try {
-      const mermaidElements = document.querySelectorAll('.language-mermaid');
-
-      if (mermaidElements.length === 0) {
-        return;
-      }
-
       // 既存のSVG要素をすべて削除
       document.querySelectorAll('.language-mermaid svg').forEach(svg => {
         svg.remove();
       });
 
-      // テーマに応じた設定
+      // テーマに応じた設定と初期化
       const mermaidConfig = {
         startOnLoad: false,
         theme: theme === 'dark' ? 'dark' : 'default'
@@ -920,97 +932,96 @@ if (document.querySelector('.language-mermaid') !== null) {
         mermaid.initialize(mermaidConfig);
       }
 
-      // 各Mermaidチャートを再描画（順次処理）
-      const processChart = function (index) {
-        if (index >= mermaidElements.length) {
-          return;
-        }
+      // 描画処理を requestAnimationFrame でスケジュール (ちらつき防止)
+      requestAnimationFrame(() => {
 
-        const element = mermaidElements[index];
-
-        // 対応する.language-mermaid-copyからソースコードを取得
-        let copyElement = null;
-
-        if (element.previousElementSibling && element.previousElementSibling.classList.contains('language-mermaid-copy')) {
-          copyElement = element.previousElementSibling;
-        } else if (element.nextElementSibling && element.nextElementSibling.classList.contains('language-mermaid-copy')) {
-          copyElement = element.nextElementSibling;
-        }
-
-        if (!copyElement) {
-          processChart(index + 1);
-          return;
-        }
-
-        // 親要素を取得（.mermaid-chartのfigure要素）
-        const parentFigure = element.closest('.mermaid-chart');
-
-        if (parentFigure) {
-          const computedStyle = window.getComputedStyle(parentFigure);
-
-          // 現在の計算されたサイズを親要素に適用
-          parentFigure.style.width = computedStyle.width;
-          parentFigure.style.height = computedStyle.height;
-        }
-
-        // 保存されたソースコードを取得
-        const originalCode = copyElement.textContent.trim();
-        let updatedCode = originalCode;
-
-        // Ganttチャートの場合は日付を更新
-        if (originalCode.includes('gantt')) {
-          const latestDate = findLatestDate(originalCode);
-          if (latestDate) {
-            updatedCode = replaceLatestDate(originalCode, latestDate, today);
+        // 各Mermaidチャートを再描画（順次処理）
+        const processChart = function (index) {
+          if (index >= mermaidElements.length) {
+            return;
           }
-        }
 
-        // 要素をクリアして準備
-        element.innerHTML = '';
-        element.textContent = updatedCode;
-        element.removeAttribute('data-processed');
+          const element = mermaidElements[index];
 
-        // 一意のIDを生成して設定
-        const uniqueId = 'mermaid-' + Date.now() + '-' + index;
-        element.id = uniqueId;
+          // .language-mermaid-copyからソースコードを取得 (更新済みコードのバックアップ)
+          let copyElement = null;
+          if (element.nextElementSibling && element.nextElementSibling.classList.contains('language-mermaid-copy')) {
+            copyElement = element.nextElementSibling;
+          } else if (element.previousElementSibling && element.previousElementSibling.classList.contains('language-mermaid-copy')) {
+            copyElement = element.previousElementSibling;
+          }
 
-        // 描画完了後の後処理関数
-        const onRenderComplete = function () {
-          // 親要素のサイズを元に戻す（元々設定されていなかった場合は削除）
-          parentFigure.style.removeProperty('width');
-          parentFigure.style.removeProperty('height');
+          if (!copyElement) {
+            processChart(index + 1);
+            return;
+          }
 
-          processChart(index + 1);
-        };
+          // 親要素を取得（.mermaid-chartのfigure要素）
+          const parentFigure = element.closest('.mermaid-chart');
 
-        try {
-          // Mermaidバージョンに応じた描画方法を選択
-          if (typeof mermaid.run === 'function') {
-            mermaid.run({
-              nodes: [element],
-              suppressErrors: false
-            }).then(function () {
+          // サイズの強制適用 (レイアウトスラッシングの可能性あり)
+          if (parentFigure) {
+            const computedStyle = window.getComputedStyle(parentFigure);
+            parentFigure.style.width = computedStyle.width;
+            parentFigure.style.height = computedStyle.height;
+          }
+
+          // ★修正点: コピーからコードを取得し、Gantt日付を再度更新
+          let updatedCode = copyElement.textContent.trim();
+
+          // Ganttチャートの場合は日付を更新
+          if (updatedCode.includes('gantt')) {
+            const latestDate = findLatestDate(updatedCode);
+            if (latestDate) {
+              updatedCode = replaceLatestDate(updatedCode, latestDate, today);
+            }
+          }
+
+          // 要素をクリアして準備
+          element.innerHTML = '';
+          element.textContent = updatedCode; // 更新されたコードを要素に設定
+          element.removeAttribute('data-processed');
+
+          // 一意のIDを生成して設定
+          const uniqueId = 'mermaid-' + Date.now() + '-' + index;
+          element.id = uniqueId;
+
+          // 描画完了後の後処理関数
+          const onRenderComplete = function () {
+            // 親要素のサイズを元に戻す
+            if (parentFigure) {
+              parentFigure.style.removeProperty('width');
+              parentFigure.style.removeProperty('height');
+            }
+            // ★バックアップコピーを最新コードで更新
+            copyElement.textContent = element.textContent;
+
+            processChart(index + 1);
+          };
+
+          try {
+            // Mermaidバージョンに応じた描画方法を選択 (非同期処理)
+            if (typeof mermaid.run === 'function') {
+              mermaid.run({
+                nodes: [element],
+                suppressErrors: false
+              }).then(onRenderComplete).catch(onRenderComplete);
+            } else if (typeof mermaid.render === 'function') {
+              mermaid.render(uniqueId + '-svg', updatedCode).then(function (result) {
+                element.innerHTML = result.svg;
+                onRenderComplete();
+              }).catch(onRenderComplete);
+            } else {
               onRenderComplete();
-            }).catch(function (error) {
-              onRenderComplete();
-            });
-          } else if (typeof mermaid.render === 'function') {
-            mermaid.render(uniqueId + '-svg', updatedCode).then(function (result) {
-              element.innerHTML = result.svg;
-              onRenderComplete();
-            }).catch(function (error) {
-              onRenderComplete();
-            });
-          } else {
+            }
+          } catch (error) {
             onRenderComplete();
           }
-        } catch (error) {
-          onRenderComplete();
-        }
-      };
+        };
 
-      // 最初のチャートから処理開始
-      processChart(0);
+        // 最初のチャートから処理開始
+        processChart(0);
+      }); // requestAnimationFrame 終了
 
     } catch (error) {
       if (confirm('チャートのテーマ更新でエラーが発生しました。ページを再読み込みしますか？')) {
@@ -1019,13 +1030,20 @@ if (document.querySelector('.language-mermaid') !== null) {
     }
   };
 
-  Defer(function () {
+  // -------------------------------------------------------------------
+  // 初回描画実行ロジック (Defer.js 維持)
+  // -------------------------------------------------------------------
 
+  Defer(function () {
+    if (typeof mermaid === 'undefined') return;
+
+    // 初回描画時の設定
     mermaid.initialize({
       startOnLoad: false,
       theme: isDarkMode ? 'dark' : 'default',
     });
 
+    // Gantt日付更新済みのDOMコードを使って描画を実行
     mermaid.run();
 
   }, 1500);
