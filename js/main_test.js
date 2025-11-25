@@ -54,158 +54,147 @@ function debounce(func, wait) {
 }
 
 /* header アニメーション */
-Defer(function () {
-  // スクロール位置を記録する変数
-  let lastScrollTop = 0;
-  const header = document.getElementById('header');
-  // スクロールの閾値（ビューポート高さの5% = 5svh相当）
-  const scrollThreshold = window.innerHeight * 0.03;
+// スクロール位置を記録する変数
+let lastScrollTop = 0;
+const header = document.getElementById('header');
+// スクロールの閾値
+const scrollThreshold = window.innerHeight * 0.03;
 
-  // debounce用のタイムアウトIDを保持
-  let showHeaderTimeout;
+// debounce用のタイムアウトIDを保持
+let showHeaderTimeout;
 
-  // ヘッダーを表示する処理
-  function showHeader() {
+// ヘッダーを表示する処理
+function showHeader() {
+  clearTimeout(showHeaderTimeout);
+  showHeaderTimeout = setTimeout(function () {
+    header.classList.remove('header-move-up');
+    header.classList.add('header-move-down');
+  }, 200);
+}
+
+// スクロール処理の本体
+function handleScroll() {
+  const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+  // 上にスクロール（下方向に移動）
+  if (currentScroll > lastScrollTop && currentScroll > scrollThreshold) {
+    // 待機中のヘッダー表示をキャンセル
     clearTimeout(showHeaderTimeout);
-    showHeaderTimeout = setTimeout(function () {
-      header.classList.remove('header-move-up');
-      header.classList.add('header-move-down');
-    }, 200);
+    // ヘッダーを隠す（即座に実行）
+    header.classList.remove('header-move-down');
+    header.classList.add('header-move-up');
+  }
+  // 下にスクロール（上方向に移動）
+  else if (currentScroll < lastScrollTop) {
+    showHeader();
   }
 
-  // スクロール処理の本体
-  function handleScroll() {
-    const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+  lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+}
 
-    // 上にスクロール（下方向に移動）
-    if (currentScroll > lastScrollTop && currentScroll > scrollThreshold) {
-      // 待機中のヘッダー表示をキャンセル
-      clearTimeout(showHeaderTimeout);
-      // ヘッダーを隠す（即座に実行）
-      header.classList.remove('header-move-down');
-      header.classList.add('header-move-up');
-    }
-    // 下にスクロール（上方向に移動）
-    else if (currentScroll < lastScrollTop) {
-      showHeader();
-    }
+// スクロールイベントのリスナー
+window.addEventListener('scroll', handleScroll, false);
 
-    lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+// 要素取得（存在チェック付き）
+const headerSearchButton = document.getElementById('header-search-button');
+const headerSearchDropdown = document.getElementById('header-search-dropdown');
+const headerMenuButton = document.getElementById('header-menu-button');
+const navbarMenu = document.getElementById('navbar-menu');
+
+// 共通関数：自分はトグル、相手は強制非表示
+const toggleAndHideOther = (targetDropdown, otherDropdown) => {
+  targetDropdown.classList.toggle('dropdown-visible');
+  if (otherDropdown && otherDropdown.classList.contains('dropdown-visible')) {
+    otherDropdown.classList.remove('dropdown-visible');
   }
+};
 
-  // スクロールイベントのリスナー
-  window.addEventListener('scroll', handleScroll, false);
-}, 100);
+// 検索ボタンクリック
+if (headerSearchButton && headerSearchDropdown) {
+  headerSearchButton.addEventListener('click', function () {
+    toggleAndHideOther(headerSearchDropdown, navbarMenu);
+  });
+}
 
-Defer(function () {
-  // 要素取得（存在チェック付き）
-  const headerSearchButton = document.getElementById('header-search-button');
-  const headerSearchDropdown = document.getElementById('header-search-dropdown');
-  const headerMenuButton = document.getElementById('header-menu-button');
-  const navbarMenu = document.getElementById('navbar-menu');
+// メニューボタンクリック
+if (headerMenuButton && navbarMenu) {
+  headerMenuButton.addEventListener('click', function () {
+    toggleAndHideOther(navbarMenu, headerSearchDropdown);
+  });
+}
 
-  // 共通関数：自分はトグル、相手は強制非表示
-  const toggleAndHideOther = (targetDropdown, otherDropdown) => {
-    targetDropdown.classList.toggle('dropdown-visible');
-    if (otherDropdown && otherDropdown.classList.contains('dropdown-visible')) {
-      otherDropdown.classList.remove('dropdown-visible');
-    }
-  };
-
-  // 検索ボタンクリック
-  if (headerSearchButton && headerSearchDropdown) {
-    headerSearchButton.addEventListener('click', function () {
-      toggleAndHideOther(headerSearchDropdown, navbarMenu);
-    });
-  }
-
-  // メニューボタンクリック
-  if (headerMenuButton && navbarMenu) {
-    headerMenuButton.addEventListener('click', function () {
-      toggleAndHideOther(navbarMenu, headerSearchDropdown);
-    });
-  }
-
-  // === スクロール時に両方閉じる ===
-  let ticking = false;
-  const closeBothOnScroll = () => {
-    if (!ticking) {
-      requestAnimationFrame(() => {
-        headerSearchDropdown?.classList.remove('dropdown-visible');
-        navbarMenu?.classList.remove('dropdown-visible');
-        ticking = false;
-      });
-      ticking = true;
-    }
-  };
-
-  // スクロールイベント（パフォーマンス考慮：requestAnimationFrameで制御）
-  window.addEventListener('scroll', closeBothOnScroll, { passive: true });
-
-  // === （任意）ドキュメント全体クリックで閉じる ===
-  document.addEventListener('click', function (e) {
-    const isSearchClick = headerSearchButton?.contains(e.target) || headerSearchDropdown?.contains(e.target);
-    const isMenuClick = headerMenuButton?.contains(e.target) || navbarMenu?.contains(e.target);
-
-    if (!isSearchClick && !isMenuClick) {
+// === スクロール時に両方閉じる ===
+let ticking = false;
+const closeBothOnScroll = () => {
+  if (!ticking) {
+    requestAnimationFrame(() => {
       headerSearchDropdown?.classList.remove('dropdown-visible');
       navbarMenu?.classList.remove('dropdown-visible');
-    }
-  });
+      ticking = false;
+    });
+    ticking = true;
+  }
+};
 
-}, 100);
+// スクロールイベント（パフォーマンス考慮：requestAnimationFrameで制御）
+window.addEventListener('scroll', closeBothOnScroll, { passive: true });
+
+// === （任意）ドキュメント全体クリックで閉じる ===
+document.addEventListener('click', function (e) {
+  const isSearchClick = headerSearchButton?.contains(e.target) || headerSearchDropdown?.contains(e.target);
+  const isMenuClick = headerMenuButton?.contains(e.target) || navbarMenu?.contains(e.target);
+
+  if (!isSearchClick && !isMenuClick) {
+    headerSearchDropdown?.classList.remove('dropdown-visible');
+    navbarMenu?.classList.remove('dropdown-visible');
+  }
+});
 
 /* 外部リンクに新しいタブで開く属性追加 */
-Defer(function () {
-  const links = document.querySelectorAll('a');
-  const myDomain = 'ai-image-journey.com';
+const links = document.querySelectorAll('a');
+const myDomain = 'ai-image-journey.com';
 
-  links.forEach(link => {
-    const href = link.getAttribute('href');
-    if (href && !href.includes(myDomain) && !href.startsWith('/') && !href.startsWith('#')) {
-      link.setAttribute('target', '_blank');
-      link.setAttribute('rel', 'noopener noreferrer');
-    }
-  });
-}, 100);
+links.forEach(link => {
+  const href = link.getAttribute('href');
+  if (href && !href.includes(myDomain) && !href.startsWith('/') && !href.startsWith('#')) {
+    link.setAttribute('target', '_blank');
+    link.setAttribute('rel', 'noopener noreferrer');
+  }
+});
 
 /* DMCA バッジ */
-Defer(function () {
-  var dmcaLink = document.getElementById('dmcaLink');
-  if (dmcaLink && dmcaLink.href.indexOf('refurl') < 0) {
-    dmcaLink.href += (dmcaLink.href.indexOf('?') === -1 ? '?' : '&') + 'refurl=' + document.location;
-  }
-}, 100);
+var dmcaLink = document.getElementById('dmcaLink');
+if (dmcaLink && dmcaLink.href.indexOf('refurl') < 0) {
+  dmcaLink.href += (dmcaLink.href.indexOf('?') === -1 ? '?' : '&') + 'refurl=' + document.location;
+}
 
 /* dark-mode ボタン */
-Defer(function () {
-  var darkModeButtons = document.querySelectorAll(".toggle-dark-mode-btn");
+var darkModeButtons = document.querySelectorAll(".toggle-dark-mode-btn");
 
-  darkModeButtons.forEach(function (button) {
-    button.addEventListener("click", function () {
-      var isDarkMode = htmlElement.classList.contains("dark-mode");
-      var newTheme = isDarkMode ? 'light' : 'dark';
+darkModeButtons.forEach(function (button) {
+  button.addEventListener("click", function () {
+    var isDarkMode = htmlElement.classList.contains("dark-mode");
+    var newTheme = isDarkMode ? 'light' : 'dark';
 
-      applyTheme(newTheme);
+    applyTheme(newTheme);
 
-      // Chart.jsの色を更新
-      if (typeof updateAllChartColors === 'function') {
-        updateAllChartColors();
-      }
+    // Chart.jsの色を更新
+    if (typeof updateAllChartColors === 'function') {
+      updateAllChartColors();
+    }
 
-      // Mermaidチャートを再描画
-      if (typeof updateMermaidTheme === 'function') {
-        updateMermaidTheme(newTheme);
-      }
+    // Mermaidチャートを再描画
+    if (typeof updateMermaidTheme === 'function') {
+      updateMermaidTheme(newTheme);
+    }
 
-      // Blueskyの埋め込みテーマを更新
-      if (window.bluesky && typeof window.bluesky.updateThemes === 'function') {
-        window.bluesky.updateThemes();
-      }
+    // Blueskyの埋め込みテーマを更新
+    if (window.bluesky && typeof window.bluesky.updateThemes === 'function') {
+      window.bluesky.updateThemes();
+    }
 
-    });
   });
-}, 100);
+});
 
 // テキストエリアの高さ自動調整
 if (document.querySelector('textarea') !== null) {
