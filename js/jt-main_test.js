@@ -15,7 +15,7 @@ function sidebar_temp(e) {
 
 const jo = {};
 
-(function() {
+(function () {
   var windowObj = window,
     documentObj = document,
     setTimeoutFn = setTimeout,
@@ -114,7 +114,7 @@ const jo = {};
 
   function toggleClassWithTimeout(element, className, timeout) {
     removeClass(element, className);
-    setTimeoutFn(function() {
+    setTimeoutFn(function () {
       removeClass(element, "d-block");
     }, timeout || 300);
   }
@@ -141,30 +141,30 @@ const jo = {};
 
   function checkWebpSupport(callback) {
     var img = new ImageObj();
-    img.onload = img.onerror = function() {
+    img.onload = img.onerror = function () {
       callback(2 == img.height);
     };
     img.src = "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA";
   }
 
-  checkWebpSupport(function(supported) {
+  checkWebpSupport(function (supported) {
     if (!supported) rwStr = "";
   });
 
-// ヘッダー制御の修正版
-var searchToggle = documentObj[getElementByIdFn]("search-toggle"),
-  searchHeader = documentObj[getElementByIdFn]("search-header"),
-  navbarToggle = documentObj[getElementByIdFn]("navbar-toggle"),
-  navbar = documentObj[getElementByIdFn]("navbar"),
-  backToTop = documentObj[getElementByIdFn]("back-to-top"),
-  adsPost = documentObj[getElementByIdFn]("ads-post"),
-  postBody = documentObj[getElementByIdFn]("post-body"),
-  relatedPosts = documentObj[querySelectorFn](".related-posts"),
-  relatedInline = documentObj[querySelectorFn](".related-inline"),
-  currentPage = getQueryParam("page", currentUrl),
-  isLazy = localStorageObj !== null && localStorageObj["get" + ItemFn]("lazy") == 1;
+  // ヘッダー制御の修正版
+  var searchToggle = documentObj[getElementByIdFn]("search-toggle"),
+    searchHeader = documentObj[getElementByIdFn]("search-header"),
+    navbarToggle = documentObj[getElementByIdFn]("navbar-toggle"),
+    navbar = documentObj[getElementByIdFn]("navbar"),
+    backToTop = documentObj[getElementByIdFn]("back-to-top"),
+    adsPost = documentObj[getElementByIdFn]("ads-post"),
+    postBody = documentObj[getElementByIdFn]("post-body"),
+    relatedPosts = documentObj[querySelectorFn](".related-posts"),
+    relatedInline = documentObj[querySelectorFn](".related-inline"),
+    currentPage = getQueryParam("page", currentUrl),
+    isLazy = localStorageObj !== null && localStorageObj["get" + ItemFn]("lazy") == 1;
 
-  var processImage = function(element) {
+  var processImage = function (element) {
     if (element[tagNameProp] == "IMG") {
       var dataSrc = element["get" + AttributeFn]("data-src");
       if (dataSrc[matchFn](/(bp.blogspot|googleusercontent)/)) {
@@ -181,124 +181,73 @@ var searchToggle = documentObj[getElementByIdFn]("search-toggle"),
     }
   };
 
-  var createPagination = function(element) {
+  var createPagination = function (element) {
     if (element["get" + AttributeFn]("data-pagination") != falseStr) {
       var postsPerPage = element["get" + AttributeFn]("data-posts");
       var label = element["get" + AttributeFn]("data-label");
       var encodedLabel = encodeURIComponentFn(label);
       var labelPrefix = encodedLabel ? "-/" + encodedLabel + "/" : "";
       var labelPath = encodedLabel ? "/label/" + encodedLabel : "";
+
       Defer.js(siteUrl + "/feeds/posts/summary/" + labelPrefix + "?alt=json&callback=jo." + paginationStr + "_key&max-results=1");
+
       var maxResults = getQueryParam("max-results", currentUrl);
       var pageNum = getQueryParam("page", currentUrl);
       var pageSize = maxResults || postsPerPage;
       var currentPageNum = pageNum || 1;
 
-      jo[paginationStr + "_key"] = function(data) {
+      jo[paginationStr + "_key"] = function (data) {
         var feed = data.feed;
         var totalResults = parseIntFn(feed.openSearch$totalResults.$t);
-        if (postsPerPage < totalResults) {
-          var paginationInfo = (function(total, current, size, maxPages) {
-            total = parseIntFn(total);
-            current = parseIntFn(current);
-            size = parseIntFn(size);
-            maxPages = parseIntFn(maxPages);
-            var totalPages = MathObj[ceilFn](total / size);
-            if (current < 1) current = 1;
-            else if (totalPages < current) current = totalPages;
-            var startPage, endPage;
-            if (totalPages <= maxPages) {
-              startPage = 1;
-              endPage = totalPages;
-            } else {
-              var halfMax = MathObj[floorFn](maxPages / 2);
-              var halfMaxCeil = MathObj[ceilFn](maxPages / 2) - 1;
-              if (current <= halfMax) {
-                startPage = 1;
-                endPage = maxPages;
-              } else if (totalPages <= current + halfMaxCeil) {
-                startPage = totalPages - maxPages + 1;
-                endPage = totalPages;
-              } else {
-                startPage = current - halfMax;
-                endPage = current + halfMaxCeil;
-              }
-            }
-            var pages = [];
-            for (var i = 0; i < endPage + 1 - startPage; i++) {
-              pages[pushFn](i);
-            }
-            pages = pages.map(function(i) {
-              return startPage + i;
-            });
-            return {
-              totalItems: total,
-              currentPage: current,
-              pageSize: size,
-              totalPages: totalPages,
-              startPage: startPage,
-              endPage: endPage,
-              startIndex: (current - 1) * size,
-              endIndex: MathObj.min((current - 1) * size + size - 1, total - 1),
-              pages: pages
-            };
-          })(totalResults, currentPageNum, pageSize, 5);
-          var ul = documentObj[createElementFn]("ul");
-          var totalPages = paginationInfo.totalPages;
-          if (paginationInfo.currentPage != 1) {
-            var prevLi = createPageItem(paginationInfo.currentPage - 1, "", '<svg aria-hidden="true" class="jt-icon"><use xlink:href="#i-arrow-l"/></svg>');
-            ul[appendChildFn](prevLi);
-          }
-          if (!arrayIncludes(paginationInfo.pages, 1)) {
-            var firstLi = createPageItem(1, paginationInfo.currentPage, "1 . .");
-            ul[appendChildFn](firstLi);
-          }
-          for (var i = 0; i < paginationInfo.pages[lengthProp]; i++) {
-            var pageLi = createPageItem(paginationInfo.pages[i], paginationInfo.currentPage);
-            ul[appendChildFn](pageLi);
-          }
-          if (!arrayIncludes(paginationInfo.pages, totalPages)) {
-            var lastLi = createPageItem(totalPages, paginationInfo.currentPage, ". . " + totalPages);
-            ul[appendChildFn](lastLi);
-          }
-          if (paginationInfo.currentPage != totalPages) {
-            var nextLi = createPageItem(paginationInfo.currentPage + 1, "", '<svg aria-hidden="true" class="jt-icon"><use xlink:href="#i-arrow-r"/></svg>');
-            ul[appendChildFn](nextLi);
-          }
-          element[innerHTMLProp] = "";
-          addClass(ul, "pagination");
-          element[appendChildFn](ul);
-          removeClass(element, "visually-hidden");
 
-          function createPageItem(page, currentPage, label) {
-            var li = documentObj[createElementFn]("li");
-            var span = documentObj[createElementFn]("span");
-            addClass(span, "btn rounded-pill jt-icon-center");
-            span[innerHTMLProp] = label || page;
-            span["set" + AttributeFn]("data-page", page);
-            if (page == currentPage) {
-              addClass(span, "jt-btn-primary");
-            } else {
-              addClass(span, "jt-btn-light hover-btn-primary");
-              span["add" + EventListenerFn](clickEvent, function(e) {
-                e[preventDefaultFn]();
-                var url;
-                if (page == 1) {
-                  url = encodedLabel ? siteUrl + "/search" + labelPath + "?max-results=" + postsPerPage + "&page=" + page : siteUrl;
-                  windowObj[locationProp][hrefProp] = url;
-                } else {
-                  var startIndex = (page - 1) * postsPerPage;
-                  Defer.js(siteUrl + "/feeds/posts/summary/" + labelPrefix + "?start-index=" + startIndex + "&alt=json&callback=jo." + paginationStr + "_date&max-results=1");
-                }
-              });
-            }
-            li[appendChildFn](span);
-            return li;
+        if (postsPerPage < totalResults) {
+          var totalPages = MathObj[ceilFn](totalResults / pageSize);
+          var currentPage = parseIntFn(currentPageNum);
+
+          // ボタンコンテナの作成
+          var buttonContainer = documentObj[createElementFn]("div");
+          addClass(buttonContainer, "button-container");
+
+          // Prevボタンの作成（1ページ目以外で表示）
+          if (currentPage > 1) {
+            var prevButton = documentObj[createElementFn]("button");
+            addClass(prevButton, "round-button");
+            prevButton[innerHTMLProp] = "Prev Page";
+            prevButton["add" + EventListenerFn](clickEvent, function (e) {
+              e[preventDefaultFn]();
+              var prevPage = currentPage - 1;
+              if (prevPage == 1) {
+                var url = encodedLabel ? siteUrl + "/search" + labelPath + "?max-results=" + postsPerPage + "&page=1" : siteUrl;
+                windowObj[locationProp][hrefProp] = url;
+              } else {
+                var startIndex = (prevPage - 1) * postsPerPage;
+                Defer.js(siteUrl + "/feeds/posts/summary/" + labelPrefix + "?start-index=" + startIndex + "&alt=json&callback=jo." + paginationStr + "_date&max-results=1");
+              }
+            });
+            buttonContainer[appendChildFn](prevButton);
           }
+
+          // Nextボタンの作成（最終ページ以外で表示）
+          if (currentPage < totalPages) {
+            var nextButton = documentObj[createElementFn]("button");
+            addClass(nextButton, "round-button");
+            nextButton[innerHTMLProp] = "Next Page";
+            nextButton["add" + EventListenerFn](clickEvent, function (e) {
+              e[preventDefaultFn]();
+              var nextPage = currentPage + 1;
+              var startIndex = (nextPage - 1) * postsPerPage;
+              Defer.js(siteUrl + "/feeds/posts/summary/" + labelPrefix + "?start-index=" + startIndex + "&alt=json&callback=jo." + paginationStr + "_date&max-results=1");
+            });
+            buttonContainer[appendChildFn](nextButton);
+          }
+
+          element[innerHTMLProp] = "";
+          element[appendChildFn](buttonContainer);
+          removeClass(element, "visually-hidden");
         }
       };
 
-      jo[paginationStr + "_date"] = function(data) {
+      jo[paginationStr + "_date"] = function (data) {
         var published = data.feed.entry[0].published.$t;
         var timestamp = published[substrFn](0, 19) + published[substrFn](23, 29);
         timestamp = timestamp[replaceFn]("+", "%2B");
@@ -315,7 +264,7 @@ var searchToggle = documentObj[getElementByIdFn]("search-toggle"),
     xhr[openFn]("get", url);
     xhr[setRequestHeaderFn](contentTypeHeader, "text/html");
     xhr[sendFn](null);
-    xhr["add" + EventListenerFn](loadEvent, function() {
+    xhr["add" + EventListenerFn](loadEvent, function () {
       var titleMatch = xhr[responseTextProp][matchFn](/<title>(.*?)<\/title>/);
       var titleSeparator = " | ";
       var blogTitle = "AI Image Journey";
@@ -324,7 +273,7 @@ var searchToggle = documentObj[getElementByIdFn]("search-toggle"),
     });
   }
 
-  var processPostPager = function(element) {
+  var processPostPager = function (element) {
     var links = element[querySelectorAllFn]("a");
     for (var i = 0; i < links[lengthProp]; ++i) {
       var link = links[i];
@@ -335,7 +284,7 @@ var searchToggle = documentObj[getElementByIdFn]("search-toggle"),
     }
   };
 
-  jo[loadCustomPostsStr] = function(element) {
+  jo[loadCustomPostsStr] = function (element) {
     var randomId = (MathObj[randomFn]() + 1).toString(36)[substrFn](7);
     var label = element["get" + AttributeFn]("data-label");
     var title = element["get" + AttributeFn]("data-title");
@@ -350,7 +299,7 @@ var searchToggle = documentObj[getElementByIdFn]("search-toggle"),
     var feedUrl = "";
     feedUrl = labelArray[lengthProp] > 1 ? (labels ? "-/" + encodeURIComponentFn(labelArray[MathObj[floorFn](MathObj[randomFn]() * labelArray[lengthProp])]) + "/?" : "?") : (labels && labels != falseStr ? "-/" + encodeURIComponentFn(labels[trimFn]()) + "/?" : "?");
     Defer.js(siteUrl + "/feeds/posts/summary/" + feedUrl + "alt=json&callback=jo." + customPostsStr + "_key_" + randomId + "&max-results=" + maxResults);
-    jo[customPostsStr + "_key_" + randomId] = function(data) {
+    jo[customPostsStr + "_key_" + randomId] = function (data) {
       var totalPosts = parseIntFn(data.feed.openSearch$totalResults.$t);
       var categories = data.feed.category;
       if (totalPosts > 0) {
@@ -427,14 +376,14 @@ var searchToggle = documentObj[getElementByIdFn]("search-toggle"),
   }
 
   if (searchToggle) {
-    searchToggle["add" + EventListenerFn](changeEvent, function() {
+    searchToggle["add" + EventListenerFn](changeEvent, function () {
       toggleHeader();
       if (this[checkedProp]) {
-        setTimeoutFn(function() {
+        setTimeoutFn(function () {
           documentObj[getElementByIdFn]("search-input").focus();
         }, 100);
       }
-      handleClickOutside(searchHeader, function() {
+      handleClickOutside(searchHeader, function () {
         searchToggle[checkedProp] = false;
         toggleHeader();
       });
@@ -442,14 +391,14 @@ var searchToggle = documentObj[getElementByIdFn]("search-toggle"),
   }
 
   if (navbarToggle) {
-    navbarToggle["add" + EventListenerFn](changeEvent, function() {
+    navbarToggle["add" + EventListenerFn](changeEvent, function () {
       toggleHeader();
       if (this[checkedProp]) {
         addClass(navbar, "d-block");
-        setTimeoutFn(function() {
+        setTimeoutFn(function () {
           addClass(navbar, "show");
         }, 100);
-        handleClickOutside(navbar, function() {
+        handleClickOutside(navbar, function () {
           navbarToggle[checkedProp] = false;
           toggleHeader();
           toggleClassWithTimeout(navbar, "show");
@@ -460,7 +409,7 @@ var searchToggle = documentObj[getElementByIdFn]("search-toggle"),
     });
   }
 
-  windowObj["add" + EventListenerFn](scrollEvent, function() {
+  windowObj["add" + EventListenerFn](scrollEvent, function () {
     (this[pageYOffsetProp] >= 1 && header !== null ? addClass : removeClass)(header, "shadow-sm");
     (this[pageYOffsetProp] >= 1000 && backToTop !== null ? removeClass : addClass)(backToTop, "d-none");
   }, false);
