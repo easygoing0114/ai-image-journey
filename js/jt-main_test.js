@@ -390,25 +390,6 @@ const jo = {};
     });
   }
 
-  if (navbarToggle) {
-    navbarToggle["add" + EventListenerFn](changeEvent, function () {
-      toggleHeader();
-      if (this[checkedProp]) {
-        addClass(navbar, "d-block");
-        setTimeoutFn(function () {
-          addClass(navbar, "show");
-        }, 100);
-        handleClickOutside(navbar, function () {
-          navbarToggle[checkedProp] = false;
-          toggleHeader();
-          toggleClassWithTimeout(navbar, "show");
-        });
-      } else {
-        toggleClassWithTimeout(navbar, "show");
-      }
-    });
-  }
-
   windowObj["add" + EventListenerFn](scrollEvent, function () {
     (this[pageYOffsetProp] >= 1 && header !== null ? addClass : removeClass)(header, "shadow-sm");
     (this[pageYOffsetProp] >= 1000 && backToTop !== null ? removeClass : addClass)(backToTop, "d-none");

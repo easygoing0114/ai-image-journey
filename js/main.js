@@ -54,201 +54,190 @@ function debounce(func, wait) {
 }
 
 /* header アニメーション */
-Defer(function () {
-  // スクロール位置を記録する変数
-  let lastScrollTop = 0;
-  const header = document.getElementById('header');
-  // スクロールの閾値（ビューポート高さの5% = 5svh相当）
-  const scrollThreshold = window.innerHeight * 0.03;
+// スクロール位置を記録する変数
+let lastScrollTop = 0;
+const header = document.getElementById('header');
+// スクロールの閾値
+const scrollThreshold = window.innerHeight * 0.03;
 
-  // debounce用のタイムアウトIDを保持
-  let showHeaderTimeout;
+// debounce用のタイムアウトIDを保持
+let showHeaderTimeout;
 
-  // ヘッダーを表示する処理（debounce適用）
-  function showHeader() {
+// ヘッダーを表示する処理
+function showHeader() {
+  clearTimeout(showHeaderTimeout);
+  showHeaderTimeout = setTimeout(function () {
+    header.classList.remove('header-move-up');
+    header.classList.add('header-move-down');
+  }, 200);
+}
+
+// スクロール処理の本体
+function handleScroll() {
+  const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+  // 上にスクロール（下方向に移動）
+  if (currentScroll > lastScrollTop && currentScroll > scrollThreshold) {
+    // 待機中のヘッダー表示をキャンセル
     clearTimeout(showHeaderTimeout);
-    showHeaderTimeout = setTimeout(function () {
-      header.classList.remove('header-move-up');
-      header.classList.add('header-move-down');
-    }, 300);
+    // ヘッダーを隠す（即座に実行）
+    header.classList.remove('header-move-down');
+    header.classList.add('header-move-up');
+  }
+  // 下にスクロール（上方向に移動）
+  else if (currentScroll < lastScrollTop) {
+    showHeader();
   }
 
-  // スクロール処理の本体
-  function handleScroll() {
-    const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+  lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+}
 
-    // 上にスクロール（下方向に移動）
-    if (currentScroll > lastScrollTop && currentScroll > scrollThreshold) {
-      // 待機中のヘッダー表示をキャンセル
-      clearTimeout(showHeaderTimeout);
-      // ヘッダーを隠す（即座に実行）
-      header.classList.remove('header-move-down');
-      header.classList.add('header-move-up');
-    }
-    // 下にスクロール（上方向に移動）
-    else if (currentScroll < lastScrollTop) {
-      // ヘッダーを表示（debounce適用）
-      showHeader();
-    }
+// スクロールイベントのリスナー
+window.addEventListener('scroll', handleScroll, false);
 
-    lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+// 要素取得（存在チェック付き）
+const headerSearchButton = document.getElementById('header-search-button');
+const headerSearchDropdown = document.getElementById('header-search-dropdown');
+const headerMenuButton = document.getElementById('header-menu-button');
+const navbarMenu = document.getElementById('navbar-menu');
+
+// 共通関数：自分はトグル、相手は強制非表示
+const toggleAndHideOther = (targetDropdown, otherDropdown) => {
+  targetDropdown.classList.toggle('dropdown-visible');
+  if (otherDropdown && otherDropdown.classList.contains('dropdown-visible')) {
+    otherDropdown.classList.remove('dropdown-visible');
   }
+};
 
-  // スクロールイベントのリスナー
-  window.addEventListener('scroll', handleScroll, false);
-}, 100);
+// 検索ボタンクリック
+if (headerSearchButton && headerSearchDropdown) {
+  headerSearchButton.addEventListener('click', function () {
+    toggleAndHideOther(headerSearchDropdown, navbarMenu);
+  });
+}
 
-Defer(function () {
-  // 要素取得（存在チェック付き）
-  const headerSearchButton = document.getElementById('header-search-button');
-  const headerSearchDropdown = document.getElementById('header-search-dropdown');
-  const headerMenuButton = document.getElementById('header-menu-button');
-  const navbarMenu = document.getElementById('navbar-menu');
+// メニューボタンクリック
+if (headerMenuButton && navbarMenu) {
+  headerMenuButton.addEventListener('click', function () {
+    toggleAndHideOther(navbarMenu, headerSearchDropdown);
+  });
+}
 
-  // 共通関数：自分はトグル、相手は強制非表示
-  const toggleAndHideOther = (targetDropdown, otherDropdown) => {
-    targetDropdown.classList.toggle('dropdown-visible');
-    if (otherDropdown && otherDropdown.classList.contains('dropdown-visible')) {
-      otherDropdown.classList.remove('dropdown-visible');
-    }
-  };
-
-  // 検索ボタンクリック
-  if (headerSearchButton && headerSearchDropdown) {
-    headerSearchButton.addEventListener('click', function () {
-      toggleAndHideOther(headerSearchDropdown, navbarMenu);
-    });
-  }
-
-  // メニューボタンクリック
-  if (headerMenuButton && navbarMenu) {
-    headerMenuButton.addEventListener('click', function () {
-      toggleAndHideOther(navbarMenu, headerSearchDropdown);
-    });
-  }
-
-  // === スクロール時に両方閉じる ===
-  let ticking = false;
-  const closeBothOnScroll = () => {
-    if (!ticking) {
-      requestAnimationFrame(() => {
-        headerSearchDropdown?.classList.remove('dropdown-visible');
-        navbarMenu?.classList.remove('dropdown-visible');
-        ticking = false;
-      });
-      ticking = true;
-    }
-  };
-
-  // スクロールイベント（パフォーマンス考慮：requestAnimationFrameで制御）
-  window.addEventListener('scroll', closeBothOnScroll, { passive: true });
-
-  // === （任意）ドキュメント全体クリックで閉じる ===
-  document.addEventListener('click', function (e) {
-    const isSearchClick = headerSearchButton?.contains(e.target) || headerSearchDropdown?.contains(e.target);
-    const isMenuClick = headerMenuButton?.contains(e.target) || navbarMenu?.contains(e.target);
-
-    if (!isSearchClick && !isMenuClick) {
+// === スクロール時に両方閉じる ===
+let ticking = false;
+const closeBothOnScroll = () => {
+  if (!ticking) {
+    requestAnimationFrame(() => {
       headerSearchDropdown?.classList.remove('dropdown-visible');
       navbarMenu?.classList.remove('dropdown-visible');
-    }
-  });
+      ticking = false;
+    });
+    ticking = true;
+  }
+};
 
-}, 100);
+// スクロールイベント（パフォーマンス考慮：requestAnimationFrameで制御）
+window.addEventListener('scroll', closeBothOnScroll, { passive: true });
+
+// === （任意）ドキュメント全体クリックで閉じる ===
+document.addEventListener('click', function (e) {
+  const isSearchClick = headerSearchButton?.contains(e.target) || headerSearchDropdown?.contains(e.target);
+  const isMenuClick = headerMenuButton?.contains(e.target) || navbarMenu?.contains(e.target);
+
+  if (!isSearchClick && !isMenuClick) {
+    headerSearchDropdown?.classList.remove('dropdown-visible');
+    navbarMenu?.classList.remove('dropdown-visible');
+  }
+});
 
 /* 外部リンクに新しいタブで開く属性追加 */
-Defer(function () {
-  const links = document.querySelectorAll('a');
-  const myDomain = 'ai-image-journey.com';
+const links = document.querySelectorAll('a');
+const myDomain = 'ai-image-journey.com';
 
-  links.forEach(link => {
-    const href = link.getAttribute('href');
-    if (href && !href.includes(myDomain) && !href.startsWith('/') && !href.startsWith('#')) {
-      link.setAttribute('target', '_blank');
-      link.setAttribute('rel', 'noopener noreferrer');
-    }
-  });
-}, 100);
+links.forEach(link => {
+  const href = link.getAttribute('href');
+  if (href && !href.includes(myDomain) && !href.startsWith('/') && !href.startsWith('#')) {
+    link.setAttribute('target', '_blank');
+    link.setAttribute('rel', 'noopener noreferrer');
+  }
+});
 
 /* DMCA バッジ */
-Defer(function () {
-  var dmcaLink = document.getElementById('dmcaLink');
-  if (dmcaLink && dmcaLink.href.indexOf('refurl') < 0) {
-    dmcaLink.href += (dmcaLink.href.indexOf('?') === -1 ? '?' : '&') + 'refurl=' + document.location;
-  }
-}, 100);
+var dmcaLink = document.getElementById('dmcaLink');
+if (dmcaLink && dmcaLink.href.indexOf('refurl') < 0) {
+  dmcaLink.href += (dmcaLink.href.indexOf('?') === -1 ? '?' : '&') + 'refurl=' + document.location;
+}
 
 /* dark-mode ボタン */
-Defer(function () {
-  var darkModeButtons = document.querySelectorAll(".toggle-dark-mode-btn");
+var darkModeButtons = document.querySelectorAll(".toggle-dark-mode-btn");
 
-  darkModeButtons.forEach(function (button) {
-    button.addEventListener("click", function () {
-      var isDarkMode = htmlElement.classList.contains("dark-mode");
-      var newTheme = isDarkMode ? 'light' : 'dark';
+darkModeButtons.forEach(function (button) {
+  button.addEventListener("click", function () {
+    var isDarkMode = htmlElement.classList.contains("dark-mode");
+    var newTheme = isDarkMode ? 'light' : 'dark';
 
-      applyTheme(newTheme);
+    applyTheme(newTheme);
 
-      // Chart.jsの色を更新
-      if (typeof updateAllChartColors === 'function') {
-        updateAllChartColors();
-      }
+    // Chart.jsの色を更新
+    if (typeof updateAllChartColors === 'function') {
+      updateAllChartColors();
+    }
 
-      // Mermaidチャートを再描画
-      if (typeof updateMermaidTheme === 'function') {
-        updateMermaidTheme(newTheme);
-      }
+    // Mermaidチャートを再描画
+    if (typeof updateMermaidTheme === 'function') {
+      updateMermaidTheme(newTheme);
+    }
 
-      // Blueskyの埋め込みテーマを更新
-      if (window.bluesky && typeof window.bluesky.updateThemes === 'function') {
-        window.bluesky.updateThemes();
-      }
+    // Blueskyの埋め込みテーマを更新
+    if (window.bluesky && typeof window.bluesky.updateThemes === 'function') {
+      window.bluesky.updateThemes();
+    }
 
-    });
   });
-}, 100);
+});
 
 // テキストエリアの高さ自動調整
 if (document.querySelector('textarea') !== null) {
-  Defer(function () {
 
-    function createAutoResizeTextarea() {
-      const textareas = document.querySelectorAll('textarea');
+  function createAutoResizeTextarea() {
+    const textareas = document.querySelectorAll('textarea');
 
-      textareas.forEach(textarea => {
-        function adjustHeight() {
-          textarea.style.height = 'auto';
-          textarea.style.height = Math.max(textarea.scrollHeight, 24) + 'px';
+    textareas.forEach(textarea => {
+      let isScheduled = false; // rAFが既にスケジュールされているかを管理
+
+      function adjustHeight() {
+        textarea.style.height = 'auto';
+        textarea.style.height = Math.max(textarea.scrollHeight, 24) + 'px';
+
+        isScheduled = false;
+      }
+
+      function scheduleAdjustHeight() {
+        if (!isScheduled) {
+          isScheduled = true;
+          // 次の描画フレーム直前で adjustHeight を実行
+          requestAnimationFrame(adjustHeight);
         }
+      }
 
-        adjustHeight();
+      // 初期ロード時に高さを設定
+      scheduleAdjustHeight();
 
-        // 全てのイベントを監視
-        ['input', 'paste', 'cut', 'keydown', 'keyup'].forEach(event => {
-          textarea.addEventListener(event, () => {
-            setTimeout(adjustHeight, 0);
-          });
-        });
-
-        // 定期的な値チェック（最も確実）
-        let lastValue = textarea.value;
-        const checkInterval = setInterval(() => {
-          if (textarea.value !== lastValue) {
-            lastValue = textarea.value;
-            adjustHeight();
-          }
-
-          // textareaが削除された場合はintervalをクリア
-          if (!document.contains(textarea)) {
-            clearInterval(checkInterval);
-          }
-        }, 50);
+      // イベント発生時に rAF に処理を委ねる
+      // rAF が既にスケジュールされていれば、不要な再スケジュールを防ぐ
+      ['input', 'paste', 'cut', 'keydown', 'keyup'].forEach(event => {
+        textarea.addEventListener(event, scheduleAdjustHeight);
       });
-    }
 
+    });
+  }
+
+  // DOMがロードされた後に実行
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', createAutoResizeTextarea);
+  } else {
     createAutoResizeTextarea();
-
-  }, 100);
+  }
 }
 
 /* リンクカードの作成 */
@@ -271,7 +260,12 @@ if (document.querySelector('.blogcard-auto') !== null) {
           'huggingface.co/bluepen5805/blue_pencil-xl': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/55619f31-4395-4e9b-a94d-208460a9f7d2/00494-20240623160056-880978405-30-5.jpeg',
           'huggingface.co/bluepen5805/noob_v_pencil-XL': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/5d4020ad-6777-4077-b53e-4432e9263d45/00000-20241211153415-1954655588-30-5.jpeg',
           'huggingface.co/zer0int': 'https://cdn-avatars.huggingface.co/v1/production/uploads/6490359a877fc29cb1b09451/b-oU9m0-ceQQ1tyt2G_pq.png',
-          'huggingface.co/easygoing0114': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjCVXA9lGHLmQZqpHFx_m1MEfgolO1f8ksTQfLJcHDa5-rH86NWJ-ufv4TgNOAPOMcFfIFEpqBzjV3xPRQ-85oKG-GWDI8zRiUku_ZFtVcOJACWm97gJH_PsadwGx9GujgPRu3RVtBY25qnG0UiTVBzOErzfsEI5Q0ZAnkzkp5odc7BAw/w400-e90-rw/Profile_image_20250824.png',
+          'huggingface.co/easygoing0114/HiDream_HQ-models': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgzPF0z6moB5p4_DSWEE4Rgxn2gAfXnLBfTTNUZksVbIOgZ8Zzv-kYczpyNmvguaadFKJVMS-Fn3RDT01njmbbmo0BdDR5ud7eoinBveD6AVJTXzT6LtuTn2eDoZvECnknSwafftBoebrBjD_MSpvKyswlwNeDumzpveAuOcYpJjDHLTg/w400-e90-rw/HiDream_I1-Dev_clear_anime_compare.png',
+          'huggingface.co/easygoing0114/easygoing0114/flan-t5-xxl-fused': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgcXz7nKUsCisd5moS160_QTJFK5JjGiY6blVSbMlfWgwhAuYYC0xVt3cema6WMQwFDPx8snM5jAdo5ftFGHOFVrJDDQuTmLCn5Zg5HX4_cO9vf4Nl58T04LDVQB8VIMWRnqZfAcSmfDxRKimxmzeRQH9cS7qbldoXOmBhUCnVXuAnWaw/w400-e90-rw/Flan-T5xxl_00020_.png',
+          'huggingface.co/easygoing0114/HiDream-I1-Dev_clear': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEji_XSe_Vz4JW98Whg3MRvpZprPRvVRZA_erQAYNsg9F8ptC2Jn_JMEb0-y6ZeZBJ96sV28fywJd11NQ5fH3zawPlcn0U6cVPd21en5xDCCGMFU3jtqSy7FFlPgFz416aTf-08DV9srkjv6aktdbSCq3IHGvVhGBwMtXIS11DXFzPfWcQ/w400-e90-rw/HiDream_clear_00012_.png',
+          'huggingface.co/easygoing0114/animagine-xl-4.0-opt-clear': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhq9am8PTLvZsx1SIV8haxgOtx6ZB7LmGQxIgJGxXy53a6Wcf7ftqN3ejWn_rF_keOQpxMsdlG98T3t2TvJbCYIwowCKtw5twxRS_gzWI10yICKwadeQ-wiarAhi2fUGPoRjohTZzLddenh9_DcG19gYyJFBCykLvFxUxvCoiiDVIgu5A/w400-e90-rw/Hitman1_close_up.png',
+          'huggingface.co/easygoing0114/anima_pencil-XL_clear': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi06BisvxgpRCqjurddi69g8DXd1u51WbRf7_cpFPQJf6aZM_arHXD7QE4cV2mTscWVeTpti0kZYOcy_YSEHKD-Ek-jb7T9FJpB8MuU2o5hUaxGWuS9SNFOb0uCABNNcKvJSUhqbBQ-QE4kfYCjPCZNQxZ-lNdmaHpK-JWFuDKinmbnZw/w400-e90-rw/anipen_clear_00186_.png',
+          'huggingface.co/easygoing0114/Qwen-Image-Edit-2509_clear': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg9hEIUyFPYL9zXXEAzP3xFi2l5F0dvgFjEdpayfPVYCvIC46fRvrUBD4VfAcAm7sLnc4Uqz3F42LD4Yw4__p0u2SZrVPKqn1d8pCXL-v-bxzOCbxoWfwIagDTgCFk5zLTACxWHkzfSiqAszB8XhJKZtyNzM4Rb9YJ5HhFm2FMqD9VILQ/w400-e90-rw/Qwen-Image-Edit-2509_clear_anime_kimono.png',
 
           // Civitai models
           'civitai.com/models/722776': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ff1638f0-0295-45e8-b038-d7f376f26873/ComfyUI_00023_.jpeg',
@@ -283,7 +277,9 @@ if (document.querySelector('.blogcard-auto') !== null) {
           'civitai.com/models/1188071': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/44382db0-b992-4058-b8b1-369a58cc2604/animagine-xl-4.0-opt.jpeg',
           'civitai.com/models/1356520': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgnwPTigmuL8PCTQ0LYH3psdmMJrjX5E6airywZe7ZAUqKzjscylMiyKIlCFx4K3p5Icx7vOb7pXDxohMMXChooPYvgadslw2qQs-N_qQD8cEW_haXr-rbLhUotCNHxUSIKkJ9JDmf8J3qMU6qjnt0S8R0sT0JG844K5bnm8Bc2Lip33T4/w400-e90-rw/Flux1_euler_Anime%20Illustration%20of%20%20A%20young%20girl%20holding%20a%20chalkboard%20that%20says%20flan%20t5%20and%20te-only.png',
           'civitai.com/models/2081436': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj4YTSY3VXkYyY3tukvgxw585ybaUXS0FTD8_1VWTo_nIIdBBL9Uk2Mr5ftwIOZLW6LL2Kd2YpZdXIYQ_wyLOOMSzZA38OgKpLoZ7EDSgOhX49vYeJzh08XGvoTb2H8z5_5aZGYFnFji3RrLWMs8M7pMtFOiffgYHOR8_U-42zBfdtivw/w400-e90-rw/HiDream_I1-Dev_clear_photoreal_compare.png',
-          'civitai.com/models/2110148': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEix1Z4fRSVlZ6sYPVo00fSFG16mokYEd9zLXK9wgCWOl56kOqE6Lhxrf55T9JRbT9zDpXwpEWRd-4Uw48-6AcGFvPAmdM82fXyJMSMUwShoOPaXeFxz4Yk-qnENi37oi9O2tA_1uIbgxTFRYP0lImzUNC98Kwjk02CuXHd1y82ojvxMog/w400-e90-rw/Upscale_Detailer_color_correct_00036_close_up.png'
+          'civitai.com/models/2110148': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEix1Z4fRSVlZ6sYPVo00fSFG16mokYEd9zLXK9wgCWOl56kOqE6Lhxrf55T9JRbT9zDpXwpEWRd-4Uw48-6AcGFvPAmdM82fXyJMSMUwShoOPaXeFxz4Yk-qnENi37oi9O2tA_1uIbgxTFRYP0lImzUNC98Kwjk02CuXHd1y82ojvxMog/w400-e90-rw/Upscale_Detailer_color_correct_00036_close_up.png',
+          'civitai.com/models/2130524': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiBWz6GckEdtrHg2vdLCq5T6yUfO305n0iTOUvp7I2xEHi5hXtLJwKgRk7FtK7Ulh_UXxMRJ2VPV8Hmq-8E4f6hpMgmVyCcSH7h4uUAPiyUIRzxqxMF8xfsOzeFbJC5fnoN4TwXNTghJIcR8x_0JsoqI7wgLWxSvzn81JZBcsHVjBZV3Q/w400-e90-rw/anipen_clear_00118_.png',
+          'civitai.com/models/2143257': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEheBuAqh9OA5Tfi9iB1XL6Q-yop8bxArkTYDdU3hhFM2cPjoOVdYtGLOHuzLbrheQtkJnVLk85Wti1a5mXGptBLJLK3HYXPWEWxEhq8vAVeYl8Yb8wZwHvVqlb_HZl7sccoiNI0_Vuq5_4z_0njJZO7GB-jyI8FHAaHck71m1cub1ChBg/w400-e90-rw/Qwen-Image_original_vae_photoreal_close_up.png',
         };
 
         // デフォルトのCivitai画像
@@ -481,8 +477,10 @@ if (document.querySelector('.blogcard-auto') !== null) {
   }, 200);
 }
 
-/* table の font-size と padding を画面の最大幅に合わせて変更 */
 if (document.querySelector('.table-responsive') !== null) {
+
+  // スケール調整処理の実行を rAF に委ねるためのフラグ
+  let isScheduled = false;
 
   function adjustTableScale() {
     var tables = document.querySelectorAll('.table-responsive table');
@@ -561,6 +559,7 @@ if (document.querySelector('.table-responsive') !== null) {
         var availableWidth = tableResponsiveWidth - totalBorderWidth - safetyMargin;
         var scale = availableWidth / originalTableWidth;
 
+        // DOM書き込み（スタイル適用）
         table.style.width = availableWidth + 'px';
         table.style.height = (originalTableHeight * scale) + totalBorderHeight + safetyMargin + 'px';
         table.querySelectorAll('th, td').forEach(function (cell) {
@@ -571,141 +570,22 @@ if (document.querySelector('.table-responsive') !== null) {
     });
   }
 
-  Defer(function () {
-    const debouncedAdjust = debounce(adjustTableScale, 100);
-    window.addEventListener('resize', debouncedAdjust);
-    debouncedAdjust(); // 初回実行
-  }, 100);
-}
-
-/* Aspect Ratio を調整 */
-if (document.querySelector('.ar1_1, .ar16_9, .ar9_16, .ar5_7, .ar7_5') !== null) {
-
-  // アスペクト比を調整するスクリプト
-  function resizeAspectRatios() {
-    // .ar1_1 クラスを持つすべての要素を取得（1:1 正方形）
-    const squareElements = document.querySelectorAll('.ar1_1');
-    squareElements.forEach(element => {
-      const actualWidth = element.offsetWidth;
-      // 子のiframe要素の高さを調整
-      const iframe = element.querySelector('iframe');
-      if (iframe) {
-        iframe.style.height = actualWidth + 'px';
-      }
-    });
-
-    // .ar16_9 クラスを持つすべての要素を取得（16:9 横長）
-    const wideElements = document.querySelectorAll('.ar16_9');
-    wideElements.forEach(element => {
-      const actualWidth = element.offsetWidth;
-      const height = Math.round(actualWidth * 9 / 16);
-      // 子のiframe要素の高さを調整
-      const iframe = element.querySelector('iframe');
-      if (iframe) {
-        iframe.style.height = height + 'px';
-      }
-    });
-
-    // .ar9_16 クラスを持つすべての要素を取得（9:16 縦長）
-    const tallElements = document.querySelectorAll('.ar9_16');
-    tallElements.forEach(element => {
-      const actualWidth = element.offsetWidth;
-      const height = Math.round(actualWidth * 16 / 9);
-      // 子のiframe要素の高さを調整
-      const iframe = element.querySelector('iframe');
-      if (iframe) {
-        iframe.style.height = height + 'px';
-      }
-    });
-
-    // .ar5_7 クラスを持つすべての要素を取得（1:√2 白銀比縦長）
-    const silverTallElements = document.querySelectorAll('.ar5_7');
-    silverTallElements.forEach(element => {
-      const actualWidth = element.offsetWidth;
-      const height = Math.round(actualWidth * Math.sqrt(2)); // √2 ≈ 1.4142
-      // 子のiframe要素の高さを調整
-      const iframe = element.querySelector('iframe');
-      if (iframe) {
-        iframe.style.height = height + 'px';
-      }
-    });
-
-    // .ar7_5 クラスを持つすべての要素を取得（√2:1 白銀比横長）
-    const silverWideElements = document.querySelectorAll('.ar7_5');
-    silverWideElements.forEach(element => {
-      const actualWidth = element.offsetWidth;
-      const height = Math.round(actualWidth / Math.sqrt(2)); // 1/√2 ≈ 0.7071
-      // 子のiframe要素の高さを調整
-      const iframe = element.querySelector('iframe');
-      if (iframe) {
-        iframe.style.height = height + 'px';
-      }
-    });
-  }
-
-  // debounce付きのリサイズハンドラーを作成
-  const debouncedResize = debounce(resizeAspectRatios, 100);
-
-  // 修正: ResizeObserver変数をスコープ外で宣言
-  let resizeObserver;
-
-  if (window.ResizeObserver) {
-    resizeObserver = new ResizeObserver(entries => {
-      entries.forEach(entry => {
-        const element = entry.target;
-        if (element.classList.contains('ar1_1')) {
-          const actualWidth = element.offsetWidth;
-          const iframe = element.querySelector('iframe');
-          if (iframe) {
-            iframe.style.height = actualWidth + 'px';
-          }
-        } else if (element.classList.contains('ar16_9')) {
-          const actualWidth = element.offsetWidth;
-          const height = Math.round(actualWidth * 9 / 16);
-          const iframe = element.querySelector('iframe');
-          if (iframe) {
-            iframe.style.height = height + 'px';
-          }
-        } else if (element.classList.contains('ar9_16')) {
-          const actualWidth = element.offsetWidth;
-          const height = Math.round(actualWidth * 16 / 9);
-          const iframe = element.querySelector('iframe');
-          if (iframe) {
-            iframe.style.height = height + 'px';
-          }
-        } else if (element.classList.contains('ar5_7')) {
-          const actualWidth = element.offsetWidth;
-          const height = Math.round(actualWidth * Math.sqrt(2)); // 白銀比縦長 1:√2
-          const iframe = element.querySelector('iframe');
-          if (iframe) {
-            iframe.style.height = height + 'px';
-          }
-        } else if (element.classList.contains('ar7_5')) {
-          const actualWidth = element.offsetWidth;
-          const height = Math.round(actualWidth / Math.sqrt(2)); // 白銀比横長 √2:1
-          const iframe = element.querySelector('iframe');
-          if (iframe) {
-            iframe.style.height = height + 'px';
-          }
-        }
-      });
-    });
-  }
-
-  Defer(function () {
-    // 初回実行
-    resizeAspectRatios();
-
-    // リサイズイベントリスナー追加
-    window.addEventListener('resize', debouncedResize);
-
-    // ResizeObserver で要素監視開始（存在する場合のみ）
-    if (resizeObserver) {
-      document.querySelectorAll('.ar1_1, .ar16_9, .ar9_16, .ar5_7, .ar7_5').forEach(element => {
-        resizeObserver.observe(element);
+  function scheduleAdjustTableScale() {
+    if (!isScheduled) {
+      isScheduled = true;
+      // 次の描画フレームの直前に adjustTableScale を実行
+      requestAnimationFrame(() => {
+        adjustTableScale();
+        isScheduled = false; // 処理完了後にフラグをリセット
       });
     }
-  }, 100);
+  }
+
+  const debouncedSchedule = debounce(scheduleAdjustTableScale, 100);
+
+  window.addEventListener('resize', debouncedSchedule);
+
+  scheduleAdjustTableScale();
 }
 
 /* loading="lazy" の順次解除 */
@@ -723,44 +603,39 @@ Defer(function () {
   });
 }, 100);
 
-/* Chart.js */
+/* Chart.js - requestAnimationFrame最適化版 */
 if (document.querySelector('.chartjs') !== null) {
   let chartsInitialized = false;
+  let rafId = null;
+  let resizeScheduled = false;
 
   function getCurrentThemeColor() {
     return getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color').trim();
   }
 
   function calculateDynamicPadding(specificContainer = null) {
-
-    // 特定のコンテナが指定されていない場合は最初のコンテナを使用
     const container = specificContainer || document.querySelector('.chartjs-container');
 
     if (!container) {
-      return 24; // デフォルト値
+      return 24;
     }
 
     const containerWidth = container.offsetWidth;
     const containerHeight = container.offsetHeight;
-
-    // アスペクト比を計算（幅/高さ）
     const aspectRatio = containerWidth / containerHeight;
 
-    // アスペクト比に応じて係数を選択
     let coefficient;
     if (aspectRatio >= 1) {
-      coefficient = 0.05; // 横長または正方形の場合
+      coefficient = 0.05;
     } else {
-      coefficient = 0.1;  // 縦長の場合
+      coefficient = 0.1;
     }
 
     const calculatedPadding = Math.round(containerWidth * coefficient);
-
     return calculatedPadding;
   }
 
   function findContainerForChart(canvas) {
-    // canvasの親要素を遡って.chartjs-containerを探す
     let parent = canvas.parentElement;
     while (parent && parent !== document.body) {
       if (parent.classList.contains('chartjs-container')) {
@@ -772,85 +647,64 @@ if (document.querySelector('.chartjs') !== null) {
   }
 
   function wrapChartjsCanvas() {
-    // すべての.chartjsクラスを持つcanvas要素を取得
     const canvases = document.querySelectorAll('canvas.chartjs');
 
     canvases.forEach(canvas => {
-      // 既にラッパーで囲まれているかチェック
       if (canvas.parentElement && canvas.parentElement.classList.contains('chartjs-wrapper')) {
-        return; // 既にラップされている場合はスキップ
+        return;
       }
 
-      // 新しいdiv要素を作成
       const wrapper = document.createElement('div');
       wrapper.classList.add('chartjs-wrapper');
 
-      // canvasの親要素にwrapperを挿入し、canvasをwrapperの中に移動
       canvas.parentNode.insertBefore(wrapper, canvas);
       wrapper.appendChild(canvas);
     });
   }
 
   function updateChartPadding() {
+    Object.values(Chart.instances).forEach(chart => {
+      const container = findContainerForChart(chart.canvas);
+      if (!container) return;
 
-    // 既存のチャートのpaddingを個別に更新
-    const chartInstances = Object.values(Chart.instances);
+      const newPadding = calculateDynamicPadding(container);
 
-    chartInstances.forEach(function (chart, index) {
-
-      // このチャートに対応するコンテナを見つける
-      const canvas = chart.canvas;
-      const container = findContainerForChart(canvas);
-
-      if (container) {
-        const newPadding = calculateDynamicPadding(container);
-
-        if (chart.options.layout) {
-          chart.options.layout.padding = newPadding;
-        } else {
-          chart.options.layout = { padding: newPadding };
-        }
-
-        chart.update('none');
+      if (!chart.options.layout) {
+        chart.options.layout = {};
       }
+      chart.options.layout.padding = newPadding;
+      chart.update('none');
     });
   }
 
   function updateAllChartColors() {
     const currentColor = getCurrentThemeColor();
     Chart.defaults.color = currentColor;
-    Object.values(Chart.instances).forEach(function (chart) {
+
+    Object.values(Chart.instances).forEach(chart => {
       if (chart.options.scales) {
-        Object.keys(chart.options.scales).forEach(function (scaleKey) {
-          // 軸のティックの色
-          if (chart.options.scales[scaleKey].ticks) {
-            chart.options.scales[scaleKey].ticks.color = currentColor;
-          }
-          // 軸ラベルの色
-          if (chart.options.scales[scaleKey].title) {
-            chart.options.scales[scaleKey].title.color = currentColor;
-          }
+        Object.keys(chart.options.scales).forEach(scaleKey => {
+          const scale = chart.options.scales[scaleKey];
+          if (scale.ticks) scale.ticks.color = currentColor;
+          if (scale.title) scale.title.color = currentColor;
         });
       }
-      if (chart.options.plugins && chart.options.plugins.legend && chart.options.plugins.legend.labels) {
-        chart.options.plugins.legend.labels.color = currentColor;
+
+      const plugins = chart.options.plugins;
+      if (plugins) {
+        if (plugins.legend?.labels) plugins.legend.labels.color = currentColor;
+        if (plugins.title) plugins.title.color = currentColor;
+        if (plugins.datalabels) plugins.datalabels.color = currentColor;
       }
-      if (chart.options.plugins && chart.options.plugins.title) {
-        chart.options.plugins.title.color = currentColor;
-      }
-      if (chart.options.plugins && chart.options.plugins.datalabels) {
-        chart.options.plugins.datalabels.color = currentColor;
-      }
+
       chart.update('none');
     });
   }
 
   function createAllCharts() {
-    // Get all canvas elements with class 'chartjs'
     const canvases = document.querySelectorAll('.chartjs');
 
     canvases.forEach((canvas, index) => {
-      // Call createChartN function where N is index + 1
       const funcName = `createChart${index + 1}`;
       if (typeof window[funcName] === 'function') {
         window[funcName]();
@@ -859,80 +713,72 @@ if (document.querySelector('.chartjs') !== null) {
   }
 
   function applyIndividualPadding() {
+    Object.values(Chart.instances).forEach(chart => {
+      const container = findContainerForChart(chart.canvas);
+      if (!container) return;
 
-    // 作成されたチャートに対して個別のパディングを適用
-    const chartInstances = Object.values(Chart.instances);
+      const padding = calculateDynamicPadding(container);
 
-    chartInstances.forEach(function (chart, index) {
-
-      const canvas = chart.canvas;
-      const container = findContainerForChart(canvas);
-
-      if (container) {
-        const padding = calculateDynamicPadding(container);
-
-        if (chart.options.layout) {
-          chart.options.layout.padding = padding;
-        } else {
-          chart.options.layout = { padding: padding };
-        }
-
-        chart.update('none');
+      if (!chart.options.layout) {
+        chart.options.layout = {};
       }
+      chart.options.layout.padding = padding;
+      chart.update('none');
     });
   }
 
   function initializeCharts() {
-
-    // Canvas要素をdivで囲む処理を最初に実行
     wrapChartjsCanvas();
 
-    // 初回のみChart.jsの設定を行う
     if (!chartsInitialized) {
       Chart.register(ChartDataLabels);
-
-      // デフォルトのパディングは最小値に設定（個別で上書きする）
       Chart.defaults.layout.padding = 24;
       chartsInitialized = true;
     }
 
-    // チャート作成
     createAllCharts();
-
-    // 各チャートに個別のパディングを適用
     applyIndividualPadding();
-
-    // テーマカラーの適用
     updateAllChartColors();
 
-    // Canvas要素のサイズ設定
-    document.querySelectorAll('.chartjs').forEach(canvas => {
-      canvas.style.width = 'auto';
-      canvas.style.height = 'auto';
+    // requestAnimationFrameでCanvas要素のサイズ設定を最適化
+    requestAnimationFrame(() => {
+      document.querySelectorAll('.chartjs').forEach(canvas => {
+        canvas.style.width = 'auto';
+        canvas.style.height = 'auto';
+      });
     });
   }
 
+  // リサイズ処理をrequestAnimationFrameで最適化
   function handleResize() {
-    // リサイズ時は個別のpaddingとチャートの色を更新
-    updateChartPadding();
-    updateAllChartColors();
+    if (resizeScheduled) return;
 
-    // Chart.jsの内蔵リサイズ機能を使用（より効率的）
-    Object.values(Chart.instances).forEach(chart => {
-      chart.resize();
-    });
+    resizeScheduled = true;
 
-    // Canvas要素のサイズ設定を再適用
-    document.querySelectorAll('.chartjs').forEach(canvas => {
-      canvas.style.width = 'auto';
-      canvas.style.height = 'auto';
+    if (rafId !== null) {
+      cancelAnimationFrame(rafId);
+    }
+
+    rafId = requestAnimationFrame(() => {
+      updateChartPadding();
+      updateAllChartColors();
+
+      Object.values(Chart.instances).forEach(chart => chart.resize());
+
+      document.querySelectorAll('.chartjs').forEach(canvas => {
+        canvas.style.width = 'auto';
+        canvas.style.height = 'auto';
+      });
+
+      resizeScheduled = false;
+      rafId = null;
     });
   }
 
   Defer(function () {
     const debouncedResize = debounce(handleResize, 100);
     window.addEventListener('resize', debouncedResize);
-    initializeCharts(); // 初回実行
+    initializeCharts();
   }, 1500);
 }
 
@@ -945,193 +791,147 @@ if (document.querySelector('.language-mermaid') !== null) {
   });
 
   const isDarkMode = document.documentElement.classList.contains('dark-mode');
-
-  // gantt チャートの最新日付を更新
-  // 今日の日付を取得 (YYYY-MM-DD形式)
   const today = new Date().toISOString().split('T')[0];
 
-  // 最新の日付を検出する関数
+  // ユーティリティ関数（変更なし）
   function findLatestDate(code) {
     const dateRegex = /\d{4}-\d{2}-\d{2}/g;
     const dates = code.match(dateRegex);
     if (!dates) return null;
-
-    // 日付を比較して最新の日付を見つける
     return dates.reduce((latest, current) => {
       return new Date(current) > new Date(latest) ? current : latest;
     }, dates[0]);
   }
-
-  // 最新の日付を今日の日付に置換
   function replaceLatestDate(code, latestDate, newDate) {
     const regex = new RegExp(latestDate, 'g');
     return code.replace(regex, newDate);
   }
-
-  // Mermaidコードを検出して処理
-  function updateMermaidGanttCharts() {
-    const mermaidElements = document.querySelectorAll('.language-mermaid');
-
-    mermaidElements.forEach((element) => {
-      const code = element.textContent;
-
-      if (code.includes('gantt')) {
-        const latestDate = findLatestDate(code);
-        if (latestDate) {
-          const updatedCode = replaceLatestDate(code, latestDate, today);
-          element.textContent = updatedCode;
-
-          if (typeof mermaid !== 'undefined') {
-            mermaid.init(undefined, element);
-          }
-        }
-      }
-    });
-  }
-
-  updateMermaidGanttCharts()
 
   // 初回変換前に.language-mermaidの内容を保存する関数
   function preserveMermaidSource() {
     const languageMermaidElements = document.querySelectorAll('.language-mermaid');
 
     languageMermaidElements.forEach(function (element) {
-      // 既にコピーが存在する場合はスキップ
       if (element.nextElementSibling && element.nextElementSibling.classList.contains('language-mermaid-copy')) {
         return;
       }
 
-      // .language-mermaid-copyを作成
+      const originalCode = element.textContent.trim();
+
+      // ★修正: copyElementには日付更新前のオリジナルコードを保存★
       const copyElement = document.createElement('code');
       copyElement.className = 'language-mermaid-copy';
       copyElement.style.display = 'none';
-      copyElement.textContent = element.textContent;
+      copyElement.textContent = originalCode;
 
-      // 元の要素の直後に挿入
       element.parentNode.insertBefore(copyElement, element.nextSibling);
+
+      // DOM上の要素は、初回描画のためにGanttの日付を更新
+      if (originalCode.includes('gantt')) {
+        const latestDate = findLatestDate(originalCode);
+        if (latestDate) {
+          element.textContent = replaceLatestDate(originalCode, latestDate, today);
+        }
+      }
     });
   }
 
-  // Mermaidソースを保存
   preserveMermaidSource();
 
-  // Mermaidチャートのテーマ更新機能（グローバル関数として定義）
   window.updateMermaidTheme = function (theme) {
+    if (typeof mermaid === 'undefined') return;
+
+    const mermaidElements = document.querySelectorAll('.language-mermaid');
+    if (mermaidElements.length === 0) return;
+
     try {
-      const mermaidElements = document.querySelectorAll('.language-mermaid');
-
-      if (mermaidElements.length === 0) {
-        return;
-      }
-
       // 既存のSVG要素をすべて削除
       document.querySelectorAll('.language-mermaid svg').forEach(svg => {
         svg.remove();
       });
 
-      // テーマに応じた設定
+      // テーマに応じた設定と初期化
       const mermaidConfig = {
         startOnLoad: false,
         theme: theme === 'dark' ? 'dark' : 'default'
       };
-
       if (typeof mermaid.initialize === 'function') {
         mermaid.initialize(mermaidConfig);
       }
 
-      // 各Mermaidチャートを再描画（順次処理）
-      const processChart = function (index) {
-        if (index >= mermaidElements.length) {
-          return;
-        }
+      // 描画処理を requestAnimationFrame でスケジュール
+      requestAnimationFrame(() => {
 
-        const element = mermaidElements[index];
+        const processChart = function (index) {
+          if (index >= mermaidElements.length) return;
 
-        // 対応する.language-mermaid-copyからソースコードを取得
-        let copyElement = null;
+          const element = mermaidElements[index];
 
-        if (element.previousElementSibling && element.previousElementSibling.classList.contains('language-mermaid-copy')) {
-          copyElement = element.previousElementSibling;
-        } else if (element.nextElementSibling && element.nextElementSibling.classList.contains('language-mermaid-copy')) {
-          copyElement = element.nextElementSibling;
-        }
-
-        if (!copyElement) {
-          processChart(index + 1);
-          return;
-        }
-
-        // 親要素を取得（.mermaid-chartのfigure要素）
-        const parentFigure = element.closest('.mermaid-chart');
-
-        if (parentFigure) {
-          const computedStyle = window.getComputedStyle(parentFigure);
-
-          // 現在の計算されたサイズを親要素に適用
-          parentFigure.style.width = computedStyle.width;
-          parentFigure.style.height = computedStyle.height;
-        }
-
-        // 保存されたソースコードを取得
-        const originalCode = copyElement.textContent.trim();
-        let updatedCode = originalCode;
-
-        // Ganttチャートの場合は日付を更新
-        if (originalCode.includes('gantt')) {
-          const latestDate = findLatestDate(originalCode);
-          if (latestDate) {
-            updatedCode = replaceLatestDate(originalCode, latestDate, today);
+          // ★修正: 常にオリジナルコードが保存された copyElement からソースを取得
+          let copyElement = element.nextElementSibling;
+          if (!copyElement || !copyElement.classList.contains('language-mermaid-copy')) {
+            copyElement = element.previousElementSibling;
           }
-        }
+          if (!copyElement || !copyElement.classList.contains('language-mermaid-copy')) {
+            processChart(index + 1); // ソースが見つからなければスキップ
+            return;
+          }
 
-        // 要素をクリアして準備
-        element.innerHTML = '';
-        element.textContent = updatedCode;
-        element.removeAttribute('data-processed');
+          let updatedCode = copyElement.textContent.trim(); // オリジナルコードからスタート
 
-        // 一意のIDを生成して設定
-        const uniqueId = 'mermaid-' + Date.now() + '-' + index;
-        element.id = uniqueId;
+          // 親要素のサイズ保存 (元のロジックを維持)
+          const parentFigure = element.closest('.mermaid-chart');
+          if (parentFigure) {
+            const computedStyle = window.getComputedStyle(parentFigure);
+            parentFigure.style.width = computedStyle.width;
+            parentFigure.style.height = computedStyle.height;
+          }
 
-        // 描画完了後の後処理関数
-        const onRenderComplete = function () {
-          // 親要素のサイズを元に戻す（元々設定されていなかった場合は削除）
-          parentFigure.style.removeProperty('width');
-          parentFigure.style.removeProperty('height');
+          // ★Ganttチャートの場合のみ、オリジナルのソースに対して日付更新を適用
+          if (updatedCode.includes('gantt')) {
+            const latestDate = findLatestDate(updatedCode);
+            if (latestDate) {
+              updatedCode = replaceLatestDate(updatedCode, latestDate, today);
+            }
+          }
 
-          processChart(index + 1);
-        };
+          // 要素をクリアし、更新されたコードを設定
+          element.innerHTML = '';
+          element.textContent = updatedCode;
+          element.removeAttribute('data-processed');
 
-        try {
-          // Mermaidバージョンに応じた描画方法を選択
+          const uniqueId = 'mermaid-' + Date.now() + '-' + index;
+          element.id = uniqueId;
+
+          const onRenderComplete = function () {
+            // 親要素のサイズを元に戻す
+            if (parentFigure) {
+              parentFigure.style.removeProperty('width');
+              parentFigure.style.removeProperty('height');
+            }
+            processChart(index + 1);
+          };
+
+          // Mermaidの描画実行 (非同期)
           if (typeof mermaid.run === 'function') {
-            mermaid.run({
-              nodes: [element],
-              suppressErrors: false
-            }).then(function () {
-              onRenderComplete();
-            }).catch(function (error) {
-              onRenderComplete();
-            });
+            mermaid.run({ nodes: [element] }).then(onRenderComplete).catch(onRenderComplete);
           } else if (typeof mermaid.render === 'function') {
             mermaid.render(uniqueId + '-svg', updatedCode).then(function (result) {
               element.innerHTML = result.svg;
               onRenderComplete();
-            }).catch(function (error) {
-              onRenderComplete();
-            });
+            }).catch(onRenderComplete);
           } else {
             onRenderComplete();
           }
-        } catch (error) {
-          onRenderComplete();
-        }
-      };
+        };
 
-      // 最初のチャートから処理開始
-      processChart(0);
+        // 最初のチャートから処理開始
+        processChart(0);
+      }); // requestAnimationFrame 終了
 
     } catch (error) {
+      console.error('Mermaid theme update error:', error);
+      // エラー時の処理は維持
       if (confirm('チャートのテーマ更新でエラーが発生しました。ページを再読み込みしますか？')) {
         window.location.reload();
       }
@@ -1139,12 +939,15 @@ if (document.querySelector('.language-mermaid') !== null) {
   };
 
   Defer(function () {
+    if (typeof mermaid === 'undefined') return;
 
+    // 初回描画時の設定
     mermaid.initialize({
       startOnLoad: false,
       theme: isDarkMode ? 'dark' : 'default',
     });
 
+    // 日付更新済みのDOMコードを使って描画を実行
     mermaid.run();
 
   }, 1500);
