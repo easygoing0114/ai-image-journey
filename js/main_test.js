@@ -807,10 +807,6 @@ if (document.querySelector('.language-mermaid') !== null) {
     return code.replace(regex, newDate);
   }
 
-  // -------------------------------------------------------------------
-  // 初期化ロジックの修正
-  // -------------------------------------------------------------------
-
   // 初回変換前に.language-mermaidの内容を保存する関数
   function preserveMermaidSource() {
     const languageMermaidElements = document.querySelectorAll('.language-mermaid');
@@ -840,13 +836,7 @@ if (document.querySelector('.language-mermaid') !== null) {
     });
   }
 
-  // DOM更新とソース保存
   preserveMermaidSource();
-
-
-  // -------------------------------------------------------------------
-  // テーマ更新ロジックの修正 (rAF + 信頼できるソースからの描画)
-  // -------------------------------------------------------------------
 
   window.updateMermaidTheme = function (theme) {
     if (typeof mermaid === 'undefined') return;
@@ -947,10 +937,6 @@ if (document.querySelector('.language-mermaid') !== null) {
       }
     }
   };
-
-  // -------------------------------------------------------------------
-  // 初回描画実行ロジック (Defer.js 維持)
-  // -------------------------------------------------------------------
 
   Defer(function () {
     if (typeof mermaid === 'undefined') return;
