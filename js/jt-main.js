@@ -112,20 +112,6 @@ const jo = {};
     element[classNameProp] = element[classNameProp][replaceFn](new RegExpObj("(?:^|\\s)" + className + "(?!\\S)"), "")[trimFn]();
   }
 
-  function toggleClassWithTimeout(element, className, timeout) {
-    removeClass(element, className);
-    setTimeoutFn(function () {
-      removeClass(element, "d-block");
-    }, timeout || 300);
-  }
-
-  function arrayIncludes(array, item) {
-    for (var i = 0; i < array[lengthProp]; i++) {
-      if (array[i] === item) return true;
-    }
-    return false;
-  }
-
   function getQueryParam(param, url) {
     var regex = new RegExpObj("[?&]" + param + "=([^&#=]*)");
     return regex.test(url) ? url[matchFn](regex)[1] : false;
@@ -152,10 +138,7 @@ const jo = {};
   });
 
   // ヘッダー制御の修正版
-  var searchToggle = documentObj[getElementByIdFn]("search-toggle"),
-    searchHeader = documentObj[getElementByIdFn]("search-header"),
-    navbarToggle = documentObj[getElementByIdFn]("navbar-toggle"),
-    navbar = documentObj[getElementByIdFn]("navbar"),
+  var
     backToTop = documentObj[getElementByIdFn]("back-to-top"),
     adsPost = documentObj[getElementByIdFn]("ads-post"),
     postBody = documentObj[getElementByIdFn]("post-body"),
@@ -358,59 +341,7 @@ const jo = {};
     };
   };
 
-  function toggleHeader() {
-    (searchToggle && searchToggle[checkedProp] || navbarToggle && navbarToggle[checkedProp] ? removeClass : addClass)(header, "header-animate");
-  }
-
-  function handleClickOutside(container, callback) {
-    function clickHandler(e) {
-      if (!container.contains(e[targetProp])) {
-        callback();
-        removeClickHandler();
-      }
-    }
-    function removeClickHandler() {
-      documentObj[removeFn + EventListenerFn](clickEvent, clickHandler);
-    }
-    documentObj["add" + EventListenerFn](clickEvent, clickHandler);
-  }
-
-  if (searchToggle) {
-    searchToggle["add" + EventListenerFn](changeEvent, function () {
-      toggleHeader();
-      if (this[checkedProp]) {
-        setTimeoutFn(function () {
-          documentObj[getElementByIdFn]("search-input").focus();
-        }, 100);
-      }
-      handleClickOutside(searchHeader, function () {
-        searchToggle[checkedProp] = false;
-        toggleHeader();
-      });
-    });
-  }
-
-  if (navbarToggle) {
-    navbarToggle["add" + EventListenerFn](changeEvent, function () {
-      toggleHeader();
-      if (this[checkedProp]) {
-        addClass(navbar, "d-block");
-        setTimeoutFn(function () {
-          addClass(navbar, "show");
-        }, 100);
-        handleClickOutside(navbar, function () {
-          navbarToggle[checkedProp] = false;
-          toggleHeader();
-          toggleClassWithTimeout(navbar, "show");
-        });
-      } else {
-        toggleClassWithTimeout(navbar, "show");
-      }
-    });
-  }
-
   windowObj["add" + EventListenerFn](scrollEvent, function () {
-    (this[pageYOffsetProp] >= 1 && header !== null ? addClass : removeClass)(header, "shadow-sm");
     (this[pageYOffsetProp] >= 1000 && backToTop !== null ? removeClass : addClass)(backToTop, "d-none");
   }, false);
 
