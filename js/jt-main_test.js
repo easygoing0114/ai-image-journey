@@ -112,14 +112,6 @@ const jo = {};
     return regex.test(url) ? url[matchFn](regex)[1] : false;
   }
 
-  function parseJSON(jsonStr) {
-    try {
-      return JSONObj.parse(jsonStr);
-    } catch (e) {
-      return false;
-    }
-  }
-
   function checkWebpSupport(callback) {
     var img = new ImageObj();
     img.onload = img.onerror = function () {
