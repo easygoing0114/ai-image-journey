@@ -18,8 +18,6 @@ const jo = {};
 (function () {
   var windowObj = window,
     documentObj = document,
-    setTimeoutFn = setTimeout,
-    clearTimeoutFn = clearTimeout,
     DateObj = Date,
     MathObj = Math,
     parseIntFn = parseInt,
