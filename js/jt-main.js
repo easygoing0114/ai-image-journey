@@ -9,7 +9,7 @@ function related_inline_temp(e) {
 
 function sidebar_temp(e) {
   return (e.title ? "<div class='widget-title'><span class='item-title-text'>" + e.title + "</span></div>" : "") + "<div class='item-post-base'>" + e.posts.map(function (data, i) {
-    return "<div class='item-post'><a class='item-post-link' href='" + data.url + "'>" + (data.img ? "<div class='item-thumbnail'><img alt='" + data.title + "' class='object-cover thumbnail-img lazy-" + data.grup_id + " lazyload' data-src='" + data.img + "' loading='lazy' src='data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='/></div>" : "") + "<div class='item-content'><h3 class='item-title' itemprop='headline'><span href='" + data.url + "'>" + data.title + "</span></h3><div class='item-meta '><span class='post-date'><svg aria-hidden='true' class='jt-icon'><use xlink:href='#i-clock'/></svg>" + data.date + "</span></div></div></a></div>";
+    return "<div class='item-post'><a class='item-post-link' href='" + data.url + "'>" + (data.img ? "<div class='item-thumbnail'><img alt='" + data.title + "' class='object-cover thumbnail-img lazy-" + data.grup_id + " lazyload' data-src='" + data.img + "' loading='lazy' src='data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='/></div>" : "") + "<div class='item-content'><h3 class='item-title' itemprop='headline'><span href='" + data.url + "'>" + data.title + "</span></h3></div></a></div>";
   }).join("") + "</div>";
 }
 
@@ -18,8 +18,6 @@ const jo = {};
 (function () {
   var windowObj = window,
     documentObj = document,
-    setTimeoutFn = setTimeout,
-    clearTimeoutFn = clearTimeout,
     DateObj = Date,
     MathObj = Math,
     parseIntFn = parseInt,
@@ -44,13 +42,11 @@ const jo = {};
     sliceFn = "slice",
     pushFn = "push",
     AttributeFn = "Attribute",
-    checkedProp = "checked",
     pageYOffsetProp = "pageYOffset",
     appendChildFn = "appendChild",
     insertBeforeFn = "insertBefore",
     matchFn = "match",
     hrefProp = "href",
-    targetProp = "target",
     locationProp = "location",
     splitFn = "split",
     trimFn = "trim",
@@ -73,7 +69,6 @@ const jo = {};
     clickEvent = "click",
     mousemoveEvent = "mousemove",
     touchstartEvent = "touchstart",
-    changeEvent = "change",
     undefinedStr = "undefined",
     functionStr = "function",
     contentTypeHeader = "Content-Type",
@@ -115,14 +110,6 @@ const jo = {};
   function getQueryParam(param, url) {
     var regex = new RegExpObj("[?&]" + param + "=([^&#=]*)");
     return regex.test(url) ? url[matchFn](regex)[1] : false;
-  }
-
-  function parseJSON(jsonStr) {
-    try {
-      return JSONObj.parse(jsonStr);
-    } catch (e) {
-      return false;
-    }
   }
 
   function checkWebpSupport(callback) {

@@ -203,7 +203,7 @@ if (document.querySelector('textarea') !== null) {
     const textareas = document.querySelectorAll('textarea');
 
     textareas.forEach(textarea => {
-      let isScheduled = false;
+      let isScheduled = false; // rAFが既にスケジュールされているかを管理
 
       function adjustHeight() {
         textarea.style.height = 'auto';
@@ -215,12 +215,16 @@ if (document.querySelector('textarea') !== null) {
       function scheduleAdjustHeight() {
         if (!isScheduled) {
           isScheduled = true;
+          // 次の描画フレーム直前で adjustHeight を実行
           requestAnimationFrame(adjustHeight);
         }
       }
 
+      // 初期ロード時に高さを設定
       scheduleAdjustHeight();
 
+      // イベント発生時に rAF に処理を委ねる
+      // rAF が既にスケジュールされていれば、不要な再スケジュールを防ぐ
       ['input', 'paste', 'cut', 'keydown', 'keyup'].forEach(event => {
         textarea.addEventListener(event, scheduleAdjustHeight);
       });
@@ -265,6 +269,7 @@ if (document.querySelector('.blogcard-auto') !== null) {
           'huggingface.co/easygoing0114/mellow_pencil-XL_clear': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi4LiAxXCKnjrgG-uAWE2QEqdxd7WokhSETWAoz-WVpDXX0EP9UaHuAqWwOZjV53FMdn6kJwbVGcsc6ZOErzA-4TGnj5hKeHge5E-xecyJdcRY9kO4tqoFn9DOANBQVHi5dLlRHrNSHNHZNQKByAGNOtx85cR04J05rcSQgAzt30Diw6A/w400-e90-rw/mellow_pencil-XL-v1.0.0-base_clear_upscale_square4.png',
           'huggingface.co/easygoing0114/Z-Image_clear_vae': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh_RktUvKxwH_tr3WsKf_SrOXe2ZOwYlrL8dk69e_TBI3fKU6kNA1dKtroSUZQfo11uS-vZOZkdyGfJEB35nGTh1qDJZ_L6Zkb0rGQaf9oiDO1bpi-Q5vYJ0_1FAEYf9LNG80MSHWOk9ouIcQBzrIetcjNyZz6vNSFHV6M-UCBqSPQLag/w400-e90-rw/Z-Image-Turbo_clear_vivid_vae_photo.png',
           'huggingface.co/easygoing0114/Z-Image-Turbo_clear': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjbRZWjOvWuNSND5imJe4tTbU2-v5JkDfbQIkxHJr7RoockZXZnzqF0uUQxK8U-LpBZwtVjAP7UeNS9-w7xZgkXR7DDhSXZ319Fcb9WKH-7o_B6p30A05mhVhBq31xJa4iwCn9myfZ_EBL01HCz65x6-m7CCMTua2uciASEDEmZfWhgYw/w400-e90-rw/Z-Image-Turbo_FP32_clear_vivid_vae_photoreal.png',
+          'huggingface.co/easygoing0114/animagine-xl-3.0_clear': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjHyjrGmoBb0ZeYgIuCJJouC3iUYvOROj-HSGQXUb8jT8kOoR6aCYVp_NCdHFoidd_Cor_xOfFIsnShe1-4g6SxuXH5bfkq0H3gUDqw2Hl986GQ_s0-vp5LiIXWmIJ4FhwDs95iHito6rBSjeTGuCMrTo2nV52-AUqwUTU7iqbczh2M6w/w400-e90-rw/a%20female%20animated%20character%20with%20blue%20hair%20and%20blue%20eyes%20wears%20a%20black%20outfit%20with%20gold%20embellishments%20and%20a%20fur%20collar%20square.png',
 
           // Civitai models
           'civitai.com/models/722776': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ff1638f0-0295-45e8-b038-d7f376f26873/ComfyUI_00023_.jpeg',
@@ -282,6 +287,7 @@ if (document.querySelector('.blogcard-auto') !== null) {
           'civitai.com/models/2177495': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiVYD44mmA9L2NhhMhad3uIl0mrwxI0SOstiiM_MqHdzhGdU7XAL44K2atvl_HPsF2J99WqXDRxVsvmeC0yVYrY0Y5nctlVc-SRCnJ-sSBnz93TN6KeXvFbvCBJg3ES4sea9cwMR8YvHvA2xmVxZnmxAmzduoVWqP_GQT3IA7xblH2R0w/w400-e90-rw/A%20little%20girl%20happy%20riding%20a%20sled.png',
           'civitai.com/models/2191617': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhsr_6FK-zahN4VT6pWn_xf_RGizw5EqwTFMvfpVMBIwJlnD6SaxfyO73K5AulFuy7ybGdlAT0uYv0QIhyphenhyphen6VODD7rOqZx1JxXfoBnsqva9z4R0zOZcEKAQeCKjqrM5T0Yl3nisKhkeZ73TCnKjn7iQDR74AGC8l0Kwyqle-F6ITPp56-Q/w400-e90-rw/Z-Image-Turbo_clear_vivid_vae_upscale_2.png',
           'civitai.com/models/2197598': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhyu8Mmv6ABAr0ggVhdlck5Ybs_SbtIgmGuShggKoyO72Pn6nvMNCWI2h3v7E1s6_E9TizS6XL4CQPFHPFtWb6-kVRRIJiU0lSLna946PHlSnzUvEAunQUIdLxwzH1AAwo8qKrJNHlyBE_jE3UP0oadgVsg55EEhGe2fobGyZ6vro269g/w400-e90-rw/Z-Image-Turbo_FP32_clear_vivid_vae_anime.png',
+          'civitai.com/models/2197598': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEicmkPXX7yy9v0QMgFiVRaMnVFlfPvqBnWApSAhixws4F0SX0XY83kZMDB0rV3_qrnokrfSycSuaBQSJkESITwYdZMYmXM7NI8VN4dXdvD9r0b__WXUU7tLSBVBb7vOekPXZaZq7odGRRv6ZG7HPi_Ya1N-ngZuXXmFqIXFlHClh96Mqg/w400-e90-rw/Chef%20square.png',
         };
 
         // デフォルトのCivitai画像
