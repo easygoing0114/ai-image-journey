@@ -287,7 +287,7 @@ if (document.querySelector('.blogcard-auto') !== null) {
           'civitai.com/models/2177495': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiVYD44mmA9L2NhhMhad3uIl0mrwxI0SOstiiM_MqHdzhGdU7XAL44K2atvl_HPsF2J99WqXDRxVsvmeC0yVYrY0Y5nctlVc-SRCnJ-sSBnz93TN6KeXvFbvCBJg3ES4sea9cwMR8YvHvA2xmVxZnmxAmzduoVWqP_GQT3IA7xblH2R0w/w400-e90-rw/A%20little%20girl%20happy%20riding%20a%20sled.png',
           'civitai.com/models/2191617': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhsr_6FK-zahN4VT6pWn_xf_RGizw5EqwTFMvfpVMBIwJlnD6SaxfyO73K5AulFuy7ybGdlAT0uYv0QIhyphenhyphen6VODD7rOqZx1JxXfoBnsqva9z4R0zOZcEKAQeCKjqrM5T0Yl3nisKhkeZ73TCnKjn7iQDR74AGC8l0Kwyqle-F6ITPp56-Q/w400-e90-rw/Z-Image-Turbo_clear_vivid_vae_upscale_2.png',
           'civitai.com/models/2197598': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhyu8Mmv6ABAr0ggVhdlck5Ybs_SbtIgmGuShggKoyO72Pn6nvMNCWI2h3v7E1s6_E9TizS6XL4CQPFHPFtWb6-kVRRIJiU0lSLna946PHlSnzUvEAunQUIdLxwzH1AAwo8qKrJNHlyBE_jE3UP0oadgVsg55EEhGe2fobGyZ6vro269g/w400-e90-rw/Z-Image-Turbo_FP32_clear_vivid_vae_anime.png',
-          'civitai.com/models/2197598': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEicmkPXX7yy9v0QMgFiVRaMnVFlfPvqBnWApSAhixws4F0SX0XY83kZMDB0rV3_qrnokrfSycSuaBQSJkESITwYdZMYmXM7NI8VN4dXdvD9r0b__WXUU7tLSBVBb7vOekPXZaZq7odGRRv6ZG7HPi_Ya1N-ngZuXXmFqIXFlHClh96Mqg/w400-e90-rw/Chef%20square.png',
+          'civitai.com/models/2241280': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEicmkPXX7yy9v0QMgFiVRaMnVFlfPvqBnWApSAhixws4F0SX0XY83kZMDB0rV3_qrnokrfSycSuaBQSJkESITwYdZMYmXM7NI8VN4dXdvD9r0b__WXUU7tLSBVBb7vOekPXZaZq7odGRRv6ZG7HPi_Ya1N-ngZuXXmFqIXFlHClh96Mqg/w400-e90-rw/Chef%20square.png',
         };
 
         // デフォルトのCivitai画像
