@@ -87,8 +87,6 @@ const jo = {};
     caPubAdsense = typeof caPubAdsense !== undefinedStr && caPubAdsense[replaceFn](/^\D+/g, ""),
     innerAdsDelimiter = typeof innerAdsDelimiter !== undefinedStr ? innerAdsDelimiter : "p,br,div",
     ignoreAdsDelimiter = typeof ignoreAdsDelimiter !== undefinedStr ? ignoreAdsDelimiter : "pre,ul,ol,table,blockquote",
-    autoTOC = typeof autoTOC !== undefinedStr && autoTOC,
-    positionTOC = typeof positionTOC !== undefinedStr && positionTOC,
     jtCallback = typeof jtCallback === functionStr && jtCallback;
 
   function hasClass(element, className) {
