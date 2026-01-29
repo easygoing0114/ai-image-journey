@@ -273,6 +273,7 @@ if (document.querySelector('.blogcard-auto') !== null) {
           'huggingface.co/easygoing0114/animagine-xl-3.0_clear': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjHyjrGmoBb0ZeYgIuCJJouC3iUYvOROj-HSGQXUb8jT8kOoR6aCYVp_NCdHFoidd_Cor_xOfFIsnShe1-4g6SxuXH5bfkq0H3gUDqw2Hl986GQ_s0-vp5LiIXWmIJ4FhwDs95iHito6rBSjeTGuCMrTo2nV52-AUqwUTU7iqbczh2M6w/w400-e90-rw/a%20female%20animated%20character%20with%20blue%20hair%20and%20blue%20eyes%20wears%20a%20black%20outfit%20with%20gold%20embellishments%20and%20a%20fur%20collar%20square.png',
           'huggingface.co/easygoing0114/qwen_image_clear_vae': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjeQC5AeEaC1CXr9sqdIaWrJMTQKkzHnxSRkSwVW-VpBel35PvAA5RdTX_abc4IxGqPGYw059PiqDjqROwpbXWbNDAZtiIszEjN3QiSTB8bPh5RNZtVgT08v8C7l2amiP-SQQ2M0UQzsY8QraTTWMDHvH51QN-Z3PKlpbTh0PhLvHrfXQ/w400-e90-rw/clear_vae.png',
           'huggingface.co/easygoing0114/Qwen-Image-Edit-2511_clear': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgLa46YF4wGAYIDbvgU3CHqKDG8RlvpXev-FrnltBFyYwnGqqtweyoan2Zr2Ii_4CjsDffvJcZc5bQb-jHFpYOj-rVxJqRUu0HufV70cy_y_Mc43N41uGNy-nl7X4My16fm7nSqpfKQkSCsEqkMMqyHw3JagdgaCvZmqGak0_X_EnTmmA/w400-e90-rw/upscale_00053_.png',
+          'huggingface.co/easygoing0114/FLUX.2-klein-4B_clear': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhCGjlcmcry8meWHFykKbxjytK79sbEwD_rrsVLxHameG8oq2sO5wC47RnQtyDM02Jlo1bO7hnHChhN18XWACFBcORLBAOxh9E3zB5PPYWrdFw8pdakA8YqTq0wDH21XReGzE-fAHaKtYkmA7bZEvmNRypnEyu-Nw_vLeuUYEEyY6Gpqg/w400-e90-rw/upscale_00087_.png',
 
           // Civitai models
           'civitai.com/models/722776': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ff1638f0-0295-45e8-b038-d7f376f26873/ComfyUI_00023_.jpeg',
@@ -294,6 +295,7 @@ if (document.querySelector('.blogcard-auto') !== null) {
           'civitai.com/models/2171491': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgUDEOB0Eofke7RkB3VKHo6JZ5negs-2jDDI2EdekHs6T5A86YYXHmh4vO1rgvNxn1W0duXnsHFjSFzsthlNSMxzZQ19mSg7llh53CMYEF2ezfqE9_jPetI354SDn2dV4gnVnRH55Wdh40qOvpsNsKw1DbNgnvRdPzE58gYgtCVlUXnOw/w400-e90-rw/mellow_pencil-XL-v1.0.0-base_clear_00665_.png',
           'civitai.com/models/2151326': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj9B-60FkOLypjay6LXo88IgPU_QeuIfX61iPVnRJL05RAMfc9Rsatnd4ak37yqx_9QKzdRPR2j5S4SUtJsUI4F5Cy9ZBeBIO2kWExPIqTfGiHraI9NvgII1vgBqAiLDhvJnOLX3zFfIFYEeLr59NWwuTkpPWZO7csWAf1ZiStuBJhW4g/w400-e90-rw/Qwen-Image-Edit-2511_clear_clear_vae_00022_.png',
           'civitai.com/models/2285329': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiIKaqyQStmoZcSq-LbwaJphPB6qPU6CkBLniCyMtD58d8pstUitT0MbnpzbvCEZNf0qSs57psNiIfnq6ZkRPc5AWtf9iPDb94y0QNQfINAWx3xM27CJgKZdkkCQ64Kq6grRIix9H5TYU84HaOkN1qukonoha5bhQd8L4gyxLCyXShBGw/w400-e90-rw/upscale_00006_.png',
+          'civitai.com/models/2341785': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiA5Ny8bB8hXvL8OjygWgufDqkEMeClRpC7tA5LPxIEl78WESh9wRaq5ZipPY0yNG-cxNXRVarPFtM0fykaxVPCIPZSr0g7vwffVv9s6tDC-AvU0WVznaQWcHLkbX7MmFwECMRVUcX285q8laPidtPX4qQtQ7zUn92UAOn5Fyy-S06wag/w400-e90-rw/flux-2-klein-4b_clear_cover_image_photoreal.png',
         };
 
         // デフォルトのCivitai画像
