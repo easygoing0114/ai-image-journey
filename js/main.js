@@ -628,7 +628,7 @@ if (document.querySelector('.chartjs') !== null) {
   let resizeScheduled = false;
 
   document.querySelectorAll('.chartjs-container').forEach(figure => {
-    figure.classList.add('box-img', 'box-img400');
+    figure.classList.add('box-img');
   });
 
   function getCurrentThemeColor() {
