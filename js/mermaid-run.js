@@ -2,6 +2,7 @@ document.querySelectorAll('.mermaid-chart').forEach(figure => {
   figure.classList.add('box-img', 'box-img640');
 });
 
+const isDarkModeMermaid = htmlElement.classList.contains("dark-mode");
 const today = new Date().toISOString().split('T')[0];
 
 // ユーティリティ関数（変更なし）
@@ -155,7 +156,7 @@ Defer(function () {
   // 初回描画時の設定
   mermaid.initialize({
     startOnLoad: false,
-    theme: isDarkMode ? 'dark' : 'default',
+    theme: isDarkModeMermaid ? 'dark' : 'default',
   });
 
   // 日付更新済みのDOMコードを使って描画を実行
