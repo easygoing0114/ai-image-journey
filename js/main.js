@@ -36,22 +36,18 @@ if (document.querySelector('.language-mermaid') !== null) {
 }
 
 if (document.querySelector('.markdown') !== null) {
-  Defer.js('https://cdnjs.cloudflare.com/ajax/libs/turndown/7.2.0/turndown.min.js', 'turndown', 100);
-  Defer.js('https://unpkg.com/turndown-plugin-gfm/dist/turndown-plugin-gfm.js', 'turndownplugin', 100);
-  Defer.js('https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js', 'marked', 100);
-  Defer.js('https://cdn.jsdelivr.net/npm/marked-extended-tables/lib/index.umd.js', 'markedplugin', 100);
+  Defer.js('https://ai-image-journey.pages.dev/js/turndown.min.js', 'turndown', 100);
+  Defer.js('https://ai-image-journey.pages.dev/js/turndown-plugin-gfm.js', 'turndownplugin', 100);
+  Defer.js('https://ai-image-journey.pages.dev/js/marked.min.js', 'marked', 100);
+  Defer.js('https://ai-image-journey.pages.dev/js/marked_index.umd.js', 'markedplugin', 100);
 }
 
 if (document.querySelector('.bluesky-embed') !== null) {
   Defer.js('https://ai-image-journey.pages.dev/js/bluesky-embed.js', 'bluesky-embed', 1000);
 }
 if (document.querySelector('.twitter-tweet') !== null) {
-  Defer.js('https://platform.twitter.com/widgets.js', 'twitter', 1500);
+  Defer.js('https://ai-image-journey.pages.dev/js/twitter_embed.js', 'twitter', 1500);
 }
-if (document.querySelector('.text-post-media') !== null) {
-  Defer.js('https://www.threads.com/embed.js', 'threads', 1500);
-}
-
 
 /* img, iframe 差し替え */
 Defer.dom('img', 300);
