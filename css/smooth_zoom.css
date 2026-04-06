@@ -1,6 +1,5 @@
 /*smooth zoom*/
-.zoom-img,
-.zoom-bg  {
+.blogcard-image {
   cursor: pointer;/*デフォルトは zoom-in*/
 }
 /*拡大(背景変化)&#12539;解除が完了するまでの時間*/
