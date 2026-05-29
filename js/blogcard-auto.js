@@ -31,6 +31,7 @@ class LinkPreviewGenerator {
         'huggingface.co/easygoing0114/FLUX.2-klein-4B_clear': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhCGjlcmcry8meWHFykKbxjytK79sbEwD_rrsVLxHameG8oq2sO5wC47RnQtyDM02Jlo1bO7hnHChhN18XWACFBcORLBAOxh9E3zB5PPYWrdFw8pdakA8YqTq0wDH21XReGzE-fAHaKtYkmA7bZEvmNRypnEyu-Nw_vLeuUYEEyY6Gpqg/w400-e90-rw/upscale_00087_.png',
         'huggingface.co/easygoing0114/Z-Image_clear_photoreal': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi0d6j23FOhiHS1CwrxOo8UvsHAZMKJ4Ryxiu_t4ZlwqQzRjPMyrL-X91HiN5_pRtfCuC8HHddGvfc4KPTxz8EvOmD03LKGTzh6GfHV8NijdMntkqUYNfJ88ERrqatvXgvJYh83OPtXrFA5p_ShReSwBufZov6zS_H-lCvF24mx_vZt0Q/w400-e90-rw/Z-Image_clear_photoreal_upscale_10.png',
         'huggingface.co/easygoing0114/Z-Image_clear_anime': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi8LlBvKQrZnRh5mVoC97GMC6jcb9aNTQHHGSNOK0jXHUbGItwK3wPRQDXSspiq1xRvU7b3kWQgJmOLR5bz4FYgjWUPrrki5YjTNMedyZJjegAPG7eamggVgfm5bALSSujw2BtWVwyldDaHz_tvqMeWbRT891eQ3ELH55vlTYOzIryCRg/w400-e90-rw/FP32_upscale3.png',
+        'huggingface.co/easygoing0114/HiDream-O1-Image_clear': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhLs9ueGvN5kumQuRuFvwSVFMa7v1dEUTRHz4h-7yzdHW8mrnQHqOc475uQYocMFEYeRqSy8gt5p5KexmdKhMu_PxrjacK_nI5AfbxhdUZmA5mDhdRCP1p-y2iLKTQ4MPm__2x3y53zoneAMXGiSBc7QRmTbiNJM_NZUMYeHO0CG5FmQg/w400-e90-rw/HiDream-O1-Image_clear_v1_original_00113_.png',
 
 
         // Civitai models
@@ -56,6 +57,7 @@ class LinkPreviewGenerator {
         'civitai.com/models/2341785': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiA5Ny8bB8hXvL8OjygWgufDqkEMeClRpC7tA5LPxIEl78WESh9wRaq5ZipPY0yNG-cxNXRVarPFtM0fykaxVPCIPZSr0g7vwffVv9s6tDC-AvU0WVznaQWcHLkbX7MmFwECMRVUcX285q8laPidtPX4qQtQ7zUn92UAOn5Fyy-S06wag/w400-e90-rw/flux-2-klein-4b_clear_cover_image_photoreal.png',
         'civitai.com/models/2369132': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh_H0SCgJ7FonGdrFn2XrTOW4qUQ33M52bwkhWoE_Atz_MfhcYI6sXnZCtY0QUDYDI12oh_Rz-8erxwpjzmMAEGxi8r6OAZ7ISJnHpDNWaaV_uUhx8Y_QTmHZTdDjLPPDCno2-iIbbo9Hu6Uh6AOkNabn2zbsNRUh0UiRQvh4phrebIiQ/w400-e90-rw/Z-Image_clear_photoreal_upscale_9.png',
         'civitai.com/models/2396290': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg89Su6R0sE_sqQOjlWuePK1S8HoUq1YikbOQKSEsSKH8kfogSn0kMhEWWK5vlb9Ul5YwoyKbCAOEqIaBomFXuGROj6xbB4HuvuVYmlTyHeNc00tMUTekKn3UP5fRlHL06twLFW0yMAhVbBL4XxM1vtb4uiggVAghNkr0iOwajqb7Nd1w/w400-e90-rw/FP32_upscale2.png',
+        'civitai.com/models/2637486': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh4tJpcKnaxGZny0Jt1iv6safImLt20oLRrYzLkBcW-TvSDlv7XX2jvl4p2g9urmPiaza7dGtYjGW3etPj2ygsH4zP202WZQnCozro_78hYsCxe9dgC0JuPf4zfXxNOOHN-YMh492izubZnd-6bodFZE1dNceIxpbJ46xztr71FOHR9gg/w400-e90-rw/HiDream-O1-Image_clear_v1_anime_LAB_adjust_00054_.png',
     };
 
     // デフォルトのCivitai画像
