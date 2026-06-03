@@ -4,24 +4,24 @@
 
 'IntersectionObserver' in window || document.write('<script src="https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver"><\/script>');
 
-if (document.querySelector('.blogcard-auto') !== null) {
+if (document.querySelector('.blogcard-auto')) {
   Defer.js('https://ai-image-journey.pages.dev/js/blogcard-auto.js', 'blogcard-auto', 100);
 }
 
-if (document.querySelector('textarea') !== null) {
+if (document.querySelector('textarea')) {
   Defer.js('https://ai-image-journey.pages.dev/js/textarea-adjust.js', 'textarea-adjust', 100);
 }
 
-if (document.querySelector('.table-responsive') !== null) {
+if (document.querySelector('.table-responsive')) {
   Defer.js('https://ai-image-journey.pages.dev/js/table-responsive.js', 'table-responsive', 100);
 }
 
-if (document.querySelector('#toc') !== null) {
+if (document.querySelector('#toc')) {
   Defer.js('https://ai-image-journey.pages.dev/js/page_toc.js', 'page_toc_js', 100);
   Defer.css('https://ai-image-journey.pages.dev/css/page_toc.css', 'page_toc_css', 100);
 }
 
-if (document.querySelector('.chartjs') !== null) {
+if (document.querySelector('.chartjs')) {
   Defer.js('https://ai-image-journey.pages.dev/js/chart.umd.min.js', 'chartjs', 100);
   Defer.js('https://ai-image-journey.pages.dev/js/chartjs-run.js', 'chartjs-run', 100);
   Defer.js('https://ai-image-journey.pages.dev/js/chartjs-plugin-datalabels.min.js', 'chartjsdatalabelsplugin', 300);
@@ -30,22 +30,22 @@ if (document.querySelector('.chartjs') !== null) {
   Defer.js('https://ai-image-journey.pages.dev/js/papaprase.js', 'papapease', 300);
 }
 
-if (document.querySelector('.language-mermaid') !== null) {
+if (document.querySelector('.language-mermaid')) {
   Defer.js('https://ai-image-journey.pages.dev/js/mermaid-custom/mermaid-custom.min.js', 'mermaid', 100);
   Defer.js('https://ai-image-journey.pages.dev/js/mermaid-run.js', 'mermaid-run', 100);
 }
 
-if (document.querySelector('.markdown') !== null) {
+if (document.querySelector('.markdown')) {
   Defer.js('https://ai-image-journey.pages.dev/js/turndown.min.js', 'turndown', 100);
   Defer.js('https://ai-image-journey.pages.dev/js/turndown-plugin-gfm.js', 'turndownplugin', 100);
   Defer.js('https://ai-image-journey.pages.dev/js/marked.min.js', 'marked', 100);
   Defer.js('https://ai-image-journey.pages.dev/js/marked_index.umd.js', 'markedplugin', 100);
 }
 
-if (document.querySelector('.bluesky-embed') !== null) {
+if (document.querySelector('.bluesky-embed')) {
   Defer.js('https://ai-image-journey.pages.dev/js/bluesky-embed.js', 'bluesky-embed', 1000);
 }
-if (document.querySelector('.twitter-tweet') !== null) {
+if (document.querySelector('.twitter-tweet')) {
   Defer.js('https://ai-image-journey.pages.dev/js/twitter_embed.js', 'twitter', 1500);
 }
 

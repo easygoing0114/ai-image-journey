@@ -5,53 +5,49 @@
 'IntersectionObserver' in window || document.write('<script src="https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver"><\/script>');
 
 if (document.querySelector('.blogcard-auto') !== null) {
-  Defer.js('https://files.ai-image-journey.com/js/blogcard-auto.js', 'blogcard-auto', 100);
+  Defer.js('https://ai-image-journey.pages.dev/js/blogcard-auto.js', 'blogcard-auto', 100);
 }
 
 if (document.querySelector('textarea') !== null) {
-  Defer.js('https://files.ai-image-journey.com/js/textarea-adjust.js', 'textarea-adjust', 100);
+  Defer.js('https://ai-image-journey.pages.dev/js/textarea-adjust.js', 'textarea-adjust', 100);
 }
 
 if (document.querySelector('.table-responsive') !== null) {
-  Defer.js('https://files.ai-image-journey.com/js/table-responsive.js', 'table-responsive', 100);
+  Defer.js('https://ai-image-journey.pages.dev/js/table-responsive.js', 'table-responsive', 100);
 }
 
 if (document.querySelector('#toc') !== null) {
-  Defer.js('https://files.ai-image-journey.com/js/page_toc.js', 'page_toc_js', 100);
-  Defer.css('https://files.ai-image-journey.com/css/page_toc.css', 'page_toc_css', 100);
+  Defer.js('https://ai-image-journey.pages.dev/js/page_toc.js', 'page_toc_js', 100);
+  Defer.css('https://ai-image-journey.pages.dev/css/page_toc.css', 'page_toc_css', 100);
 }
 
 if (document.querySelector('.chartjs') !== null) {
-  Defer.js('https://files.ai-image-journey.com/js/chart.umd.min.js', 'chartjs', 100);
-  Defer.js('https://files.ai-image-journey.com/js/chartjs-run.js', 'chartjs-run', 100);
-  Defer.js('https://files.ai-image-journey.com/js/chartjs-plugin-datalabels.min.js', 'chartjsdatalabelsplugin', 300);
-  Defer.js('https://files.ai-image-journey.com/js/chartjs-adapter-date-fns.bundle.min.js', 'chartjsadapterdatefns', 300);
-  Defer.js('https://files.ai-image-journey.com/js/chartjs_arrow_plugin.js', 'chartjsarrowplugin', 300);
-  Defer.js('https://files.ai-image-journey.com/js/papaprase.js', 'papapease', 300);
+  Defer.js('https://ai-image-journey.pages.dev/js/chart.umd.min.js', 'chartjs', 100);
+  Defer.js('https://ai-image-journey.pages.dev/js/chartjs-run.js', 'chartjs-run', 100);
+  Defer.js('https://ai-image-journey.pages.dev/js/chartjs-plugin-datalabels.min.js', 'chartjsdatalabelsplugin', 300);
+  Defer.js('https://ai-image-journey.pages.dev/js/chartjs-adapter-date-fns.bundle.min.js', 'chartjsadapterdatefns', 300);
+  Defer.js('https://ai-image-journey.pages.dev/js/chartjs_arrow_plugin.js', 'chartjsarrowplugin', 300);
+  Defer.js('https://ai-image-journey.pages.dev/js/papaprase.js', 'papapease', 300);
 }
 
 if (document.querySelector('.language-mermaid') !== null) {
-  Defer.js('https://files.ai-image-journey.com/js/mermaid-custom/mermaid-custom.min.js', 'mermaid', 100);
-  Defer.js('https://files.ai-image-journey.com/js/mermaid-run.js', 'mermaid-run', 100);
+  Defer.js('https://ai-image-journey.pages.dev/js/mermaid-custom/mermaid-custom.min.js', 'mermaid', 100);
+  Defer.js('https://ai-image-journey.pages.dev/js/mermaid-run.js', 'mermaid-run', 100);
 }
 
 if (document.querySelector('.markdown') !== null) {
-  Defer.js('https://cdnjs.cloudflare.com/ajax/libs/turndown/7.2.0/turndown.min.js', 'turndown', 100);
-  Defer.js('https://unpkg.com/turndown-plugin-gfm/dist/turndown-plugin-gfm.js', 'turndownplugin', 100);
-  Defer.js('https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js', 'marked', 100);
-  Defer.js('https://cdn.jsdelivr.net/npm/marked-extended-tables/lib/index.umd.js', 'markedplugin', 100);
+  Defer.js('https://ai-image-journey.pages.dev/js/turndown.min.js', 'turndown', 100);
+  Defer.js('https://ai-image-journey.pages.dev/js/turndown-plugin-gfm.js', 'turndownplugin', 100);
+  Defer.js('https://ai-image-journey.pages.dev/js/marked.min.js', 'marked', 100);
+  Defer.js('https://ai-image-journey.pages.dev/js/marked_index.umd.js', 'markedplugin', 100);
 }
 
 if (document.querySelector('.bluesky-embed') !== null) {
-  Defer.js('https://files.ai-image-journey.com/js/bluesky-embed.js', 'bluesky-embed', 1000);
+  Defer.js('https://ai-image-journey.pages.dev/js/bluesky-embed.js', 'bluesky-embed', 1000);
 }
 if (document.querySelector('.twitter-tweet') !== null) {
-  Defer.js('https://platform.twitter.com/widgets.js', 'twitter', 1500);
+  Defer.js('https://ai-image-journey.pages.dev/js/twitter_embed.js', 'twitter', 1500);
 }
-if (document.querySelector('.text-post-media') !== null) {
-  Defer.js('https://www.threads.com/embed.js', 'threads', 1500);
-}
-
 
 /* img, iframe 差し替え */
 Defer.dom('img', 300);

@@ -373,9 +373,9 @@ const jo = {};
     documentObj[titleProp] = documentObj[titleProp][replaceFn](titleSeparator, titleSeparator + pageTitle + " " + currentPage + titleSeparator);
   }
 
-  Defer.domz(".lazyload", 1, "loaded", processImage, null, { rootMargin: "300%" });
-  Defer.domz("#post-pager", 1, null, processPostPager, null, { rootMargin: "300%" });
-  Defer.domz("#pagination", 1, null, createPagination, null, { rootMargin: "300%" });
+  Defer.domz(".lazyload", 1, "loaded", processImage, null, { rootMargin: "500%" });
+  Defer.domz("#post-pager", 1, null, processPostPager, null, { rootMargin: "500%" });
+  Defer.domz("#pagination", 1, null, createPagination, null, { rootMargin: "500%" });
 
   if (isLazy) {
     initialize(false);
