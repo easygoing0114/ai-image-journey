@@ -252,3 +252,33 @@ Defer(function () {
     }
   });
 }, 5000);
+
+Defer(function() {
+  // ウィンドウの幅が800pxより大きい場合のみ実行
+  if (window.innerWidth > 800) {
+    // 画像のsrc属性を変更
+    var imageFullSize2 = document.querySelectorAll('img');
+    imageFullSize2.forEach(function(img) {
+      var src = img.src;
+      if (src.includes('w800-e90-rw')) {
+        var newFullImgSrc2 = src.replace('w800-e90-rw', 'w0-e90-rw');
+        img.src = newFullImgSrc2;
+      }
+    });
+  }
+}, 10000); 
+
+Defer(function() {
+  // ウィンドウの幅が800pxより大きい場合のみ実行
+  if (window.innerWidth > 800) {
+    // 画像のsrc属性を変更
+    var imageFullSize3 = document.querySelectorAll('img');
+    imageFullSize3.forEach(function(img) {
+      var src = img.src;
+      if (src.includes('w1200-e90-rw')) {
+        var newFullImgSrc3 = src.replace('w1200-e90-rw', 'w0-e90-rw');
+        img.src = newFullImgSrc3;
+      }
+    });
+  }
+}, 10000); 
