@@ -11,7 +11,7 @@ return getComputedStyle(document.documentElement).getPropertyValue('--bs-body-co
 }
 
 function getCurrentGridColor() {
-return getComputedStyle(document.documentElement).getPropertyValue('--bs-gray-600').trim();
+return getComputedStyle(document.documentElement).getPropertyValue('--bs-gray-500').trim();
 }
 
 function calculateDynamicPadding(specificContainer = null) {
