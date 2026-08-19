@@ -10,6 +10,10 @@ function getCurrentThemeColor() {
 return getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color').trim();
 }
 
+function getCurrentGridColor() {
+return getComputedStyle(document.documentElement).getPropertyValue('--bs-gray-600').trim();
+}
+
 function calculateDynamicPadding(specificContainer = null) {
 const container = specificContainer || document.querySelector('.chartjs-container');
 
@@ -76,6 +80,7 @@ Object.values(Chart.instances).forEach(chart => {
 
 function updateAllChartColors() {
 const currentColor = getCurrentThemeColor();
+const gridColor = getCurrentGridColor();
 Chart.defaults.color = currentColor;
 
 Object.values(Chart.instances).forEach(chart => {
@@ -84,8 +89,8 @@ Object.values(Chart.instances).forEach(chart => {
         const scale = chart.options.scales[scaleKey];
         if (scale.ticks) scale.ticks.color = currentColor;
         if (scale.title) scale.title.color = currentColor;
-        if (scale.grid) scale.grid.color = currentColor;
-        if (scale.border) scale.border.color = currentColor;
+        if (scale.grid) scale.grid.color = gridColor;
+        if (scale.border) scale.border.color = gridColor;
     });
     }
 
