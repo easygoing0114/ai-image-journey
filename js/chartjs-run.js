@@ -84,6 +84,8 @@ Object.values(Chart.instances).forEach(chart => {
         const scale = chart.options.scales[scaleKey];
         if (scale.ticks) scale.ticks.color = currentColor;
         if (scale.title) scale.title.color = currentColor;
+        if (scale.grid) scale.grid.color = currentColor;
+        if (scale.border) scale.border.color = currentColor;
     });
     }
 
