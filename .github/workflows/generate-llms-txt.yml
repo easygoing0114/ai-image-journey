@@ -31,10 +31,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet -- llms.txt; then
+          git add llms.txt
+          if git diff --cached --quiet -- llms.txt; then
             echo "No changes to commit."
           else
-            git add llms.txt
             git commit -m "chore: update llms.txt [automated]"
             git push
           fi
