@@ -49,7 +49,9 @@ def strip_html(html: str) -> str:
 
 def fetch_all_posts():
     posts = []
+    seen_urls = set()
     start = 1
+
     while start <= MAX_TOTAL:
         url = FEED_URL.format(n=PAGE_SIZE, start=start)
         req = urllib.request.Request(url, headers={"User-Agent": "llms-txt-bot"})
@@ -57,9 +59,12 @@ def fetch_all_posts():
             data = json.load(resp)
 
         entries = data.get("feed", {}).get("entry", [])
+
+        # 返ってきた件数が0件になったら、それが最終ページ（打ち切り条件）
         if not entries:
             break
 
+        new_count = 0
         for e in entries:
             title = e.get("title", {}).get("$t", "").strip()
             link = next(
@@ -74,14 +79,22 @@ def fetch_all_posts():
             summary = strip_html(summary_html)[:200]
             published = e.get("published", {}).get("$t", "")
 
-            if title and link:
+            if title and link and link not in seen_urls:
+                seen_urls.add(link)
                 posts.append(
                     {"title": title, "url": link, "summary": summary, "published": published}
                 )
+                new_count += 1
 
-        if len(entries) < PAGE_SIZE:
+        # Blogger側が指定件数より少なく返すことがあるため、
+        # 「返ってきた件数」ベースで次のstart-indexを進める。
+        # PAGE_SIZEで進めると、実際の返却件数がPAGE_SIZE未満の場合に
+        # 記事を読み飛ばしてしまう。
+        start += len(entries)
+
+        # 新規記事が1件も取得できなかった場合は無限ループ防止のため打ち切る
+        if new_count == 0:
             break
-        start += PAGE_SIZE
 
     # 公開日の新しい順に並べる
     posts.sort(key=lambda p: p["published"], reverse=True)
