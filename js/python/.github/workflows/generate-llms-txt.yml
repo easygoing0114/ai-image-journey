@@ -1,0 +1,40 @@
+name: Generate llms.txt
+
+on:
+  schedule:
+    - cron: "0 18 * * *"   # 毎日 UTC 18:00 = JST 03:00 に実行
+  workflow_dispatch: {}     # 手動実行も可能に
+  push:
+    branches: [main]
+    paths:
+      - "python/generate_llms_txt.py"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Generate llms.txt
+        run: python python/generate_llms_txt.py
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- llms.txt; then
+            echo "No changes to commit."
+          else
+            git add llms.txt
+            git commit -m "chore: update llms.txt [automated]"
+            git push
+          fi
