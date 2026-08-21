@@ -42,6 +42,22 @@ if (document.querySelector('.markdown')) {
   Defer.js('https://ai-image-journey.pages.dev/js/marked_index.umd.js', 'markedplugin', 100);
 }
 
+if (document.querySelector('.katex')) {
+  Defer.css('https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.css', 'katex-css', 100);
+  Defer.js('https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js', 'katex', 100);
+  Defer.js('https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/contrib/auto-render.min.js', 'katex-autorender', 100, function () {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\[', right: '\\]', display: true},
+        {left: '\\(', right: '\\)', display: false}
+      ],
+      throwOnError: false
+    });
+  });
+}
+
 if (document.querySelector('.bluesky-embed')) {
   Defer.js('https://ai-image-journey.pages.dev/js/bluesky-embed.js', 'bluesky-embed', 1000);
 }
