@@ -45,7 +45,7 @@ if (document.querySelector('.markdown')) {
 if (document.querySelector('.katex')) {
   Defer.css('https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.css', 'katex-css', 100);
   Defer.js('https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js', 'katex', 100);
-  Defer.js('https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/contrib/auto-render.min.js', 'katex-autorender', 100, function () {
+  Defer.js('https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/contrib/auto-render.min.js', 'katex-autorender', 300, function () {
     renderMathInElement(document.body, {
       delimiters: [
         {left: '$$', right: '$$', display: true},
