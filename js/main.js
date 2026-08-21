@@ -53,7 +53,9 @@ if (document.querySelector('.katex')) {
         {left: '\\[', right: '\\]', display: true},
         {left: '\\(', right: '\\)', display: false}
       ],
-      throwOnError: false
+      throwOnError: false,
+      strict: false,
+      ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code", "option"]
     });
   });
 }
