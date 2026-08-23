@@ -303,3 +303,12 @@ __webpack_exports__ = __webpack_exports__["default"];
 /******/ })()
 ;
 });
+
+if (document.querySelector('.katex-block')) {
+  window.renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true}
+    ],
+    throwOnError: false,
+  });
+}

@@ -45,21 +45,14 @@ if (document.querySelector('.markdown')) {
 if (document.querySelector('.katex-block')) {
   Defer.css('https://ai-image-journey.pages.dev/css/katex.css', 'katex-css', 100);
   Defer.js('https://ai-image-journey.pages.dev/js/katex.min.js', 'katex', 100);
-  Defer.js('https://ai-image-journey.pages.dev/js/katex-auto-render.js', 'katex-auto-render', 300, function () {
-    renderMathInElement(document.body, {
-      delimiters: [
-        {left: '$$', right: '$$', display: true}
-      ],
-      throwOnError: false,
-    });
-  });
+  Defer.js('https://ai-image-journey.pages.dev/js/katex-auto-render.js', 'katex-auto-render', 300);
 }
 
-if (document.querySelector('.bluesky-embed')) {
-  Defer.js('https://ai-image-journey.pages.dev/js/bluesky-embed.js', 'bluesky-embed', 1000);
-}
 if (document.querySelector('.twitter-tweet')) {
-  Defer.js('https://ai-image-journey.pages.dev/js/twitter_embed.js', 'twitter', 1500);
+  Defer.js('https://ai-image-journey.pages.dev/js/twitter_embed.js', 'twitter', 1000);
+}
+if (document.querySelector('.bluesky-embed')) {
+  Defer.js('https://ai-image-journey.pages.dev/js/bluesky-embed.js', 'bluesky-embed', 1500);
 }
 
 /* img, iframe 差し替え */
