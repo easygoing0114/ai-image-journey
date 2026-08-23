@@ -168,9 +168,6 @@
   width: 1px;
   overflow: hidden;
 }
-.katex .katex-html {
-  /* \newline is an empty block at top level, between .katex-base elements */
-}
 .katex .katex-html > .katex-newline {
   display: block;
 }
