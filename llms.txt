@@ -5,7 +5,8 @@
 Written by Easygoing. Focus areas: local AI image generation models (checkpoints, licenses, color/VAE precision comparisons), ComfyUI workflows and custom nodes (ComfyUI-easygoing-nodes), Linux setup for AI workloads (Pop!_OS), and practical image-editing tooling (inpainting, upscaling, background removal).
 
 ## Recent Articles
-- [ComfyUI-easygoing-nodes v2.0.0: Better Workflow Screenshots, Prompt Embedding & VRAM Control](https://www.ai-image-journey.com/2026/08/comfyui-easygoing-nodes-v2.html): Update ComfyUI-easygoing-nodes to v2.0.0 Support for Nodes 2.0 and V3 schema You may need to delete and re-place older nodes Introduction Hello, this is Kimama / Easygoing. Today, I’d like to introduc
+- [note Goes Dark: Which Chart Background Works Better?](https://www.ai-image-journey.com/2026/08/note-dark-mode.html): note has added dark mode support More than half of users keep dark mode always on Use KaTeX syntax to create tables Introduction Hello, this is Easygoing. Today, I’d like to take a closer look at the 
+- [ComfyUI-easygoing-nodes v2.0.0: Better Workflow Screenshots, Prompt Embedding & VRAM Control](https://www.ai-image-journey.com/2026/08/comfyui-easygoing-nodes-v2.html): Update ComfyUI-easygoing-nodes to v2.0.0 Support for Nodes 2.0 and V3 schema You may need to delete and re-place older nodes Introduction Hello, this is Easygoing. Today, I’d like to introduce the v2.
 - [ComfyUI Standard Nodes + α: BiRefNet, Depth-Anything-V3, SAM 3.1 & Lama Remover Guide](https://www.ai-image-journey.com/2026/08/birefnet-depthanythingv3-sam31-lama.html): BiRefNet separates the background Depth-Anything-V3 estimates depth Combine SAM 3.1 and LaMa to remove unwanted objects Introduction Hello, this is Easygoing. In this post, I’ll introduce image editin
 - [Image Editing with ComfyUI Standard Nodes! How to Use SAM 3.1 and Qwen3-VL](https://www.ai-image-journey.com/2026/08/sam31-qwen3-vl.html): SAM 3.1 and LLMs have been integrated into ComfyUI itself Performance and stability have improved Evolving into the strongest generative AI tool Introduction Hello, this is Easygoing. In this article,
 - [The Secret Behind note's AI Translation: Why Likes and Views Don't Matter?](https://www.ai-image-journey.com/2026/07/note-automatic-translation.html): note selectively translates articles it considers valuable Likes, overall views, and backlinks are not directly related to whether an article is translated Analyzing which articles get translated may 
@@ -19,7 +20,6 @@ Written by Easygoing. Focus areas: local AI image generation models (checkpoints
 - [mellow_pencil-XL_clear_v2 Released! A Cute Anime Model with Beautiful Color Expression](https://www.ai-image-journey.com/2026/04/mellow-pencil-xl-clear-v2.html): Beautiful color expression Improved ease of use Slightly reduced background complexity Introduction Hello, I'm Easygoing. In this post, I’m excited to introduce mellow_pencil-XL_clear_v2 , a model kno
 - [Does AI Illustration Turn Green? A Thorough Comparison of VAE Precision and Color Accuracy Between SDXL and Flux!](https://www.ai-image-journey.com/2026/04/sdxl-anime-natural-vae.html): SDXL’s VAE tends to shift toward green Flux’s VAE offers high precision Introduction of SDXL_anime_natural_vae Introduction Hello, this is Easygoing. This time, I’d like to take a closer look at VAE ,
 - [10 Recommended Apps for Linux! From Image Management to Coding and Steam Gaming 【Image Generation AI / Pop!_OS】](https://www.ai-image-journey.com/2026/04/linux-apps.html): Add apps easily from the app store Flatpak is safe and secure Plenty of privacy-conscious apps available Introduction Hello, this is Kimama / Easygoing. In the previous article, I introduced Linux dis
-- [Pop!_OS Installation! Comparison with Ubuntu, Linux Mint, and Zorin OS, and How to Switch from Windows](https://www.ai-image-journey.com/2026/04/popos-install.html): Linux Mint, Zorin OS, and Pop!_OS are lightweight and fast Pop!_OS includes NVIDIA drivers by default Linux offers rich customization options Introduction Hello, this is Easygoing. In the previous art
 
 ## Model Reviews & Comparisons
 - [Z-Image_clear_anime Released! What Will the Next Generation of Anime Models Look Like?](https://www.ai-image-journey.com/2026/02/z-image-clear-anime.html): Z-Image_clear_anime is dedicated to anime Improved depth and color expression Excited for future developments Introduction Hello, I'm Easygoing. This time, I'm introducing the Z-Image_clear_anime mode
@@ -81,6 +81,7 @@ Written by Easygoing. Focus areas: local AI image generation models (checkpoints
 - [[EasyForge] Super Easy! How to Install ComfyUI with One Click](https://www.ai-image-journey.com/2024/09/EasyForge-ComfyUI.html): EasyForge + ComfyUI is easy to install. First, enjoy generating prompts automatically with LLM. Once you're familiar, explore more with Forge and ComfyUI. EasyForge logo (Unofficial logo created by th
 
 ## Environment & Tooling (Linux, Python, etc.)
+- [Pop!_OS Installation! Comparison with Ubuntu, Linux Mint, and Zorin OS, and How to Switch from Windows](https://www.ai-image-journey.com/2026/04/popos-install.html): Linux Mint, Zorin OS, and Pop!_OS are lightweight and fast Pop!_OS includes NVIDIA drivers by default Linux offers rich customization options Introduction Hello, this is Easygoing. In the previous art
 - [Speed Up Your Web Site by 40%! A Thorough Look at Cloudflare's Fast Delivery and Privacy Features!](https://www.ai-image-journey.com/2026/03/cloudflare-privacy.html): Custom domain: about 12 USD per year 40% faster with Cloudflare No personal data collection Introduction Hello, I'm Easygoing. This time, I'd like to introduce how to create fast-loading web pages tha
 
 ## Other Articles
@@ -149,4 +150,4 @@ Written by Easygoing. Focus areas: local AI image generation models (checkpoints
 - [Privacy Policy](https://www.ai-image-journey.com/p/privacy-policy.html)
 - [Links / Portfolio](https://www.ai-image-journey.com/p/links.html)
 
-<!-- Generated automatically on 2026-08-20 18:22 UTC -->
+<!-- Generated automatically on 2026-08-22 18:13 UTC -->
