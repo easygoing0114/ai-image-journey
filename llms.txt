@@ -18,7 +18,7 @@ Written by Easygoing. Focus areas: local AI image generation models (checkpoints
 - [HiDream-O1-Image_clear_v1: Easy Local Image Editing with UiT Architecture](https://www.ai-image-journey.com/2026/05/hidream-o1-image-clear-v1.html): HiDream-O1-Image_clear delivers clear and vibrant outputs Supports Image-to-Image and various image editing tasks MXFP8 is a format exclusive to RTX 5000 series Introduction Hello, I'm Easygoing. This
 - [Goodbye Latent Space? How HiDream-O1-Image is Revolutionizing General-Purpose AI Drawing](https://www.ai-image-journey.com/2026/05/hidream-o1-image.html): HiDream-O1-Image uses a general-purpose UiT architecture The “work is visible” to humans Potential for dramatic performance improvements in Qwen-VL models Introduction Hello, this is Easygoing. This t
 - [How to Find Models on Civitai and Hugging Face! Complete List of Licenses for the Latest Local Image & Video Generation AI Models](https://www.ai-image-journey.com/2026/05/civitai-huggingface.html): Civitai.red allows viewing of NSFW content Next-generation models have separated Text Encoder, UNet/Transformer, and VAE components Always check the license before use Introduction Hello, this is Easy
-- [Anima Model’s Dual Licensing! Open Source Technology from Alibaba and NVIDIA’s Ambition](https://www.ai-image-journey.com/2026/05/anima-alibaba-nvidia.html): Anima is an image generation AI whose roots trace back to Wan2.1. Subject to NVIDIA’s strict licensing restrictions. Safest to avoid commercial use for now. Introduction Hello, this is Easygoing. This
+- [Anima Model’s Dual Licensing! Open Source Technology from Alibaba and NVIDIA’s Ambition](https://www.ai-image-journey.com/2026/05/anima-alibaba-nvidia.html): Anima is an image generation AI whose roots trace back to Wan2.1. Subject to NVIDIA’s strict licensing restrictions. Safest to avoid commercial use for now. Addendum: 2026.9.25 In June 2026, NVIDIA re
 - [mellow_pencil-XL_clear_v2 Released! A Cute Anime Model with Beautiful Color Expression](https://www.ai-image-journey.com/2026/04/mellow-pencil-xl-clear-v2.html): Beautiful color expression Improved ease of use Slightly reduced background complexity Introduction Hello, I'm Easygoing. In this post, I’m excited to introduce mellow_pencil-XL_clear_v2 , a model kno
 
 ## Model Reviews & Comparisons
@@ -152,4 +152,4 @@ Written by Easygoing. Focus areas: local AI image generation models (checkpoints
 - [Privacy Policy](https://www.ai-image-journey.com/p/privacy-policy.html)
 - [Links / Portfolio](https://www.ai-image-journey.com/p/links.html)
 
-<!-- Generated automatically on 2026-09-24 20:54 UTC -->
+<!-- Generated automatically on 2026-09-25 20:50 UTC -->
