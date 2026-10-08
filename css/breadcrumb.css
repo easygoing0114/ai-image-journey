@@ -1,0 +1,26 @@
+#breadcrumb-container {
+  position: absolute;
+  top: -300vh;
+}
+
+.breadcrumb {
+	display: flex;
+	font-size: var(--font-08);
+	padding: 2vh 0 0 0;
+}
+
+.breadcrumb-item{
+	display: block;
+	padding: 0;
+}
+
+.breadcrumb li::before {
+	content: ">";
+	margin-left: 1em;
+	margin-right: 0.75em;
+}
+
+.breadcrumb li:first-child::before {
+	content: "";
+	margin: 0;
+}
