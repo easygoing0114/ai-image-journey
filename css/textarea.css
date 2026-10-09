@@ -1,0 +1,29 @@
+.copy-button {
+    display: none;
+    position: absolute;
+    top: 0.25em;
+    right: 0.25em;
+    padding: 0.25em 0.5em;
+    font-size: var(--font-08);
+    color: var(--bs-body-color);
+    background-color: var(--jt-bg-light);
+    border: 1px solid var(--bs-body-color);
+    border-radius: var(--radius-04);
+    cursor: pointer;
+    box-shadow: var(--shadow-regular);
+}
+
+.switch-button {
+    display: none;
+    position: absolute;
+    top: 0.25em;
+    left: 0.25em;
+    padding: 0.25em 0.5em;
+    font-size: var(--font-08);
+    color: var(--bs-body-color);
+    background-color: var(--jt-bg-light);
+    border: 1px solid var(--bs-body-color);
+    border-radius: var(--radius-04);
+    cursor: pointer;
+    box-shadow: var(--shadow-regular);
+}
