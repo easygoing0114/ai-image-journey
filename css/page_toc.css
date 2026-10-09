@@ -26,3 +26,17 @@ color: var(--jt-link-color);
 padding-right: .5em;
 white-space: nowrap;
 }
+
+details {
+    interpolate-size: allow-keywords;
+}
+
+details::details-content {
+    height: 0;
+    overflow: clip;
+    transition: height width 300 ease, content-visibility 300ms allow-discrete;
+}
+
+details[open]::details-content {
+    height: auto;
+}
