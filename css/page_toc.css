@@ -34,7 +34,7 @@ details {
 details::details-content {
     height: 0;
     overflow: clip;
-    transition: height 300ms ease, content-visibility 300ms allow-discrete;
+    transition: height 700ms ease, content-visibility 300ms allow-discrete;
 }
 
 details[open]::details-content {
