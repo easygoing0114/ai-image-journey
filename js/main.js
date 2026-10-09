@@ -15,7 +15,6 @@ if (document.querySelector('.blogcard-auto')) {
 
 if (document.querySelector('textarea')) {
   Defer.css('https://ai-image-journey.pages.dev/css/textarea.css', 'textarea-css', 100);
-//  Defer.js('https://ai-image-journey.pages.dev/js/textarea-adjust.js', 'textarea-adjust', 100);
 }
 
 if (document.querySelector('.table-responsive')) {
