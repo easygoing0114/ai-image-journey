@@ -37,7 +37,7 @@ if (document.querySelector('.chartjs')) {
 }
 
 if (document.querySelector('.language-mermaid')) {
-  Defer.js('https://ai-image-journey.pages.dev/js/mermaid-custom/mermaid-custom.min.js', 'mermaid', 100);
+  Defer.js('https://ai-image-journey.pages.dev/js/mermaid-custom/mermaid.esm.min.mjs', 'mermaid', 100);
   Defer.js('https://ai-image-journey.pages.dev/js/mermaid-run.js', 'mermaid-run', 100);
 }
 
