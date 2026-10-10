@@ -222,7 +222,7 @@ class LinkPreviewGenerator {
     }
     }
 
-    // 並行処理でリンクを置換する関数（0.2秒間隔で開始）
+    // 並行処理でリンクを置換する関数（0.3秒間隔で開始）
     async replaceLinks() {
     const blogcards = document.querySelectorAll('.blogcard-auto');
 
