@@ -135,13 +135,11 @@ class LinkPreviewGenerator {
             <blockquote cite="${metadata.url}">
                 <p class="blogcard-description">${metadata.description}</p>
             </blockquote>
-            ${isInternal ? '' : `
-                <div class="blogcard-footer">
+            <div class="blogcard-footer">
                 <img src="https://www.google.com/s2/favicons?domain=${metadata.domain}"
                     alt="Favicon" width="16" height="16" />
                 ${metadata.domain}
-                </div>
-            `}
+            </div>
             </div>
         </a>
         </figure>
