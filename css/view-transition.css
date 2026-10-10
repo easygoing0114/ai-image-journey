@@ -1,9 +1,8 @@
 /* 1. ページ遷移でビュー遷移を有効化（遷移元・遷移先の両ページに必要） */
-@media (prefers-reduced-motion: no-preference) {
-  @view-transition {
-    navigation: auto;
-  }
+@view-transition {
+  navigation: auto;
 }
+
 
 /* 2. main だけを独立した遷移対象にする */
 main {
@@ -22,21 +21,18 @@ main {
   overflow: clip;
 }
 
-/* 5. 旧ページ：左へスライドアウト / 新ページ：右からスライドイン */
-::view-transition-old(main-content) {
-  animation: main-slide-out 0.4s cubic-bezier(0.4, 0, 1, 1) both;
-}
-
 ::view-transition-new(main-content) {
-  animation: main-slide-in 0.4s cubic-bezier(0, 0, 0.2, 1) both;
-}
-
-@keyframes main-slide-out {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-100%); }
+  animation: main-slide-in 1000ms ease in;
 }
 
 @keyframes main-slide-in {
-  from { transform: translateX(100%); }
-  to   { transform: translateX(0); }
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
