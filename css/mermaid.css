@@ -5,7 +5,7 @@
 @keyframes edge-animation-frame{from{stroke-dashoffset:0;}}
 @keyframes dash{to{stroke-dashoffset:0;}}
 /* light */
-svg[aria-roledescription="flowchart-v2"]{font-size:16px;fill:#333}
+svg[aria-roledescription="flowchart-v2"]{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333}
 svg[aria-roledescription="flowchart-v2"] .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round}
 svg[aria-roledescription="flowchart-v2"] .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round}
 svg[aria-roledescription="flowchart-v2"] .error-icon{fill:#552222}
@@ -133,7 +133,7 @@ svg[aria-roledescription="gantt"] [data-look="neo"].icon-shape .icon-neo path{st
 svg[aria-roledescription="gantt"] :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif}
 /* dark */
 html.dark-mode{--mermaid-gradient-start:#cccccc;--mermaid-gradient-end:hsl(180, 0%, 18.3529411765%)}
-html.dark-mode svg[aria-roledescription="flowchart-v2"]{font-size:16px;fill:#ccc}
+html.dark-mode svg[aria-roledescription="flowchart-v2"]{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#ccc}
 html.dark-mode svg[aria-roledescription="flowchart-v2"] .error-icon{fill:#a44141}
 html.dark-mode svg[aria-roledescription="flowchart-v2"] .error-text{fill:#ddd;stroke:#ddd}
 html.dark-mode svg[aria-roledescription="flowchart-v2"] .marker{fill:lightgrey;stroke:lightgrey}
