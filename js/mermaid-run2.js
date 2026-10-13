@@ -31,7 +31,7 @@
 
   // true: classDef 由来のルールだけ <style> に残す（classDef を使う図の色が消えない）
   // false: <style> を完全に削除する
-  const KEEP_CLASSDEF_STYLES = true;
+  const KEEP_CLASSDEF_STYLES = false;
 
   // ---- 既存処理: figure にクラス付与 ---------------------------------------
   document.querySelectorAll('.mermaid-chart').forEach((figure) => {
