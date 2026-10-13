@@ -1,25 +1,33 @@
 /*
  * mermaid-run.js
  *
- * Mermaid v12 を公式CDNの ESM から読み込んで描画する。
- *  - main.js から Defer.js 経由で呼ばれる（classic script）。ESMは動的 import() で読む
+ * Mermaid v12 の ESM を読み込んで描画する。
+ *  - main.js から Defer.js 経由で呼ばれる（classic script）。ESM は動的 import() で読む
+ *  - mermaid.css は main.js が Defer.css で読み込む（id="mermaid-css"）。ここでは読み込み完了を待つだけ
  *  - 描画後、各 SVG 内に生成される <style> を削除する
  *  - 配色は mermaid.css（.dark-mode 対応済み）が担当するため、テーマ切替で再描画しない
  *
  * 注意: <style> を消すと、Mermaid が計測時に使ったフォント指定も消える。
- *       FONT_FAMILY と mermaid.css の --mmd-font は必ず同じ値にすること。
+ *       フォントはサイトの --font-system-ui を取得して Mermaid に渡しており、
+ *       mermaid.css も同じ変数を使うので、計測時と表示時のフォントは一致する。
  */
 (() => {
   'use strict';
 
   // ---- 設定 ---------------------------------------------------------------
-  const MERMAID_VERSION = '12.1.0';
-  const MERMAID_URL = `https://cdn.jsdelivr.net/npm/mermaid@${MERMAID_VERSION}/dist/mermaid.esm.min.mjs`;
-  const CSS_URL = 'https://ai-image-journey.pages.dev/css/mermaid.css';
+  // Cloudflare Pages 上に配置した Mermaid v12 の ESM（チャンクは ./chunks/mermaid.esm.min/ に置く）
+  const MERMAID_URL = 'https://ai-image-journey.pages.dev/js/mermaid/mermaid.esm.min.mjs';
+  const CSS_ID = 'mermaid-css'; // main.js の Defer.css の第2引数と一致させる
   const SELECTOR = '.language-mermaid';
 
-  // mermaid.css の --mmd-font と一致させる（Mermaid 既定値）
-  const FONT_FAMILY = '"trebuchet ms", verdana, arial, sans-serif';
+  // --font-system-ui が取得できなかった場合の予備（サイトの定義と同じ）
+  const FALLBACK_FONT =
+    "-apple-system, BlinkMacSystemFont, 'Helvetica Neue', \"Segoe UI\", \"Liberation Sans\", \"Hiragino Sans\", \"BIZ UDGothic\", system-ui, sans-serif";
+
+  function siteFontFamily() {
+    const v = getComputedStyle(document.documentElement).getPropertyValue('--font-system-ui').trim();
+    return v || FALLBACK_FONT;
+  }
 
   // true: classDef 由来のルールだけ <style> に残す（classDef を使う図の色が消えない）
   // false: <style> を完全に削除する
@@ -94,15 +102,18 @@
     });
   }
 
-  // ---- CSS 読み込み（読み込み完了を待てるようにする） -----------------------
-  function loadCss(href) {
+  // ---- mermaid.css の読み込み完了待ち ---------------------------------------
+  // <style> を消した後は mermaid.css だけが見た目を決めるため、先に描画すると
+  // 一瞬だけ未スタイルの図（黒塗り）が見える。link が読み込まれる（.sheet が入る）まで待つ。
+  // 5秒待っても読めなければ（404 など）そのまま描画する。
+  function waitForStylesheet(id, timeout = 5000) {
     return new Promise((resolve) => {
-      if (document.querySelector(`link[rel="stylesheet"][href="${href}"]`)) return resolve();
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = href;
-      link.onload = link.onerror = () => resolve();
-      document.head.appendChild(link);
+      const start = performance.now();
+      (function check() {
+        const link = document.getElementById(id);
+        if ((link && link.sheet) || performance.now() - start > timeout) return resolve();
+        setTimeout(check, 50);
+      })();
     });
   }
 
@@ -110,7 +121,7 @@
   async function main() {
     // 並行して取得開始（描画は両方そろってから）
     const modulePromise = import(MERMAID_URL);
-    const cssPromise = loadCss(CSS_URL);
+    const cssPromise = waitForStylesheet(CSS_ID);
 
     // 描画対象と元ソースを控える（Gantt は日付を更新）
     const sources = new Map();
@@ -132,7 +143,7 @@
       startOnLoad: false,
       theme: 'default', // 配色は mermaid.css で上書きするため固定
       securityLevel: 'strict',
-      fontFamily: FONT_FAMILY,
+      fontFamily: siteFontFamily(),
     });
 
     await mermaid.run({

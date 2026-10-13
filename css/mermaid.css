@@ -1,22 +1,20 @@
 /*
- * mermaid.css  (Mermaid v12 / theme: default 相当 + .dark-mode 対応)
+ * mermaid.css  (Mermaid v12 / flowchart + gantt 専用 / .dark-mode 対応)
  *
  * mermaid-run.js が描画後に SVG 内の <style> を削除するため、
  * Mermaid が <style> で与えていた配色・線の太さ・破線などをここで再現している。
- * 対象は SVG ルートに付与される .mmd クラス。
+ * 対象は SVG ルートに付与される .mmd クラス。main.js から Defer.css で読み込む。
  *
- * 色は全て CSS 変数。ライトは .mmd、ダークは .dark-mode .mmd で上書きする。
- * （html 要素に .dark-mode が付く前提。別の要素に付く場合は .dark-mode の位置を調整）
- *
- * 対応: flowchart / sequence / class / state / ER / gantt / pie
- * 未対応の図（journey, timeline, mindmap, gitGraph など）は末尾の
- * 「汎用フォールバック」で最低限の文字色だけ保証している。
+ * - 色は全て CSS 変数。ライトは .mmd、ダークは .dark-mode .mmd で上書き。
+ * - フォントはサイト共通の --font-system-ui。
+ *   Mermaid は <code class="language-mermaid"> の中に描画されるため、
+ *   何も指定しないと code の monospace が継承される。ここで明示的に上書きしている。
+ *   font-size: 16px は Mermaid が文字幅を計測した値と合わせるためで、変更するとラベルが見切れる。
+ * - flowchart / gantt 以外の図は対応していない（スタイルが無いため崩れる）。
  */
 
 /* ========== 変数（ライト） ========== */
 .mmd {
-  --mmd-font: "trebuchet ms", verdana, arial, sans-serif; /* mermaid-run.js の FONT_FAMILY と一致させる */
-
   --mmd-text: #333;
   --mmd-title: #333;
   --mmd-line: #333;
@@ -30,17 +28,6 @@
 
   --mmd-edge-label-bg: #e8e8e8;
   --mmd-edge-label-bg-soft: rgba(232, 232, 232, 0.5);
-
-  --mmd-note-bg: #fff5ad;
-  --mmd-note-border: #aaaa33;
-  --mmd-note-text: #333;
-
-  --mmd-actor-line: #999;
-  --mmd-activation-bg: #f4f4f4;
-  --mmd-activation-border: #666;
-
-  --mmd-bg: #fff;
-  --mmd-alt-bg: #f0f0f0;
 
   /* gantt */
   --mmd-section: rgba(102, 102, 255, 0.49);
@@ -60,10 +47,7 @@
   --mmd-done-border: #808080;
   --mmd-crit-bg: #f00;
   --mmd-crit-border: #f88;
-
-  /* pie */
-  --mmd-pie-stroke: #000;
-  --mmd-pie-label: #333;          /* スライス上の文字（スライスは明るい色のため両モード暗色） */
+  --mmd-link: #003163;
 }
 
 /* ========== 変数（ダーク） ========== */
@@ -82,17 +66,6 @@
   --mmd-edge-label-bg: #3a3e50;
   --mmd-edge-label-bg-soft: rgba(58, 62, 80, 0.6);
 
-  --mmd-note-bg: #4a4430;
-  --mmd-note-border: #8a7f45;
-  --mmd-note-text: #f1ecd0;
-
-  --mmd-actor-line: #8b90a0;
-  --mmd-activation-bg: #3b3f52;
-  --mmd-activation-border: #9aa0b4;
-
-  --mmd-bg: #1f2230;
-  --mmd-alt-bg: #2d3040;
-
   --mmd-section: #7aa2d6;
   --mmd-section-alt: #fff;
   --mmd-section2: #e5c100;
@@ -110,46 +83,30 @@
   --mmd-done-border: #c5c9d2;
   --mmd-crit-bg: #d64545;
   --mmd-crit-border: #ff9a9a;
-
-  --mmd-pie-stroke: #1f2230;
+  --mmd-link: #9ec5ff;
 }
 
 /* ========== 共通 ========== */
 .mmd {
-  font-family: var(--mmd-font);
+  font-family: var(--font-system-ui);
   font-size: 16px;
 }
 .mmd p { margin: 0; }
 .mmd text { fill: var(--mmd-text); }
 
-.mmd .label {
-  font-family: var(--mmd-font);
-  color: var(--mmd-node-text);
-}
+.mmd .label { color: var(--mmd-node-text); }
 .mmd .label text,
 .mmd span {
   fill: var(--mmd-node-text);
   color: var(--mmd-node-text);
 }
-.mmd .node .label,
-.mmd .rough-node .label,
-.mmd .image-shape .label,
-.mmd .icon-shape .label { text-align: center; }
-.mmd .node .label text,
-.mmd .rough-node .label text,
-.mmd .image-shape .label,
-.mmd .icon-shape .label { text-anchor: middle; }
-.mmd .node.clickable { cursor: pointer; }
 
-/* 図タイトル */
+/* 図タイトル（flowchart / gantt） */
 .mmd .flowchartTitleText,
-.mmd .classTitleText,
-.mmd .statediagramTitleText,
 .mmd .titleText {
   text-anchor: middle;
   font-size: 18px;
   fill: var(--mmd-title);
-  font-family: var(--mmd-font);
 }
 
 /* エッジの太さ・線種 */
@@ -159,20 +116,6 @@
 .mmd .edge-pattern-solid { stroke-dasharray: 0; }
 .mmd .edge-pattern-dashed { stroke-dasharray: 3; }
 .mmd .edge-pattern-dotted { stroke-dasharray: 2; }
-
-.mmd .edge-animation-slow {
-  stroke-dasharray: 9, 5 !important;
-  stroke-dashoffset: 900;
-  animation: mmd-dash 50s linear infinite;
-  stroke-linecap: round;
-}
-.mmd .edge-animation-fast {
-  stroke-dasharray: 9, 5 !important;
-  stroke-dashoffset: 900;
-  animation: mmd-dash 20s linear infinite;
-  stroke-linecap: round;
-}
-@keyframes mmd-dash { to { stroke-dashoffset: 0; } }
 
 /* 矢印（マーカー） */
 .mmd .marker {
@@ -192,20 +135,22 @@
   stroke: var(--mmd-node-border);
   stroke-width: 1px;
 }
-.mmd .node .neo-node { stroke: var(--mmd-node-border); }
+.mmd .node .label { text-align: center; }
+.mmd .node .label text { text-anchor: middle; }
+.mmd .node.clickable { cursor: pointer; }
 
 .mmd .root .anchor path {
   fill: var(--mmd-line) !important;
   stroke-width: 0;
   stroke: var(--mmd-line);
 }
-.mmd .flowchart-link {
-  stroke: var(--mmd-line);
-  fill: none;
-}
 .mmd .edgePaths .path {
   stroke: var(--mmd-line);
   stroke-width: 2px;
+}
+.mmd .flowchart-link {
+  stroke: var(--mmd-line);
+  fill: none;
 }
 
 .mmd .edgeLabel {
@@ -231,289 +176,10 @@
 .mmd .cluster-label span { color: var(--mmd-title); }
 .mmd .cluster-label span p { background-color: transparent; }
 
-.mmd .node .collapsed-indicator {
-  fill: var(--mmd-cluster-border);
-  stroke: none;
-  opacity: 0.6;
-}
-.mmd .node .collapsed-separator {
-  stroke: var(--mmd-cluster-border);
-  stroke-width: 0.75px;
-}
-
-.mmd .icon-shape,
-.mmd .image-shape {
-  background-color: var(--mmd-edge-label-bg);
-  text-align: center;
-}
-.mmd .icon-shape p,
-.mmd .image-shape p {
-  background-color: var(--mmd-edge-label-bg);
-  padding: 2px;
-}
-.mmd .icon-shape .label rect,
-.mmd .image-shape .label rect {
-  opacity: 0.5;
-  background-color: var(--mmd-edge-label-bg);
-  fill: var(--mmd-edge-label-bg);
-}
 .mmd rect.text { fill: none; stroke-width: 0; }
 
-/* ========== sequence ========== */
-.mmd .actor {
-  stroke: var(--mmd-node-border);
-  fill: var(--mmd-node-bg);
-  stroke-width: 1;
-}
-.mmd text.actor > tspan {
-  fill: var(--mmd-node-text);
-  stroke: none;
-}
-.mmd .actor-line { stroke: var(--mmd-actor-line); }
-.mmd .actor-man circle,
-.mmd .actor-man line {
-  fill: var(--mmd-node-bg);
-  stroke-width: 2px;
-}
-.mmd .innerArc { stroke-width: 1.5; stroke-dasharray: none; }
-.mmd .messageLine0 {
-  stroke-width: 1.5;
-  stroke-dasharray: none;
-  stroke: var(--mmd-line);
-}
-.mmd .messageLine1 {
-  stroke-width: 1.5;
-  stroke-dasharray: 2, 2;
-  stroke: var(--mmd-line);
-}
-.mmd [id$="-arrowhead"] path,
-.mmd [id$="-crosshead"] path {
-  fill: var(--mmd-line);
-  stroke: var(--mmd-line);
-}
-.mmd [id$="-sequencenumber"] { fill: var(--mmd-line); }
-.mmd .sequenceNumber { fill: var(--mmd-bg); }
-.mmd .messageText {
-  fill: var(--mmd-text);
-  stroke: none;
-}
-.mmd .labelBox {
-  stroke: var(--mmd-node-border);
-  fill: var(--mmd-node-bg);
-}
-.mmd .labelText,
-.mmd .labelText > tspan,
-.mmd .loopText,
-.mmd .loopText > tspan,
-.mmd .sectionTitle,
-.mmd .sectionTitle > tspan {
-  fill: var(--mmd-text);
-  stroke: none;
-}
-.mmd .loopLine {
-  stroke-width: 2px;
-  stroke-dasharray: 2, 2;
-  stroke: var(--mmd-node-border);
-  fill: var(--mmd-node-border);
-}
-.mmd .note {
-  stroke: var(--mmd-note-border);
-  fill: var(--mmd-note-bg);
-}
-.mmd .noteText,
-.mmd .noteText > tspan {
-  fill: var(--mmd-note-text);
-  stroke: none;
-}
-.mmd .activation0,
-.mmd .activation1,
-.mmd .activation2 {
-  fill: var(--mmd-activation-bg);
-  stroke: var(--mmd-activation-border);
-}
-.mmd g rect.rect { stroke: var(--mmd-node-border); }
-
-/* ========== class ========== */
-.mmd g.classGroup text {
-  fill: var(--mmd-node-border);
-  stroke: none;
-  font-family: var(--mmd-font);
-  font-size: 10px;
-}
-.mmd g.classGroup rect {
-  fill: var(--mmd-node-bg);
-  stroke: var(--mmd-node-border);
-}
-.mmd g.classGroup line {
-  stroke: var(--mmd-node-border);
-  stroke-width: 1;
-}
-.mmd .classTitle { font-weight: bolder; }
-.mmd .classLabel .box {
-  stroke: none;
-  stroke-width: 0;
-  fill: var(--mmd-node-bg);
-  opacity: 0.5;
-}
-.mmd .classLabel .label {
-  fill: var(--mmd-node-border);
-  font-size: 10px;
-}
-.mmd .divider {
-  stroke: var(--mmd-node-border);
-  stroke-width: 1;
-}
-.mmd g.clickable { cursor: pointer; }
-.mmd .nodeLabel,
-.mmd .edgeLabel { color: var(--mmd-node-text); }
-.mmd .noteLabel .nodeLabel,
-.mmd .noteLabel .edgeLabel { color: var(--mmd-note-text); }
-.mmd .edgeLabel .label rect { fill: var(--mmd-node-bg); }
-.mmd .edgeLabel .label span { background: var(--mmd-node-bg); }
-
-.mmd .relation {
-  stroke: var(--mmd-line);
-  stroke-width: 1;
-  fill: none;
-}
-.mmd .dashed-line { stroke-dasharray: 3; }
-.mmd .dotted-line { stroke-dasharray: 1 2; }
-.mmd [id$="-compositionStart"], .mmd [id$="-compositionEnd"], .mmd .composition,
-.mmd [id$="-dependencyStart"], .mmd [id$="-dependencyEnd"], .mmd .dependency {
-  fill: var(--mmd-line) !important;
-  stroke: var(--mmd-line) !important;
-  stroke-width: 1;
-}
-.mmd [id$="-extensionStart"], .mmd [id$="-extensionEnd"], .mmd .extension,
-.mmd [id$="-aggregationStart"], .mmd [id$="-aggregationEnd"], .mmd .aggregation {
-  fill: transparent !important;
-  stroke: var(--mmd-line) !important;
-  stroke-width: 1;
-}
-.mmd [id$="-lollipopStart"], .mmd [id$="-lollipopEnd"], .mmd .lollipop {
-  fill: var(--mmd-node-bg) !important;
-  stroke: var(--mmd-line) !important;
-  stroke-width: 1;
-}
-.mmd .edgeTerminals { font-size: 11px; line-height: initial; }
-
-/* ========== state ========== */
-.mmd [id$="-barbEnd"] { fill: var(--mmd-line); }
-.mmd g.stateGroup text {
-  fill: var(--mmd-text);
-  stroke: none;
-  font-size: 10px;
-}
-.mmd g.stateGroup .state-title {
-  font-weight: bolder;
-  fill: var(--mmd-text);
-}
-.mmd g.stateGroup rect {
-  fill: var(--mmd-node-bg);
-  stroke: var(--mmd-node-border);
-}
-.mmd g.stateGroup line {
-  stroke: var(--mmd-line);
-  stroke-width: 1;
-}
-.mmd .transition {
-  stroke: var(--mmd-line);
-  stroke-width: 1;
-  fill: none;
-}
-.mmd .stateGroup .composit { fill: var(--mmd-bg); border-bottom: 1px; }
-.mmd .stateGroup .alt-composit { fill: var(--mmd-alt-bg); border-bottom: 1px; }
-.mmd .state-note {
-  stroke: var(--mmd-note-border);
-  fill: var(--mmd-note-bg);
-}
-.mmd .state-note text {
-  fill: var(--mmd-note-text);
-  stroke: none;
-  font-size: 10px;
-}
-.mmd .stateLabel .box {
-  stroke: none;
-  stroke-width: 0;
-  fill: var(--mmd-node-bg);
-  opacity: 0.5;
-}
-.mmd .stateLabel text {
-  fill: var(--mmd-text);
-  font-size: 10px;
-  font-weight: bold;
-}
-.mmd .edgeLabel .label text { fill: var(--mmd-text); }
-.mmd .label div .edgeLabel { color: var(--mmd-text); }
-.mmd .node circle.state-start,
-.mmd .node .fork-join {
-  fill: var(--mmd-line);
-  stroke: var(--mmd-line);
-}
-.mmd .node circle.state-end {
-  fill: var(--mmd-node-border);
-  stroke: var(--mmd-bg);
-  stroke-width: 1.5;
-}
-.mmd .end-state-inner {
-  fill: var(--mmd-bg);
-  stroke-width: 1.5;
-}
-.mmd .statediagram-cluster rect {
-  fill: var(--mmd-node-bg);
-  stroke: var(--mmd-node-border);
-  stroke-width: 1px;
-}
-.mmd .cluster-label,
-.mmd .statediagram-cluster .nodeLabel { color: var(--mmd-text); }
-.mmd .statediagram-cluster rect.outer { rx: 5px; ry: 5px; }
-.mmd .statediagram-state .divider { stroke: var(--mmd-node-border); }
-.mmd .statediagram-state .title-state { rx: 5px; ry: 5px; }
-.mmd .statediagram-cluster.statediagram-cluster .inner { fill: var(--mmd-bg); }
-.mmd .statediagram-cluster.statediagram-cluster-alt .inner { fill: var(--mmd-alt-bg); }
-.mmd .statediagram-cluster .inner { rx: 0; ry: 0; }
-.mmd .statediagram-state rect.basic { rx: 5px; ry: 5px; }
-.mmd .statediagram-state rect.divider {
-  stroke-dasharray: 10, 10;
-  fill: var(--mmd-alt-bg);
-}
-.mmd .note-edge { stroke-dasharray: 5; }
-.mmd .statediagram-note rect {
-  fill: var(--mmd-note-bg);
-  stroke: var(--mmd-note-border);
-  stroke-width: 1px;
-  rx: 0;
-  ry: 0;
-}
-.mmd .statediagram-note text,
-.mmd .statediagram-note .nodeLabel { fill: var(--mmd-note-text); color: var(--mmd-note-text); }
-
-/* ========== ER ========== */
-.mmd .entityBox {
-  fill: var(--mmd-node-bg);
-  stroke: var(--mmd-node-border);
-}
-.mmd .relationshipLabelBox {
-  fill: var(--mmd-cluster-bg);
-  opacity: 0.7;
-  background-color: var(--mmd-cluster-bg);
-}
-.mmd .relationshipLabelBox rect { opacity: 0.5; }
-.mmd .relationshipLine {
-  stroke: var(--mmd-line);
-  stroke-width: 1px;
-  fill: none;
-}
-.mmd[aria-roledescription="er"] .marker {
-  fill: none !important;
-  stroke: var(--mmd-line) !important;
-  stroke-width: 1;
-}
-.mmd[aria-roledescription="er"] .edge-pattern-dashed { stroke-dasharray: 8, 8; }
-.mmd[aria-roledescription="er"] .edgeLabel .label { fill: var(--mmd-node-border); font-size: 14px; }
-
 /* ========== gantt ========== */
-.mmd .mermaid-main-font { font-family: var(--mmd-font); }
+.mmd .mermaid-main-font { font-family: var(--font-system-ui); }
 .mmd .exclude-range { fill: var(--mmd-exclude-bg); }
 
 .mmd .section { stroke: none; opacity: 0.2; }
@@ -526,38 +192,31 @@
 .mmd .sectionTitle1,
 .mmd .sectionTitle2,
 .mmd .sectionTitle3 { fill: var(--mmd-title); }
-.mmd .sectionTitle { text-anchor: start; font-family: var(--mmd-font); }
+.mmd .sectionTitle { text-anchor: start; }
 
 .mmd .grid .tick {
   stroke: var(--mmd-grid);
   opacity: 0.8;
   shape-rendering: crispEdges;
 }
-.mmd .grid .tick text { font-family: var(--mmd-font); fill: var(--mmd-text); }
+.mmd .grid .tick text { fill: var(--mmd-text); }
 .mmd .grid path { stroke-width: 0; }
 
 .mmd .today { fill: none; stroke: var(--mmd-today); stroke-width: 2px; }
 
 .mmd .task { stroke-width: 2; }
-.mmd .taskText { text-anchor: middle; font-family: var(--mmd-font); }
-.mmd .taskTextOutsideRight {
-  fill: var(--mmd-task-text-outside);
-  text-anchor: start;
-  font-family: var(--mmd-font);
-}
+.mmd .taskText { text-anchor: middle; }
+.mmd .taskTextOutsideRight { fill: var(--mmd-task-text-outside); text-anchor: start; }
 .mmd .taskTextOutsideLeft { fill: var(--mmd-task-text-outside); text-anchor: end; }
-.mmd .task.clickable,
-.mmd .taskText.clickable { cursor: pointer; }
+
+.mmd .task.clickable { cursor: pointer; }
 .mmd .taskText.clickable,
 .mmd .taskTextOutsideLeft.clickable,
 .mmd .taskTextOutsideRight.clickable {
   cursor: pointer;
-  fill: #003163 !important;
+  fill: var(--mmd-link) !important;
   font-weight: bold;
 }
-.dark-mode .mmd .taskText.clickable,
-.dark-mode .mmd .taskTextOutsideLeft.clickable,
-.dark-mode .mmd .taskTextOutsideRight.clickable { fill: #9ec5ff !important; }
 
 .mmd .taskText0, .mmd .taskText1, .mmd .taskText2, .mmd .taskText3 { fill: var(--mmd-task-text); }
 .mmd .task0, .mmd .task1, .mmd .task2, .mmd .task3 {
@@ -612,6 +271,7 @@
   cursor: pointer;
   shape-rendering: crispEdges;
 }
+
 .mmd .milestone { transform: rotate(45deg) scale(0.8, 0.8); }
 .mmd .milestoneText { font-style: italic; }
 .mmd .vert { stroke: var(--mmd-line); }
@@ -620,45 +280,3 @@
   text-anchor: middle;
   fill: var(--mmd-line) !important;
 }
-
-/* ========== pie ========== */
-.mmd .pieCircle {
-  stroke: var(--mmd-pie-stroke);
-  stroke-width: 2px;
-  opacity: 0.7;
-}
-.mmd .pieCircle.highlighted { scale: 1.05; opacity: 1; }
-.mmd .pieCircle.highlightedOnHover:hover {
-  transition-duration: 250ms;
-  scale: 1.05;
-  opacity: 1;
-}
-.mmd .pieOuterCircle {
-  stroke: var(--mmd-pie-stroke);
-  stroke-width: 2px;
-  fill: none;
-}
-.mmd .pieTitleText {
-  text-anchor: middle;
-  font-size: 25px;
-  fill: var(--mmd-title);
-  font-family: var(--mmd-font);
-}
-.mmd .slice {
-  font-family: var(--mmd-font);
-  fill: var(--mmd-pie-label);
-  font-size: 17px;
-}
-.mmd .legend text {
-  fill: var(--mmd-text);
-  font-family: var(--mmd-font);
-  font-size: 17px;
-}
-
-/* ========== 汎用フォールバック ==========
- * 上記以外の図（journey / timeline / mindmap / gitGraph / quadrant など）は
- * 個別に再現していない。文字色だけはダークモードで読めるよう保証する。
- * 図ごとの調整が必要になったら、Mermaid 出力の class 名を DevTools で確認して追記する。
- */
-.mmd .titleText,
-.mmd .legendText { fill: var(--mmd-title); }
