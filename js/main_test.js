@@ -1,27 +1,31 @@
-
 /*@shinsenter/defer.js@3.7.0*/
 !(function (i, u, f) { function s(n, t, e) { N ? z(n, t) : ((e = e === f ? s.lazy : e) ? q : S).push(n, Math.max(e ? 350 : 0, t)) } function c(n) { return "string" == typeof (n = n || {}) ? { id: n } : n } function r(t, n, e, o) { a(n.split(" "), function (n) { (o || i)[t + "EventListener"](n, e || m) }) } function a(n, t) { n.map(t) } function l(n, t) { a(D.call(n.attributes), function (n) { t(n.name, n.value) }) } function d(n, t, e, o, i, c) { if (i = I.createElement(n), e && r(w, b, e, i), t) for (c in t) i[j](c, t[c]); return o && I.head.appendChild(i), i } function p(n, t) { return D.call((t || I).querySelectorAll(n)) } function h(o, n) { a(p("source,img", o), h), l(o, function (n, t, e) { (e = y.exec(n)) && o[j](e[1], t) }), "string" == typeof n && (o.className += " " + n), o[b] && o[b]() } function n(n, t, e) { s(function (o) { a(o = p(n || "script[type=deferjs]"), function (n, e) { n[A] && (e = {}, l(n, function (n, t) { n != C && (e[n == A ? "href" : n] = t) }), e.as = g, e.rel = "preload", d(v, e, f, I)) }), (function i(n, e, t) { (n = o[k]()) && (e = {}, l(n, function (n, t) { n != C && (e[n] = t) }), t = e[A] && !("async" in e), (e = d(g, e)).text = n.text, n.parentNode.replaceChild(e, n), t ? r(w, b + " error", i, e) : i()) })() }, t, e) } function m(n, t) { for (t = N ? (r(e, o), q) : (r(e, x), N = s, q[0] && r(w, o), S); t[0];)z(t[k](), t[k]()) } var y = /^data-(.+)/, v = "link", g = "script", b = "load", t = "pageshow", w = "add", e = "remove", o = "touchstart mousemove mousedown keydown wheel", x = "on" + t in i ? t : b, j = "setAttribute", k = "shift", A = "src", C = "type", E = i.IntersectionObserver, I = i.document || i, N = /p/.test(I.readyState), S = [], q = [], z = i.setTimeout, D = S.slice; s.all = n, s.domz = function (n, t, i, z, c, r) { s(function (e) { function o(n) { c && !1 === c(n) || h(n, i) } e = E ? new E(function (n) { a(n, function (n, t) { n.isIntersecting && (t = n.target) && (z && z(t), e.unobserve(t), o(t)) }) }, r) : f, a(p(n || "[data-src]"), function (n) { n[u] || (n[u] = s, e ? e.observe(n) : o(n)) }) }, t, !1) }, s.dom = function (n, t, i, c, r) { s(function (e) { function o(n) { c && !1 === c(n) || h(n, i) } e = E ? new E(function (n) { a(n, function (n, t) { n.isIntersecting && (e.unobserve(t = n.target), o(t)) }) }, r) : f, a(p(n || "[data-src]"), function (n) { n[u] || (n[u] = s, e ? e.observe(n) : o(n)) }) }, t, !1) }, s.css = function (n, t, e, o, i) { (t = c(t)).href = n, t.rel = "stylesheet", s(function () { d(v, t, o, I) }, e, i) }, s.js = function (n, t, e, o, i) { (t = c(t)).src = n, s(function () { d(g, t, o, I) }, e, i) }, s.reveal = h, i[u] = s, N || r(w, x), n() })(this, "Defer")
 
 'IntersectionObserver' in window || document.write('<script src="https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver"><\/script>');
 
-if (document.querySelector('.blogcard-auto') !== null) {
-  Defer.js('https://ai-image-journey.pages.dev/js/blogcard-auto.js', 'blogcard-auto', 100);
+if (document.querySelector('#post-pager, #HTML5')) {
+  Defer.css('https://ai-image-journey.pages.dev/css/post-pager.css', 'post-pager-css', 100);
 }
 
-if (document.querySelector('textarea') !== null) {
-  Defer.js('https://ai-image-journey.pages.dev/js/textarea-adjust.js', 'textarea-adjust', 100);
+if (document.querySelector('.blogcard-auto')) {
+  Defer.css('https://ai-image-journey.pages.dev/css/blogcard-auto.css', 'blogcard-auto-css', 100);
+  Defer.js('https://ai-image-journey.pages.dev/js/blogcard-auto.js', 'blogcard-auto-js', 100);
 }
 
-if (document.querySelector('.table-responsive') !== null) {
+if (document.querySelector('textarea')) {
+  Defer.css('https://ai-image-journey.pages.dev/css/textarea.css', 'textarea-css', 100);
+}
+
+if (document.querySelector('.table-responsive')) {
   Defer.js('https://ai-image-journey.pages.dev/js/table-responsive.js', 'table-responsive', 100);
 }
 
-if (document.querySelector('#toc') !== null) {
+if (document.querySelector('#toc')) {
   Defer.js('https://ai-image-journey.pages.dev/js/page_toc.js', 'page_toc_js', 100);
   Defer.css('https://ai-image-journey.pages.dev/css/page_toc.css', 'page_toc_css', 100);
 }
 
-if (document.querySelector('.chartjs') !== null) {
+if (document.querySelector('.chartjs')) {
   Defer.js('https://ai-image-journey.pages.dev/js/chart.umd.min.js', 'chartjs', 100);
   Defer.js('https://ai-image-journey.pages.dev/js/chartjs-run.js', 'chartjs-run', 100);
   Defer.js('https://ai-image-journey.pages.dev/js/chartjs-plugin-datalabels.min.js', 'chartjsdatalabelsplugin', 300);
@@ -30,23 +34,29 @@ if (document.querySelector('.chartjs') !== null) {
   Defer.js('https://ai-image-journey.pages.dev/js/papaprase.js', 'papapease', 300);
 }
 
-if (document.querySelector('.language-mermaid') !== null) {
-  Defer.js('https://ai-image-journey.pages.dev/js/mermaid-custom/mermaid-custom.min.js', 'mermaid', 100);
-  Defer.js('https://ai-image-journey.pages.dev/js/mermaid-run.js', 'mermaid-run', 100);
+/* Mermaid v12: ESM本体と mermaid.css は mermaid-run.js 側で読み込む */
+if (document.querySelector('.language-mermaid')) {
+  Defer.js('https://ai-image-journey.pages.dev/js/mermaid-run2.js', 'mermaid-run', 100);
 }
 
-if (document.querySelector('.markdown') !== null) {
+if (document.querySelector('.markdown')) {
   Defer.js('https://ai-image-journey.pages.dev/js/turndown.min.js', 'turndown', 100);
   Defer.js('https://ai-image-journey.pages.dev/js/turndown-plugin-gfm.js', 'turndownplugin', 100);
   Defer.js('https://ai-image-journey.pages.dev/js/marked.min.js', 'marked', 100);
   Defer.js('https://ai-image-journey.pages.dev/js/marked_index.umd.js', 'markedplugin', 100);
 }
 
-if (document.querySelector('.bluesky-embed') !== null) {
-  Defer.js('https://ai-image-journey.pages.dev/js/bluesky-embed.js', 'bluesky-embed', 1000);
+if (document.querySelector('.katex-block')) {
+  Defer.css('https://ai-image-journey.pages.dev/css/katex.css', 'katex-css', 100);
+  Defer.js('https://ai-image-journey.pages.dev/js/katex.min.js', 'katex', 100);
+  Defer.js('https://ai-image-journey.pages.dev/js/katex-auto-render.js', 'katex-auto-render', 300);
 }
-if (document.querySelector('.twitter-tweet') !== null) {
-  Defer.js('https://ai-image-journey.pages.dev/js/twitter_embed.js', 'twitter', 1500);
+
+if (document.querySelector('.twitter-tweet')) {
+  Defer.js('https://ai-image-journey.pages.dev/js/twitter_embed.js', 'twitter', 1000);
+}
+if (document.querySelector('.bluesky-embed')) {
+  Defer.js('https://ai-image-journey.pages.dev/js/bluesky-embed.js', 'bluesky-embed', 1500);
 }
 
 /* img, iframe 差し替え */
@@ -193,10 +203,7 @@ darkModeButtons.forEach(function (button) {
       updateAllChartColors();
     }
 
-    // Mermaidチャートを再描画
-    if (typeof updateMermaidTheme === 'function') {
-      updateMermaidTheme(newTheme);
-    }
+    // Mermaidは mermaid.css の .dark-mode 対応で切り替わるため、再描画は不要
 
     // Blueskyの埋め込みテーマを更新
     if (window.bluesky && typeof window.bluesky.updateThemes === 'function') {
@@ -252,3 +259,33 @@ Defer(function () {
     }
   });
 }, 5000);
+
+Defer(function() {
+  // ウィンドウの幅が800pxより大きい場合のみ実行
+  if (window.innerWidth > 800) {
+    // 画像のsrc属性を変更
+    var imageFullSize2 = document.querySelectorAll('img');
+    imageFullSize2.forEach(function(img) {
+      var src = img.src;
+      if (src.includes('w800-e90-rw')) {
+        var newFullImgSrc2 = src.replace('w800-e90-rw', 'w0-e90-rw');
+        img.src = newFullImgSrc2;
+      }
+    });
+  }
+}, 10000); 
+
+Defer(function() {
+  // ウィンドウの幅が800pxより大きい場合のみ実行
+  if (window.innerWidth > 800) {
+    // 画像のsrc属性を変更
+    var imageFullSize3 = document.querySelectorAll('img');
+    imageFullSize3.forEach(function(img) {
+      var src = img.src;
+      if (src.includes('w1200-e90-rw')) {
+        var newFullImgSrc3 = src.replace('w1200-e90-rw', 'w0-e90-rw');
+        img.src = newFullImgSrc3;
+      }
+    });
+  }
+}, 10000);
