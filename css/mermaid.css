@@ -13,6 +13,44 @@
  * - flowchart / gantt 以外の図は対応していない（スタイルが無いため崩れる）。
  */
 
+ /* ========== グローバル ========== */
+
+.mermaid-chart {
+    content-visibility: visible;
+    margin: 0 auto;
+}
+
+.mermaid-block {
+	display: grid;
+	grid-template-columns: 100%;
+    padding: 0;
+	background-color: transparent;
+}
+
+.mermaid {
+	display: block;
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+    padding: 0;
+    background-color: transparent;
+}
+
+.mermaid svg{
+	width: 100%;
+    height: 100%;
+    stroke: none;
+}
+
+.mermaidTooltip{
+    display: none;
+}
+
+g,
+foreignObject {
+	overflow: visible;
+}
+
 /* ========== 変数（ライト） ========== */
 
 .mmd {
@@ -280,43 +318,4 @@
   font-size: 15px;
   text-anchor: middle;
   fill: var(--mmd-line) !important;
-}
-
-
-/* ========== グローバル ========== */
-
-.mermaid-block {
-	display: grid;
-	grid-template-columns: 100%;
-    padding: 0;
-	background-color: transparent;
-}
-
-.mermaid {
-	display: block;
-	width: 100%;
-	margin-left: auto;
-	margin-right: auto;
-    padding: 0;
-    background-color: transparent;
-}
-
-.mermaid svg{
-	width: 100%;
-    height: 100%;
-    stroke: none;
-}
-
-.mermaidTooltip{
-    display: none;
-}
-
-g,
-foreignObject {
-	overflow: visible;
-}
-
-.mermaid-chart {
-    content-visibility: visible;
-    margin: 0 auto;
 }
