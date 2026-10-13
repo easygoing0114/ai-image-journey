@@ -14,6 +14,43 @@
  */
 
 /* ========== 変数（ライト） ========== */
+
+.mermaid-chart {
+    content-visibility: visible
+    margin: 0 auto;
+}
+
+.mermaid-block {
+	display: grid;
+	grid-template-columns: 100%;
+    padding: 0;
+	background-color: transparent;
+}
+
+.mermaid {
+	display: block;
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+    padding: 0;
+    background-color: transparent;
+}
+
+.mermaid svg{
+	width: 100%;
+    height: 100%;
+    stroke: none;
+}
+
+.mermaidTooltip{
+    display: none;
+}
+
+g,
+foreignObject {
+	overflow: visible;
+}
+
 .mmd {
   --mmd-text: #333;
   --mmd-title: #333;
