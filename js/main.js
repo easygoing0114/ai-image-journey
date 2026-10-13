@@ -21,8 +21,8 @@ if (document.querySelector('.table-responsive')) {
 }
 
 if (document.querySelector('#toc')) {
-  Defer.js('https://ai-image-journey.pages.dev/js/page_toc.js', 'page_toc_js', 100);
   Defer.css('https://ai-image-journey.pages.dev/css/page_toc.css', 'page_toc_css', 100);
+  Defer.js('https://ai-image-journey.pages.dev/js/page_toc.js', 'page_toc_js', 100);
 }
 
 if (document.querySelector('.chartjs')) {
@@ -36,7 +36,7 @@ if (document.querySelector('.chartjs')) {
 
 if (document.querySelector('.language-mermaid')) {
   Defer.js('https://ai-image-journey.pages.dev/js/mermaid-run.js', 'mermaid-run', 100);
-  Defer.css('https://ai-image-journey.pages.dev/css/mermaid.css', 'mermaid-css', 300);
+  Defer.css('https://ai-image-journey.pages.dev/css/mermaid.css', 'mermaid-css', 200);
 }
 
 if (document.querySelector('.markdown')) {
@@ -202,8 +202,6 @@ darkModeButtons.forEach(function (button) {
     if (typeof updateAllChartColors === 'function') {
       updateAllChartColors();
     }
-
-    // Mermaidは mermaid.css の .dark-mode 対応で切り替わるため、再描画は不要
 
     // Blueskyの埋め込みテーマを更新
     if (window.bluesky && typeof window.bluesky.updateThemes === 'function') {
