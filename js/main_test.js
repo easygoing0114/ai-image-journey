@@ -561,18 +561,18 @@
      10. 実行 (すべて load 後。取得タイミングは秒数で指定)
      ------------------------------------------------------------------------ */
 
-  //Defer(() => {
-  //  if (postBody) copyRelatedPostsToInline();
+  Defer(() => {
+    if (postBody) copyRelatedPostsToInline();
 
     // 複数のリストが同時にフィードを取りに行かないよう 300ms ずつずらす
-  //  document.querySelectorAll('.custom-posts').forEach((container, i) => {
-  //    Defer(() => {
-  //      loadCustomPosts(container).catch((error) => console.warn('[custom-posts]', error));
-  //    }, i * 300);
-  //  });
+    document.querySelectorAll('.custom-posts').forEach((container, i) => {
+      Defer(() => {
+        loadCustomPosts(container).catch((error) => console.warn('[custom-posts]', error));
+      }, i * 300);
+    });
 
-  //  insertInArticleAds();
-  //}, 300);
+    insertInArticleAds();
+  }, 300);
 
   Defer(() => {
     const postPager = document.getElementById('post-pager');
