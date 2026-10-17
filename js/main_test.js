@@ -139,17 +139,17 @@
   // data-src を使う画像の差し替え (公式の Defer.dom)
   // 旧 .lazyload 画像 (data-src のみ) は、表示前にサムネイルサイズへ変換する。
   // テーマ側に data-src + .lazyload の画像が無ければ、この1行は削除できる。
-  Defer.dom('img.lazyload', 1, 'loaded', (img) => {
-    const src = img.getAttribute('data-src');
-    if (src) img.setAttribute('data-src', toThumbnail(src));
-  }, { rootMargin: '500%' });
+  //Defer.dom('img.lazyload', 1, 'loaded', (img) => {
+  //  const src = img.getAttribute('data-src');
+  //  if (src) img.setAttribute('data-src', toThumbnail(src));
+  //}, { rootMargin: '500%' });
   Defer.dom('img', 300);
   Defer.dom('iframe', 500);
 
   Defer(() => releaseLazyImages(), 100);
 
-  // 小さいカード画像を段階的に拡大 (w200 → w400 → w800 → w0)
-  Defer(() => swapImageSize('w200-e90-rw', 'w400-e90-rw'), 2000);
+  // 小さいカード画像を段階的に拡大 (w200, w400 → w800 → w0)
+  Defer(() => swapImageSize('w200-e90-rw', 'w800-e90-rw'), 5000);
   Defer(() => swapImageSize('w400-e90-rw', 'w800-e90-rw'), 5000);
   Defer(() => {
     // 最高画質 (w0) は PC 幅のみ。ダウンロード用途の長期滞在者向け
