@@ -13,8 +13,8 @@
 ;(function () {
   'use strict';
 
-  const LAZY_RELEASE_BATCH = 6;       // loading="lazy" を一度に解除する枚数
-  const LAZY_RELEASE_INTERVAL = 150;  // 解除バッチの間隔 (ms)
+  const LAZY_RELEASE_BATCH = 2;       // loading="lazy" を一度に解除する枚数
+  const LAZY_RELEASE_INTERVAL = 200;  // 解除バッチの間隔 (ms)
 
 
   /* ------------------------------------------------------------------------
