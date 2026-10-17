@@ -1,106 +1,70 @@
+// リサイズ停止後に1回だけ実行するための debounce
+// （他のスクリプトとの名前衝突を避けるため、専用の名前にしています）
+function tableDebounce(fn, wait) {
+  let timer;
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), wait);
+  };
+}
+
 let isScheduled = false;
 
 function adjustTableScale() {
-var tables = document.querySelectorAll('.table-responsive table');
-tables.forEach(function (table) {
-    var tableResponsive = table.parentElement;
-    var tableResponsiveWidth = tableResponsive.clientWidth;
+  document.querySelectorAll('.table-responsive table').forEach(function (table) {
+    const wrap = table.closest('.table-responsive');
+    const cells = table.querySelectorAll('th, td');
+    if (!wrap || !cells.length) return;
 
-    // 元のサイズが保存されていない場合は保存
-    if (!table.dataset.originalWidth) {
-    // 完全にリセットした状態でサイズを測定
-    table.style.cssText = '';
-    table.querySelectorAll('th, td').forEach(function (cell) {
-        cell.style.fontSize = '';
-        cell.style.padding = '';
-    });
-
-    // 元のサイズを保存
-    table.dataset.originalWidth = table.scrollWidth;
-    table.dataset.originalHeight = table.scrollHeight;
-
-    // 元のスタイルも保存
-    var firstCell = table.querySelector('th, td');
-    if (firstCell) {
-        var computedStyle = getComputedStyle(firstCell);
-        if (!table.dataset.originalFontSize) {
-        table.dataset.originalFontSize = computedStyle.fontSize;
-        table.dataset.originalPaddingTop = computedStyle.paddingTop;
-        table.dataset.originalPaddingLeft = computedStyle.paddingLeft;
-        }
-    }
-    }
-
-    // 保存された元のサイズを使用
-    var originalTableWidth = parseInt(table.dataset.originalWidth);
-    var originalTableHeight = parseInt(table.dataset.originalHeight);
-    var originalFontSize = parseFloat(table.dataset.originalFontSize);
-    var originalPaddingTop = parseFloat(table.dataset.originalPaddingTop);
-    var originalPaddingLeft = parseFloat(table.dataset.originalPaddingLeft);
-
-    // リセット処理
-    table.style.height = 'auto';
+    // 毎回、元の状態に戻してから測定する（キャッシュしない）
     table.style.width = 'auto';
-    table.querySelectorAll('th, td').forEach(function (cell) {
-    cell.style.fontSize = originalFontSize + 'px';
-    cell.style.padding = originalPaddingTop + 'px ' + originalPaddingLeft + 'px';
+    table.style.height = '';
+    cells.forEach(function (cell) {
+      cell.style.fontSize = '';
+      cell.style.padding = '';
     });
 
-    // スケール調整の判定と適用
-    if (originalTableWidth > tableResponsiveWidth) {
-    // テーブルの実際のボーダー幅を取得
-    var tableComputedStyle = getComputedStyle(table);
-    var borderLeftWidth = parseFloat(tableComputedStyle.borderLeftWidth) || 0;
-    var borderRightWidth = parseFloat(tableComputedStyle.borderRightWidth) || 0;
-    var totalBorderWidth = borderLeftWidth + borderRightWidth;
+    const available = wrap.clientWidth;
+    const natural = table.scrollWidth;
 
-    // セルのボーダーも考慮（テーブルによってはcollapse border）
-    var firstCell = table.querySelector('th, td');
-    var totalBorderHeight = 0;
-    if (firstCell && tableComputedStyle.borderCollapse !== 'collapse') {
-        var cellStyle = getComputedStyle(firstCell);
-        var cellBorderLeft = parseFloat(cellStyle.borderLeftWidth) || 0;
-        var cellBorderRight = parseFloat(cellStyle.borderRightWidth) || 0;
-        var cellBorderTop = parseFloat(cellStyle.borderTopWidth) || 0;
-        var cellBorderBottom = parseFloat(cellStyle.borderBottomWidth) || 0;
-        totalBorderWidth += Math.max(cellBorderLeft + cellBorderRight, 2);
-        totalBorderHeight = cellBorderTop + cellBorderBottom;
-    }
+    // 非表示などで幅が取れない場合、またはすでに収まっている場合は何もしない
+    if (!available || !natural || natural <= available) return;
 
-    // テーブル自体の上下ボーダー
-    var borderTopWidth = parseFloat(tableComputedStyle.borderTopWidth) || 0;
-    var borderBottomWidth = parseFloat(tableComputedStyle.borderBottomWidth) || 0;
-    totalBorderHeight += borderTopWidth + borderBottomWidth;
+    // リセット後の元のスタイルを取得
+    const cs = getComputedStyle(cells[0]);
+    const fontSize = parseFloat(cs.fontSize);
+    const padTop = parseFloat(cs.paddingTop);
+    const padLeft = parseFloat(cs.paddingLeft);
 
-    // 安全なマージンを追加
-    var safetyMargin = 12;
-    var availableWidth = tableResponsiveWidth - totalBorderWidth - safetyMargin;
-    var scale = availableWidth / originalTableWidth;
+    // ボーダー等の誤差を吸収する安全マージン
+    const safety = 12;
+    const targetWidth = available - safety;
+    const scale = targetWidth / natural;
 
-    // DOM書き込み（スタイル適用）
-    table.style.width = availableWidth + 'px';
-    table.style.height = (originalTableHeight * scale) + totalBorderHeight + safetyMargin + 'px';
-    table.querySelectorAll('th, td').forEach(function (cell) {
-        cell.style.fontSize = (originalFontSize * scale) + 'px';
-        cell.style.padding = (originalPaddingTop * scale) + 'px ' + (originalPaddingLeft * scale) + 'px';
+    table.style.width = targetWidth + 'px';
+    cells.forEach(function (cell) {
+      cell.style.fontSize = (fontSize * scale) + 'px';
+      cell.style.padding = (padTop * scale) + 'px ' + (padLeft * scale) + 'px';
     });
-    }
-});
+  });
 }
 
 function scheduleAdjustTableScale() {
-if (!isScheduled) {
-    isScheduled = true;
-    // 次の描画フレームの直前に adjustTableScale を実行
-    requestAnimationFrame(() => {
+  if (isScheduled) return;
+  isScheduled = true;
+  // 次の描画フレームの直前に実行
+  requestAnimationFrame(function () {
     adjustTableScale();
-    isScheduled = false; // 処理完了後にフラグをリセット
-    });
+    isScheduled = false;
+  });
 }
+
+// リサイズ時（停止後100msで1回）
+window.addEventListener('resize', tableDebounce(scheduleAdjustTableScale, 100));
+
+// 初回実行：DOM構築後、全リソース読み込み後、フォント読み込み後
+document.addEventListener('DOMContentLoaded', scheduleAdjustTableScale);
+window.addEventListener('load', scheduleAdjustTableScale);
+if (document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(scheduleAdjustTableScale);
 }
-
-const debouncedSchedule = debounce(scheduleAdjustTableScale, 100);
-
-window.addEventListener('resize', debouncedSchedule);
-
-scheduleAdjustTableScale();
