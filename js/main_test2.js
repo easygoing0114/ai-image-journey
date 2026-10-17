@@ -16,6 +16,10 @@
    Defer.css / Defer.js (url, id, 遅延ms)
    ========================================================================== */
 
+if (document.querySelector('#post-pager, #HTML5')) {
+  Defer.css('https://ai-image-journey.pages.dev/css/post-pager.css', 'post-pager-css', 100);
+}
+
 if (document.querySelector('.blogcard-auto')) {
   Defer.css('https://ai-image-journey.pages.dev/css/blogcard-auto.css', 'blogcard-auto-css', 100);
   Defer.js('https://ai-image-journey.pages.dev/js/blogcard-auto.js', 'blogcard-auto-js', 100);
