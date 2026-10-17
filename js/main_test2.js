@@ -1,7 +1,6 @@
 /* ==========================================================================
    main_test.js
    依存: defer_390.js (先に読み込むこと。グローバルの Defer を使う)
-   画像の後処理 (loading="lazy" の解除 / 画質の段階的な向上) は image_refine.js
 
    テンプレート側で定義されていれば読む変数 (無くても動作):
      titleSeparator / pageTitle / innerAdsDelimiter / ignoreAdsDelimiter
@@ -48,8 +47,8 @@ if (document.querySelector('.chartjs')) {
 }
 
 if (document.querySelector('.language-mermaid')) {
+  Defer.css('https://ai-image-journey.pages.dev/css/mermaid.css', 'mermaid-css', 100);
   Defer.js('https://ai-image-journey.pages.dev/js/mermaid-run.js', 'mermaid-run', 100);
-  Defer.css('https://ai-image-journey.pages.dev/css/mermaid.css', 'mermaid-css', 300);
 }
 
 if (document.querySelector('.markdown')) {
@@ -78,9 +77,7 @@ if (document.querySelector('.bluesky-embed')) {
    ここからサイト独自コード
    ========================================================================== */
 
-// 先頭の ; は保険: 直前の行がセミコロンなしで終わっていても、
-// 次の (function () { ... })() が関数呼び出しとして解釈されないようにする。
-;(function () {
+(function () {
   'use strict';
 
   /* ------------------------------------------------------------------------
@@ -96,6 +93,8 @@ if (document.querySelector('.bluesky-embed')) {
 
   const THUMBNAIL_WIDTH = 400;          // カスタム記事リストのサムネイル幅 (px)
   const BACK_TO_TOP_THRESHOLD = 1000;   // この px 以上スクロールしたらトップへ戻るボタンを表示
+  const LAZY_RELEASE_BATCH = 2;         // loading="lazy" を一度に解除する枚数
+  const LAZY_RELEASE_INTERVAL = 200;    // 解除バッチの間隔 (ms)
 
   const header = document.getElementById('header');
   const backToTop = document.getElementById('back-to-top');
@@ -111,23 +110,19 @@ if (document.querySelector('.bluesky-embed')) {
 
   /* ------------------------------------------------------------------------
      2. 画像
-        loading="lazy" の解除と高画質化は image_refine.js
      ------------------------------------------------------------------------ */
 
-  /** Blogger の画像 URL を THUMBNAIL_WIDTH のサムネイル URL に変換 */
+  /**
+   * Blogger の画像 URL を THUMBNAIL_WIDTH のサムネイル URL に変換
+   * 例: .../img/a/xxxx=s1600 や .../proxy/xxxx=s1600 → "=" 以降を差し替える
+   * 上記の形式以外は変換せずそのまま返す。
+   */
   function toBloggerThumbnail(src) {
+    if (!/img\/a|proxy\//.test(src)) return src;
+
     const size = `w${THUMBNAIL_WIDTH}-c-e90-rw`;
-
-    // 例: .../img/a/xxxx=s1600 や .../proxy/xxxx=s1600 → "=" 以降を差し替える
-    if (/img\/a|proxy\//.test(src)) {
-      const equalsIndex = src.lastIndexOf('=');
-      return equalsIndex === -1 ? `${src}=${size}` : src.slice(0, equalsIndex + 1) + size;
-    }
-
-    // 例: .../img/b/xxxx/s72-c/image.png → 後ろから 2 番目のパス要素を差し替える
-    const segments = src.split('/');
-    segments[segments.length - 2] = size;
-    return segments.join('/');
+    const equalsIndex = src.lastIndexOf('=');
+    return equalsIndex === -1 ? `${src}=${size}` : src.slice(0, equalsIndex + 1) + size;
   }
 
   /** 画像 URL を表示用サイズに変換 (Blogger → サムネイル / YouTube → mqdefault) */
@@ -136,6 +131,27 @@ if (document.querySelector('.bluesky-embed')) {
     if (/googleusercontent/.test(src)) return toBloggerThumbnail(src);
     if (/img\.youtube|i\.ytimg/.test(src)) return src.slice(0, src.lastIndexOf('/')) + '/mqdefault.jpg';
     return src;
+  }
+
+  /**
+   * loading="lazy" を順次解除する (img / iframe)。
+   * Blogger の画像サーバーは応答待ちが長いので、少しずつ並列にリクエストを出す。
+   */
+  function releaseLazyMedia(root = document) {
+    root.querySelectorAll('img[loading="lazy"], iframe[loading="lazy"]').forEach((element, i) => {
+      Defer(
+        () => element.removeAttribute('loading'),
+        Math.floor(i / LAZY_RELEASE_BATCH) * LAZY_RELEASE_INTERVAL
+      );
+    });
+  }
+
+  /** src 内の from を to に置き換える (viewport 幅が minViewport 以下なら何もしない) */
+  function swapImageSize(from, to, minViewport = 0) {
+    if (window.innerWidth <= minViewport) return;
+    document.querySelectorAll(`img[src*="${from}"]`).forEach((img) => {
+      img.src = img.src.replace(from, to);
+    });
   }
 
   // data-src を使う画像の差し替え (公式の Defer.dom)
@@ -147,6 +163,17 @@ if (document.querySelector('.bluesky-embed')) {
   }, { rootMargin: '500%' });
   Defer.dom('img', 300);
   Defer.dom('iframe', 500);
+
+  Defer(() => releaseLazyMedia(), 100);
+
+  // 小さいカード画像を段階的に拡大 (w200, w400 → w800 → w0)
+  Defer(() => swapImageSize('w200-e90-rw', 'w800-e90-rw'), 5000);
+  Defer(() => swapImageSize('w400-e90-rw', 'w800-e90-rw'), 5000);
+  Defer(() => {
+    // 最高画質 (w0) は PC 幅のみ。ダウンロード用途の長期滞在者向け
+    swapImageSize('w800-e90-rw', 'w0-e90-rw', 800);
+    swapImageSize('w1200-e90-rw', 'w0-e90-rw', 800);
+  }, 10000);
 
   Defer(() => {
     document.querySelectorAll('.gpu-accelerated').forEach((el) => el.classList.remove('gpu-accelerated'));
@@ -497,8 +524,7 @@ if (document.querySelector('.bluesky-embed')) {
     container.innerHTML = template({ title, posts: finalPosts }).trim();
     showElement(container);
 
-    // 描画した記事リスト内の loading="lazy" を解除する (image_refine.js が公開する関数)
-    window.releaseLazyMedia?.(container);
+    releaseLazyMedia(container);
 
     if (typeof window[callback] === 'function') window[callback]();
   }
