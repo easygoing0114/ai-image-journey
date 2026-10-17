@@ -74,6 +74,21 @@ if (document.querySelector('.bluesky-embed')) {
 
 
 /* ==========================================================================
+   グローバル関数
+   chartjs-run.js が window.debounce を参照するため、IIFE の外 (グローバル) に置く。
+   ========================================================================== */
+
+function debounce(func, wait) {
+  let timeout;
+  return function () {
+    const context = this, args = arguments;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(context, args), wait);
+  };
+}
+
+
+/* ==========================================================================
    ここからサイト独自コード
    ========================================================================== */
 
