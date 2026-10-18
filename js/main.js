@@ -79,7 +79,7 @@ function debounce(func, wait) {
   const AD_ANCHOR = typeof innerAdsDelimiter !== 'undefined' ? innerAdsDelimiter : 'p,br,div';
   const AD_IGNORE = typeof ignoreAdsDelimiter !== 'undefined' ? ignoreAdsDelimiter : 'pre,ul,ol,table,blockquote';
 
-  const THUMBNAIL_WIDTH = 400;
+  const THUMBNAIL_WIDTH = 200;
   const BACK_TO_TOP_THRESHOLD = 1000;
   const LAZY_BATCH = 3;
   const LAZY_INTERVAL = 500;
