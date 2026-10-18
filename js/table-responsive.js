@@ -1,12 +1,3 @@
-// リサイズ停止後に1回だけ実行するための debounce
-// （他のスクリプトとの名前衝突を避けるため、専用の名前にしています）
-function tableDebounce(fn, wait) {
-  let timer;
-  return function (...args) {
-    clearTimeout(timer);
-    timer = setTimeout(() => fn.apply(this, args), wait);
-  };
-}
 
 let isScheduled = false;
 
@@ -60,7 +51,7 @@ function scheduleAdjustTableScale() {
 }
 
 // リサイズ時（停止後100msで1回）
-window.addEventListener('resize', tableDebounce(scheduleAdjustTableScale, 100));
+window.addEventListener('resize', debounce(scheduleAdjustTableScale, 100));
 
 // 初回実行：DOM構築後、全リソース読み込み後、フォント読み込み後
 document.addEventListener('DOMContentLoaded', scheduleAdjustTableScale);
