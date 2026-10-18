@@ -83,7 +83,7 @@ function debounce(func, wait) {
   const BACK_TO_TOP_THRESHOLD = 1000;
   const LAZY_BATCH = 3;
   const LAZY_INTERVAL = 500;
-  const TITLE_SUFFIX = ' | AI Image Journey'; // 前後記事タイトル取得用 (コメントアウト中)
+  const TITLE_SUFFIX = ' | AI Image Journey'; 
 
   const header = document.getElementById('header');
   const backToTop = document.getElementById('back-to-top');
@@ -122,9 +122,9 @@ function debounce(func, wait) {
   }
 
   Defer(() => {
-    Defer.dom('img', 300);
-    Defer.dom('iframe', 500);
-  }, 0, true);
+    Defer.dom('img', 100);
+    Defer.dom('iframe', 300);
+  }, 350, true);
 
   Defer(() => releaseLazyMedia(), 100);
 
