@@ -603,20 +603,20 @@ Defer(function() {
   Defer(() => {
     if (postBody) copyRelatedPostsToInline();
 
-    // 複数のリストが同時にフィードを取りに行かないよう 300ms ずつずらす
+    // 複数のリストが同時にフィードを取りに行かないよう 100ms ずつずらす
     document.querySelectorAll('.custom-posts').forEach((container, i) => {
       Defer(() => {
         loadCustomPosts(container).catch((error) => console.warn('[custom-posts]', error));
-      }, i * 300);
+      }, i * 100);
     });
 
     insertInArticleAds();
-  }, 300);
+  }, 100);
 
   Defer(() => {
     const postPager = document.getElementById('post-pager');
     if (postPager) processPostPager(postPager);
-  }, 1500);
+  }, 1500, true);
 
   Defer(() => {
     const pagination = document.getElementById('pagination');
