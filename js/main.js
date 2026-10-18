@@ -146,14 +146,14 @@ function debounce(func, wait) {
   }
    */
 
-  /** 画像 URL を表示用サイズに変換 (Blogger → サムネイル / YouTube → mqdefault) 
+  /** 画像 URL を表示用サイズに変換 (Blogger → サムネイル / YouTube → mqdefault)    */
   function toThumbnail(src) {
     if (!src) return src;
     if (/googleusercontent/.test(src)) return toBloggerThumbnail(src);
     if (/img\.youtube|i\.ytimg/.test(src)) return src.slice(0, src.lastIndexOf('/')) + '/mqdefault.jpg';
     return src;
   }
-   */
+
 
   /**
    * loading="lazy" を順次解除する (img / iframe)。
