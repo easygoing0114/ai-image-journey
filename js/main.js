@@ -130,13 +130,21 @@ function debounce(func, wait) {
   /**
    * Blogger の画像 URL を THUMBNAIL_WIDTH のサムネイル URL に変換
    */
-  function toBloggerThumbnail(src) {
-    if (!/img\/[ab]|proxy\//.test(src)) return src;
+function toBloggerThumbnail(src) {
+  if (!/img\/[ab]|proxy\//.test(src)) return src;
 
-    const size = `w${THUMBNAIL_WIDTH}-e90-rw`;
-    const equalsIndex = src.lastIndexOf('=');
-    return equalsIndex === -1 ? `${src}=${size}` : src.slice(0, equalsIndex + 1) + size;
+  const size = `w${THUMBNAIL_WIDTH}-e90-rw`;
+
+  // 新形式: .../w2048-e90-rw/ファイル名 や .../s72-c/ファイル名 (サイズがパスの1セグメント)
+  const pathSizePattern = /\/[wsh]\d+(?:-[A-Za-z0-9]+)*\//;
+  if (pathSizePattern.test(src)) {
+    return src.replace(pathSizePattern, `/${size}/`);
   }
+
+  // 旧形式: .../AVvX...=s72-c (= の後ろがサイズ指定)
+  const equalsIndex = src.lastIndexOf('=');
+  return equalsIndex === -1 ? `${src}=${size}` : src.slice(0, equalsIndex + 1) + size;
+}
 
   /** 画像 URL を表示用サイズに変換 (Blogger → サムネイル / YouTube → mqdefault) */
   function toThumbnail(src) {
@@ -184,8 +192,8 @@ Defer(function() {
   Defer(() => releaseLazyMedia(), 100);
 
   // 小さいカード画像を段階的に拡大 (w200 / w400 → w800 → w0)
-  Defer(() => swapImageSize('w200-e90-rw', 'w800-e90-rw'), 5000);
-  Defer(() => swapImageSize('w400-e90-rw', 'w800-e90-rw'), 5000);
+  Defer(() => swapImageSize('w200-e90-rw', 'w800-e90-rw'), 5000, true);
+  Defer(() => swapImageSize('w400-e90-rw', 'w800-e90-rw'), 5000, true);
   Defer(() => {
     // 最高画質 (w0) は PC 幅のみ。ダウンロード用途の長期滞在者向け
     swapImageSize('w800-e90-rw', 'w0-e90-rw', 800);
