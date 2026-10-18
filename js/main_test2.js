@@ -108,8 +108,8 @@ function debounce(func, wait) {
 
   const THUMBNAIL_WIDTH = 400;          // カスタム記事リストのサムネイル幅 (px)
   const BACK_TO_TOP_THRESHOLD = 1000;   // この px 以上スクロールしたらトップへ戻るボタンを表示
-  const LAZY_RELEASE_BATCH = 2;         // loading="lazy" を一度に解除する枚数
-  const LAZY_RELEASE_INTERVAL = 200;    // 解除バッチの間隔 (ms)
+  const LAZY_RELEASE_BATCH = 3;         // loading="lazy" を一度に解除する枚数
+  const LAZY_RELEASE_INTERVAL = 500;    // 解除バッチの間隔 (ms)
 
   const header = document.getElementById('header');
   const backToTop = document.getElementById('back-to-top');
