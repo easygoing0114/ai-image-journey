@@ -129,7 +129,6 @@ function debounce(func, wait) {
 
   /**
    * Blogger の画像 URL を THUMBNAIL_WIDTH のサムネイル URL に変換
-   */
   function toBloggerThumbnail(src) {
     if (!/img\/[ab]|proxy\//.test(src)) return src;
 
@@ -145,14 +144,16 @@ function debounce(func, wait) {
     const equalsIndex = src.lastIndexOf('=');
     return equalsIndex === -1 ? `${src}=${size}` : src.slice(0, equalsIndex + 1) + size;
   }
+   */
 
-  /** 画像 URL を表示用サイズに変換 (Blogger → サムネイル / YouTube → mqdefault) */
+  /** 画像 URL を表示用サイズに変換 (Blogger → サムネイル / YouTube → mqdefault) 
   function toThumbnail(src) {
     if (!src) return src;
     if (/googleusercontent/.test(src)) return toBloggerThumbnail(src);
     if (/img\.youtube|i\.ytimg/.test(src)) return src.slice(0, src.lastIndexOf('/')) + '/mqdefault.jpg';
     return src;
   }
+   */
 
   /**
    * loading="lazy" を順次解除する (img / iframe)。
