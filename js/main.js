@@ -129,30 +129,31 @@ function debounce(func, wait) {
 
   /**
    * Blogger の画像 URL を THUMBNAIL_WIDTH のサムネイル URL に変換
-   */
-function toBloggerThumbnail(src) {
-  if (!/img\/[ab]|proxy\//.test(src)) return src;
+  function toBloggerThumbnail(src) {
+    if (!/img\/[ab]|proxy\//.test(src)) return src;
 
-  const size = `w${THUMBNAIL_WIDTH}-e90-rw`;
+    const size = `w${THUMBNAIL_WIDTH}-e90-rw`;
 
-  // 新形式: .../w2048-e90-rw/ファイル名 や .../s72-c/ファイル名 (サイズがパスの1セグメント)
-  const pathSizePattern = /\/[wsh]\d+(?:-[A-Za-z0-9]+)*\//;
-  if (pathSizePattern.test(src)) {
-    return src.replace(pathSizePattern, `/${size}/`);
+    // 新形式: .../w2048-e90-rw/ファイル名 や .../s72-c/ファイル名 (サイズがパスの1セグメント)
+    const pathSizePattern = /\/[wsh]\d+(?:-[A-Za-z0-9]+)*\//;
+    if (pathSizePattern.test(src)) {
+      return src.replace(pathSizePattern, `/${size}/`);
+    }
+
+    // 旧形式: .../AVvX...=s72-c (= の後ろがサイズ指定)
+    const equalsIndex = src.lastIndexOf('=');
+    return equalsIndex === -1 ? `${src}=${size}` : src.slice(0, equalsIndex + 1) + size;
   }
+   */
 
-  // 旧形式: .../AVvX...=s72-c (= の後ろがサイズ指定)
-  const equalsIndex = src.lastIndexOf('=');
-  return equalsIndex === -1 ? `${src}=${size}` : src.slice(0, equalsIndex + 1) + size;
-}
-
-  /** 画像 URL を表示用サイズに変換 (Blogger → サムネイル / YouTube → mqdefault) */
+  /** 画像 URL を表示用サイズに変換 (Blogger → サムネイル / YouTube → mqdefault)
   function toThumbnail(src) {
     if (!src) return src;
     if (/googleusercontent/.test(src)) return toBloggerThumbnail(src);
     if (/img\.youtube|i\.ytimg/.test(src)) return src.slice(0, src.lastIndexOf('/')) + '/mqdefault.jpg';
     return src;
   }
+  */
 
   /**
    * loading="lazy" を順次解除する (img / iframe)。
@@ -178,10 +179,10 @@ function toBloggerThumbnail(src) {
   // data-src を使う画像の差し替え (公式の Defer.dom)
   // 旧 .lazyload 画像 (data-src のみ) は、表示前にサムネイルサイズへ変換する。
   // テーマ側に data-src + .lazyload の画像が無ければ、この1行は削除できる。
-  Defer.dom('img.lazyload', 1, 'loaded', (img) => {
-    const src = img.getAttribute('data-src');
-    if (src) img.setAttribute('data-src', toThumbnail(src));
-  }, { rootMargin: '500%' });
+  //Defer.dom('img.lazyload', 1, 'loaded', (img) => {
+  //  const src = img.getAttribute('data-src');
+  //  if (src) img.setAttribute('data-src', toThumbnail(src));
+  //}, { rootMargin: '500%' });
 
 // ユーザー操作があるまで Defer.dom 自体を実行しない
 Defer(function() {
