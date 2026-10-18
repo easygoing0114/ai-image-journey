@@ -179,10 +179,10 @@ function debounce(func, wait) {
   // data-src を使う画像の差し替え (公式の Defer.dom)
   // 旧 .lazyload 画像 (data-src のみ) は、表示前にサムネイルサイズへ変換する。
   // テーマ側に data-src + .lazyload の画像が無ければ、この1行は削除できる。
-  //Defer.dom('img.lazyload', 1, 'loaded', (img) => {
-  //  const src = img.getAttribute('data-src');
-  //  if (src) img.setAttribute('data-src', toThumbnail(src));
-  //}, { rootMargin: '500%' });
+  Defer.dom('img.lazyload', 1, 'loaded', (img) => {
+    const src = img.getAttribute('data-src');
+    if (src) img.setAttribute('data-src', toThumbnail(src));
+  }, { rootMargin: '500%' });
 
 // ユーザー操作があるまで Defer.dom 自体を実行しない
 Defer(function() {
