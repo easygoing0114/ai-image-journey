@@ -176,12 +176,16 @@ function debounce(func, wait) {
     const src = img.getAttribute('data-src');
     if (src) img.setAttribute('data-src', toThumbnail(src));
   }, { rootMargin: '500%' });
+
+// ユーザー操作があるまで Defer.dom 自体を実行しない
+Defer(function() {
   Defer.dom('img', 300);
   Defer.dom('iframe', 500);
+}, 0, true);
 
   Defer(() => releaseLazyMedia(), 100);
 
-  // 小さいカード画像を段階的に拡大 (w200, w400 → w800 → w0)
+  // 小さいカード画像を段階的に拡大 (w200 / w400 → w800 → w0)
   Defer(() => swapImageSize('w200-e90-rw', 'w800-e90-rw'), 5000);
   Defer(() => swapImageSize('w400-e90-rw', 'w800-e90-rw'), 5000);
   Defer(() => {
