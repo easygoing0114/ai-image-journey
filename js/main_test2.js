@@ -129,13 +129,11 @@ function debounce(func, wait) {
 
   /**
    * Blogger の画像 URL を THUMBNAIL_WIDTH のサムネイル URL に変換
-   * 例: .../img/a/xxxx=s1600 や .../proxy/xxxx=s1600 → "=" 以降を差し替える
-   * 上記の形式以外は変換せずそのまま返す。
    */
   function toBloggerThumbnail(src) {
-    if (!/img\/a|proxy\//.test(src)) return src;
+    if (!/img\/[ab]|proxy\//.test(src)) return src;
 
-    const size = `w${THUMBNAIL_WIDTH}-c-e90-rw`;
+    const size = `w${THUMBNAIL_WIDTH}-e90-rw`;
     const equalsIndex = src.lastIndexOf('=');
     return equalsIndex === -1 ? `${src}=${size}` : src.slice(0, equalsIndex + 1) + size;
   }
