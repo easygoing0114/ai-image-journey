@@ -220,17 +220,17 @@ class LinkPreviewGenerator {
     }
     }
 
-    // 並行処理でリンクを置換する関数（0.3秒間隔で開始）
+    // 並行処理でリンクを置換する関数
     async replaceLinks() {
     const blogcards = document.querySelectorAll('.blogcard-auto');
 
-    // 0.3秒間隔で処理を開始し、完了次第表示
+    // 0.2秒間隔で処理を開始し、完了次第表示
     const promises = Array.from(blogcards).map((card, index) => {
         return new Promise(resolve => {
         setTimeout(async () => {
             await this.processLink(card);
             resolve();
-        }, index * 300);
+        }, index * 200);
         });
     });
 
