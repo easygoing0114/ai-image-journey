@@ -188,7 +188,7 @@ function debounce(func, wait) {
     // 最高画質 (w0) は PC 幅のみ。ダウンロード用途の長期滞在者向け
     swapImageSize('w800-e90-rw', 'w0-e90-rw', 800);
     swapImageSize('w1200-e90-rw', 'w0-e90-rw', 800);
-  }, 10000);
+  }, 10000, true);
 
   Defer(() => {
     document.querySelectorAll('.gpu-accelerated').forEach((el) => el.classList.remove('gpu-accelerated'));
