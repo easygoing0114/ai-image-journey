@@ -1,8 +1,6 @@
 /* main.js (依存: defer_390.js) */
 
 /* ---------- defer.js が読み込めなかった場合の最小フォールバック ---------- */
-// Defer が未定義でも、ヘッダー・ダークモードなどの処理が止まらないようにする。
-// 入力待ちは行わず、遅延時間だけ守って実行する。
 
 if (typeof window.Defer !== 'function') {
   const toAttrs = (v) => (typeof v === 'string' ? { id: v } : v || {});
@@ -146,7 +144,7 @@ function debounce(func, wait) {
   }
 
   Defer(() => {
-    Defer.dom('img[data-src], img[data-srcset]', 100);
+    Defer.dom('img[data-src]', 100);
     Defer.dom('iframe[data-src]', 300);
   }, 350, true);
 
