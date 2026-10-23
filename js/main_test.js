@@ -146,7 +146,7 @@ function debounce(func, wait) {
   }
 
   Defer(() => {
-    Defer.dom('img[data-src]', 100);
+    Defer.dom('img[data-src], img[data-srcset]', 100);
     Defer.dom('iframe[data-src]', 300);
   }, 350, true);
 
@@ -204,12 +204,22 @@ function debounce(func, wait) {
   let ticking = false;
   const scrollThreshold = window.innerHeight * 0.03;
 
+  // 検索欄などドロップダウン内にフォーカスがある間は true
+  const isTyping = () => dropdowns.some(([, menu]) => menu?.contains(document.activeElement));
+
   function onScrollFrame() {
     ticking = false;
     const current = window.scrollY;
+    const typing = isTyping();
 
     if (header) {
-      if (current > lastScrollTop && current > scrollThreshold) {
+      if (typing) {
+        // 入力中はヘッダーを出したままにする。隠れると入力欄が画面外に出て、
+        // ブラウザが入力のたびに入力欄を表示しようとして少しずつスクロールしてしまうため
+        clearTimeout(showHeaderTimer);
+        header.classList.remove('header-move-up');
+        header.classList.add('header-move-down');
+      } else if (current > lastScrollTop && current > scrollThreshold) {
         clearTimeout(showHeaderTimer);
         header.classList.remove('header-move-down');
         header.classList.add('header-move-up');
@@ -222,8 +232,8 @@ function debounce(func, wait) {
       }
     }
 
-    // 検索欄などにフォーカスがある間は閉じない (モバイルでキーボード表示時のスクロール対策)
-    if (!dropdowns.some(([, menu]) => menu?.contains(document.activeElement))) closeDropdowns();
+    // 入力中は閉じない (モバイルでキーボード表示時のスクロール対策)
+    if (!typing) closeDropdowns();
     backToTop?.classList.toggle('d-none', current < BACK_TO_TOP_THRESHOLD);
     lastScrollTop = Math.max(current, 0);
   }
