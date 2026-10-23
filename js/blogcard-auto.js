@@ -60,7 +60,7 @@ class LinkPreviewGenerator {
         'civitai.com/models/2396290': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg89Su6R0sE_sqQOjlWuePK1S8HoUq1YikbOQKSEsSKH8kfogSn0kMhEWWK5vlb9Ul5YwoyKbCAOEqIaBomFXuGROj6xbB4HuvuVYmlTyHeNc00tMUTekKn3UP5fRlHL06twLFW0yMAhVbBL4XxM1vtb4uiggVAghNkr0iOwajqb7Nd1w/w400-e90-rw/FP32_upscale2.png',
         'civitai.com/models/2637486': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh4tJpcKnaxGZny0Jt1iv6safImLt20oLRrYzLkBcW-TvSDlv7XX2jvl4p2g9urmPiaza7dGtYjGW3etPj2ygsH4zP202WZQnCozro_78hYsCxe9dgC0JuPf4zfXxNOOHN-YMh492izubZnd-6bodFZE1dNceIxpbJ46xztr71FOHR9gg/w400-e90-rw/HiDream-O1-Image_clear_v1_anime_LAB_adjust_00054_.png',
         'civitai.com/models/2786476': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjPorYuIjld7SdQNCtaxrQxtvmqmf_le4XCF2jIB-ofDo3nQamuE2IM_j3jzkh9265qV0d549mu02YpG53TwVcx1BfkH8nM4ForIKaDcoLgZhmy6AokQhyphenhyphenjDiVEuQ46obauXgZ8OVcjPbVAB1GpXQMF-0qbt3HNcxGU7aDlTCfY6EQYYg/w400-e90-rw/Krea2-Turbo_clear_cover_anime2.png',
-        'civitai.com/models/3014463': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhAVSRAMGc7SI7nlVA9C9Ft9G-sY7YUcx2MDIv47ioU9TsVChtNzpGl0y_xKfxdp6ZjcpUm2Qdi1MIj8JA0xN3JHHiA26N3NHxvIqelDGOqGZjXR34v1AHlXH5ZTHDJL_A9vnEnaT5ajI_e32yXXjEV3hIeqsUKEOSGGRldoXCX7tVtFA/w400-e90-rw/BF16_00003_.png',
+        'civitai.com/models/3014463': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjbyF5ChjrNhDGrJRH13JyhTngHQrROYXGiO_c9Kl1fdpwHNVcjkpgiy-4bh6HQ-pra53OZvmZqparqiknhpv9ZcSKf4wLLuzkktTggrg3LD9KH3dno1GRRVnJNM4uqcmIGnzX1DeG4fRaGT-rRQXYHefXQhVe64A-F3zkrGCqp0lp6tg/w400-e90-rw/BF16_nishikigoi2_00001_.png',
     };
 
     // デフォルトのCivitai画像
