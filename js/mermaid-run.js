@@ -16,7 +16,7 @@
   const SELECTOR = '.language-mermaid';
 
   // 図を描画するときの最低幅（px）。これより狭い画面では縮小表示になる
-  const MIN_WIDTH = 640;
+  const MIN_WIDTH = 560;
 
   // リサイズ・回転イベントの待ち時間（ms）
   const RESIZE_DELAY = 250;
