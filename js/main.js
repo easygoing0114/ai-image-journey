@@ -357,7 +357,7 @@ function debounce(func, wait) {
           const url = escapeHtml(p.url);
           const name = escapeHtml(p.title);
           const thumb = p.img
-            ? `<div class='item-thumbnail'><img alt='${name}' class='object-cover thumbnail-img' loading='lazy' src='${escapeHtml(p.img)}'/></div>`
+            ? `<div class='item-thumbnail'><img alt='${name}' class='thumbnail-img' loading='lazy' src='${escapeHtml(p.img)}'/></div>`
             : '';
           return `<div class='item-post'><a class='item-post-link' href='${url}'>${thumb}` +
             `<div class='item-content'><h3 class='item-title' itemprop='headline'><span href='${url}'>${name}</span></h3></div></a></div>`;
