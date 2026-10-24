@@ -212,8 +212,6 @@ function debounce(func, wait) {
 
     if (header) {
       if (typing) {
-        // 入力中はヘッダーを出したままにする。隠れると入力欄が画面外に出て、
-        // ブラウザが入力のたびに入力欄を表示しようとして少しずつスクロールしてしまうため
         clearTimeout(showHeaderTimer);
         header.classList.remove('header-move-up');
         header.classList.add('header-move-down');
