@@ -19,7 +19,7 @@
   const MIN_WIDTH = 560;
 
   // リサイズ・回転イベントの待ち時間（ms）
-  const RESIZE_DELAY = 250;
+  const RESIZE_DELAY = 100;
 
   // --font-system-ui が取得できなかった場合の予備（サイトの定義と同じ）
   const FALLBACK_FONT =
