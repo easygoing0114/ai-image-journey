@@ -5,9 +5,6 @@ margin: 0;
 .toc-container, .toc-container ul {
 counter-reset: ul-counter;
 }
-.toc-container ul {
-padding-left: 1em;
-} 
 .toc-container li {
 list-style: none;
 } 
@@ -26,7 +23,7 @@ color: var(--jt-link-hover);
 counter-increment: ul-counter;
 content: counters(ul-counter,".");
 color: var(--jt-link-color);
-padding-right: .5em;
+padding-right: 1.5em;
 white-space: nowrap;
 }
 
