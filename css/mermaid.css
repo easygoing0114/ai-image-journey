@@ -17,6 +17,7 @@
  
 .mermaid-chart {
     margin: 0 auto;
+    visibility: visible;
 }
 
 .mermaid-block {
