@@ -14,7 +14,7 @@
  */
 
  /* ========== グローバル ========== */
-
+ 
 .mermaid-chart {
     margin: 0 auto;
 }
@@ -48,6 +48,15 @@
 g,
 foreignObject {
 	overflow: visible;
+}
+
+.mermaid-chart foreignObject,
+.mermaid-chart foreignObject * {
+	overflow: visible;
+}
+
+.mermaid-chart foreignObject p {
+	padding: 0;
 }
 
 /* ========== 変数（ライト） ========== */
