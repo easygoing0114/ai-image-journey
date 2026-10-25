@@ -41,8 +41,8 @@ if (document.querySelector('.chartjs')) {
 }
 
 if (document.querySelector('.language-mermaid')) {
-  Defer.css('https://ai-image-journey.pages.dev/css/mermaid.css', 'mermaid-css', 700, null, true);
   Defer.js('https://ai-image-journey.pages.dev/js/mermaid-run.js', 'mermaid-run', 350, null, true);
+  Defer.css('https://ai-image-journey.pages.dev/css/mermaid.css', 'mermaid-css', 700, null, true);
 }
 
 if (document.querySelector('.katex-block')) {
