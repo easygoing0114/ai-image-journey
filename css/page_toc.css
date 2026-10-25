@@ -5,6 +5,9 @@ margin: 0;
 .toc-container, .toc-container ul {
 counter-reset: ul-counter;
 }
+.toc-container ul {
+padding-left: 1em;
+} 
 .toc-container li {
 list-style: none;
 } 
