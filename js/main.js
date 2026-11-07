@@ -11,10 +11,6 @@ if (document.querySelector('.blogcard-auto')) {
   Defer.js('https://ai-image-journey.pages.dev/js/blogcard-auto.js', 'blogcard-auto-js', 100);
 }
 
-if (document.querySelector('textarea')) {
-  Defer.css('https://ai-image-journey.pages.dev/css/textarea.css', 'textarea-css', 100);
-}
-
 if (document.querySelector('.table-responsive')) {
   Defer.js('https://ai-image-journey.pages.dev/js/table-responsive.js', 'table-responsive', 100);
 }
