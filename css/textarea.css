@@ -1,5 +1,4 @@
 .copy-button {
-    display: none;
     position: absolute;
     top: 0.25em;
     right: 0.25em;
@@ -14,7 +13,6 @@
 }
 
 .switch-button {
-    display: none;
     position: absolute;
     top: 0.25em;
     left: 0.25em;
