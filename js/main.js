@@ -103,7 +103,6 @@ function debounce(func, wait) {
     return src;
   }
 
-  // loading="lazy" を少しずつ解除する
   function releaseLazyMedia(root = document) {
     root.querySelectorAll('img[loading="lazy"], iframe[loading="lazy"]').forEach((el, i) => {
       Defer(() => el.removeAttribute('loading'), Math.floor(i / LAZY_BATCH) * LAZY_INTERVAL);
