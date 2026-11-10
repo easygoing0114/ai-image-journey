@@ -67,9 +67,6 @@ class LinkPreviewGenerator {
         'civitai.com/models/3014463': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiAmlgKBasl_rO9hUPuvYydXH8j9GSjuMuBL32RJ6CXKhi6MFUY5Wx9YFxJ1vgPnp2Cvy1sD-2ilxeCQi45EmmtADitQ6hSL6Ik0m7L2OCnt9tgKC6gAi0b1Qr0wjRzgW9nHk9UcKb0E7SvmJYREU3jQKv9tZzvfxIjDXqTjw89EnvJIg/w400-e90-rw/BF16_nishikigoi3_00001_.png',
         'civitai.com/models/3028656': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEijmXGj3ttb-Tgzahyphenhyphen2pqsQg4cwEb2leg7YJw_B8wLQaP-_6T1H0yYlbDtLfMurVes8f4mnCpRR8bg0cgP5IrLCeVFFroa-GCeZReH2aFqE1DO4s7Ne8XPD-nue2qw1GdJhVKpF-ME-VJ1ls4ETG0pmPxNpa7xMDk7wUxm6bi4SsV9Njg/w400-e90-rw/BF16_Hires_00001_.png',
     };
-
-    // デフォルトのCivitai画像
-//    this.DEFAULT_CIVITAI_IMAGE = 'https://files.ai-image-journey.com/images/logo/civitai-color%20400.webp';
     }
 
     // カスタム画像を取得する関数
@@ -82,11 +79,6 @@ class LinkPreviewGenerator {
         if (urlLower.includes(path.toLowerCase())) {
             return image;
         }
-        }
-
-        // Civitaiのその他のページ用のデフォルト画像
-        if (urlLower.includes('civitai.com/models/')) {
-        return this.DEFAULT_CIVITAI_IMAGE;
         }
 
         return null;
@@ -123,6 +115,11 @@ class LinkPreviewGenerator {
         imageUrl = imageUrl.replace(/s1600|w0-e90-rw|w800-e90-rw|w1200-e90-rw/g, 'w400-e90-rw');
     }
 
+    // フッター表示用ドメイン（自サイトの www は除去）
+    const displayDomain = metadata.domain === `www.${this.baseDomain}`
+        ? this.baseDomain
+        : metadata.domain;
+
     const linkClass = `blogcard-link${imageUrl ? '' : ' blogcard-link-no-image'}`;
 
     const imageHTML = imageUrl ? `
@@ -145,7 +142,7 @@ class LinkPreviewGenerator {
             <div class="blogcard-footer">
                 <img src="https://www.google.com/s2/favicons?domain=${metadata.domain}"
                     alt="Favicon" width="16" height="16" />
-                ${metadata.domain}
+                ${displayDomain}
             </div>
             </div>
         </a>
