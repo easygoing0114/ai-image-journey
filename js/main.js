@@ -72,8 +72,8 @@ function debounce(func, wait) {
   const MY_DOMAIN = 'ai-image-journey.com';
   const TITLE_SEPARATOR = typeof titleSeparator !== 'undefined' ? titleSeparator : ' - ';
   const PAGE_LABEL = typeof pageTitle !== 'undefined' ? pageTitle : 'Page';
-  //const AD_ANCHOR = typeof innerAdsDelimiter !== 'undefined' ? innerAdsDelimiter : 'p,br,div';
-  //const AD_IGNORE = typeof ignoreAdsDelimiter !== 'undefined' ? ignoreAdsDelimiter : 'pre,ul,ol,table,blockquote';
+  const AD_ANCHOR = typeof innerAdsDelimiter !== 'undefined' ? innerAdsDelimiter : 'p,br,div';
+  const AD_IGNORE = typeof ignoreAdsDelimiter !== 'undefined' ? ignoreAdsDelimiter : 'pre,ul,ol,table,blockquote';
 
   const THUMBNAIL_WIDTH = 200;
   const BACK_TO_TOP_THRESHOLD = 1000;
