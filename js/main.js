@@ -410,7 +410,25 @@ function debounce(func, wait) {
     if (excluded !== null) inline.setAttribute('data-no-item', excluded);
   }
 
+  function insertInArticleAds() {
+    const adsContainer = document.getElementById('inner-post');
+    if (!adsContainer || !postBody) return;
 
+    const ads = Array.from(adsContainer.children);
+    if (!ads.length) return;
+
+    const anchors = Array.from(postBody.querySelectorAll(`${AD_ANCHOR},${AD_IGNORE}`)).filter((el) => {
+      const ignored = el.closest(AD_IGNORE);
+      return !ignored || el === ignored;
+    });
+    const interval = Math.max(1, Math.round(anchors.length / ads.length));
+
+    ads.forEach((ad, i) => {
+      if (i === ads.length - 1) postBody.appendChild(ad);
+      else if (i === 0) anchors[0]?.before(ad);
+      else anchors[interval * i]?.after(ad);
+    });
+  }
 
   /* ---------- 実行 ---------- */
 
