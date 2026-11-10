@@ -410,7 +410,7 @@ function debounce(func, wait) {
     if (excluded !== null) inline.setAttribute('data-no-item', excluded);
   }
 
-  function insertInArticleAds() {
+  function insertRelatedArticles() {
     const adsContainer = document.getElementById('inner-post');
     if (!adsContainer || !postBody) return;
 
@@ -439,7 +439,7 @@ function debounce(func, wait) {
       Defer(() => loadCustomPosts(container).catch((err) => console.warn('[custom-posts]', err)), i * 100);
     });
 
-    insertInArticleAds();
+    insertRelatedArticles();
   }, 100);
 
   Defer(() => {
