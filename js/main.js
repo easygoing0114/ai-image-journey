@@ -104,7 +104,7 @@ function debounce(func, wait) {
   }
 
   function releaseLazyMedia(root = document) {
-    root.querySelectorAll('img[loading="lazy"], iframe[loading="lazy"]').forEach((el, i) => {
+    root.querySelectorAll('img[loading="lazy"]').forEach((el, i) => {
       Defer(() => el.removeAttribute('loading'), Math.floor(i / LAZY_BATCH) * LAZY_INTERVAL);
     });
   }
@@ -118,7 +118,6 @@ function debounce(func, wait) {
 
   Defer(() => {
     Defer.dom('img', 100);
-    Defer.dom('iframe', 300);
   }, 350, true);
 
   Defer(() => releaseLazyMedia(), 100);
