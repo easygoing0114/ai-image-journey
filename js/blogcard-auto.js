@@ -7,7 +7,6 @@ class LinkPreviewGenerator {
     // カスタム画像のマッピング
     this.CUSTOM_IMAGES = {
         // GitHub
-//        'github.com/easygoing0114': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjCVXA9lGHLmQZqpHFx_m1MEfgolO1f8ksTQfLJcHDa5-rH86NWJ-ufv4TgNOAPOMcFfIFEpqBzjV3xPRQ-85oKG-GWDI8zRiUku_ZFtVcOJACWm97gJH_PsadwGx9GujgPRu3RVtBY25qnG0UiTVBzOErzfsEI5Q0ZAnkzkp5odc7BAw/w400-e90-rw/Profile_image_20250824.png',
         'github.com/easygoing0114/ComfyUI-easygoing-nodes': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi2-Ke0XZtUMjfrpXvkpA9-ZXO-Qry7earNIk0FZL6ONGbG-pCXczX4iCGjLRv1TDkEDpoGpBbHQdORAeU7sF0nCoi2rhsGY6VWuwYgLPH2RpI7QTW1n7H2YCjRGRyONmj__31IqWCJZ92aZbXnhfDB41pbUv-RHzEABMtloc5hVbNU1Q/w400-e90-rw/easygoing_icon.png',
         'github.com/easygoing0114/ComfyUI-AutoMask': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEify2s6Q9BMH8lAH_x8zTefRPFGfGUDO1bqBaziH4-RUc4y-lvPTm4okQ1AQEwSt6apP51nFJuWCJfXqKst8v5bJaAjN2bS6aTd5mAR1eTdkctZtRCVYr-tIzMwbIRQPaEWqE9oRxUEX_5bgHu_9hBtMOKZ211xnYLcqjjcQ802xe-BFg/w400-e90-rw/BiRefNet_DepthAnythingV3_Refine_black_bg_compare.png',
         'github.com/easygoing0114/ComfyUI-cliption-integrated': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhSSPTV49cZESo8VZ11cOGZNw7CvUcO604lIe6tkdkhncNxm2pMkZ3UMFkiQi2HcaIzTZnpirgfVmvuzu9S_bUXtxOPZU6MTQjzhmynZbupoN_vj72O86AeTCdNK6ja2NxZSFjgjBQMAPAiTt4prTxjKW09aQ5j_Xh2EzCBS7JkQSuauQ/w400-e90-rw/cliption_icon.png',
@@ -70,7 +69,7 @@ class LinkPreviewGenerator {
     };
 
     // デフォルトのCivitai画像
-    this.DEFAULT_CIVITAI_IMAGE = 'https://files.ai-image-journey.com/images/logo/civitai-color%20400.webp';
+//    this.DEFAULT_CIVITAI_IMAGE = 'https://files.ai-image-journey.com/images/logo/civitai-color%20400.webp';
     }
 
     // カスタム画像を取得する関数
