@@ -410,8 +410,9 @@ function debounce(func, wait) {
     if (excluded !== null) inline.setAttribute('data-no-item', excluded);
   }
 
-  function insertRelatedArticles() {
-    const adsContainer = document.getElementById('inner-post');
+  // #ads-post の広告を本文に等間隔で挿入 (先頭は最初の区切りの前、最後は本文末尾)
+  function insertInArticleAds() {
+    const adsContainer = document.getElementById('ads-post');
     if (!adsContainer || !postBody) return;
 
     const ads = Array.from(adsContainer.children);
@@ -439,7 +440,7 @@ function debounce(func, wait) {
       Defer(() => loadCustomPosts(container).catch((err) => console.warn('[custom-posts]', err)), i * 100);
     });
 
-    insertRelatedArticles();
+    insertInArticleAds();
   }, 100);
 
   Defer(() => {
