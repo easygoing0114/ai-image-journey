@@ -38,7 +38,9 @@ class LinkPreviewGenerator {
         'huggingface.co/easygoing0114/Krea-2-Turbo_clear': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh07nwBKrwerYDx6zuZ3zhw4ZmL8RE-LySYVht99enX1YImpXggoJHxuW09cwUvzcyoonx9DkWEH9I4QWuiRQcQj-J1fG3D-Qh3Z2c-0ArrCYMQTy105hT6r2wETzYwswRG2WBPCEAgbcVXznHbpVwVfPWsX05UJddPYabm-CZoxbkArw/w400-e90-rw/Krea2-Turbo_clear_Krea2-Turbo_clear_hires_00134_.png',
         'huggingface.co/easygoing0114/Krea-2-Nippon_clear': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhe5G0eNDcSrJmecbL6BG9ebG57FE5NhVWD2xnINXxrWAsKow8vQwQ3JVAJEdBohyydKddkCCcnO65YnAu9YI-2Z9UEml3VRVA1VB5EAaMQUyKP1C1Rtbs0tUdIoBYLtbGw3tEf86-_PMynwEcvyZgQH5w7ZFie2gNR2iMByaeqk8utqw/w400-e90-rw/BF16_00002_.png',
         'huggingface.co/easygoing0114/MOSS-Image-SFT_clear': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjPkk2POJb7d6vpjMnxpiK5ML22z5iSdkwwPIW1Q-r17vGlVzVMm7iRUDSEHzaemt9SCQam7G2pvkFrcQGFTiNzUe9u67lc5RguP7I9xVU9Kbmw6a5scavjcwpN5zK19Jg1tG9IwYnw1FvPS_Vw88QZdJyhyFleuTWXkBjuRLzEBWt_rQ/w400-e90-rw/MOSS-Image-SFT_clear_cover_image_photoreal.png',
+        'huggingface.co/easygoing0114/HiDream-O1-Image_clear_v2': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj5-fCRqCZXx7IMwVt6ChuTzwvPCozs6wIAIKV18_hMxpBt6daymmI2072dXHRvX7ai-fi84yptTamc7kLvZd95FtsppMuYAIHy5JOceaAFLzstbloNbjXXOVRf2MLw-h5q5bod4FXtawTdLtZDwNOow1cU7a0PeudRPD8tvHEzKTfBdQ/w400-e90-rw/HiDream-O1-Image_clear_v2_BF16_00001_.png',
 
+        /*
         // Civitai models
         'civitai.com/models/722776': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/ff1638f0-0295-45e8-b038-d7f376f26873/ComfyUI_00023_.jpeg',
         'civitai.com/models/261336': 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/48499ad8-33bb-4a2c-aac8-af6c6edcc280/00494-20240625200426-223644773-30-5.jpeg',
@@ -66,6 +68,7 @@ class LinkPreviewGenerator {
         'civitai.com/models/2786476': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjPorYuIjld7SdQNCtaxrQxtvmqmf_le4XCF2jIB-ofDo3nQamuE2IM_j3jzkh9265qV0d549mu02YpG53TwVcx1BfkH8nM4ForIKaDcoLgZhmy6AokQhyphenhyphenjDiVEuQ46obauXgZ8OVcjPbVAB1GpXQMF-0qbt3HNcxGU7aDlTCfY6EQYYg/w400-e90-rw/Krea2-Turbo_clear_cover_anime2.png',
         'civitai.com/models/3014463': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiAmlgKBasl_rO9hUPuvYydXH8j9GSjuMuBL32RJ6CXKhi6MFUY5Wx9YFxJ1vgPnp2Cvy1sD-2ilxeCQi45EmmtADitQ6hSL6Ik0m7L2OCnt9tgKC6gAi0b1Qr0wjRzgW9nHk9UcKb0E7SvmJYREU3jQKv9tZzvfxIjDXqTjw89EnvJIg/w400-e90-rw/BF16_nishikigoi3_00001_.png',
         'civitai.com/models/3028656': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEijmXGj3ttb-Tgzahyphenhyphen2pqsQg4cwEb2leg7YJw_B8wLQaP-_6T1H0yYlbDtLfMurVes8f4mnCpRR8bg0cgP5IrLCeVFFroa-GCeZReH2aFqE1DO4s7Ne8XPD-nue2qw1GdJhVKpF-ME-VJ1ls4ETG0pmPxNpa7xMDk7wUxm6bi4SsV9Njg/w400-e90-rw/BF16_Hires_00001_.png',
+        */
     };
     }
 
